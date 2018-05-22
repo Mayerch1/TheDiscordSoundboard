@@ -1,5 +1,3 @@
-![Logo](res/speaker.ico "CC0 - MTZD")
-
 Hi, 
 this is my small Discord-Bot, orientated on the Teamspeak Soundboard. <br>
 
@@ -48,7 +46,7 @@ You need to connect to the server before playing any file. <br>
 > If you want to enter/change the bot token, the bot needs to be disconnected
     
 
-![Main Window](doc/MainWin.png "Main Window")
+![Main Window](DiscordBot/doc/MainWin.png "Main Window")
 
 1. [Left Click] Start to play the audio file
   *if any file is playing, this will abort the stream
@@ -60,7 +58,7 @@ You need to connect to the server before playing any file. <br>
 
 ---
 
-![Settings  Window](doc/SettingsWin.png "Settings Window")
+![Settings Window](DiscordBot/doc/SettingsWin.png "Settings Window")
 
 1. The Name of the button
 2. Opens a file picker, to choose the file
@@ -69,7 +67,7 @@ You need to connect to the server before playing any file. <br>
 
 ---
 
-![Token  Window](doc/TokenWin.png "Token Window")
+![Token  Window](DiscordBot/doc/TokenWin.png "Token Window")
 
 1. Show the secret key
 2. Enter a new key
