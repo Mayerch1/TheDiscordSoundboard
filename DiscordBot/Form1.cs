@@ -40,7 +40,7 @@ namespace DiscordBot
         private IAudioClient _audioCl;
 
         //TODO: remove before push
-        private string _token = "NDQ2MDUyMTcxNTAzMzcwMjQy.Ddza1g.2MdcNp9Yb94jc3BJHrz1wx4NU-Q";
+        private string _token = "";
 
         /*----------------------------------------------------------*/
 
