@@ -16,7 +16,7 @@ It's main purpose is, to stream your local mp3 and wav files into a discord voic
 
 What the bot needs:
 1. Rights to join a channel (permanent)
-2. Rights to speak in that channet (permanent)
+2. Rights to speak in that channel (permanent)
 3. One bot per server (multi-broadcasting is not implemented)
 
 
@@ -49,7 +49,7 @@ You need to connect to the server before playing any file. <br>
 ![Main Window](DiscordBot/doc/MainWin.png "Main Window")
 
 1. [Left Click] Start to play the audio file
-  *if any file is playing, this will abort the stream
+  * if any file is playing, this will abort the stream
 2. [Right Click] Open the setting window for this button
 3. Connect to the server
 4. Enter the ID of the channel to join
@@ -63,7 +63,7 @@ You need to connect to the server before playing any file. <br>
 1. The Name of the button
 2. Opens a file picker, to choose the file
 3. Close the winwow
-  *you can also 'x' the window away
+  * you can also 'x' the window away
 
 ---
 
@@ -71,10 +71,10 @@ You need to connect to the server before playing any file. <br>
 
 1. Show the secret key
 2. Enter a new key
-  *for enering a new key, the old can stay hidden
+  * for entering a new key, the old can stay hidden
 
 > The token is saved into the directory ot the executable <br>
-> So you might want to safe if somewhere in your filesystem and link the .exe (to e.g. your Desktop). <br>
+> So you might want to safe if somewhere in your filesystem and link the .exe (e.g. to your Desktop). <br>
 > You can also disable the saving of the token and hardcode it into the ```_token``` variable. (You'll need to compile it afterwards)
 
 
