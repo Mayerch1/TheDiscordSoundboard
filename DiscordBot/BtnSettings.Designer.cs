@@ -45,7 +45,7 @@
             this.closeBtn.Location = new System.Drawing.Point(357, 234);
             this.closeBtn.Name = "closeBtn";
             this.closeBtn.Size = new System.Drawing.Size(75, 23);
-            this.closeBtn.TabIndex = 0;
+            this.closeBtn.TabIndex = 4;
             this.closeBtn.Text = "Exit";
             this.closeBtn.UseVisualStyleBackColor = true;
             this.closeBtn.Click += new System.EventHandler(this.button1_Click);
@@ -64,7 +64,7 @@
             this.label1.Location = new System.Drawing.Point(12, 9);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(70, 13);
-            this.label1.TabIndex = 2;
+            this.label1.TabIndex = 6;
             this.label1.Text = "Button name:";
             // 
             // filechooser
@@ -85,9 +85,9 @@
             // 
             this.fileChooseBox.Location = new System.Drawing.Point(15, 93);
             this.fileChooseBox.Name = "fileChooseBox";
-            this.fileChooseBox.ReadOnly = true;
             this.fileChooseBox.Size = new System.Drawing.Size(225, 20);
-            this.fileChooseBox.TabIndex = 4;
+            this.fileChooseBox.TabIndex = 2;
+            this.fileChooseBox.TextChanged += new System.EventHandler(this.fileChooseBox_TextChanged);
             // 
             // label2
             // 
@@ -95,7 +95,7 @@
             this.label2.Location = new System.Drawing.Point(13, 74);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(53, 13);
-            this.label2.TabIndex = 5;
+            this.label2.TabIndex = 7;
             this.label2.Text = "Audio file:";
             // 
             // button1
@@ -105,7 +105,7 @@
             this.button1.Location = new System.Drawing.Point(12, 210);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(50, 47);
-            this.button1.TabIndex = 6;
+            this.button1.TabIndex = 5;
             this.button1.UseVisualStyleBackColor = true;
             this.button1.Click += new System.EventHandler(this.button1_Click_1);
             // 

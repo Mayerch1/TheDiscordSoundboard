@@ -1,11 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace DiscordBot
@@ -18,14 +11,26 @@ namespace DiscordBot
         {
             InitializeComponent();
             token = _token;
-
-            MessageBox.Show("Anyone with this token, can controll the bot and possibly abuse his rights.", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
         }
 
         private void button1_Click(object sender, EventArgs e)
         {
-            tokenBox.Text = token.ToString();
-            tokenBox.PasswordChar = '\0';
+            if (button1.Text == "show")
+            {
+                var result = MessageBox.Show("Anyone with this token, can controll the bot and possibly abuse his rights.", "Warning", MessageBoxButtons.OKCancel, MessageBoxIcon.Warning);
+
+                if (result == DialogResult.OK)
+                {
+                    tokenBox.Text = token.ToString();
+                    tokenBox.PasswordChar = '\0';
+                    button1.Text = "hide";
+                }
+            }
+            else
+            {
+                tokenBox.PasswordChar = '*';
+                button1.Text = "show";
+            }
         }
 
         private void tokenBox_TextChanged(object sender, EventArgs e)

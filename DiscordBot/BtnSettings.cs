@@ -1,12 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Diagnostics;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.IO;
 using System.Windows.Forms;
 
 namespace DiscordBot
@@ -39,13 +33,34 @@ namespace DiscordBot
         {
             filechooser.ShowDialog();
 
-            btn_n.file = filechooser.FileName.ToString();
-            fileChooseBox.Text = btn_n.file;
+            var newFile = filechooser.FileName.ToString();
+
+            if (newFile != "fileChooser" && newFile != " ")
+            {
+                // btn_n.file = newFile;
+                fileChooseBox.Text = newFile;
+                getFileName(newFile);
+            }
+        }
+
+        private void getFileName(string file)
+        {
+            //write fileName into Text var of btn_n
+            if (btn_n.Text != " ")
+                return;
+            var fileName = Path.GetFileName(file);
+            btn_n.Text = fileName.Substring(0, fileName.LastIndexOf('.'));
+            btnTextBox.Text = btn_n.Text;
         }
 
         private void button1_Click_1(object sender, EventArgs e)
         {
             Process.Start(new ProcessStartInfo("https://www.paypal.me/CJMayer/3,99"));
+        }
+
+        private void fileChooseBox_TextChanged(object sender, EventArgs e)
+        {
+            btn_n.file = fileChooseBox.Text;
         }
     }
 }

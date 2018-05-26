@@ -40,7 +40,7 @@
             this.tokenBox.Location = new System.Drawing.Point(94, 15);
             this.tokenBox.Name = "tokenBox";
             this.tokenBox.PasswordChar = '*';
-            this.tokenBox.Size = new System.Drawing.Size(342, 20);
+            this.tokenBox.Size = new System.Drawing.Size(387, 20);
             this.tokenBox.TabIndex = 0;
             this.tokenBox.TextChanged += new System.EventHandler(this.tokenBox_TextChanged);
             // 
@@ -58,7 +58,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(448, 59);
+            this.ClientSize = new System.Drawing.Size(493, 59);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.tokenBox);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));

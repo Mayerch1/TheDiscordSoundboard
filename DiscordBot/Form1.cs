@@ -17,20 +17,27 @@ namespace DiscordBot
         #region Variables
 
         /*-----------------------------------------------------------*/
-        private const int btnNum = 380;
-        private ulong _placeholderID = 409439103965462528;
+
+        //!!Important!!
+        //changing this will prevent you from loading the config
+        //if you want more buttons (or if you want to safe disk space), you'll need to
+        //generate a new config, then copy (remove) button-entries by hand
+
+        //saved vars
+        private const int maxBtnNum = 2000;
+
+        private int _btnNum = 40;
+        private ulong _channelID = 409439103965462528;
+        private bool _isAutoconnect = false;
         /*-----------------------------------------------------------*/
 
-        private ButtonData[] btn = new ButtonData[btnNum];
-
-        //user to join
-        private ulong _userId = 140149964020908032;
+        private ButtonData[] btn = new ButtonData[maxBtnNum];
 
         //if nothing is assigned to button
-        private string _placeholderFile = @"F:\Christian\Music\Alles_nur_Spass_Mix.mp3";
+        private string _placeholderFile = @"F:\Christian\Music\Soundboard\Airhorn.mp3";
 
         //btnSettings and tokenSave
-        private string _settingsFile = "Settings.cfg";
+        private string _settingsFile = "SoundboardConfig.cfg";
 
         private string _tokenFile = "sensitiveToken.cfg";
 
@@ -39,7 +46,10 @@ namespace DiscordBot
         private DiscordSocketClient _client;
         private IAudioClient _audioCl;
 
-        //TODO: remove before push
+        //SENSITIVE: remove before push
+
+        //hardcode token here, don't need to safe it in the filesystem
+
         private string _token = "";
 
         /*----------------------------------------------------------*/
@@ -50,6 +60,7 @@ namespace DiscordBot
         private bool _isAudioConnected = false;
         private bool _isPlaying = false;
         private bool _isToAbort = false;
+        private bool _isLooped = false;
         /*---------------------------------------------------------*/
 
         #endregion Variables
@@ -59,36 +70,53 @@ namespace DiscordBot
         public Form1()
         {
             InitializeComponent();
-            channelIdBox.Text = _placeholderID.ToString();
+            createTooltips();
 
             //load from file
             ButtonData[] loadingBtn = LoadSettings();
+
+            channelIdBox.Text = _channelID.ToString();
+
+            btnNumBox.Maximum = maxBtnNum;
+            if (btnNumBox.Value <= maxBtnNum)
+                btnNumBox.Value = _btnNum;
+
             if (loadingBtn != null)
                 btn = loadingBtn;
 
-            if (btn == null)
-                btn = new ButtonData[btnNum];
-
-            //create all Buttons
-            for (int i = 0; i < btnNum; i++)
+            //generate standart Btn
+            if (loadingBtn == null)
             {
-                Button button = new Button();
-                button.Tag = i;
-                button.Height = 40;
-                button.Width = 95;
-                button.Click += new EventHandler(btn_Click);
-                button.MouseDown += new MouseEventHandler(btn_MouseDown);
+                btn = new ButtonData[maxBtnNum];
 
-                flowLayout.Controls.Add(button);
-
-                //if file is not existing, use default
-                if (loadingBtn == null)
+                for (int i = 0; i < maxBtnNum; i++)
                 {
                     btn[i] = new ButtonData();
                     initBtnSettings(ref btn[i]);
                 }
-                button.Text = btn[i].Text;
             }
+
+            //create all Buttons
+            for (int i = 0; i < _btnNum; i++)
+            {
+                addBtnToLayout(i, btn[i]);
+            }
+
+            if (_isAutoconnect)
+                //dirty, but effective
+                connectBtn_Click(null, null);
+        }
+
+        private void createTooltips()
+        {
+            ToolTip toolTip = new ToolTip();
+            toolTip.SetToolTip(btnNumBox, "Sets the amount of shown buttons");
+            toolTip.SetToolTip(channelIdBox, "Sets the channel to join the next time");
+            toolTip.SetToolTip(channelIdLbl, "Sets the channel to join the next time");
+            toolTip.SetToolTip(volumeSlider, "Sets the Volume between 0.0 and 1.0");
+            toolTip.SetToolTip(connectBtn, "Connect the bot to the server");
+            toolTip.SetToolTip(earRapeBox, "If you just need that extra-boost for your audio :)");
+            toolTip.SetToolTip(abortBtn, "If the bot is playing, stop it");
         }
 
         private void Form1_FormClosed(object sender, FormClosedEventArgs e)
@@ -99,40 +127,58 @@ namespace DiscordBot
         private void initBtnSettings(ref ButtonData btn)
         {
             //set to default values
-            btn.Text = "Button";
+            btn.Text = " ";
             btn.file = _placeholderFile;
 
             btn.settingsOpened = false;
         }
 
+        private void addBtnToLayout(int num, ButtonData thisBtn)
+        {
+            Button button = new Button();
+            button.Tag = num;
+            button.Height = 40;
+            button.Width = 95;
+            button.Click += new EventHandler(btn_Click);
+            button.MouseDown += new MouseEventHandler(btn_MouseDown);
+
+            flowLayout.Controls.Add(button);
+
+            button.Text = thisBtn.Text;
+        }
+
         private void SaveSettings(ButtonData[] btnData)
         {
-            for (int i = 0; i < btnNum; i++)
+            for (int i = 0; i < maxBtnNum; i++)
             {
                 btnData[i].settingsOpened = false;
             }
 
             Stream stream;
             BinaryFormatter binaryFormatter = new BinaryFormatter();
-            //save binary
+            //save token as binary
             try
             {
                 stream = File.Open(_tokenFile, FileMode.Create);
                 binaryFormatter.Serialize(stream, _token);
+                stream.Close();
             }
             catch { }
 
-            try
-            {
-                stream = File.Open(_settingsFile, FileMode.Create);
-            }
-            catch
-            {
-                return;
-            }
-            binaryFormatter.Serialize(stream, btnData);
+            //write settings as text
+            StreamWriter file = File.CreateText(_settingsFile);
 
-            stream.Close();
+            file.WriteLine(_channelID);
+            file.WriteLine(_isAutoconnect);
+            file.WriteLine(_btnNum);
+
+            foreach (var singleBtn in btn)
+            {
+                file.WriteLine(singleBtn.ToString());
+            }
+
+            file.Flush();
+            file.Close();
         }
 
         private ButtonData[] LoadSettings()
@@ -140,30 +186,43 @@ namespace DiscordBot
             Stream stream;
             BinaryFormatter binaryFormatter = new BinaryFormatter();
 
-            ButtonData[] loadingBtn;
-
             //load from binary stream
             try
             {
                 stream = File.Open(_tokenFile, FileMode.Open);
                 _token = (string)binaryFormatter.Deserialize(stream);
+                stream.Close();
             }
             catch
             {
                 tokenButton.PerformClick();
             }
 
+            //load rest from text file
+            StreamReader file;
             try
             {
-                stream = File.Open(_settingsFile, FileMode.Open);
+                file = File.OpenText(_settingsFile);
             }
             catch
             {
                 return null;
             }
 
-            loadingBtn = (ButtonData[])binaryFormatter.Deserialize(stream);
-            stream.Close();
+            _channelID = ulong.Parse(file.ReadLine());
+            _isAutoconnect = bool.Parse(file.ReadLine());
+
+            //for later use (dynamic Btn Count)
+            _btnNum = int.Parse(file.ReadLine());
+
+            ButtonData[] loadingBtn = new ButtonData[maxBtnNum];
+            for (int i = 0; i < maxBtnNum; i++)
+            {
+                loadingBtn[i] = new ButtonData();
+                loadingBtn[i].parse(file.ReadLine());
+            }
+
+            file.Close();
             return loadingBtn;
         }
 
@@ -181,52 +240,56 @@ namespace DiscordBot
             }
             catch
             {
-                showTokenError();
+                showTokenError("Can't login. Check Token");
                 return;
             }
 
             await _client.StartAsync();
+            await _client.SetGameAsync("Preparing to Earrape", "http://www.bdfm-clan.de", StreamType.NotStreaming);
+
             _isServerConnected = true;
             tokenButton.Enabled = false;
-            connectBtn.Text = "Exit";
+            connectBtn.Text = "Disconnect";
         }
 
         private async Task<IAudioClient> connectToChannel()
         {
-            //try 5 times
-            ulong voiceID = getChannelId();
-            for (int i = 0; i < 5; i++)
+            try
             {
-                try
-                {
-                    var tmpAudio = await ((ISocketAudioChannel)_client.GetChannel(voiceID)).ConnectAsync();
-                    _isAudioConnected = true;
-                    return tmpAudio;
-                }
-                catch
-                {
-                    //do nothing, _isAudioConnectes stays false
-                }
+                IAudioClient tmpAudio = await ((ISocketAudioChannel)_client.GetChannel(_channelID)).ConnectAsync();
+                _isAudioConnected = true;
+                return tmpAudio;
             }
-            return null;
-        }
-
-        private ulong getChannelId()
-        {//TODO: connect to client
-            //get channel ID from user with '_userID'
-            return _placeholderID;
+            catch
+            {
+                //do nothing, _isAudioConnectes stays false
+                return null;
+            }
         }
 
         #endregion ConnectToServerAndAudio
 
-        private void disconnectFromServer()
+        private async void disconnectFromServer()
         {
-            _client.StopAsync();
-            _client.LogoutAsync();
-            Environment.Exit(0);
+            abortBtn.PerformClick();
+
+            await _client.SetGameAsync("Mission Completed", "http://www.bdfm-clan.de", StreamType.NotStreaming);
+
+            while (_isAudioConnected)
+            {/*wait until stream buffer is empty*/
+                await Task.Delay(10);
+            }
+
+            await _client.StopAsync();
+            await _client.LogoutAsync();
+
+            _isServerConnected = false;
+
+            connectBtn.Text = "Connect";
+            tokenButton.Enabled = true;
         }
 
-        private async void connectPlayAudioFile(ButtonData btn)
+        private async void connectPlayAudioFile(ButtonData btn, AudioOutStream stream = null)
         {
             //check for existing audioConnection
             if (!_isAudioConnected)
@@ -241,44 +304,26 @@ namespace DiscordBot
             //check for existing serverConnectitn
             if (_isServerConnected && !_isPlaying && _audioCl != null)
             {
-                var stream = _audioCl.CreatePCMStream(AudioApplication.Music);
+                if (stream == null)
+                    stream = _audioCl.CreatePCMStream(AudioApplication.Music);
 
-                //TODO: handle mono/stereo
+                MediaFoundationResampler resampler = null;
+
                 int channelCount = 2;
                 var OutFormat = new WaveFormat(48000, 16, channelCount);
 
-                Mp3FileReader MP3Reader;
-                WaveFileReader WavReader;
-                MediaFoundationResampler resampler;
-
-                //choose between wav and mp3
-                if (btn.file[btn.file.Length - 1] == 'v')
+                //choose between URl and local file
+                if (btn.file.StartsWith("http"))
                 {
-                    try
-                    {
-                        WavReader = new WaveFileReader(btn.file);
-                    }
-                    catch
-                    {
-                        return;
-                    }
-                    resampler = new MediaFoundationResampler(WavReader, OutFormat);
+                    resampler = await getStreamStream(btn, OutFormat);
                 }
                 else
-                {
-                    try
-                    {
-                        MP3Reader = new Mp3FileReader(btn.file);
-                    }
-                    catch
-                    {
-                        return;
-                    }
+                    resampler = getFileStream(btn, OutFormat);
 
-                    resampler = new MediaFoundationResampler(MP3Reader, OutFormat);
-                }
+                if (resampler == null)
+                    return;
 
-                resampler.ResamplerQuality = 60;
+                volumeSlider.Enabled = earRapeBox.Enabled = false;
 
                 //load and play audio file
                 int blockSize = OutFormat.AverageBytesPerSecond / 50;
@@ -286,16 +331,13 @@ namespace DiscordBot
                 int byteCount;
 
                 _isPlaying = true;
+
                 //start buffering
                 while ((byteCount = resampler.Read(buffer, 0, blockSize)) > 0)
                 {
                     //check each loop for abort
                     if (_isToAbort)
-                    {
-                        _isToAbort = false;
-                        _isPlaying = false;
                         break;
-                    }
 
                     //for uneven endings, fill with 0
                     if (byteCount < blockSize)
@@ -304,10 +346,80 @@ namespace DiscordBot
                             buffer[i] = 0;
                     }
                     //write to binary stream
+
                     await stream.WriteAsync(buffer, 0, blockSize);
                 }
+
                 _isPlaying = false;
+                volumeSlider.Enabled = earRapeBox.Enabled = true;
+
+                // disconnect
+                if (!_isLooped || _isToAbort)
+                {
+                    _isToAbort = false;
+                    stream.Close();
+                    await _audioCl.StopAsync();
+
+                    _isAudioConnected = false;
+                }
+                //play loop
+                else
+                {
+                    //keep stream open, for gap-less looping
+                    connectPlayAudioFile(btn, stream);
+                }
             }
+        }
+
+        private async Task<MediaFoundationResampler> getStreamStream(ButtonData btn, WaveFormat waveFormat)
+        {
+            //maybe, but only maybe in the future
+            return null;
+        }
+
+        private MediaFoundationResampler getFileStream(ButtonData btn, WaveFormat OutFormat)
+        {
+            Mp3FileReader MP3Reader;
+            WaveFileReader WavReader;
+
+            MediaFoundationResampler resampler;
+            VolumeWaveProvider16 volume;
+
+            //choose between wav and mp3
+            if (btn.file[btn.file.Length - 1] == 'v')//*.waV
+            {
+                try
+                {
+                    WavReader = new WaveFileReader(btn.file);
+                }
+                catch
+                {
+                    return null;
+                }
+                volume = new VolumeWaveProvider16(WavReader);
+            }
+            else
+            {
+                try
+                {
+                    MP3Reader = new Mp3FileReader(btn.file);
+                }
+                catch
+                {
+                    return null;
+                }
+                volume = new VolumeWaveProvider16(MP3Reader);
+            }
+
+            float volumeLever = volumeSlider.Value / 200.0f;
+            volume.Volume = volumeLever;
+
+            if (earRapeBox.Checked)
+                volume.Volume = 100;
+            //converts the incoming wav/mp3 into opus compatible format
+            resampler = new MediaFoundationResampler(volume, OutFormat);
+            resampler.ResamplerQuality = 60;
+            return resampler;
         }
 
         private void openButtonSettings(ref ButtonData btn)
@@ -329,9 +441,9 @@ namespace DiscordBot
             return settingsWindow.btn_n;
         }
 
-        private void showTokenError()
+        private void showTokenError(string msg = "")
         {
-            MessageBox.Show("Invalid Token", "Token Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            MessageBox.Show(msg, "Authorization error", MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
 
         #region ButtonEvents
@@ -343,6 +455,16 @@ namespace DiscordBot
 
             connectPlayAudioFile(btn[int.Parse(button.Tag.ToString())]);
         }
+
+        //private void playButton_Click(object sender, EventArgs e)
+        //{
+        //    ButtonData newBtn = new ButtonData();
+        //    newBtn.settingsOpened = false;
+        //    newBtn.Text = "myUrl";
+        //    newBtn.file = urlBox.Text;
+
+        //    connectPlayAudioFile(newBtn);
+        //}
 
         private void btn_MouseDown(object sender, MouseEventArgs e)
         {
@@ -359,13 +481,26 @@ namespace DiscordBot
         {
             if (!_isServerConnected)
             {
-                if (_token == "")
-                    showTokenError();
+                if (_token == "" || _token == " ")
+                    showTokenError("Token is empty");
                 connectToServer();
             }
             else
             {
                 disconnectFromServer();
+            }
+        }
+
+        private void connectBtn_MouseDown(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Right)
+            {
+                var contextPos = this.Location;
+                contextPos.X += connectBtn.Location.X;
+                contextPos.Y += connectBtn.Location.Y;
+
+                connectContextEntry.Checked = _isAutoconnect;
+                connectContext.Show(contextPos);
             }
         }
 
@@ -378,7 +513,7 @@ namespace DiscordBot
         private void channelIdBox_TextChanged(object sender, EventArgs e)
         {
             if (ulong.TryParse(channelIdBox.Text, out ulong result))
-                _placeholderID = result;
+                _channelID = result;
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -390,12 +525,61 @@ namespace DiscordBot
             _token = token.token;
         }
 
+        private void loopBox_CheckedChanged(object sender, EventArgs e)
+        {
+            _isLooped = loopBox.Checked;
+        }
+
+        private void btnNumBox_ValueChanged(object sender, EventArgs e)
+        {
+            if (btnNumBox.Value > _btnNum)
+            {
+                for (int i = _btnNum; i < btnNumBox.Value; i++)
+                {
+                    addBtnToLayout(i, btn[i]);
+                }
+                _btnNum = (int)btnNumBox.Value;
+            }
+            else if (btnNumBox.Value < _btnNum)
+            {
+                for (int i = _btnNum - 1; i >= btnNumBox.Value; i--)
+                {
+                    flowLayout.Controls.RemoveAt(i);
+                }
+                _btnNum = (int)btnNumBox.Value;
+            }
+        }
+
         #endregion ButtonEvents
+
+        private void connectContextEntry_Click(object sender, EventArgs e)
+        {
+            _isAutoconnect = !_isAutoconnect;
+            connectContextEntry.Checked = _isAutoconnect;
+        }
     }
 
-    [Serializable()]
     public class ButtonData
     {
+        public override string ToString()
+        {
+            //settingsOpened must be false on saving
+            string tmp = Text.Length.ToString() + ";" + Text + file;
+            return tmp;
+        }
+
+        public void parse(string toParse)
+        {
+            settingsOpened = false;
+            var seek = toParse.IndexOf(';');
+            var textLen = int.Parse(toParse.Substring(0, seek));
+
+            var subStr = toParse.Substring(seek + 1);
+
+            Text = subStr.Substring(0, textLen);
+            file = subStr.Substring(textLen);
+        }
+
         public bool settingsOpened;
         public string Text;
         public string file;
