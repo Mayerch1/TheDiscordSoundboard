@@ -60,7 +60,13 @@ If you compile the project by yourself, the Dll's should get generated.
 
 #### How to use the Bot
 
-You need to connect to the server before playing any file. <br>
+At first you need to copy all dll's and the .exe.config.
+Make sure, that the .exe and the .exe.config are named the same, so the executable can find it. <br>
+
+![config file](DiscordBot/doc/settingsFile.png "config file") 
+
+
+Further you need to connect to the server before playing any file. <br>
 > ###### F: Why not connect automatically? <br>
 > A: If you want to enter/change the bot token, the bot needs to be disconnected
 > Hint: try a right-click

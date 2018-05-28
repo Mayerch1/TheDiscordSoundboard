@@ -47,9 +47,7 @@ namespace DiscordBot
         private IAudioClient _audioCl;
 
         //SENSITIVE: remove before push
-
         //hardcode token here, don't need to safe it in the filesystem
-
         private string _token = "";
 
         /*----------------------------------------------------------*/
