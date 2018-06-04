@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Diagnostics;
 using System.IO;
 using System.Windows.Forms;
 
@@ -51,11 +50,6 @@ namespace DiscordBot
             var fileName = Path.GetFileName(file);
             btn_n.Text = fileName.Substring(0, fileName.LastIndexOf('.'));
             btnTextBox.Text = btn_n.Text;
-        }
-
-        private void button1_Click_1(object sender, EventArgs e)
-        {
-            Process.Start(new ProcessStartInfo("https://www.paypal.me/CJMayer/3,99"));
         }
 
         private void fileChooseBox_TextChanged(object sender, EventArgs e)

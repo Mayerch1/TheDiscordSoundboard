@@ -83,17 +83,32 @@ Further you need to connect to the server before playing any file. <br>
 3. Connect to the server
   * right-click for autoconnect
 4. Enter the ID<sup>[1](#channelFootnote)</sup> of the channel to join 
-5. Enter the Bot-Token
-6. Abort the current stream
+5. Abort the current stream
 
 ---
 
-![Settings Window](DiscordBot/doc/SettingsWin.png "Settings Window")
+![Button Menue](DiscordBot/doc/SettingsWin.png "Button Menue")
 
 1. The Name of the button
 2. Opens a file picker, to choose the file
 3. Close the winwow
   * you can also 'x' the window away
+
+---
+
+![Settings Window](DiscordBot/doc/SettingsWindow.png "Settings Window")
+
+1. Amount of Buttons to display
+2. Connect automatically on applacation start
+3. Manage channel Favorites (and assign aliases for those long ids)
+4. Enter Bot-Token
+5. Game-status panel
+   * Set a game status on join and leave
+   * The Url must be empty or an valid adress, otherwise nothing will happen
+   * You can manage presets
+   * You can change the status while the bot in connected using the 'Set now' button.
+
+
 
 ---
 
