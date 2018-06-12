@@ -3,11 +3,19 @@ this is my small Discord-Bot, orientated on the Teamspeak Soundboard. <br>
 
 It's main purpose is, to stream your local mp3 and wav files into a discord voice channel, by using a local hosted bot as middleman. <br>
 <br>
-> ##### F: Why can't I stream the Audio with my userClient? <br>
-> A: It seems that there's no simple solution, to play files without 3rd party software (like VCable). <br>This method only needs administrator rights for the discord server and is running as a portable version on your PC.
+> ##### You can now stream music, using your client. <br>
+> You can uncheck the ```isBot``` box and enter your client token.
+> But <b>never ever give away this token</b>.</br>
+> With that token you can login as bot and perform any actions in the name of your client + it's not as easy to reset as the token of a bot.
 >
-> 
-> (After this bot is finished, I'm still going to look into it, to see if there is a possibility to stream without any drivers with your client)
+> (```TheRacingLion``` described [here](https://github.com/TheRacingLion/Discord-SelfBot/wiki/Discord-Token-Tutorial), how to get this token.) </br>
+> <b>Be very carefull with the client token!!</b>
+>
+> If you decide to use your client account, you can skip the next steps until ```"How to 'install' the Soundboard"```
+>
+>Considering the limitations (you can't be in a voice channel when streaming music), it is not recommend to use this method.
+
+
 
 ---
 
@@ -19,14 +27,14 @@ It's main purpose is, to stream your local mp3 and wav files into a discord voic
 3. Internet Connection (obviously)
 4. Some soundfiles to stream
 
-What the bot needs:
+##### What the bot needs:
 1. Rights to join a channel (permanent)
 2. Rights to speak in that channel (permanent)
 3. One bot per server (multi-broadcasting is not implemented)
 
 ---
 
-##### How to create the Bot:
+#### How to create the Bot:
 
 ![Create Bot](DiscordBot/doc/createBot.png "Create Bot") 
 1. Create a bot at [this](https://discordapp.com/login?redirect_to=%2Fdevelopers%2Fapplications%2Fme) page

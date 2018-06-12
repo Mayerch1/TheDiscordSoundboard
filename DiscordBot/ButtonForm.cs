@@ -42,6 +42,7 @@ namespace DiscordBot
         public bool _isPlaying = false;
         public bool _isToAbort = false;
         public bool _isLooped = false;
+        public int _fastForward = 0;
 
         //safe and safe-reladet vars
         private Data data = new Data();
@@ -182,6 +183,7 @@ namespace DiscordBot
             {
                 file.WriteLine(element.ToString());
             }
+            file.WriteLine(data.isBot);
 
             file.Flush();
 
@@ -307,6 +309,15 @@ namespace DiscordBot
                 }
             }
 
+            if (dataVer >= 2)
+            {
+                data.isBot = bool.Parse(file.ReadLine());
+            }
+            else
+            {
+                data.isBot = true;
+            }
+
             //newer versions might load additional data
             //in 'else', defaults for old vers. will be set
 
@@ -375,10 +386,15 @@ namespace DiscordBot
         private async void connectToServer()
         {
             _client = new DiscordSocketClient();
+            TokenType myToken;
 
+            if (data.isBot)
+                myToken = TokenType.Bot;
+            else
+                myToken = TokenType.User;
             try
             {
-                await _client.LoginAsync(TokenType.Bot, data.token);
+                await _client.LoginAsync(myToken, data.token);
             }
             catch
             {
@@ -482,7 +498,13 @@ namespace DiscordBot
                     _resampler = getFileStream(btn, OutFormat);
 
                 if (_resampler == null)
+                {
+                    _isToAbort = false;
+                    stream.Close();
+                    await _audioCl.StopAsync();
+                    _isAudioConnected = false;
                     return;
+                }
 
                 volumeSlider.Enabled = false;
                 if (earRapeBox.Checked)
@@ -510,6 +532,11 @@ namespace DiscordBot
                     }
                     //write to binary stream
 
+                    if (_fastForward > 0)
+                    {
+                        _fastForward--;
+                        continue;
+                    }
                     await stream.WriteAsync(buffer, 0, blockSize);
                 }
                 _isPlaying = false;
@@ -551,6 +578,9 @@ namespace DiscordBot
             VolumeWaveProvider16 volume;
 
             //choose between wav and mp3
+            if (btn.file == "")
+                return null;
+
             if (btn.file[btn.file.Length - 1] == 'v')//*.waV
             {
                 try
@@ -732,10 +762,11 @@ namespace DiscordBot
         private void button1_Click(object sender, EventArgs e)
         {
             //open window to enter/view new token
-            TokenWindow token = new TokenWindow(data.token);
+            TokenWindow token = new TokenWindow(data.token, data.isBot);
             token.Location = this.Location;
             token.ShowDialog();
             data.token = token.token;
+            data.isBot = token.isBot;
         }
 
         private void favoriteBtn_Click(object sender, EventArgs e)
@@ -838,12 +869,19 @@ namespace DiscordBot
         }
 
         #endregion ButtonEvents
+
+        private void forwardBtn_Click(object sender, EventArgs e)
+        {
+            //TODO: adjust value
+            if (_isPlaying)
+                _fastForward += 50;
+        }
     }
 
     //all config data,
     public class Data
     {
-        public const int safeVersion = 1;
+        public const int safeVersion = 2;
 
         public int btnNum = 40;
         public ulong activeChannelID = 409439103965462528;
@@ -853,6 +891,8 @@ namespace DiscordBot
         public string joinMsg = "I'm ready";
         public bool isStreaming = false;
         public string url = "";
+
+        public bool isBot = true;
 
         public string leaveMsg = "Mission Completed";
 

@@ -73,6 +73,7 @@
             this.connectContext = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.connectContextEntry = new System.Windows.Forms.ToolStripMenuItem();
             this.channelIdBox = new System.Windows.Forms.ComboBox();
+            this.forwardBtn = new System.Windows.Forms.Button();
             this.tabControl.SuspendLayout();
             this.filePage.SuspendLayout();
             this.settingsPage.SuspendLayout();
@@ -521,11 +522,11 @@
             // 
             this.earRapeBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.earRapeBox.AutoSize = true;
-            this.earRapeBox.Location = new System.Drawing.Point(476, 277);
+            this.earRapeBox.Location = new System.Drawing.Point(507, 277);
             this.earRapeBox.Name = "earRapeBox";
-            this.earRapeBox.Size = new System.Drawing.Size(63, 17);
+            this.earRapeBox.Size = new System.Drawing.Size(53, 17);
             this.earRapeBox.TabIndex = 4;
-            this.earRapeBox.Text = "Earrape";
+            this.earRapeBox.Text = "Boost";
             this.earRapeBox.UseVisualStyleBackColor = true;
             this.earRapeBox.CheckedChanged += new System.EventHandler(this.earRapeBox_CheckedChanged);
             // 
@@ -533,7 +534,7 @@
             // 
             this.loopBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.loopBox.AutoSize = true;
-            this.loopBox.Location = new System.Drawing.Point(545, 277);
+            this.loopBox.Location = new System.Drawing.Point(566, 277);
             this.loopBox.Name = "loopBox";
             this.loopBox.Size = new System.Drawing.Size(50, 17);
             this.loopBox.TabIndex = 5;
@@ -565,11 +566,24 @@
             this.channelIdBox.Sorted = true;
             this.channelIdBox.TabIndex = 5;
             // 
+            // forwardBtn
+            // 
+            this.forwardBtn.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.forwardBtn.BackgroundImage = global::DiscordBot.Properties.Resources.Skip;
+            this.forwardBtn.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.forwardBtn.Location = new System.Drawing.Point(476, 273);
+            this.forwardBtn.Name = "forwardBtn";
+            this.forwardBtn.Size = new System.Drawing.Size(23, 23);
+            this.forwardBtn.TabIndex = 11;
+            this.forwardBtn.UseVisualStyleBackColor = true;
+            this.forwardBtn.Click += new System.EventHandler(this.forwardBtn_Click);
+            // 
             // ButtonForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(757, 308);
+            this.Controls.Add(this.forwardBtn);
             this.Controls.Add(this.channelIdBox);
             this.Controls.Add(this.loopBox);
             this.Controls.Add(this.earRapeBox);
@@ -655,6 +669,7 @@
         private System.Windows.Forms.CheckBox streamBox;
         private System.Windows.Forms.TextBox urlBox;
         private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Button forwardBtn;
     }
 }
 

@@ -6,11 +6,16 @@ namespace DiscordBot
     public partial class TokenWindow : Form
     {
         public string token;
+        public bool isBot = false;
 
-        public TokenWindow(string _token)
+        public TokenWindow(string _token, bool _isBot)
         {
             InitializeComponent();
+            
+            isBot = _isBot;
             token = _token;
+
+            isBotBox.Checked = isBot;
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -36,6 +41,11 @@ namespace DiscordBot
         private void tokenBox_TextChanged(object sender, EventArgs e)
         {
             token = tokenBox.Text;
+        }
+
+        private void isBotBox_CheckedChanged(object sender, EventArgs e)
+        {
+            isBot = isBotBox.Checked;
         }
     }
 }

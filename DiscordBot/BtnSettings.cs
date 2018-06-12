@@ -56,5 +56,13 @@ namespace DiscordBot
         {
             btn_n.file = fileChooseBox.Text;
         }
+
+        private void resetBtn_Click(object sender, EventArgs e)
+        {
+            btnTextBox.Text = " ";
+            btn_n.Text = " ";
+            btn_n.file = "";
+            fileChooseBox.Text = "";
+        }
     }
 }

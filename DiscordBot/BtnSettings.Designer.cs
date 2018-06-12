@@ -36,6 +36,7 @@
             this.fileBtn = new System.Windows.Forms.Button();
             this.fileChooseBox = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
+            this.resetBtn = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // closeBtn
@@ -97,11 +98,22 @@
             this.label2.TabIndex = 7;
             this.label2.Text = "Audio file:";
             // 
+            // resetBtn
+            // 
+            this.resetBtn.Location = new System.Drawing.Point(16, 234);
+            this.resetBtn.Name = "resetBtn";
+            this.resetBtn.Size = new System.Drawing.Size(75, 23);
+            this.resetBtn.TabIndex = 8;
+            this.resetBtn.Text = "Reset";
+            this.resetBtn.UseVisualStyleBackColor = true;
+            this.resetBtn.Click += new System.EventHandler(this.resetBtn_Click);
+            // 
             // BtnSettings
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(444, 269);
+            this.Controls.Add(this.resetBtn);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.fileChooseBox);
             this.Controls.Add(this.fileBtn);
@@ -125,5 +137,6 @@
         private System.Windows.Forms.Button fileBtn;
         private System.Windows.Forms.TextBox fileChooseBox;
         private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Button resetBtn;
     }
 }
