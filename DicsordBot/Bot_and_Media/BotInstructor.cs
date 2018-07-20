@@ -12,7 +12,7 @@ namespace DicsordBot
         {
             try
             {
-                await Handle.Bot.connectToServerAsync(Handle.Data.persistent.Token);
+                await Handle.Bot.connectToServerAsync(Handle.Data.Persistent.Token);
             }
             catch (BotException ex)
             {
@@ -45,7 +45,7 @@ namespace DicsordBot
                     //iterate through connected clints
                     foreach(var client in server)
                     {
-                        if(client.Id == Handle.Data.persistent.ClientId)
+                        if(client.Id == Handle.Data.Persistent.ClientId)
                         {
                             try
                             {

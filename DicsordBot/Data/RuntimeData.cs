@@ -26,13 +26,13 @@ namespace DicsordBot
 
         #region embedded classes
 
-        public PersistentData persistent { get; set; }
+        public PersistentData Persistent { get; set; }
 
         #endregion embedded classes
 
         public RuntimeData()
         {
-            persistent = new PersistentData();
+            Persistent = new PersistentData();
         }
 
         ~RuntimeData()
@@ -47,30 +47,30 @@ namespace DicsordBot
         public int resizeBtnList()
         {
             //downsize to minimum
-            if (persistent.BtnList.Count > persistent.VisibleButtons)
+            if (Persistent.BtnList.Count > Persistent.VisibleButtons)
             {
                 cleanBtnList();
             }
             //upsize again, if list is to short to display
-            if (persistent.BtnList.Count < persistent.VisibleButtons)
+            if (Persistent.BtnList.Count < Persistent.VisibleButtons)
             {
-                for (int i = persistent.BtnList.Count; i < persistent.VisibleButtons; i++)
+                for (int i = Persistent.BtnList.Count; i < Persistent.VisibleButtons; i++)
                 {
-                    persistent.BtnList.Add(mkDefaultButtonData());
+                    Persistent.BtnList.Add(mkDefaultButtonData());
                 }
             }
 
-            return persistent.BtnList.Count;
+            return Persistent.BtnList.Count;
         }
 
         //remove all elements above the last with content
         public void cleanBtnList()
         {
-            int upper = persistent.BtnList.Count;
+            int upper = Persistent.BtnList.Count;
 
-            for (int i = persistent.HighestButtonToSave + 1; i < upper; i++)
+            for (int i = Persistent.HighestButtonToSave + 1; i < upper; i++)
             {
-                persistent.BtnList.RemoveAt(persistent.BtnList.Count - 1);
+                Persistent.BtnList.RemoveAt(Persistent.BtnList.Count - 1);
             }
         }
 
@@ -81,23 +81,23 @@ namespace DicsordBot
         //load all data from the file
         public void loadData(string _file = saveFile)
         {
-            persistent.SettingsPath = Properties.Settings.Default.Path;
+            Persistent.SettingsPath = Properties.Settings.Default.Path;
 
-            if (persistent.SettingsPath == null || persistent.SettingsPath == "")
+            if (Persistent.SettingsPath == null || Persistent.SettingsPath == "")
             {
-                persistent.SettingsPath = System.Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\DiscordBot";
+                Persistent.SettingsPath = System.Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\DiscordBot";
             }
 
-            if (System.IO.File.Exists(persistent.SettingsPath + _file))
+            if (System.IO.File.Exists(Persistent.SettingsPath + _file))
             {
                 try
                 {
-                    System.IO.StreamReader file = System.IO.File.OpenText(persistent.SettingsPath + saveFile);
-                    Type settType = persistent.GetType();
+                    System.IO.StreamReader file = System.IO.File.OpenText(Persistent.SettingsPath + saveFile);
+                    Type settType = Persistent.GetType();
                     System.Xml.Serialization.XmlSerializer xmlSerial = new System.Xml.Serialization.XmlSerializer(settType);
                     object oData = xmlSerial.Deserialize(file);
 
-                    persistent = (PersistentData)oData;
+                    Persistent = (PersistentData)oData;
                     file.Close();
                 }
                 catch
@@ -116,10 +116,10 @@ namespace DicsordBot
         {
             /*---------Persistent-------*/
             //IDEA: adjust visible buttons
-            persistent.VisibleButtons = 80;
-            persistent.HighestButtonToSave = -1;
-            persistent.IsFirstStart = true;
-            persistent.Token = null;
+            Persistent.VisibleButtons = 80;
+            Persistent.HighestButtonToSave = -1;
+            Persistent.IsFirstStart = true;
+            Persistent.Token = null;
             /* all future settings are init. here */
 
             /*-----------Buttons-------*/
@@ -128,9 +128,9 @@ namespace DicsordBot
             ButtonData.FontFamily = "Segoe UI";
 
             //init the visible Buttons
-            for (int i = 0; i < persistent.VisibleButtons; i++)
+            for (int i = 0; i < Persistent.VisibleButtons; i++)
             {
-                persistent.BtnList.Add(mkDefaultButtonData());
+                Persistent.BtnList.Add(mkDefaultButtonData());
             }
         }
 
@@ -145,7 +145,7 @@ namespace DicsordBot
             btnD.IsLoop = false;
             btnD.BorderBrush = "#FFDDDDDD";
             btnD.BackgroundBrush = "#FF000000";
-            btnD.ID = persistent.BtnList.Count;
+            btnD.ID = Persistent.BtnList.Count;
 
             return btnD;
         }
@@ -153,26 +153,29 @@ namespace DicsordBot
         //save all data to file
         public void saveData(string _file = saveFile)
         {
-            Properties.Settings.Default.Path = persistent.SettingsPath;
+            Properties.Settings.Default.Path = Persistent.SettingsPath;
+
             Properties.Settings.Default.Save();
 
             cleanBtnList();
 
-            Type settingsType = persistent.GetType();
+            Type settingsType = Persistent.GetType();
+
+            System.IO.Directory.CreateDirectory(Persistent.SettingsPath);
 
             System.IO.StreamWriter file;
             try
             {
-                file = System.IO.File.CreateText(persistent.SettingsPath + _file);
+                file = System.IO.File.CreateText(Persistent.SettingsPath + _file);
             }
-            catch
+            catch (Exception ex)
             {
                 return;
             }
             if (settingsType.IsSerializable)
             {
                 System.Xml.Serialization.XmlSerializer serializer = new System.Xml.Serialization.XmlSerializer(settingsType);
-                serializer.Serialize(file, persistent);
+                serializer.Serialize(file, Persistent);
                 file.Flush();
                 file.Close();
             }
