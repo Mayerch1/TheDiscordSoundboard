@@ -40,14 +40,13 @@ namespace DicsordBot
             IsLoading = false;
 
             //PUBLISH: remove token
-            Handle.Data.persistent.Token = "NDQ5NjU4NTMwMzg0MDUyMjM1.Dex9tw.BzGZEzz8MSAsgQdl4zLCe5EgD2M";
+            //Don't even try, it's already changed
+            Handle.Data.persistent.Token = "";
 
             InitializeComponent();
             registerEvents();
 
             Handle.BotHandler.connectServer();
-            
-
         }
 
         private async void Test()
