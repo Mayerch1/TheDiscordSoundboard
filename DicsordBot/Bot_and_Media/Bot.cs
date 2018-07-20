@@ -26,7 +26,21 @@ namespace DicsordBot
 
         #endregion config
 
-        #region status vars
+        #region event Handlers
+
+        public delegate void StreamStateHandler(bool newState);
+
+        public StreamStateHandler StreamStateChanged;
+
+        #endregion event Handlers
+
+        #region status fields
+
+        private bool isStreaming;
+
+        #endregion status fields
+
+        #region status propertys
 
         //1.0 is 100%
         //5.0 is earrape
@@ -35,7 +49,12 @@ namespace DicsordBot
 
         public bool IsServerConnected { get; private set; } = false;
         public bool IsChannelConnected { get; private set; } = false;
-        public bool IsStreaming { get; private set; } = false;
+
+        public bool IsStreaming
+        {
+            get { return isStreaming; }
+            private set { if (value != isStreaming) { isStreaming = value; StreamStateChanged(isStreaming); } }
+        }
 
         public bool IsLoop { get; set; } = false;
 
@@ -44,7 +63,7 @@ namespace DicsordBot
         private uint SkipSeconds { get; set; }
         private uint SkipTracks { get; set; }
 
-        #endregion status vars
+        #endregion status propertys
 
         #region other vars
 
@@ -58,6 +77,7 @@ namespace DicsordBot
         {
             //TOOD: maybe other format, to format more information
             Queue = new Queue<ButtonData>();
+            IsStreaming = false;
         }
 
         #region controll stuff
@@ -167,7 +187,6 @@ namespace DicsordBot
                 }
 
                 IsStreaming = false;
-                //it should not wait for the next stream to be continued
 
                 //reopen the same file
                 if (IsLoop && !IsToAbort && SkipTracks == 0)

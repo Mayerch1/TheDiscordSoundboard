@@ -1,3 +1,6 @@
+THIS BRANCH IS UNDER CONSTRUCTION, IT'S NOT WORKING YET.
+
+
 Hi, 
 this is my small Discord-Bot, orientated on the Teamspeak Soundboard. <br>
 
