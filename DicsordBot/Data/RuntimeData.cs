@@ -13,7 +13,7 @@ namespace DicsordBot
         #region constants
 
         //PUBLISH: remove
-        private const string saveFile = "\\Test.xml";
+        private const string saveFile = "\\Settings.xml";
 
         #endregion constants
 
@@ -82,9 +82,8 @@ namespace DicsordBot
         public void loadData(string _file = saveFile)
         {
             persistent.SettingsPath = Properties.Settings.Default.Path;
-            //PUBLISH: remove
-            persistent.SettingsPath = "C:\\Users\\Christian\\Desktop";
-            if (persistent.SettingsPath == "" || persistent.SettingsPath == null)
+
+            if (persistent.SettingsPath == null || persistent.SettingsPath == "")
             {
                 persistent.SettingsPath = System.Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\DiscordBot";
             }

@@ -41,7 +41,6 @@ namespace DicsordBot
 
             //PUBLISH: remove token
             //Don't even try, it's already changed
-            Handle.Data.persistent.Token = "";
 
             InitializeComponent();
             registerEvents();
