@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -18,30 +19,87 @@ namespace DicsordBot
     /// <summary>
     /// Interaction logic for SimonTestBench.xaml
     /// </summary>
-    public partial class SimonTestBench : UserControl
+    public partial class SimonTestBench : UserControl, INotifyPropertyChanged
     {
         #region fields
-        private bool placeHolder;
+        private bool isLoading;
         # endregion
 
         #region propertys
 
-        public bool IsLoading { get; set; }
+        public bool IsLoading
+        {
+            get { return isLoading; }
+            set { if (value != isLoading) { isLoading = value; OnPropertyChanged("IsLoading"); } }
+        }
 
         #endregion propertys
 
         public SimonTestBench()
         {
+            IsLoading = false;
+
+            //PUBLISH: remove token
+            Handle.Data.persistent.Token = "NDQ5NjU4NTMwMzg0MDUyMjM1.Dex9tw.BzGZEzz8MSAsgQdl4zLCe5EgD2M";
+
             InitializeComponent();
             registerEvents();
+
+            Handle.BotHandler.connectServer();
+            
+
         }
+
+        private async void Test()
+        {
+            IsLoading = true;
+
+            if (Handle.Bot.IsStreaming)
+            {
+                await Handle.Bot.stopStreamAsync();
+            }
+            else
+            {
+                await Handle.BotHandler.connectChannel(282933462690693132);
+
+                await Handle.Bot.enqueueAsync(new ButtonData
+                {
+                    File = @"C:\Users\simon\Music\Soundboard\Wir_werden_sie jagen.mp3",
+                });
+            }
+        }
+
+        private void btn_Play_Click(object sender, RoutedEventArgs e)
+        {
+            Test();
+        }
+
+        private void btn_Instant_Click(object sender, RoutedEventArgs e)
+        {
+        }
+
+        #region event stuff
 
         private void registerEvents()
         {
             //event Handler for Stream-state of bot
             Handle.Bot.StreamStateChanged += delegate (bool newState)
             {
+                IsLoading = true;
             };
         }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        private void OnPropertyChanged(string info)
+        {
+            PropertyChangedEventHandler handler = PropertyChanged;
+            if (handler != null)
+            {
+                handler(this, new PropertyChangedEventArgs(info));
+            }
+        }
+
+        #endregion event stuff
     }
 }

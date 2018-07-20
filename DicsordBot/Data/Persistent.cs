@@ -16,6 +16,8 @@ namespace DicsordBot
         public string SettingsPath { get; set; }
         public int HighestButtonToSave { get; set; }
 
+        public ulong ClientId { get; set; }
+
         public string Token { get; set; }
 
         public int VisibleButtons { get; set; }

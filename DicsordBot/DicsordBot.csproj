@@ -169,6 +169,7 @@
     </ApplicationDefinition>
     <Compile Include="Bot_and_Media\BotException.cs" />
     <Compile Include="Bot_and_Media\Bot.cs" />
+    <Compile Include="Bot_and_Media\BotInstructor.cs" />
     <Compile Include="ChristianTestBench.xaml.cs">
       <DependentUpon>ChristianTestBench.xaml</DependentUpon>
     </Compile>

@@ -10,5 +10,13 @@ namespace DicsordBot
     {
         public static RuntimeData Data { get; set; } = new RuntimeData();
         public static Bot Bot { get; set; } = new Bot();
+        public static BotInstructor BotHandler {get; set;} = new BotInstructor();
+
+
+       
+
+      
+
+
     }
 }

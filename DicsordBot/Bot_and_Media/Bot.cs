@@ -305,6 +305,7 @@ namespace DicsordBot
             }
             catch
             {
+                //TODO: catch missing token
                 throw new BotException(BotException.type.connection, "Could not connect to Server", BotException.connectionError.NoServer);
             }
             await Client.StartAsync();

@@ -10,7 +10,7 @@ namespace DicsordBot
     {
         public enum type { connection, file, others }
 
-        public enum connectionError { NoServer, NoChannel, NoStream, Unspecified }
+        public enum connectionError { NoServer, NoChannel, NoStream, Token, Unspecified }
 
         public type Type { get; set; }
         public connectionError ConnectionError { get; set; }
