@@ -20,9 +20,28 @@ namespace DicsordBot
     /// </summary>
     public partial class SimonTestBench : UserControl
     {
+        #region fields
+        private bool placeHolder;
+        # endregion
+
+        #region propertys
+
+        public bool IsLoading { get; set; }
+
+        #endregion propertys
+
         public SimonTestBench()
         {
             InitializeComponent();
+            registerEvents();
+        }
+
+        private void registerEvents()
+        {
+            //event Handler for Stream-state of bot
+            Handle.Bot.StreamStateChanged += delegate (bool newState)
+            {
+            };
         }
     }
 }
