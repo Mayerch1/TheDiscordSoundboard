@@ -45,8 +45,15 @@ namespace DicsordBot
             InitializeComponent();
             registerEvents();
 
-            Handle.BotHandler.connectServer();
+            initAsync();
+            
         }
+
+        private async void initAsync()
+        {
+            await Handle.BotHandler.connectServer();
+        }
+
 
         private async void Test()
         {

@@ -1,87 +1,120 @@
 ﻿<UserControl x:Class="DicsordBot.SimonTestBench"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:local="clr-namespace:DicsordBot"
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
-             mc:Ignorable="d" 
+             mc:Ignorable="d"
              d:DesignHeight="800" d:DesignWidth="1400">
-    <Grid Background="White">
 
-        <Grid.RowDefinitions>
-            <RowDefinition Height="*" />
-            <RowDefinition Height="75" />
-        </Grid.RowDefinitions>
+    <DockPanel LastChildFill="true">
+        <Border Height="75" Background="#ff2167bb" DockPanel.Dock="Bottom">
+            <Grid Background="#ff2167bb">
 
-        <Grid Grid.Row="0">
-            <!--main Field-->
-        </Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="75" />
+                </Grid.RowDefinitions>
 
-        
-        <Grid Grid.Row="1" Background="#ff2167bb">
+                <Grid Grid.Row="0">
+                    <!--main Field-->
+                </Grid>
 
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*" />
-                <ColumnDefinition Width="*" />
-                <ColumnDefinition Width="*" />
-            </Grid.ColumnDefinitions>
+                <Grid Grid.Row="1">
 
-            <Grid Grid.Column="0">
-                <!--Left Box-->
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="300" />
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="300" />
+                    </Grid.ColumnDefinitions>
+
+                    <Grid Grid.Column="0">
+                        <!--Left Box-->
+                    </Grid>
+
+                    <Grid Grid.Column="1">
+
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+
+                            <Button x:Name="btn_Previous"
+                                materialDesign:ShadowAssist.ShadowDepth="Depth0"
+                                Background="#ff2167bb"
+                                BorderBrush="#ff2167bb"
+                                Style="{StaticResource MaterialDesignFloatingActionMiniLightButton}"
+                                ToolTip="MaterialDesignFloatingActionMiniLightButton">
+
+                                <materialDesign:PackIcon
+                                    materialDesign:ShadowAssist.ShadowDepth="Depth0"
+                                    Kind="SkipPrevious"
+                                    Height="24"
+                                    Width="24" />
+                            </Button>
+
+                            <Button x:Name="btn_Play"
+                                Margin="10,0,10,0"
+                                Style="{StaticResource MaterialDesignFloatingActionButton}"
+                                Click="btn_Play_Click"
+
+                                      materialDesign:ButtonProgressAssist.IsIndicatorVisible="{Binding isLoading}"
+                                      materialDesign:ButtonProgressAssist.Value="-1"
+                                      materialDesign:ButtonProgressAssist.IsIndeterminate="True"
+                                      Content="{materialDesign:PackIcon Play}">
+                            </Button>
+
+                            <Button x:Name="btn_Next"
+                                materialDesign:ShadowAssist.ShadowDepth="Depth0"
+                                Background="#ff2167bb"
+                                BorderBrush="#ff2167bb"
+                                Style="{DynamicResource MaterialDesignFloatingActionMiniLightButton}"
+                                ToolTip="MaterialDesignFloatingActionMiniLightButton">
+
+                                <materialDesign:PackIcon
+
+                                    Kind="SkipNext"
+                                    Height="24"
+                                    Width="24" />
+                            </Button>
+                        </StackPanel>
+                    </Grid>
+
+                    <Grid Grid.Column="2">
+
+                        <StackPanel Orientation="Horizontal">
+
+                            <Button
+                                materialDesign:ShadowAssist.ShadowDepth="Depth0"
+                                Background="#ff2167bb"
+                                BorderBrush="#ff2167bb"
+                                Style="{StaticResource MaterialDesignFloatingActionMiniLightButton}"
+                                ToolTip="MaterialDesignFloatingActionMiniLightButton">
+
+                                <materialDesign:PackIcon
+                                        Margin="5,0,5,0"
+                                        Kind="VolumeHigh"
+                                        Height="24"
+                                        Width="24" />
+                            </Button>
+
+                            <Slider VerticalAlignment="Center"
+                          Margin="5,0,20,0"
+                          TickFrequency="5"
+                          Orientation="Horizontal"
+                          Minimum="0"
+                          Maximum="100"
+                          Value="50"
+                          Width="240" />
+                        </StackPanel>
+                    </Grid>
+                </Grid>
             </Grid>
+        </Border>
 
-            
-            <Grid Grid.Column="1" >
-                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+        <Border Width="75" Background="Gray" DockPanel.Dock="Left">
+        </Border>
 
-                    <Button x:Name="btn_Previous"
-                            Style="{StaticResource MaterialDesignFloatingActionMiniLightButton}"
-                            ToolTip="MaterialDesignFloatingActionMiniLightButton">
-
-                        <materialDesign:PackIcon
-                                Kind="SkipPrevious"
-                                Height="24"
-                                Width="24" />
-                    </Button>
-
-                    <Button x:Name="btn_Play"
-                            Margin="10,0,10,0"
-                            Style="{StaticResource MaterialDesignFloatingActionButton}"
-                            Click="btn_Play_Click"
-                            
-                                  
-                                  materialDesign:ButtonProgressAssist.IsIndicatorVisible="{Binding isLoading}"
-                                  materialDesign:ButtonProgressAssist.Value="-1"
-                                  materialDesign:ButtonProgressAssist.IsIndeterminate="True"
-                                  Content="{materialDesign:PackIcon DotsHorizontal}">
-                    </Button>
-
-                    <Button x:Name="btn_Next"
-                            Style="{StaticResource MaterialDesignFloatingActionMiniLightButton}"
-                            ToolTip="MaterialDesignFloatingActionMiniLightButton">
-
-                        <materialDesign:PackIcon
-                                Kind="SkipNext"
-                                Height="24"
-                                Width="24" />
-
-                    </Button>
-
-                </StackPanel>
-            </Grid>
-
-            
-            <Grid Grid.Column="2">
-                <!--Right Box-->
-            </Grid>
-
-
-        </Grid>
-
-
-
-
-
-    </Grid>
+        <Border Background="White" DockPanel.Dock="Right">
+            <!--Main Grid-->
+        </Border>
+    </DockPanel>
 </UserControl>
