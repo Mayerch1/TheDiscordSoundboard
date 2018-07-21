@@ -39,37 +39,34 @@ namespace DicsordBot
         {
             IsLoading = false;
 
-            //PUBLISH: remove token
             //Don't even try, it's already changed
 
             InitializeComponent();
             registerEvents();
 
-            initAsync();
-            
+            Handle.BotHandler.connectServer();
         }
-
-        private async void initAsync()
-        {
-            await Handle.BotHandler.connectServer();
-        }
-
 
         private async void Test()
         {
+            await Handle.Bot.disconnectFromChannelAsync();
             IsLoading = true;
 
             if (Handle.Bot.IsStreaming)
             {
+                Console.WriteLine("Stopping stream");
                 await Handle.Bot.stopStreamAsync();
+                Console.WriteLine("Stream stopped");
             }
             else
             {
-                await Handle.BotHandler.connectChannel(282933462690693132);
-
-                await Handle.Bot.enqueueAsync(new ButtonData
+                Console.WriteLine("Start connecting to voice");
+                //await Handle.Bot.connectToChannelAsync(375065071946039297);
+                await Handle.Bot.connectToChannelAsync();
+                Console.WriteLine("Voice connected");
+                await Handle.Bot.enqueueAsync(new Data.ButtonData
                 {
-                    File = @"C:\Users\simon\Music\Soundboard\Wir_werden_sie jagen.mp3",
+                    File = @"F:\Christian\Music\Soundboard\Airporn.mp3",
                 });
             }
         }

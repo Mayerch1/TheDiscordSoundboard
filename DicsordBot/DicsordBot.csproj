@@ -167,9 +167,9 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="Bot_and_Media\BotException.cs" />
-    <Compile Include="Bot_and_Media\Bot.cs" />
-    <Compile Include="Bot_and_Media\BotInstructor.cs" />
+    <Compile Include="Bot\BotException.cs" />
+    <Compile Include="Bot\Bot.cs" />
+    <Compile Include="Bot\BotHandler.cs" />
     <Compile Include="ChristianTestBench.xaml.cs">
       <DependentUpon>ChristianTestBench.xaml</DependentUpon>
     </Compile>
@@ -177,6 +177,9 @@
     <Compile Include="Data\RuntimeData.cs" />
     <Compile Include="SimonTestBench.xaml.cs">
       <DependentUpon>SimonTestBench.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UnhandledException.xaml.cs">
+      <DependentUpon>UnhandledException.xaml</DependentUpon>
     </Compile>
     <Page Include="ButtonUI.xaml">
       <SubType>Designer</SubType>
@@ -198,12 +201,16 @@
     <Compile Include="ButtonUI.xaml.cs">
       <DependentUpon>ButtonUI.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Bot_and_Media\Handle.cs" />
+    <Compile Include="Handle\Handle.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
     <Page Include="SimonTestBench.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UnhandledException.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -226,7 +233,7 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <None Include="ClassDiagram.cd" />
+    <None Include="ClassDiagram1.cd" />
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -247,6 +254,9 @@
       <ProductName>.NET Framework 3.5 SP1</ProductName>
       <Install>false</Install>
     </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Media\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -36,7 +36,7 @@ namespace DicsordBot
 
         public async void Test()
         {
-            await Handle.Bot.connectToServerAsync("NDQ2MDUyMTcxNTAzMzcwMjQy.DeyEPA.oXNDT1omCRx-t5n9EhiU7hdysMY");
+            await Handle.Bot.connectToServerAsync();
 
             await Task.Delay(1250);
 
@@ -44,14 +44,12 @@ namespace DicsordBot
             await Handle.Bot.disconnectFromChannelAsync();
             await Handle.Bot.connectToChannelAsync(375065071946039297);
 
-            ButtonData btn = new ButtonData();
+            Data.ButtonData btn = new Data.ButtonData();
             //btn.File = "F:\\Christian\\Music\\Alles_nur_Spass_Mix.mp3";
             btn.File = "F:\\Christian\\Music\\Soundboard\\Airporn.mp3";
 
             Handle.Bot.Volume = 0.5f;
             Handle.Bot.IsLoop = true;
-
-            //TODO: add test slider, for demo
 
             await Handle.Bot.enqueueAsync(btn);
 

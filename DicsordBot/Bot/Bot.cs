@@ -11,8 +11,19 @@ using System.Runtime.Serialization.Formatters.Binary;
 using System.Diagnostics;
 using System.Collections.Generic;
 
-namespace DicsordBot
+namespace DicsordBot.Bot
 {
+    /*
+     * Thin Discord-Bot client
+     * Provides all functions for connecting/disconnecting to/from server
+     * Provides all functions to queue files and skip, pause the stream
+     *
+     * No error Handling, just crashes, when sth is wrong
+     *
+     * To use as standalone simply change all protected keywords to public
+     * But prepare for exceptions (and crashes, if not handled)
+    */
+
     public class Bot
     {
         #region config
@@ -47,8 +58,8 @@ namespace DicsordBot
         //10.0 is just static noise
         public float Volume { get; set; } = 0.5f;
 
-        public bool IsServerConnected { get; private set; } = false;
-        public bool IsChannelConnected { get; private set; } = false;
+        public bool IsServerConnected { get; set; }
+        public bool IsChannelConnected { get; set; }
 
         public bool IsStreaming
         {
@@ -60,7 +71,6 @@ namespace DicsordBot
 
         private bool IsToAbort { get; set; } = false;
 
-        private uint SkipSeconds { get; set; }
         private uint SkipTracks { get; set; }
 
         #endregion status propertys
@@ -69,20 +79,26 @@ namespace DicsordBot
 
         private DiscordSocketClient Client { get; set; }
         private IAudioClient AudioCl { get; set; }
-        public Queue<ButtonData> Queue { get; set; }
+        protected Queue<Data.ButtonData> Queue { get; set; }
+
+        private MediaFoundationReader Reader { get; set; }
+        private MediaFoundationResampler Resampler { get; set; }
+        private WaveFormat OutFormat { get; set; }
 
         #endregion other vars
 
         public Bot()
         {
             //TOOD: maybe other format, to format more information
-            Queue = new Queue<ButtonData>();
+            Queue = new Queue<Data.ButtonData>();
             IsStreaming = false;
+            IsChannelConnected = false;
+            IsServerConnected = false;
         }
 
         #region controll stuff
 
-        public async Task enqueueAsync(ButtonData btn)
+        protected async Task enqueueAsync(Data.ButtonData btn)
         {
             Queue.Enqueue(btn);
             if (!IsStreaming)
@@ -91,42 +107,52 @@ namespace DicsordBot
 
         public void skipTrack()
         {
-            SkipTracks += 1;
+            if (IsStreaming)
+                SkipTracks += 1;
         }
 
-        public void skipSeconds(uint skip)
+        public void skipToTime(TimeSpan newTime)
         {
-            SkipSeconds += skip * 50;
+            if (IsStreaming)
+            {
+                //TODO: not precise enough
+                long offset = OutFormat.AverageBytesPerSecond * (int)newTime.TotalSeconds;
+                Reader.Seek(offset, SeekOrigin.Begin);
+                Resampler.Reposition();
+            }
         }
 
-        public async Task<bool> setGameState(string msg, string streamUrl = "", bool isStreaming = false)
+        public void skipOverTime(TimeSpan skipTime)
+        {
+            if (IsStreaming)
+            {
+                //TODO: test
+                long offset = OutFormat.AverageBytesPerSecond * (int)skipTime.TotalSeconds;
+                Reader.Seek(offset, SeekOrigin.Current);
+                Resampler.Reposition();
+            }
+        }
+
+        protected async Task setGameState(string msg, string streamUrl = "", bool isStreaming = false)
         {
             if (!IsServerConnected)
-                return false;
+                throw new BotException(BotException.type.connection, "Not connectet to server", BotException.connectionError.NoServer);
 
             StreamType type = StreamType.NotStreaming;
             if (isStreaming)
                 type = StreamType.Twitch;
 
-            try
-            {
-                if (streamUrl == "")
-                    await Client.SetGameAsync(msg, streamUrl, type);
-                else
-                    await Client.SetGameAsync(msg);
-            }
-            catch
-            {
-                throw new BotException(BotException.type.others, "Could not set Game-state", BotException.connectionError.Unspecified);
-            }
-            return true;
+            if (streamUrl == "")
+                await Client.SetGameAsync(msg, streamUrl, type);
+            else
+                await Client.SetGameAsync(msg);
         }
 
         #endregion controll stuff
 
         #region play stuff
 
-        private async Task startStreamAsync(ButtonData btn, AudioOutStream stream = null)
+        private async Task startStreamAsync(Data.ButtonData btn, AudioOutStream stream = null)
         {
             //IsChannelConnected gaurantees, to have IsServerConnected
             if (!IsChannelConnected)
@@ -142,14 +168,13 @@ namespace DicsordBot
                 if (stream == null)
                     stream = AudioCl.CreatePCMStream(AudioApplication.Music);
 
-                MediaFoundationResampler resampler = null;
-                var OutFormat = new WaveFormat(sampleRate, bitDepth, channelCount);
+                OutFormat = new WaveFormat(sampleRate, bitDepth, channelCount);
 
-                resampler = getFileStream(btn.File, OutFormat);
+                Resampler = getFileStream(btn.File, OutFormat);
 
                 loadOverrideSettings(btn);
 
-                if (resampler == null)
+                if (Resampler == null)
                 {
                     stream.Close();
                     return;
@@ -163,7 +188,7 @@ namespace DicsordBot
                 IsStreaming = true;
 
                 //repeat, read new block into buffer -> stream buffer
-                while ((byteCount = resampler.Read(buffer, 0, blockSize)) > 0)
+                while ((byteCount = Resampler.Read(buffer, 0, blockSize)) > 0)
                 {
                     applyVolume(ref buffer);
 
@@ -175,12 +200,6 @@ namespace DicsordBot
                         //fill rest of stream with '0'
                         for (int i = byteCount; i < blockSize; i++)
                             buffer[i] = 0;
-                    }
-
-                    if (SkipSeconds > 0)
-                    {
-                        --SkipSeconds;
-                        continue;
                     }
 
                     await stream.WriteAsync(buffer, 0, blockSize);
@@ -222,7 +241,7 @@ namespace DicsordBot
         }
 
         //if button has any override settings, load them
-        private void loadOverrideSettings(ButtonData btn)
+        private void loadOverrideSettings(Data.ButtonData btn)
         {
             if (btn.Volume > 0)
                 Volume = btn.Volume;
@@ -252,38 +271,11 @@ namespace DicsordBot
         //get resampler for giver format
         private MediaFoundationResampler getFileStream(string file, WaveFormat OutFormat)
         {
-            Mp3FileReader mp3File;
-            WaveFileReader waveFile;
-
             MediaFoundationResampler resampler = null;
 
-            //*.wav
-            if (file[file.Length - 1] == 'v')
-            {
-                try
-                {
-                    waveFile = new WaveFileReader(file);
-                }
-                catch
-                {
-                    throw new BotException(BotException.type.file, "Could not load wav file", BotException.connectionError.Unspecified);
-                }
-                resampler = new MediaFoundationResampler(waveFile, OutFormat);
-            }
-            //*.mp3
-            else
-            {
-                try
-                {
-                    mp3File = new Mp3FileReader(file);
-                }
-                catch
-                {
-                    throw new BotException(BotException.type.file, "Could not load mp3 file", BotException.connectionError.Unspecified);
-                }
-                resampler = new MediaFoundationResampler(mp3File, OutFormat);
-            }
-            resampler.ResamplerQuality = sampleQuality;
+            Reader = new MediaFoundationReader(file);
+
+            resampler = new MediaFoundationResampler(Reader, OutFormat);
 
             return resampler;
         }
@@ -299,15 +291,8 @@ namespace DicsordBot
 
             Client = new DiscordSocketClient();
 
-            try
-            {
-                await Client.LoginAsync(TokenType.Bot, token);
-            }
-            catch
-            {
-                //TODO: catch missing token
-                throw new BotException(BotException.type.connection, "Could not connect to Server", BotException.connectionError.NoServer);
-            }
+            await Client.LoginAsync(TokenType.Bot, token);
+
             await Client.StartAsync();
 
             //IDEA: maybe set gamestate here
@@ -315,7 +300,7 @@ namespace DicsordBot
             IsServerConnected = true;
         }
 
-        public async Task connectToChannelAsync(ulong channelId)
+        protected async Task connectToChannelAsync(ulong channelId)
         {
             if (IsChannelConnected)
                 await disconnectFromChannelAsync();
@@ -325,14 +310,8 @@ namespace DicsordBot
                 throw new BotException(BotException.type.connection, "No server connection", BotException.connectionError.NoServer);
             }
 
-            try
-            {
-                AudioCl = await ((ISocketAudioChannel)Client.GetChannel(channelId)).ConnectAsync();
-            }
-            catch
-            {
-                throw new BotException(BotException.type.file, "Could not connect to Channel", BotException.connectionError.NoChannel);
-            }
+            AudioCl = await ((ISocketAudioChannel)Client.GetChannel(channelId)).ConnectAsync();
+
             IsChannelConnected = true;
         }
 
@@ -391,7 +370,7 @@ namespace DicsordBot
         #region get data
 
         //returns a List<List>, all channels of all servers are contained
-        public List<List<SocketVoiceChannel>> getAllChannels()
+        protected List<List<SocketVoiceChannel>> getAllChannels()
         {
             if (!IsServerConnected)
                 throw new BotException(BotException.type.connection, "No Server-connection", BotException.connectionError.NoServer);
@@ -419,7 +398,7 @@ namespace DicsordBot
         }
 
         //returns a List<List>, all online clients of all servers are contained
-        public List<List<SocketGuildUser>> getAllClients()
+        protected List<List<SocketGuildUser>> getAllClients()
         {
             if (!IsServerConnected)
                 throw new BotException(BotException.type.connection, "No Server-connection", BotException.connectionError.NoServer);

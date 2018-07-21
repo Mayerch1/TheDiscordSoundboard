@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Media;
 
-namespace DicsordBot
+namespace DicsordBot.Data
 {
     [Serializable()]
     public class ButtonData
