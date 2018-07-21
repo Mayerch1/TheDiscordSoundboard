@@ -1,7 +1,6 @@
 ﻿using Discord.WebSocket;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -12,7 +11,8 @@ namespace DicsordBot.Bot
      * Handle for the Bot
      *
      * Derives from bot
-     * Overrides all unsafe functions and add handler + information from the Handler.Data
+     * Warps the bot client into a failsafe environment
+     * Handles almost everythis or shows the UnhandledException Dialog
      *
      * Catches and treats exception from base class
      */
@@ -35,23 +35,23 @@ namespace DicsordBot.Bot
             catch (System.IO.DirectoryNotFoundException ex)
             {
                 //FUTURE: show Dialog
-                Console.WriteLine("File Exception");
+                Console.WriteLine("File Exception no dir");
             }
             catch (System.IO.FileNotFoundException ex)
             {
                 //FUTURE: show Dialog
-                Console.WriteLine("File Exception");
+                Console.WriteLine("File Exception not Found");
             }
             catch (System.IO.InvalidDataException ex)
             {
                 //FUTURE: show Dialog
-                Console.WriteLine("File Exception");
+                Console.WriteLine("File Exception invalid");
             }
             catch (Exception ex)
             {
                 UnhandledException.initWindow(ex);
 
-                Console.WriteLine("File Exception");
+                Console.WriteLine("File Exception others");
                 //TODO: catch all possible ex
             }
         }

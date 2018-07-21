@@ -27,17 +27,10 @@ namespace DicsordBot
         {
             InitializeComponent();
 
-            BtnList = new MyButton[11];
+            BtnList = new MyButton[Handle.Data.Persistent.VisibleButtons];
+            Handle.Data.resizeBtnList();
 
-            for (int i = 0; i < 11; i++)
-            {
-                var btn = new MyButton("Test-" + i);
-                btn.ID = i;
-
-                BtnList[i] = (btn);
-            }
-
-            btnControl.ItemsSource = BtnList;
+            btnControl.ItemsSource = Handle.Data.Persistent.BtnList;
 
             this.DataContext = this;
         }

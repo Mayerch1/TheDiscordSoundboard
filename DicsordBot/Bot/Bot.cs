@@ -58,9 +58,6 @@ namespace DicsordBot.Bot
         //10.0 is just static noise
         public float Volume { get; set; } = 0.5f;
 
-        private MediaFoundationReader Reader { get; set; }
-        private MediaFoundationResampler Resampler { get; set; }
-
         public bool IsServerConnected { get; set; }
         public bool IsChannelConnected { get; set; }
 
@@ -84,6 +81,10 @@ namespace DicsordBot.Bot
         private IAudioClient AudioCl { get; set; }
         protected Queue<Data.ButtonData> Queue { get; set; }
 
+        private MediaFoundationReader Reader { get; set; }
+        private MediaFoundationResampler Resampler { get; set; }
+        private WaveFormat OutFormat { get; set; }
+
         #endregion other vars
 
         public Bot()
@@ -106,21 +107,30 @@ namespace DicsordBot.Bot
 
         public void skipTrack()
         {
-            SkipTracks += 1;
+            if (IsStreaming)
+                SkipTracks += 1;
         }
 
-        public void skipToTime(uint skip)
+        public void skipToTime(TimeSpan newTime)
         {
-            long offset = 0;
-            Reader.Seek(offset, SeekOrigin.Begin);
-            Resampler.Reposition();
+            if (IsStreaming)
+            {
+                //TODO: not precise enough
+                long offset = OutFormat.AverageBytesPerSecond * (int)newTime.TotalSeconds;
+                Reader.Seek(offset, SeekOrigin.Begin);
+                Resampler.Reposition();
+            }
         }
 
-        public void skipOverTime()
+        public void skipOverTime(TimeSpan skipTime)
         {
-            long offset = 0;
-            Reader.Seek(offset, SeekOrigin.Current);
-            Resampler.Reposition();
+            if (IsStreaming)
+            {
+                //TODO: test
+                long offset = OutFormat.AverageBytesPerSecond * (int)skipTime.TotalSeconds;
+                Reader.Seek(offset, SeekOrigin.Current);
+                Resampler.Reposition();
+            }
         }
 
         protected async Task setGameState(string msg, string streamUrl = "", bool isStreaming = false)
@@ -158,7 +168,7 @@ namespace DicsordBot.Bot
                 if (stream == null)
                     stream = AudioCl.CreatePCMStream(AudioApplication.Music);
 
-                var OutFormat = new WaveFormat(sampleRate, bitDepth, channelCount);
+                OutFormat = new WaveFormat(sampleRate, bitDepth, channelCount);
 
                 Resampler = getFileStream(btn.File, OutFormat);
 
@@ -261,32 +271,11 @@ namespace DicsordBot.Bot
         //get resampler for giver format
         private MediaFoundationResampler getFileStream(string file, WaveFormat OutFormat)
         {
-            //Mp3FileReader mp3File;
-            //WaveFileReader waveFile;
-
-            MediaFoundationReader reader;
-
             MediaFoundationResampler resampler = null;
 
-            reader = new MediaFoundationReader(file);
-            //TODO: seek reader, etc
-            resampler = new MediaFoundationResampler(reader, OutFormat);
+            Reader = new MediaFoundationReader(file);
 
-            ////*.wav
-            //if (file[file.Length - 1] == 'v')
-            //{
-            //    waveFile = new WaveFileReader(file);
-            //    TotalTime = waveFile.TotalTime;
-            //    resampler = new MediaFoundationResampler(waveFile, OutFormat);
-            //}
-            ////*.mp3
-            //else
-            //{
-            //    mp3File = new Mp3FileReader(file);
-            //    TotalTime = mp3File.TotalTime;
-            //    resampler = new MediaFoundationResampler(mp3File, OutFormat);
-            //}
-            //resampler.ResamplerQuality = sampleQuality;
+            resampler = new MediaFoundationResampler(Reader, OutFormat);
 
             return resampler;
         }
