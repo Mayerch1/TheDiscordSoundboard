@@ -36,7 +36,7 @@ namespace DicsordBot
 
         public async void Test()
         {
-            await Handle.Bot.connectToServerAsync("NDQ2MDUyMTcxNTAzMzcwMjQy.DeyEPA.oXNDT1omCRx-t5n9EhiU7hdysMY");
+            await Handle.Bot.connectToServerAsync();
 
             await Task.Delay(1250);
 

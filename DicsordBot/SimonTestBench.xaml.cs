@@ -45,24 +45,35 @@ namespace DicsordBot
             InitializeComponent();
             registerEvents();
 
-            Handle.BotHandler.connectServer();
+            initAsync();
+        }
+
+        private async void initAsync()
+        {
+            await Handle.Bot.connectToServerAsync();
+            Console.WriteLine("Connected");
         }
 
         private async void Test()
         {
+            await Handle.Bot.disconnectFromChannelAsync();
             IsLoading = true;
 
             if (Handle.Bot.IsStreaming)
             {
+                Console.WriteLine("Stopping stream");
                 await Handle.Bot.stopStreamAsync();
+                Console.WriteLine("Stream stopped");
             }
             else
             {
-                await Handle.BotHandler.connectChannel(282933462690693132);
-
+                Console.WriteLine("Start connecting to voice");
+                //await Handle.Bot.connectToChannelAsync(375065071946039297);
+                await Handle.Bot.connectToChannelAsync();
+                Console.WriteLine("Voice connected");
                 await Handle.Bot.enqueueAsync(new ButtonData
                 {
-                    File = @"C:\Users\simon\Music\Soundboard\Wir_werden_sie jagen.mp3",
+                    File = @"F:\Christian\Music\Soundboard\Airporn.mp3",
                 });
             }
         }

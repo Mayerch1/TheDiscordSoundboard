@@ -169,7 +169,7 @@
     </ApplicationDefinition>
     <Compile Include="Bot_and_Media\BotException.cs" />
     <Compile Include="Bot_and_Media\Bot.cs" />
-    <Compile Include="Bot_and_Media\BotInstructor.cs" />
+    <Compile Include="Bot_and_Media\BotHandler.cs" />
     <Compile Include="ChristianTestBench.xaml.cs">
       <DependentUpon>ChristianTestBench.xaml</DependentUpon>
     </Compile>
@@ -177,6 +177,9 @@
     <Compile Include="Data\RuntimeData.cs" />
     <Compile Include="SimonTestBench.xaml.cs">
       <DependentUpon>SimonTestBench.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UnhandledException.xaml.cs">
+      <DependentUpon>UnhandledException.xaml</DependentUpon>
     </Compile>
     <Page Include="ButtonUI.xaml">
       <SubType>Designer</SubType>
@@ -207,6 +210,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="UnhandledException.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs">
@@ -226,7 +233,7 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <None Include="ClassDiagram.cd" />
+    <None Include="ClassDiagram1.cd" />
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
