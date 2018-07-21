@@ -34,21 +34,24 @@ namespace DicsordBot.Bot
             }
             catch (System.IO.DirectoryNotFoundException ex)
             {
-                //TODO: treat
+                //FUTURE: show Dialog
+                Console.WriteLine("File Exception");
             }
             catch (System.IO.FileNotFoundException ex)
             {
-                //TODO: treat
+                //FUTURE: show Dialog
+                Console.WriteLine("File Exception");
             }
             catch (System.IO.InvalidDataException ex)
             {
-                //TODO: treat
+                //FUTURE: show Dialog
+                Console.WriteLine("File Exception");
             }
             catch (Exception ex)
             {
                 UnhandledException.initWindow(ex);
 
-                Console.WriteLine("Break");
+                Console.WriteLine("File Exception");
                 //TODO: catch all possible ex
             }
         }
@@ -65,6 +68,7 @@ namespace DicsordBot.Bot
             catch (Exception ex)
             {
                 UnhandledException.initWindow(ex, "Failed to set GameStatus");
+                Console.WriteLine("GameState Exception");
                 return false;
             }
 
@@ -81,13 +85,20 @@ namespace DicsordBot.Bot
             {
                 await base.connectToServerAsync(Handle.Data.Persistent.Token);
             }
+            catch (Discord.Net.HttpException ex)
+            {
+                //FUTURE: show dialog
+                Console.WriteLine("connetcion Exception");
+            }
+            catch (System.Net.Http.HttpRequestException ex)
+            {
+                //FUTURE: show dialog
+                Console.WriteLine("connetcion Exception");
+            }
             catch (Exception ex)
             {
-                Console.WriteLine("break");
-                //TODO: catch
-                //invalid token
-                //no connection
-                //everything else
+                UnhandledException.initWindow(ex, "Couldn'd connect to the Discord Servers");
+                Console.WriteLine("connetcion Exception");
             }
         }
 
@@ -113,9 +124,20 @@ namespace DicsordBot.Bot
                             {
                                 await base.connectToChannelAsync(client.VoiceChannel.Id);
                             }
+                            catch (System.Threading.Tasks.TaskCanceledException ex)
+                            {
+                                //FUTURE: show dialog
+                                Console.WriteLine("connetcion Exception");
+                            }
+                            catch (System.TimeoutException ex)
+                            {
+                                Console.WriteLine("connetcion Exception");
+                                //FUTURE: show dialog
+                            }
                             catch (Exception ex)
                             {
-                                Console.WriteLine("Error, connecting to owner async");
+                                Console.WriteLine("connetcion Exception");
+                                UnhandledException.initWindow(ex, "Error while connecting to owner channel");
                                 //TODO: catch
                                 //connection lost while connecting
                                 //timeout
@@ -124,6 +146,7 @@ namespace DicsordBot.Bot
                         }
                     }
                 }
+                //FUTURE: no client found, show msg
             }
             else
             {
@@ -131,11 +154,22 @@ namespace DicsordBot.Bot
                 {
                     await base.connectToChannelAsync(id);
                 }
+                catch (System.Threading.Tasks.TaskCanceledException ex)
+                {
+                    //FUTURE: show dialog
+                    Console.WriteLine("connetcion Exception");
+                }
+                catch (System.TimeoutException ex)
+                {
+                    Console.WriteLine("connetcion Exception");
+                    //FUTURE: show dialog
+                }
                 catch (Exception ex)
                 {
+                    Console.WriteLine("connetcion Exception");
+                    UnhandledException.initWindow(ex, "Error while connecting to specific channel");
                     //TODO: catch
                     //connection lost while connecting
-                    //no permission to join
                 }
             }
         }
