@@ -1,11 +1,12 @@
 ﻿using Discord.WebSocket;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DicsordBot
+namespace DicsordBot.Bot
 {
     /*
      * Handle for the Bot
@@ -24,8 +25,9 @@ namespace DicsordBot
 
         #region controll stuff
 
-        new public async Task enqueueAsync(ButtonData btn)
+        new public async Task enqueueAsync(Data.ButtonData btn)
         {
+            //HINT: backchek with connectToChannelAync()
             try
             {
                 await base.enqueueAsync(btn);
@@ -44,6 +46,8 @@ namespace DicsordBot
             }
             catch (Exception ex)
             {
+                UnhandledException.initWindow(ex);
+
                 Console.WriteLine("Break");
                 //TODO: catch all possible ex
             }
@@ -60,7 +64,7 @@ namespace DicsordBot
             }
             catch (Exception ex)
             {
-                //TODO: catch all possible ex
+                UnhandledException.initWindow(ex, "Failed to set GameStatus");
                 return false;
             }
 
@@ -151,9 +155,9 @@ namespace DicsordBot
             {
                 channelList = base.getAllChannels();
             }
-            catch
+            catch (Exception ex)
             {
-                //TODO: show dialog
+                UnhandledException.initWindow(ex, "Could'n request channel List");
                 return null;
             }
 
@@ -171,9 +175,9 @@ namespace DicsordBot
             {
                 userList = base.getAllClients();
             }
-            catch
+            catch (Exception ex)
             {
-                //TODO: show dialog
+                UnhandledException.initWindow(ex, "Could'n request user List");
                 return null;
             }
 

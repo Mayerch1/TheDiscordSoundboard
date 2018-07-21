@@ -8,7 +8,7 @@ namespace DicsordBot
 {
     public static class Handle
     {
-        public static RuntimeData Data { get; set; } = new RuntimeData();
-        public static BotHandle Bot { get; set; } = new BotHandle();
+        public static Data.RuntimeData Data { get; set; } = new Data.RuntimeData();
+        public static Bot.BotHandle Bot { get; set; } = new Bot.BotHandle();
     }
 }

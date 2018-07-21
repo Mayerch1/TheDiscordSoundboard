@@ -11,7 +11,7 @@ using System.Runtime.Serialization.Formatters.Binary;
 using System.Diagnostics;
 using System.Collections.Generic;
 
-namespace DicsordBot
+namespace DicsordBot.Bot
 {
     /*
      * Thin Discord-Bot client
@@ -58,8 +58,8 @@ namespace DicsordBot
         //10.0 is just static noise
         public float Volume { get; set; } = 0.5f;
 
-        public TimeSpan CurrentTime { get; set; }
-        public TimeSpan TotalTime { get; set; }
+        private MediaFoundationReader Reader { get; set; }
+        private MediaFoundationResampler Resampler { get; set; }
 
         public bool IsServerConnected { get; set; }
         public bool IsChannelConnected { get; set; }
@@ -74,7 +74,6 @@ namespace DicsordBot
 
         private bool IsToAbort { get; set; } = false;
 
-        private uint SkipSeconds { get; set; }
         private uint SkipTracks { get; set; }
 
         #endregion status propertys
@@ -83,14 +82,14 @@ namespace DicsordBot
 
         private DiscordSocketClient Client { get; set; }
         private IAudioClient AudioCl { get; set; }
-        protected Queue<ButtonData> Queue { get; set; }
+        protected Queue<Data.ButtonData> Queue { get; set; }
 
         #endregion other vars
 
         public Bot()
         {
             //TOOD: maybe other format, to format more information
-            Queue = new Queue<ButtonData>();
+            Queue = new Queue<Data.ButtonData>();
             IsStreaming = false;
             IsChannelConnected = false;
             IsServerConnected = false;
@@ -98,7 +97,7 @@ namespace DicsordBot
 
         #region controll stuff
 
-        protected async Task enqueueAsync(ButtonData btn)
+        protected async Task enqueueAsync(Data.ButtonData btn)
         {
             Queue.Enqueue(btn);
             if (!IsStreaming)
@@ -110,9 +109,18 @@ namespace DicsordBot
             SkipTracks += 1;
         }
 
-        public void skipSeconds(uint skip)
+        public void skipToTime(uint skip)
         {
-            SkipSeconds += skip * 50;
+            long offset = 0;
+            Reader.Seek(offset, SeekOrigin.Begin);
+            Resampler.Reposition();
+        }
+
+        public void skipOverTime()
+        {
+            long offset = 0;
+            Reader.Seek(offset, SeekOrigin.Current);
+            Resampler.Reposition();
         }
 
         protected async Task setGameState(string msg, string streamUrl = "", bool isStreaming = false)
@@ -134,7 +142,7 @@ namespace DicsordBot
 
         #region play stuff
 
-        private async Task startStreamAsync(ButtonData btn, AudioOutStream stream = null)
+        private async Task startStreamAsync(Data.ButtonData btn, AudioOutStream stream = null)
         {
             //IsChannelConnected gaurantees, to have IsServerConnected
             if (!IsChannelConnected)
@@ -150,14 +158,13 @@ namespace DicsordBot
                 if (stream == null)
                     stream = AudioCl.CreatePCMStream(AudioApplication.Music);
 
-                MediaFoundationResampler resampler = null;
                 var OutFormat = new WaveFormat(sampleRate, bitDepth, channelCount);
 
-                resampler = getFileStream(btn.File, OutFormat);
+                Resampler = getFileStream(btn.File, OutFormat);
 
                 loadOverrideSettings(btn);
 
-                if (resampler == null)
+                if (Resampler == null)
                 {
                     stream.Close();
                     return;
@@ -168,14 +175,10 @@ namespace DicsordBot
                 byte[] buffer = new byte[blockSize];
                 int byteCount;
 
-                //this is the time, which passes between to packest
-                TimeSpan deltaTime = TimeSpan.FromMilliseconds(20);
-
                 IsStreaming = true;
-                CurrentTime = TimeSpan.Zero;
 
                 //repeat, read new block into buffer -> stream buffer
-                while ((byteCount = resampler.Read(buffer, 0, blockSize)) > 0)
+                while ((byteCount = Resampler.Read(buffer, 0, blockSize)) > 0)
                 {
                     applyVolume(ref buffer);
 
@@ -189,14 +192,7 @@ namespace DicsordBot
                             buffer[i] = 0;
                     }
 
-                    if (SkipSeconds > 0)
-                    {
-                        --SkipSeconds;
-                        continue;
-                    }
-
                     await stream.WriteAsync(buffer, 0, blockSize);
-                    CurrentTime = CurrentTime.Add(deltaTime);
                 }
 
                 IsStreaming = false;
@@ -235,7 +231,7 @@ namespace DicsordBot
         }
 
         //if button has any override settings, load them
-        private void loadOverrideSettings(ButtonData btn)
+        private void loadOverrideSettings(Data.ButtonData btn)
         {
             if (btn.Volume > 0)
                 Volume = btn.Volume;
@@ -265,26 +261,32 @@ namespace DicsordBot
         //get resampler for giver format
         private MediaFoundationResampler getFileStream(string file, WaveFormat OutFormat)
         {
-            Mp3FileReader mp3File;
-            WaveFileReader waveFile;
+            //Mp3FileReader mp3File;
+            //WaveFileReader waveFile;
+
+            MediaFoundationReader reader;
 
             MediaFoundationResampler resampler = null;
 
-            //*.wav
-            if (file[file.Length - 1] == 'v')
-            {
-                waveFile = new WaveFileReader(file);
-                TotalTime = waveFile.TotalTime;
-                resampler = new MediaFoundationResampler(waveFile, OutFormat);
-            }
-            //*.mp3
-            else
-            {
-                mp3File = new Mp3FileReader(file);
-                TotalTime = mp3File.TotalTime;
-                resampler = new MediaFoundationResampler(mp3File, OutFormat);
-            }
-            resampler.ResamplerQuality = sampleQuality;
+            reader = new MediaFoundationReader(file);
+            //TODO: seek reader, etc
+            resampler = new MediaFoundationResampler(reader, OutFormat);
+
+            ////*.wav
+            //if (file[file.Length - 1] == 'v')
+            //{
+            //    waveFile = new WaveFileReader(file);
+            //    TotalTime = waveFile.TotalTime;
+            //    resampler = new MediaFoundationResampler(waveFile, OutFormat);
+            //}
+            ////*.mp3
+            //else
+            //{
+            //    mp3File = new Mp3FileReader(file);
+            //    TotalTime = mp3File.TotalTime;
+            //    resampler = new MediaFoundationResampler(mp3File, OutFormat);
+            //}
+            //resampler.ResamplerQuality = sampleQuality;
 
             return resampler;
         }

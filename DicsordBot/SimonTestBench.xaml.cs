@@ -39,7 +39,6 @@ namespace DicsordBot
         {
             IsLoading = false;
 
-            //PUBLISH: remove token
             //Don't even try, it's already changed
 
             InitializeComponent();
@@ -71,7 +70,7 @@ namespace DicsordBot
                 //await Handle.Bot.connectToChannelAsync(375065071946039297);
                 await Handle.Bot.connectToChannelAsync();
                 Console.WriteLine("Voice connected");
-                await Handle.Bot.enqueueAsync(new ButtonData
+                await Handle.Bot.enqueueAsync(new Data.ButtonData
                 {
                     File = @"F:\Christian\Music\Soundboard\Airporn.mp3",
                 });
