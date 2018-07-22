@@ -108,7 +108,7 @@ namespace DicsordBot.Bot
             if (!IsStreaming)
             {
                 getStream(btn);
-                await startStreamAsync(Queue.Dequeue());
+                await startStreamAsync(btn);
             }
             else
             {

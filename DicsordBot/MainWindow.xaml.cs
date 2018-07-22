@@ -21,7 +21,6 @@ namespace DicsordBot
     /// </summary>
     public partial class MainWindow : Window, INotifyPropertyChanged
     {
-
         #region fields
 
         private bool isLoading;
@@ -33,13 +32,13 @@ namespace DicsordBot
 
         public double Volume
         {
-            get { return (double)Handle.Data.Persistent.Volume; }
+            get { return (double)Handle.Data.Persistent.Volume * 100.0f; }
             set
             {
                 if (value != Volume)
                 {
                     LastVolume = Volume;
-                    Handle.Data.Persistent.Volume = (float)value;
+                    Handle.Data.Persistent.Volume = (float)value / 100.0f;
                     setVolumeIcon();
                     OnPropertyChanged("Volume");
                 }
@@ -53,9 +52,6 @@ namespace DicsordBot
         }
 
         #endregion propertys
-
-
-
 
         public MainWindow()
         {
@@ -83,16 +79,13 @@ namespace DicsordBot
         {
             Handle.Data.saveData();
 
-           await Handle.Bot.disconnectFromServerAsync();
-         }
-
+            await Handle.Bot.disconnectFromServerAsync();
+        }
 
         private async void initAsync()
         {
             await Handle.Bot.connectToServerAsync();
         }
-
-
 
         private void setVolumeIcon()
         {
@@ -158,7 +151,6 @@ namespace DicsordBot
             };
         }
 
-
         private void btn_Volume_Click(object sender, RoutedEventArgs e)
         {
             if (Volume > 0)
@@ -170,10 +162,6 @@ namespace DicsordBot
                 Volume = LastVolume;
             }
         }
-
-
-
-
 
         public event PropertyChangedEventHandler PropertyChanged;
 
