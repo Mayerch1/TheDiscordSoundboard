@@ -33,7 +33,6 @@ namespace DicsordBot.Bot
             if (!IsChannelConnected)
                 await connectToChannelAsync();
 
-            
             try
             {
                 await base.enqueueAsync(btn);
@@ -58,6 +57,24 @@ namespace DicsordBot.Bot
                 UnhandledException.initWindow(ex);
 
                 Console.WriteLine("File Exception others");
+                //TODO: catch all possible ex
+            }
+        }
+
+        new public async Task resumeStream()
+        {
+            if (!IsServerConnected)
+                await connectToServerAsync();
+
+            if (!IsChannelConnected)
+                await connectToChannelAsync();
+
+            try
+            {
+                await base.resumeStream();
+            }
+            catch (Exception ex)
+            {
                 //TODO: catch all possible ex
             }
         }

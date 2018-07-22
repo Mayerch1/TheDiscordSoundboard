@@ -20,11 +20,17 @@ namespace DicsordBot
     /// </summary>
     public partial class ButtonSettingUI : UserControl
     {
-        public ButtonSettingUI(int index)
+        private int index;
+
+        public ButtonSettingUI(int _index)
         {
+            index = _index;
+
             InitializeComponent();
 
             this.DataContext = Handle.Data.Persistent.BtnList[index];
+
+            Handle.Data.ButtonChanged(index);
         }
     }
 }

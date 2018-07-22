@@ -117,12 +117,7 @@ namespace DicsordBot
             }
             else
             {
-                await Handle.Bot.connectToChannelAsync();
-                await Handle.Bot.enqueueAsync(new Data.ButtonData
-                {
-                    Name = "Nothing",
-                    File = @"",
-                });
+                await Handle.Bot.resumeStream();
             }
         }
 

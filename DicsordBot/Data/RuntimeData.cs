@@ -37,6 +37,30 @@ namespace DicsordBot.Data
 
         #region ManageData
 
+        //sets HighestButtonToSave to new high
+        public void ButtonChanged(int index)
+        {
+            if (index > Persistent.HighestButtonToSave)
+                Persistent.HighestButtonToSave = index;
+        }
+
+        //sets HighestButtonToSave if button was reset
+        //this must be called AFTER the button was reset
+        public void ButtonReset(int index)
+        {
+            if (index == Persistent.HighestButtonToSave)
+            {
+                for (int i = index; i >= 0; i--)
+                {
+                    if (Persistent.BtnList[i].Name != null)
+                    {
+                        Persistent.HighestButtonToSave = (i - 1);
+                        break;
+                    }
+                }
+            }
+        }
+
         //delete empty List elements
         //adds new elements, if more are to be displayed
         public int resizeBtnList()

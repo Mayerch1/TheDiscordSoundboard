@@ -108,12 +108,17 @@ namespace DicsordBot.Bot
             if (!IsStreaming)
             {
                 getStream(btn);
-                await startStreamAsync(btn);
+                await startStreamAsync();
             }
             else
             {
                 Queue.Enqueue(btn);
             }
+        }
+
+        protected async Task resumeStream()
+        {
+            await startStreamAsync();
         }
 
         public void skipTrack()
@@ -177,7 +182,7 @@ namespace DicsordBot.Bot
                 return;
         }
 
-        private async Task startStreamAsync(Data.ButtonData btn, AudioOutStream stream = null)
+        private async Task startStreamAsync(AudioOutStream stream = null)
         {
             //IsChannelConnected gaurantees, to have IsServerConnected
             if (!IsChannelConnected)
@@ -232,7 +237,7 @@ namespace DicsordBot.Bot
                     TimeSpan begin = TimeSpan.Zero;
                     //move head to begin of file
                     skipToTime(begin);
-                    await startStreamAsync(btn, stream);
+                    await startStreamAsync(stream);
                 }
                 //next file in queue
                 else if (Queue.Count > 0 && !IsToAbort)
@@ -245,9 +250,8 @@ namespace DicsordBot.Bot
                     IsLoop = false;
                     //IDEA: disable earrape
 
-                    Data.ButtonData newBtn = Queue.Dequeue();
-                    getStream(newBtn);
-                    await startStreamAsync(newBtn, stream);
+                    getStream(Queue.Dequeue());
+                    await startStreamAsync(stream);
                 }
                 //exit stream
                 else
