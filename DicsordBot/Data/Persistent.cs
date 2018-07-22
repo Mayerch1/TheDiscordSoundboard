@@ -20,9 +20,9 @@ namespace DicsordBot.Data
 
         public string Token { get; set; } = null;
 
-        public int VisibleButtons { get; set; } = 80;
+        public int VisibleButtons { get; set; } = 36;
 
-        public float Volume { get; set; }
+        public float Volume { get; set; } = 0.5f;
 
         #endregion persistend vars
 

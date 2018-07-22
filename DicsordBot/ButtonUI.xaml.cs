@@ -36,8 +36,7 @@ namespace DicsordBot
         {
             Button btn = (Button)sender;
 
-            int index = (int)btn.Tag;
-            btn.Content = "Clicked";
+            int index = (int)btn.Tag;         
 
             execBtn(index);
         }

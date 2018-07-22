@@ -21,12 +21,56 @@ namespace DicsordBot
     /// </summary>
     public partial class MainWindow : Window, INotifyPropertyChanged
     {
+
+        #region fields
+
+        private bool isLoading;
+        # endregion
+
+        #region propertys
+
+        private double LastVolume { get; set; }
+
+        public double Volume
+        {
+            get { return (double)Handle.Data.Persistent.Volume; }
+            set
+            {
+                if (value != Volume)
+                {
+                    LastVolume = Volume;
+                    Handle.Data.Persistent.Volume = (float)value;
+                    setVolumeIcon();
+                    OnPropertyChanged("Volume");
+                }
+            }
+        }
+
+        public bool IsLoading
+        {
+            get { return isLoading; }
+            set { if (value != isLoading) { isLoading = value; OnPropertyChanged("IsLoading"); } }
+        }
+
+        #endregion propertys
+
+
+
+
         public MainWindow()
         {
             //need this, so other tasks will wait
             Handle.Data.loadData();
             InitializeComponent();
 
+            IsLoading = false;
+
+            //Don't even try, it's already changed
+
+            registerEvents();
+            initAsync();
+
+            setVolumeIcon();
             DataContext = this;
         }
 
@@ -42,6 +86,95 @@ namespace DicsordBot
            await Handle.Bot.disconnectFromServerAsync();
          }
 
+
+        private async void initAsync()
+        {
+            await Handle.Bot.connectToServerAsync();
+        }
+
+
+
+        private void setVolumeIcon()
+        {
+            if (Volume == 0)
+            {
+                btn_Volume.Content = FindResource("IconMuteVolume");
+            }
+            else if (Volume > 0 && Volume < 10)
+            {
+                btn_Volume.Content = FindResource("IconLowVolume");
+            }
+            else if (Volume >= 10 && Volume < 44)
+            {
+                btn_Volume.Content = FindResource("IconMediumVolume");
+            }
+            else
+            {
+                btn_Volume.Content = FindResource("IconHighVolume");
+            }
+        }
+
+        //TODO: get nicen name
+        private async void playClicked()
+        {
+            IsLoading = true;
+            if (Handle.Bot.IsStreaming)
+            {
+                await Handle.Bot.stopStreamAsync();
+            }
+            else
+            {
+                await Handle.Bot.connectToChannelAsync();
+                await Handle.Bot.enqueueAsync(new Data.ButtonData
+                {
+                    Name = "Nothing",
+                    File = @"",
+                });
+            }
+        }
+
+        #region event stuff
+
+        private void btn_Play_Click(object sender, RoutedEventArgs e)
+        {
+            playClicked();
+        }
+
+        private void btn_Next_Click(object sender, RoutedEventArgs e)
+        {
+            Handle.Bot.skipTrack();
+        }
+
+        private void btn_Previous_Click(object sender, RoutedEventArgs e)
+        {
+        }
+
+        private void registerEvents()
+        {
+            //event Handler for Stream-state of bot
+            Handle.Bot.StreamStateChanged += delegate (bool newState)
+            {
+                IsLoading = false;
+            };
+        }
+
+
+        private void btn_Volume_Click(object sender, RoutedEventArgs e)
+        {
+            if (Volume > 0)
+            {
+                Volume = 0;
+            }
+            else
+            {
+                Volume = LastVolume;
+            }
+        }
+
+
+
+
+
         public event PropertyChangedEventHandler PropertyChanged;
 
         private void OnPropertyChanged(string info)
@@ -52,5 +185,7 @@ namespace DicsordBot
                 handler(this, new PropertyChangedEventArgs(info));
             }
         }
+
+        #endregion event stuff
     }
 }

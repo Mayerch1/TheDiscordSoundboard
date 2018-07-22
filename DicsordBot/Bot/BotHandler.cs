@@ -29,7 +29,11 @@ namespace DicsordBot.Bot
         {
             if (!IsServerConnected)
                 await connectToServerAsync();
-            //HINT: backchek with connectToChannelAync()
+
+            if (!IsChannelConnected)
+                await connectToChannelAsync();
+
+            
             try
             {
                 await base.enqueueAsync(btn);

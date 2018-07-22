@@ -173,15 +173,9 @@
     <Compile Include="ButtonSettingUI.xaml.cs">
       <DependentUpon>ButtonSettingUI.xaml</DependentUpon>
     </Compile>
-    <Compile Include="ChristianTestBench.xaml.cs">
-      <DependentUpon>ChristianTestBench.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Data\Persistent.cs" />
     <Compile Include="Data\RuntimeData.cs" />
     <Compile Include="Data\SerialFont.cs" />
-    <Compile Include="SimonTestBench.xaml.cs">
-      <DependentUpon>SimonTestBench.xaml</DependentUpon>
-    </Compile>
     <Compile Include="UnhandledException.xaml.cs">
       <DependentUpon>UnhandledException.xaml</DependentUpon>
     </Compile>
@@ -190,10 +184,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="ButtonUI.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="ChristianTestBench.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -214,10 +204,6 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Page Include="SimonTestBench.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="UnhandledException.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -241,7 +227,6 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <None Include="ClassDiagram1.cd" />
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
