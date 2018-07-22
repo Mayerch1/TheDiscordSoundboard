@@ -10,17 +10,17 @@ namespace DicsordBot.Data
     [Serializable()]
     public class PersistentData
     {
-
         #region persistend vars
-        public bool IsFirstStart { get; set; }
+
+        public bool IsFirstStart { get; set; } = true;
         public string SettingsPath { get; set; }
-        public int HighestButtonToSave { get; set; }
+        public int HighestButtonToSave { get; set; } = -1;
 
         public ulong ClientId { get; set; }
 
-        public string Token { get; set; }
+        public string Token { get; set; } = null;
 
-        public int VisibleButtons { get; set; }
+        public int VisibleButtons { get; set; } = 80;
 
         public float Volume { get; set; }
 

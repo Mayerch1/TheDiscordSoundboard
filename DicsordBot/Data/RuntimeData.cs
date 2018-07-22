@@ -35,7 +35,6 @@ namespace DicsordBot.Data
             Persistent = new PersistentData();
         }
 
-
         #region ManageData
 
         //delete empty List elements
@@ -111,17 +110,10 @@ namespace DicsordBot.Data
         private void loadDefaultValues()
         {
             /*---------Persistent-------*/
-            //IDEA: adjust visible buttons
-            Persistent.VisibleButtons = 80;
-            Persistent.HighestButtonToSave = -1;
-            Persistent.IsFirstStart = true;
-            Persistent.Token = null;
+
             /* all future settings are init. here */
 
             /*-----------Buttons-------*/
-
-            ButtonData.ForegroundBrush = "#FF707070";
-            ButtonData.FontFamily = "Segoe UI";
 
             //init the visible Buttons
             for (int i = 0; i < Persistent.VisibleButtons; i++)
@@ -135,12 +127,6 @@ namespace DicsordBot.Data
         {
             ButtonData btnD = new ButtonData();
 
-            btnD.File = null;
-            btnD.Name = null;
-            btnD.Volume = -1;
-            btnD.IsLoop = false;
-            btnD.BorderBrush = "#FFDDDDDD";
-            btnD.BackgroundBrush = "#FF000000";
             btnD.ID = Persistent.BtnList.Count;
 
             return btnD;

@@ -39,19 +39,35 @@ namespace DicsordBot
             int index = (int)btn.Tag;
             btn.Content = "Clicked";
 
-
-            
-
             execBtn(index);
         }
 
+        private void btn_Instant_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            if (e.RightButton == MouseButtonState.Pressed)
+            {
+                //open settings for that Button
+                Button btn = (Button)sender;
+                int index = (int)btn.Tag;
+
+                openButtonSettings(index);
+            }
+        }
+
+        private void openButtonSettings(int index)
+        {
+            Window window = new Window
+            {
+                Title = "Settings",
+                Content = new ButtonSettingUI(index),
+            };
+
+            window.ShowDialog();
+        }
 
         private async void execBtn(int index)
         {
             await Handle.Bot.enqueueAsync(Handle.Data.Persistent.BtnList[index]);
-
         }
-
-
     }
 }

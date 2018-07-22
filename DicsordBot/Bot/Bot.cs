@@ -264,9 +264,6 @@ namespace DicsordBot.Bot
         //if button has any override settings, load them
         private void loadOverrideSettings(Data.ButtonData btn)
         {
-            if (btn.Volume > 0)
-                Volume = btn.Volume;
-
             if (btn.IsLoop)
                 IsLoop = btn.IsLoop;
         }
