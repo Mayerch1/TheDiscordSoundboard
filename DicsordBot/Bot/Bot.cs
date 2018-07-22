@@ -1,5 +1,4 @@
-﻿using System;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 
 using NAudio.Wave;
 
@@ -10,6 +9,7 @@ using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Diagnostics;
 using System.Collections.Generic;
+using System;
 
 namespace DicsordBot.Bot
 {
@@ -31,6 +31,7 @@ namespace DicsordBot.Bot
         private const int channelCount = 2;
         private const int sampleRate = 48000;
         private const int sampleQuality = 60;
+        private const int packagesPerSecond = 50;
 
         //if changed, also change applyVolume();
         private const int bitDepth = 16;
@@ -56,7 +57,11 @@ namespace DicsordBot.Bot
         //1.0 is 100%
         //5.0 is earrape
         //10.0 is just static noise
-        public float Volume { get; set; } = 0.5f;
+        public float Volume
+        {
+            get { return Handle.Data.Persistent.Volume; }
+            set { Handle.Data.Persistent.Volume = value; }
+        }
 
         public bool IsServerConnected { get; set; }
         public bool IsChannelConnected { get; set; }
@@ -100,9 +105,15 @@ namespace DicsordBot.Bot
 
         protected async Task enqueueAsync(Data.ButtonData btn)
         {
-            Queue.Enqueue(btn);
             if (!IsStreaming)
+            {
+                getStream(btn);
                 await startStreamAsync(Queue.Dequeue());
+            }
+            else
+            {
+                Queue.Enqueue(btn);
+            }
         }
 
         public void skipTrack()
@@ -152,6 +163,20 @@ namespace DicsordBot.Bot
 
         #region play stuff
 
+        private void getStream(Data.ButtonData btn)
+        {
+            OutFormat = new WaveFormat(sampleRate, bitDepth, channelCount);
+
+            Reader = new MediaFoundationReader(btn.File);
+
+            Resampler = new MediaFoundationResampler(Reader, OutFormat);
+
+            loadOverrideSettings(btn);
+
+            if (Resampler == null)
+                return;
+        }
+
         private async Task startStreamAsync(Data.ButtonData btn, AudioOutStream stream = null)
         {
             //IsChannelConnected gaurantees, to have IsServerConnected
@@ -168,12 +193,6 @@ namespace DicsordBot.Bot
                 if (stream == null)
                     stream = AudioCl.CreatePCMStream(AudioApplication.Music);
 
-                OutFormat = new WaveFormat(sampleRate, bitDepth, channelCount);
-
-                Resampler = getFileStream(btn.File, OutFormat);
-
-                loadOverrideSettings(btn);
-
                 if (Resampler == null)
                 {
                     stream.Close();
@@ -181,7 +200,7 @@ namespace DicsordBot.Bot
                 }
 
                 //send stream in small packages
-                int blockSize = OutFormat.AverageBytesPerSecond / 50;
+                int blockSize = OutFormat.AverageBytesPerSecond / packagesPerSecond;
                 byte[] buffer = new byte[blockSize];
                 int byteCount;
 
@@ -210,22 +229,25 @@ namespace DicsordBot.Bot
                 //reopen the same file
                 if (IsLoop && !IsToAbort && SkipTracks == 0)
                 {
+                    TimeSpan begin = TimeSpan.Zero;
+                    //move head to begin of file
+                    skipToTime(begin);
                     await startStreamAsync(btn, stream);
-                    return;
                 }
                 //next file in queue
                 else if (Queue.Count > 0 && !IsToAbort)
                 {
                     //skip one less
                     if (SkipTracks > 0)
-                        //reset for next song
                         --SkipTracks;
 
+                    //reset for next song
                     IsLoop = false;
                     //IDEA: disable earrape
 
-                    await startStreamAsync(Queue.Dequeue(), stream);
-                    return;
+                    Data.ButtonData newBtn = Queue.Dequeue();
+                    getStream(newBtn);
+                    await startStreamAsync(newBtn, stream);
                 }
                 //exit stream
                 else
@@ -235,7 +257,6 @@ namespace DicsordBot.Bot
 
                     stream.Close();
                     IsToAbort = false;
-                    return;
                 }
             }
         }
@@ -266,18 +287,6 @@ namespace DicsordBot.Bot
                 buffer[i] = (byte)bytePair;
                 buffer[i + 1] = (byte)(bytePair >> 8);
             }
-        }
-
-        //get resampler for giver format
-        private MediaFoundationResampler getFileStream(string file, WaveFormat OutFormat)
-        {
-            MediaFoundationResampler resampler = null;
-
-            Reader = new MediaFoundationReader(file);
-
-            resampler = new MediaFoundationResampler(Reader, OutFormat);
-
-            return resampler;
         }
 
         #endregion play stuff
@@ -336,6 +345,8 @@ namespace DicsordBot.Bot
             if (!IsServerConnected)
                 return;
 
+            Console.WriteLine("Disconnecting from channel / stopping client");
+
             await disconnectFromChannelAsync();
 
             //IDEA: maybe set game state
@@ -344,10 +355,15 @@ namespace DicsordBot.Bot
             while (IsChannelConnected)
                 await Task.Delay(10);
 
+            Console.WriteLine("Stopping Client...");
+
             await Client.StopAsync();
             await Client.LogoutAsync();
+            Console.WriteLine("Stopped Client");
 
             IsServerConnected = false;
+
+            Console.WriteLine("Last user-code was executed");
         }
 
         public async Task stopStreamAsync()

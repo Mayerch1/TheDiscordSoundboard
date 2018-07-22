@@ -22,10 +22,28 @@ namespace DicsordBot
     public partial class SimonTestBench : UserControl, INotifyPropertyChanged
     {
         #region fields
+
         private bool isLoading;
         # endregion
 
         #region propertys
+
+        private double LastVolume { get; set; }
+
+        public double Volume
+        {
+            get { return (double)Handle.Data.Persistent.Volume; }
+            set
+            {
+                if (value != Volume)
+                {
+                    LastVolume = Volume;
+                    Handle.Data.Persistent.Volume = (float)value;
+                    setVolumeIcon();
+                    OnPropertyChanged("Volume");
+                }
+            }
+        }
 
         public bool IsLoading
         {
@@ -43,51 +61,78 @@ namespace DicsordBot
 
             InitializeComponent();
             registerEvents();
+            initAsync();
 
-            Handle.BotHandler.connectServer();
+            setVolumeIcon();
+            DataContext = this;
         }
 
-        private async void Test()
+        private async void initAsync()
         {
-            await Handle.Bot.disconnectFromChannelAsync();
-            IsLoading = true;
+            await Handle.Bot.connectToServerAsync();
+        }
 
-            if (Handle.Bot.IsStreaming)
+        private void setVolumeIcon()
+        {
+            if (Volume == 0)
             {
-                Console.WriteLine("Stopping stream");
-                await Handle.Bot.stopStreamAsync();
-                Console.WriteLine("Stream stopped");
+                btn_Volume.Content = FindResource("IconMuteVolume");
+            }
+            else if (Volume > 0 && Volume < 10)
+            {
+                btn_Volume.Content = FindResource("IconLowVolume");
+            }
+            else if (Volume >= 10 && Volume < 44)
+            {
+                btn_Volume.Content = FindResource("IconMediumVolume");
             }
             else
             {
-                Console.WriteLine("Start connecting to voice");
-                //await Handle.Bot.connectToChannelAsync(375065071946039297);
+                btn_Volume.Content = FindResource("IconHighVolume");
+            }
+        }
+
+        //TODO: get nicen name
+        private async void playClicked()
+        {
+            IsLoading = true;
+            if (Handle.Bot.IsStreaming)
+            {
+                await Handle.Bot.stopStreamAsync();
+            }
+            else
+            {
                 await Handle.Bot.connectToChannelAsync();
-                Console.WriteLine("Voice connected");
                 await Handle.Bot.enqueueAsync(new Data.ButtonData
                 {
-                    File = @"F:\Christian\Music\Soundboard\Airporn.mp3",
+                    Name = "Nothing",
+                    File = @"",
                 });
             }
         }
 
+        #region event stuff
+
         private void btn_Play_Click(object sender, RoutedEventArgs e)
         {
-            Test();
+            playClicked();
         }
 
-        private void btn_Instant_Click(object sender, RoutedEventArgs e)
+        private void btn_Next_Click(object sender, RoutedEventArgs e)
+        {
+            Handle.Bot.skipTrack();
+        }
+
+        private void btn_Previous_Click(object sender, RoutedEventArgs e)
         {
         }
-
-        #region event stuff
 
         private void registerEvents()
         {
             //event Handler for Stream-state of bot
             Handle.Bot.StreamStateChanged += delegate (bool newState)
             {
-                IsLoading = true;
+                IsLoading = false;
             };
         }
 
@@ -99,6 +144,18 @@ namespace DicsordBot
             if (handler != null)
             {
                 handler(this, new PropertyChangedEventArgs(info));
+            }
+        }
+
+        private void btn_Volume_Click(object sender, RoutedEventArgs e)
+        {
+            if (Volume > 0)
+            {
+                Volume = 0;
+            }
+            else
+            {
+                Volume = LastVolume;
             }
         }
 

@@ -10,8 +10,8 @@ namespace DicsordBot.Data
     [Serializable()]
     public class PersistentData
     {
-        #region persistend vars
 
+        #region persistend vars
         public bool IsFirstStart { get; set; }
         public string SettingsPath { get; set; }
         public int HighestButtonToSave { get; set; }
@@ -21,6 +21,8 @@ namespace DicsordBot.Data
         public string Token { get; set; }
 
         public int VisibleButtons { get; set; }
+
+        public float Volume { get; set; }
 
         #endregion persistend vars
 

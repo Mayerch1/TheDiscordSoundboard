@@ -21,13 +21,10 @@ namespace DicsordBot
     /// </summary>
     public partial class ButtonUI
     {
-        public MyButton[] BtnList { get; set; }
-
         public ButtonUI()
         {
             InitializeComponent();
 
-            BtnList = new MyButton[Handle.Data.Persistent.VisibleButtons];
             Handle.Data.resizeBtnList();
 
             btnControl.ItemsSource = Handle.Data.Persistent.BtnList;
@@ -35,27 +32,26 @@ namespace DicsordBot
             this.DataContext = this;
         }
 
-        private void test_Click(object sender, RoutedEventArgs e)
+        private void btn_Instant_Click(object sender, RoutedEventArgs e)
         {
             Button btn = (Button)sender;
-            Console.WriteLine(btn.Tag);
 
             int index = (int)btn.Tag;
-
-            BtnList[index].Name = "Clicked";
             btn.Content = "Clicked";
-            Handle.Bot.disconnectFromServerAsync();
-        }
-    }
 
-    public class MyButton
-    {
-        public MyButton(string n)
+
+            
+
+            execBtn(index);
+        }
+
+
+        private async void execBtn(int index)
         {
-            Name = n;
+            await Handle.Bot.enqueueAsync(Handle.Data.Persistent.BtnList[index]);
+
         }
 
-        public string Name { get; set; }
-        public int ID { get; set; }
+
     }
 }

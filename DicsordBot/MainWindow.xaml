@@ -6,9 +6,9 @@
         xmlns:local="clr-namespace:DicsordBot"
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800" Closing="MainWindow_Closing">
+        Title="MainWindow" Height="800" Width="1200" Closing="MainWindow_Closing">
     <Grid>
-        <local:ButtonUI>
-        </local:ButtonUI>
+        <local:SimonTestBench>
+        </local:SimonTestBench>
     </Grid>
 </Window>

@@ -39,8 +39,8 @@ namespace DicsordBot
         {
             Handle.Data.saveData();
 
-            await Handle.Bot.disconnectFromServerAsync();
-        }
+           await Handle.Bot.disconnectFromServerAsync();
+         }
 
         public event PropertyChangedEventHandler PropertyChanged;
 

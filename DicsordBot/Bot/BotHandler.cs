@@ -27,6 +27,8 @@ namespace DicsordBot.Bot
 
         new public async Task enqueueAsync(Data.ButtonData btn)
         {
+            if (!IsServerConnected)
+                await connectToServerAsync();
             //HINT: backchek with connectToChannelAync()
             try
             {

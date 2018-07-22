@@ -7,19 +7,24 @@
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              mc:Ignorable="d"
              d:DesignHeight="800" d:DesignWidth="1400">
+    <UserControl.Resources>
+        <materialDesign:PackIcon x:Key="IconMuteVolume" Margin="5,0,5,0" Kind="VolumeMute" Height="24" Width="24" />
+        <materialDesign:PackIcon x:Key="IconLowVolume" Margin="5,0,5,0" Kind="VolumeLow" Height="24" Width="24" />
+        <materialDesign:PackIcon x:Key="IconMediumVolume" Margin="5,0,5,0" Kind="VolumeMedium" Height="24" Width="24" />
+        <materialDesign:PackIcon x:Key="IconHighVolume"  Margin="5,0,5,0" Kind="VolumeHigh" Height="24" Width="24" />
+    </UserControl.Resources>
 
-    <DockPanel LastChildFill="true">
-        <Border Height="75" Background="#ff2167bb" DockPanel.Dock="Bottom">
-            <Grid Background="#ff2167bb">
+    <DockPanel LastChildFill="True">
 
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="*" />
-                    <RowDefinition Height="75" />
-                </Grid.RowDefinitions>
+        <Border Height="75" Background="AliceBlue" DockPanel.Dock="Bottom">
+            <Border.Effect>
+                <DropShadowEffect Color="Black"
+                                  Direction="90"
+                                 BlurRadius="10"
+                                ShadowDepth="3" />
+            </Border.Effect>
 
-                <Grid Grid.Row="0">
-                    <!--main Field-->
-                </Grid>
+            <Grid Background="White" DockPanel.Dock="Bottom">
 
                 <Grid Grid.Row="1">
 
@@ -31,6 +36,8 @@
 
                     <Grid Grid.Column="0">
                         <!--Left Box-->
+                        <TextBox Text="{Binding Volume}">
+                        </TextBox>
                     </Grid>
 
                     <Grid Grid.Column="1">
@@ -38,6 +45,7 @@
                         <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
 
                             <Button x:Name="btn_Previous"
+                                Click="btn_Previous_Click"
                                 materialDesign:ShadowAssist.ShadowDepth="Depth0"
                                 Background="#ff2167bb"
                                 BorderBrush="#ff2167bb"
@@ -63,6 +71,7 @@
                             </Button>
 
                             <Button x:Name="btn_Next"
+                                Click="btn_Next_Click"
                                 materialDesign:ShadowAssist.ShadowDepth="Depth0"
                                 Background="#ff2167bb"
                                 BorderBrush="#ff2167bb"
@@ -82,7 +91,8 @@
 
                         <StackPanel Orientation="Horizontal">
 
-                            <Button
+                            <Button x:Name ="btn_Volume" HorizontalAlignment="Left"
+                                Click="btn_Volume_Click"
                                 materialDesign:ShadowAssist.ShadowDepth="Depth0"
                                 Background="#ff2167bb"
                                 BorderBrush="#ff2167bb"
@@ -91,7 +101,7 @@
 
                                 <materialDesign:PackIcon
                                         Margin="5,0,5,0"
-                                        Kind="VolumeHigh"
+                                        Kind="VolumeMute"
                                         Height="24"
                                         Width="24" />
                             </Button>
@@ -102,7 +112,7 @@
                           Orientation="Horizontal"
                           Minimum="0"
                           Maximum="100"
-                          Value="50"
+                          Value="{Binding Volume}"
                           Width="240" />
                         </StackPanel>
                     </Grid>
@@ -111,10 +121,26 @@
         </Border>
 
         <Border Width="75" Background="Gray" DockPanel.Dock="Left">
+            <!--Left Panel-->
         </Border>
 
-        <Border Background="White" DockPanel.Dock="Right">
+        <Border Height="60" DockPanel.Dock="Top" Background="White">
+            <materialDesign:ColorZone Height="55" materialDesign:ShadowAssist.ShadowDepth="Depth1" materialDesign:ShadowAssist.ShadowEdges="Bottom">
+                <Button
+                                Content="Test"
+                                materialDesign:ShadowAssist.ShadowDepth="Depth3"
+                                Background="#ff2167bb"
+                                BorderBrush="#ff2167bb"
+                                Style="{StaticResource MaterialDesignFloatingActionMiniLightButton}"
+                                ToolTip="MaterialDesignFloatingActionMiniLightButton">
+                </Button>
+            </materialDesign:ColorZone>
+        </Border>
+
+        <Border Background="White" DockPanel.Dock="Right" materialDesign:ShadowAssist.ShadowDepth="Depth2" materialDesign:ShadowAssist.ShadowEdges="Top">
+
             <!--Main Grid-->
+            <local:ButtonUI />
         </Border>
     </DockPanel>
 </UserControl>

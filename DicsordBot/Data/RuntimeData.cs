@@ -35,10 +35,6 @@ namespace DicsordBot.Data
             Persistent = new PersistentData();
         }
 
-        ~RuntimeData()
-        {
-            saveData(saveFile);
-        }
 
         #region ManageData
 
