@@ -138,6 +138,13 @@ namespace DicsordBot
 
         #region event stuff
 
+        private async void btn_InstantButton_Clicked(int btnListIndex)
+        {
+            await Handle.Bot.enqueueAsync(Handle.Data.Persistent.BtnList[btnListIndex]);
+            if (!Handle.Bot.IsStreaming)
+                await Handle.Bot.resumeStream();
+        }
+
         private void btn_Play_Click(object sender, RoutedEventArgs e)
         {
             playClicked();
@@ -154,6 +161,10 @@ namespace DicsordBot
 
         private void registerEvents()
         {
+            //subsribe to intsant button event
+            //TODO: give buttonui a name, then uncomment
+            //ButtonUI.InstantButtonClicked += btn_InstantButton_Clicked;
+
             //event Handler for Stream-state of bot
             Handle.Bot.StreamStateChanged += delegate (bool newState)
             {

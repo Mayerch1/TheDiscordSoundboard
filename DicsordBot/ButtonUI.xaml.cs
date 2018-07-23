@@ -21,6 +21,10 @@ namespace DicsordBot
     /// </summary>
     public partial class ButtonUI
     {
+        public delegate void InstantButtonClickedHandler(int btnListIndex);
+
+        public InstantButtonClickedHandler InstantButtonClicked;
+
         public ButtonUI()
         {
             InitializeComponent();
@@ -34,11 +38,13 @@ namespace DicsordBot
 
         private void btn_Instant_Click(object sender, RoutedEventArgs e)
         {
+            //event is handled in MainWindow
+
             Button btn = (Button)sender;
 
             int index = (int)btn.Tag;
 
-            execBtn(index);
+            InstantButtonClicked(index);
         }
 
         private void btn_Instant_MouseDown(object sender, MouseButtonEventArgs e)
@@ -62,13 +68,6 @@ namespace DicsordBot
             };
 
             window.ShowDialog();
-        }
-
-        private async void execBtn(int index)
-        {
-            await Handle.Bot.enqueueAsync(Handle.Data.Persistent.BtnList[index]);
-            if (!Handle.Bot.IsStreaming)
-                await Handle.Bot.resumeStream();
         }
     }
 }
