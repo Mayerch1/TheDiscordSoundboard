@@ -167,6 +167,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Handle\BotData.cs" />
     <Compile Include="Bot\BotException.cs" />
     <Compile Include="Bot\Bot.cs" />
     <Compile Include="Bot\BotHandler.cs" />
@@ -175,7 +176,6 @@
     </Compile>
     <Compile Include="Data\Persistent.cs" />
     <Compile Include="Data\RuntimeData.cs" />
-    <Compile Include="Data\SerialFont.cs" />
     <Compile Include="UnhandledException.xaml.cs">
       <DependentUpon>UnhandledException.xaml</DependentUpon>
     </Compile>
@@ -227,6 +227,7 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <None Include="ClassDiagram1.cd" />
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -248,8 +249,6 @@
       <Install>false</Install>
     </BootstrapperPackage>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Media\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

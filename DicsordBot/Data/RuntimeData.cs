@@ -1,6 +1,7 @@
 ﻿using Discord.WebSocket;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -8,7 +9,7 @@ using System.Windows.Media;
 
 namespace DicsordBot.Data
 {
-    public class RuntimeData
+    public class RuntimeData : INotifyPropertyChanged
 
     {
         #region constants
@@ -17,47 +18,34 @@ namespace DicsordBot.Data
 
         #endregion constants
 
-        #region volatile vars
+        #region fields
 
-        public List<List<SocketVoiceChannel>> channelList;
-        public List<List<SocketGuildUser>> clientList;
+        private PersistentData persistent = new PersistentData();
 
-        #endregion volatile vars
+        #endregion fields
 
-        #region embedded classes
+        #region properties
 
-        public PersistentData Persistent { get; set; }
+        public PersistentData Persistent { get { return persistent; } set { persistent = value; OnPropertyChanged("Persistent"); } }
 
-        #endregion embedded classes
+        #endregion properties
 
         public RuntimeData()
         {
-            Persistent = new PersistentData();
+            ButtonData.PropertyChanged += HandleButtonPropertyChanged;
         }
 
         #region ManageData
 
-        //sets HighestButtonToSave to new high
-        public void ButtonChanged(int index)
+        private void HandleButtonPropertyChanged(object sender, EventArgs e)
         {
-            if (index > Persistent.HighestButtonToSave)
-                Persistent.HighestButtonToSave = index;
-        }
+            Persistent.HighestButtonToSave = -1;
 
-        //sets HighestButtonToSave if button was reset
-        //this must be called AFTER the button was reset
-        public void ButtonReset(int index)
-        {
-            if (index == Persistent.HighestButtonToSave)
+            foreach (var element in Persistent.BtnList)
             {
-                for (int i = index; i >= 0; i--)
-                {
-                    if (Persistent.BtnList[i].Name != null)
-                    {
-                        Persistent.HighestButtonToSave = (i - 1);
-                        break;
-                    }
-                }
+                //a button with file and name null is considered empty
+                if (element.Name != null && element.File != null)
+                    Persistent.HighestButtonToSave = element.ID;
             }
         }
 
@@ -188,5 +176,20 @@ namespace DicsordBot.Data
         }
 
         #endregion Handle Save/Load
+
+        #region events
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        private void OnPropertyChanged(string info)
+        {
+            PropertyChangedEventHandler handler = PropertyChanged;
+            if (handler != null)
+            {
+                handler(null, new PropertyChangedEventArgs(info));
+            }
+        }
+
+        #endregion events
     }
 }

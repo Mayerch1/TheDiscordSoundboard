@@ -57,11 +57,7 @@ namespace DicsordBot.Bot
         //1.0 is 100%
         //5.0 is earrape
         //10.0 is just static noise
-        public float Volume
-        {
-            get { return Handle.Data.Persistent.Volume; }
-            set { Handle.Data.Persistent.Volume = value; }
-        }
+        public float Volume { get; set; }
 
         public bool IsServerConnected { get; set; }
         public bool IsChannelConnected { get; set; }
@@ -71,6 +67,8 @@ namespace DicsordBot.Bot
             get { return isStreaming; }
             private set { if (value != isStreaming) { isStreaming = value; StreamStateChanged(isStreaming); } }
         }
+
+        public bool IsBufferEmpty { get; set; }
 
         public bool IsLoop { get; set; } = false;
 
@@ -99,16 +97,16 @@ namespace DicsordBot.Bot
             IsStreaming = false;
             IsChannelConnected = false;
             IsServerConnected = false;
+            IsBufferEmpty = true;
         }
 
         #region controll stuff
 
-        protected async Task enqueueAsync(Data.ButtonData btn)
+        protected void enqueueAsync(Data.ButtonData btn)
         {
             if (!IsStreaming)
             {
                 getStream(btn);
-                await startStreamAsync();
             }
             else
             {
@@ -131,10 +129,7 @@ namespace DicsordBot.Bot
         {
             if (IsStreaming)
             {
-                //TODO: not precise enough
-                long offset = OutFormat.AverageBytesPerSecond * (int)newTime.TotalSeconds;
-                Reader.Seek(offset, SeekOrigin.Begin);
-                Resampler.Reposition();
+                Reader.CurrentTime = newTime;
             }
         }
 
@@ -142,10 +137,7 @@ namespace DicsordBot.Bot
         {
             if (IsStreaming)
             {
-                //TODO: test
-                long offset = OutFormat.AverageBytesPerSecond * (int)skipTime.TotalSeconds;
-                Reader.Seek(offset, SeekOrigin.Current);
-                Resampler.Reposition();
+                Reader.CurrentTime = Reader.CurrentTime.Add(skipTime);
             }
         }
 
@@ -176,10 +168,9 @@ namespace DicsordBot.Bot
 
             Resampler = new MediaFoundationResampler(Reader, OutFormat);
 
-            loadOverrideSettings(btn);
+            IsBufferEmpty = false;
 
-            if (Resampler == null)
-                return;
+            loadOverrideSettings(btn);
         }
 
         private async Task startStreamAsync(AudioOutStream stream = null)
@@ -224,6 +215,7 @@ namespace DicsordBot.Bot
                         //fill rest of stream with '0'
                         for (int i = byteCount; i < blockSize; i++)
                             buffer[i] = 0;
+                        IsBufferEmpty = true;
                     }
 
                     await stream.WriteAsync(buffer, 0, blockSize);
@@ -256,6 +248,8 @@ namespace DicsordBot.Bot
                 //exit stream
                 else
                 {
+                    //can't skip a track if nothing is running
+                    SkipTracks = 0;
                     //wait until last packages are played
                     await Task.Delay(1250);
 
@@ -294,7 +288,7 @@ namespace DicsordBot.Bot
 
         #region start stuff
 
-        public async Task connectToServerAsync(string token)
+        protected async Task connectToServerAsync(string token)
         {
             if (IsServerConnected)
                 await disconnectFromServerAsync();
@@ -304,8 +298,6 @@ namespace DicsordBot.Bot
             await Client.LoginAsync(TokenType.Bot, token);
 
             await Client.StartAsync();
-
-            //IDEA: maybe set gamestate here
 
             IsServerConnected = true;
         }
@@ -349,8 +341,6 @@ namespace DicsordBot.Bot
             Console.WriteLine("Disconnecting from channel / stopping client");
 
             await disconnectFromChannelAsync();
-
-            //IDEA: maybe set game state
 
             //wait until last packet is played
             while (IsChannelConnected)

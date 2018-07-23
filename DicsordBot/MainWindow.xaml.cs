@@ -32,13 +32,13 @@ namespace DicsordBot
 
         public double Volume
         {
-            get { return (double)Handle.Data.Persistent.Volume * 100.0f; }
+            get { return (double)Handle.Volume * 100.0f; }
             set
             {
                 if (value != Volume)
                 {
                     LastVolume = Volume;
-                    Handle.Data.Persistent.Volume = (float)value / 100.0f;
+                    Handle.Volume = (float)value / 100.0f;
                     setVolumeIcon();
                     OnPropertyChanged("Volume");
                 }
@@ -68,6 +68,8 @@ namespace DicsordBot
 
             setVolumeIcon();
             DataContext = this;
+
+            initDelayedAsync();
         }
 
         private void MainWindow_Closing(object sender, CancelEventArgs e)
@@ -84,7 +86,20 @@ namespace DicsordBot
 
         private async void initAsync()
         {
+            Handle.Token = Handle.Data.Persistent.Token;
+            Handle.ClientId = Handle.Data.Persistent.ClientId;
+            Handle.Volume = Handle.Data.Persistent.Volume;
+            Handle.ChannelId = Handle.Data.Persistent.ChannelId;
+
             await Handle.Bot.connectToServerAsync();
+        }
+
+        private async void initDelayedAsync()
+        {
+            //delay this method by 2,5 seconds
+            await Task.Delay(2500);
+
+            await Handle.BotData.updateAvatar();
         }
 
         private void setVolumeIcon()
@@ -107,15 +122,15 @@ namespace DicsordBot
             }
         }
 
-        //TODO: get nicen name
         private async void playClicked()
         {
+            //toogle stream state, if stream is not empty
             IsLoading = true;
             if (Handle.Bot.IsStreaming)
             {
                 await Handle.Bot.stopStreamAsync();
             }
-            else
+            else if (!Handle.Bot.IsBufferEmpty)
             {
                 await Handle.Bot.resumeStream();
             }

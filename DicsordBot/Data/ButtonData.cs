@@ -11,32 +11,40 @@ namespace DicsordBot.Data
 {
     [Serializable()]
     public class ButtonData
+
     {
-        #region visible Button preference
+        #region saved fields
 
-        public string Name { get; set; } = null;
+        private string name = null;
+        private string borderBrushString = "#FFDDDDDD";
+        private string backgroundBrushString = "#FF000000";
+        private string foregroundBrushString = "#FF707070";
+        private string fontString = "Segoe UI";
+        private string file = null;
+        private bool isEarrape = false;
+        private bool isLoop = false;
+        private int iD;
 
-        public string BorderBrushString { get; set; } = "#FFDDDDDD";
+        #endregion saved fields
 
-        public string BackgroundBrushString { get; set; } = "#FF000000";
+        #region propertys
 
-        public string ForegroundBrushString { get; set; } = "#FF707070";
+        public string Name { get { return name; } set { name = value; OnPropertyChanged("Name"); } }
 
-        public string FontString { get; set; } = "Segoe UI";
+        public string BorderBrushString { get { return borderBrushString; } set { borderBrushString = value; OnPropertyChanged("BorderBrushString"); } }
+        public string BackgroundBrushString { get { return backgroundBrushString; } set { backgroundBrushString = value; OnPropertyChanged("BackgroundBrushString"); } }
+        public string ForegroundBrushString { get { return foregroundBrushString; } set { foregroundBrushString = value; OnPropertyChanged("ForegroundBrushString"); } }
+        public string FontString { get { return fontString; } set { fontString = value; OnPropertyChanged("FontString"); } }
 
-        #endregion visible Button preference
+        public string File { get { return file; } set { file = value; OnPropertyChanged("File"); } }
 
-        #region Button data preference
+        public bool IsEarrape { get { return isEarrape; } set { isEarrape = value; OnPropertyChanged("IsEarrape"); } }
 
-        public string File { get; set; } = null;
+        public bool IsLoop { get { return isLoop; } set { isLoop = value; OnPropertyChanged("IsLoop"); } }
 
-        public bool IsEarrape { get; set; } = false;
+        public int ID { get { return iD; } set { iD = value; OnPropertyChanged("ID"); } }
 
-        public bool IsLoop { get; set; } = false;
-
-        public int ID { get; set; }
-
-        #endregion Button data preference
+        #endregion propertys
 
         #region noXml
 
@@ -65,5 +73,20 @@ namespace DicsordBot.Data
         }
 
         #endregion noXml
+
+        #region event
+
+        public static event PropertyChangedEventHandler PropertyChanged;
+
+        private static void OnPropertyChanged(string info)
+        {
+            PropertyChangedEventHandler handler = PropertyChanged;
+            if (handler != null)
+            {
+                handler(null, new PropertyChangedEventArgs(info));
+            }
+        }
+
+        #endregion event
     }
 }

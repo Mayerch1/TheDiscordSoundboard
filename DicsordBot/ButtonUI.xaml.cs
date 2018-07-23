@@ -36,7 +36,7 @@ namespace DicsordBot
         {
             Button btn = (Button)sender;
 
-            int index = (int)btn.Tag;         
+            int index = (int)btn.Tag;
 
             execBtn(index);
         }
@@ -67,6 +67,8 @@ namespace DicsordBot
         private async void execBtn(int index)
         {
             await Handle.Bot.enqueueAsync(Handle.Data.Persistent.BtnList[index]);
+            if (!Handle.Bot.IsStreaming)
+                await Handle.Bot.resumeStream();
         }
     }
 }

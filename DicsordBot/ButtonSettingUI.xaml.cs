@@ -29,8 +29,6 @@ namespace DicsordBot
             InitializeComponent();
 
             this.DataContext = Handle.Data.Persistent.BtnList[index];
-
-            Handle.Data.ButtonChanged(index);
         }
     }
 }

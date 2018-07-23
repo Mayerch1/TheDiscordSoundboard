@@ -41,6 +41,8 @@ namespace DicsordBot
             FileName = frame.GetFileName();
             Method = frame.GetMethod().ToString();
             Class = frame.GetMethod().DeclaringType.ToString();
+
+            this.DataContext = this;
         }
 
         public static void initWindow(Exception _ex, string _Info = "")
@@ -50,6 +52,7 @@ namespace DicsordBot
                 Title = "Unhandled Exception caught",
                 Content = new UnhandledException(_ex, _Info),
             };
+            window.Show();
         }
     }
 }
