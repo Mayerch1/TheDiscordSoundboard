@@ -3,8 +3,13 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:local="clr-namespace:DicsordBot"
              StartupUri="MainWindow.xaml">
+
     <Application.Resources>
         <ResourceDictionary>
+            <SolidColorBrush x:Key="PrimaryBackgroundBrush" Color="White" />
+            <SolidColorBrush x:Key="PrimaryForegroundBrush" Color="#2F4F4F" />
+            <SolidColorBrush x:Key="PrimaryAccentBrush" Color="#2F4F4F" />
+
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Light.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Defaults.xaml" />

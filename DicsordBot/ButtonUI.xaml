@@ -28,123 +28,101 @@
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
 
-                        <materialDesign:Flipper
-Style="{StaticResource MaterialDesignCardFlipper}">
+                        <materialDesign:Flipper Style="{StaticResource MaterialDesignCardFlipper}">
                             <materialDesign:Flipper.FrontContent>
                                 <StackPanel>
-                                    <Button
-                              Content="Edit"
-                              Command="{x:Static materialDesign:Flipper.FlipCommand}"
-                              Background="{Binding BackgroundBrush}" />
 
-                                    <Button
-                                 Style="{StaticResource MaterialDesignFlatButton}"
-                                 Margin="1"
-                                 Height="75"
-                                 Width="175"
-                                 Tag="{Binding ID}"
-                                 Foreground="{Binding ForegroundBrush}"
-                                 FontFamily="{Binding Font}"
-                                 Content="{Binding Name}"
-                                 Click="btn_Instant_Click"
-                                 MouseDown="btn_Instant_MouseDown" />
+                                    <Button Content="Edit" Command="{x:Static materialDesign:Flipper.FlipCommand}" Background="{Binding BackgroundBrush}" />
+
+                                    <Button Style="{StaticResource MaterialDesignFlatButton}" Height="75" Width="175" Tag="{Binding ID}" Foreground="{Binding ForegroundBrush}" FontFamily="{Binding Font}" Content="{Binding Name}" Click="btn_Instant_Click" MouseDown="btn_Instant_MouseDown" />
                                 </StackPanel>
                             </materialDesign:Flipper.FrontContent>
+
                             <materialDesign:Flipper.BackContent>
-                                <Grid
-                            Height="256"
-                            Width="200">
-                                    <Grid.RowDefinitions>
-                                        <RowDefinition
-                                Height="Auto" />
-                                        <RowDefinition
-                                Height="*" />
-                                    </Grid.RowDefinitions>
-                                    <materialDesign:ColorZone
-                              Mode="Accent"
-                              Padding="6">
-                                        <StackPanel
-                                Orientation="Horizontal">
-                                            <Button
-                                  Style="{StaticResource MaterialDesignToolForegroundButton}"
-                                  Command="{x:Static materialDesign:Flipper.FlipCommand}"
-                                  HorizontalAlignment="Left">
-                                                <materialDesign:PackIcon
-                                    Kind="ArrowLeft"
-                                    HorizontalAlignment="Right" />
-                                            </Button>
-                                            <TextBlock
-                                  Margin="8 0 0 0"
-                                  VerticalAlignment="Center">
-                                  EDIT BUTTON
-                                            </TextBlock>
-                                        </StackPanel>
-                                    </materialDesign:ColorZone>
-                                    <Grid
-                              Grid.Row="1"
-                              Margin="0 6 0 0"
-                              HorizontalAlignment="Center"
-                              VerticalAlignment="Top"
-                              Width="172">
+
+                                <StackPanel Orientation="Vertical">
+
+                                    <Grid Height="256" Width="200">
+
                                         <Grid.RowDefinitions>
-                                            <RowDefinition />
-                                            <RowDefinition />
-                                            <RowDefinition />
-                                            <RowDefinition />
-                                            <RowDefinition />
+                                            <RowDefinition Height="Auto" />
+                                            <RowDefinition Height="*" />
                                         </Grid.RowDefinitions>
 
-                                        <TextBox
-                                         materialDesign:HintAssist.Hint="Name"
-                                          materialDesign:HintAssist.IsFloating="True"
-                                           Margin="0 12 0 0"
-                                          Text="{Binding Name}" />
+                                        <Grid Grid.Row="0">
+                                            <materialDesign:ColorZone Mode="Accent" Padding="0">
 
-                                        <TextBox
-                              Grid.Row="1"
-                              materialDesign:HintAssist.Hint="File"
-                              materialDesign:HintAssist.IsFloating="True"
-                              Margin="0 12 0 0"
-                                          Text="{Binding File}" />
+                                                <StackPanel Orientation="Horizontal">
 
-                                        <Button Click="btn_FileChooser_Click" Tag="{Binding ID}">
-                                            <materialDesign:PackIcon Kind="File" Width="25" Height="25" />
-                                        </Button>
+                                                    <Button Style="{StaticResource MaterialDesignToolForegroundButton}" Command="{x:Static materialDesign:Flipper.FlipCommand}" HorizontalAlignment="Left">
+                                                        <materialDesign:PackIcon Kind="ArrowLeft" HorizontalAlignment="Right" />
+                                                    </Button>
 
-                                        <StackPanel
-                                Grid.Row="2"
-                                Orientation="Horizontal"
-                                Margin="0 12 0 0"
-                                HorizontalAlignment="Right">
-                                            <TextBlock
-                                  VerticalAlignment="Center">
-                                  Loop
-                                            </TextBlock>
-                                            <ToggleButton
-                                              IsChecked="{Binding IsLoop}"
-                                  Margin="8 0 0 0"></ToggleButton>
-                                        </StackPanel>
-                                        <StackPanel
-                                Grid.Row="3"
-                                Orientation="Horizontal"
-                                Margin="0 12 0 0"
-                                HorizontalAlignment="Right">
-                                            <TextBlock
-                                  VerticalAlignment="Center">
-                                  Boost
-                                            </TextBlock>
-                                            <ToggleButton
-                                            IsChecked="{Binding IsEarrape}"
-                                  Margin="8 0 0 0"></ToggleButton>
-                                        </StackPanel>
+                                                    <TextBlock Margin="0,0,0,0" VerticalAlignment="Center">
+                                                EDIT
+                                                    </TextBlock>
+                                                </StackPanel>
+                                            </materialDesign:ColorZone>
+                                        </Grid>
+
+                                        <Grid Grid.Row="1" Margin="0,10,0,0" Background="{StaticResource PrimaryBackgroundBrush}">
+                                            <Grid.RowDefinitions>
+                                                <RowDefinition Height="Auto" />
+                                                <RowDefinition Height="Auto" />
+                                                <RowDefinition Height="Auto" />
+                                            </Grid.RowDefinitions>
+
+                                            <Grid Grid.Row="0" Margin="0,0,0,0" HorizontalAlignment="Center" VerticalAlignment="Top" Width="172">
+                                                <StackPanel Orientation="Vertical">
+
+                                                    <Button Click="btn_FileChooser_Click" Tag="{Binding ID}" VerticalAlignment="Top">
+                                                        <materialDesign:PackIcon Kind="File" Width="25" Height="25" />
+                                                    </Button>
+
+                                                    <TextBox materialDesign:HintAssist.Hint="Name" materialDesign:HintAssist.IsFloating="True" Margin="0,10,0,0" Text="{Binding Name}" VerticalAlignment="Center" />
+
+                                                    <TextBox materialDesign:HintAssist.Hint="File" materialDesign:HintAssist.IsFloating="True" Margin="0,10,0,0" Text="{Binding File}" VerticalAlignment="Bottom" />
+                                                </StackPanel>
+                                            </Grid>
+
+                                            <Grid Grid.Row="1" Margin="0,10,0,0" HorizontalAlignment="Center">
+
+                                                <Grid>
+                                                    <Grid.RowDefinitions>
+                                                        <RowDefinition Height="*" />
+                                                        <RowDefinition Height="*" />
+                                                    </Grid.RowDefinitions>
+
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition Width="115" />
+                                                        <ColumnDefinition Width="50" />
+                                                    </Grid.ColumnDefinitions>
+
+                                                    <TextBlock Grid.Row="0" Grid.Column="0" Margin="0,20,0,0">
+                                                            Loop
+                                                    </TextBlock>
+
+                                                    <ToggleButton Grid.Row="0" Grid.Column="1" IsChecked="{Binding IsLoop}" Margin="0,10,0,0" />
+
+                                                    <TextBlock Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="0,10,0,0">
+                                                            Boost
+                                                    </TextBlock>
+
+                                                    <ToggleButton Grid.Row="1" Grid.Column="1" IsChecked="{Binding IsEarrape}" Margin="0,10,0,0" />
+                                                </Grid>
+                                            </Grid>
+                                        </Grid>
                                     </Grid>
-                                </Grid>
+                                </StackPanel>
                             </materialDesign:Flipper.BackContent>
                         </materialDesign:Flipper>
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>
+
                 <ItemsControl.ItemsPanel>
+
                     <ItemsPanelTemplate>
+
                         <WrapPanel />
                     </ItemsPanelTemplate>
                 </ItemsControl.ItemsPanel>
