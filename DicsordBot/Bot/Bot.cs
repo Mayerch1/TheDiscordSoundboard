@@ -166,6 +166,9 @@ namespace DicsordBot.Bot
 
         private void getStream(Data.ButtonData btn)
         {
+            if (btn.File == null || btn.File == "")
+                return;
+
             OutFormat = new WaveFormat(sampleRate, bitDepth, channelCount);
 
             Reader = new MediaFoundationReader(btn.File);

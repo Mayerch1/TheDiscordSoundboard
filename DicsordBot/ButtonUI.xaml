@@ -91,7 +91,9 @@ Style="{StaticResource MaterialDesignCardFlipper}">
                                             <RowDefinition />
                                             <RowDefinition />
                                             <RowDefinition />
+                                            <RowDefinition />
                                         </Grid.RowDefinitions>
+
                                         <TextBox
                                          materialDesign:HintAssist.Hint="Name"
                                           materialDesign:HintAssist.IsFloating="True"
@@ -104,6 +106,10 @@ Style="{StaticResource MaterialDesignCardFlipper}">
                               materialDesign:HintAssist.IsFloating="True"
                               Margin="0 12 0 0"
                                           Text="{Binding File}" />
+
+                                        <Button Click="btn_FileChooser_Click" Tag="{Binding ID}">
+                                            <materialDesign:PackIcon Kind="File" Width="25" Height="25" />
+                                        </Button>
 
                                         <StackPanel
                                 Grid.Row="2"
