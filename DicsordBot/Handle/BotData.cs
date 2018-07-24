@@ -16,40 +16,32 @@ namespace DicsordBot
      *
      */
 
-    //TODO: data encapsulation
-
     public class BotData
     {
         public SocketGuildUser extractClient(List<List<SocketGuildUser>> clientList, ulong id)
         {
-            foreach (var server in clientList)
+            if (clientList != null)
             {
-                //iterate through connected clints
-                foreach (var client in server)
+                foreach (var server in clientList)
                 {
-                    if (client.Id == id)
+                    //iterate through connected clints
+                    foreach (var client in server)
                     {
-                        return client;
+                        if (client.Id == id)
+                        {
+                            return client;
+                        }
                     }
                 }
             }
             return null;
         }
 
-        public async Task updateAvatar()
+        //needs access to handle, bc shared property for this single use is not worth the effort
+        public void updateAvatar(SocketGuildUser client)
         {
-            if (!Handle.Bot.IsServerConnected)
-                await Handle.Bot.connectToServerAsync();
-
-            var clientList = await Handle.Bot.getAllClients();
-
-            if (clientList != null)
-            {
-                var client = extractClient(clientList, Handle.Data.Persistent.ClientId);
-
-                if (client != null)
-                    Handle.Data.Persistent.ClientAvatar = "https://cdn.discordapp.com/avatars/" + client.Id + "/" + client.AvatarId + ".png?size=128";
-            }
+            if (client != null)
+                Handle.Data.Persistent.ClientAvatar = "https://cdn.discordapp.com/avatars/" + client.Id + "/" + client.AvatarId + ".png?size=256";
         }
     }
 }

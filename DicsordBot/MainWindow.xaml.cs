@@ -75,6 +75,7 @@ namespace DicsordBot
         private void MainWindow_Closing(object sender, CancelEventArgs e)
         {
             cleanUp();
+            Console.WriteLine("Last user-code was executed");
         }
 
         private async void cleanUp()
@@ -99,7 +100,8 @@ namespace DicsordBot
             //delay this method by 2,5 seconds
             await Task.Delay(2500);
 
-            await Handle.BotData.updateAvatar();
+            var client = Handle.BotData.extractClient(await Handle.Bot.getAllClients(), Handle.ClientId);
+            Handle.BotData.updateAvatar(client);
         }
 
         private void setVolumeIcon()
@@ -141,6 +143,7 @@ namespace DicsordBot
         private async void btn_InstantButton_Clicked(int btnListIndex)
         {
             await Handle.Bot.enqueueAsync(Handle.Data.Persistent.BtnList[btnListIndex]);
+            //IDEA: maybe skip, or interrupt current stream
             if (!Handle.Bot.IsStreaming)
                 await Handle.Bot.resumeStream();
         }
@@ -157,6 +160,9 @@ namespace DicsordBot
 
         private void btn_Previous_Click(object sender, RoutedEventArgs e)
         {
+            //FUTURE: if time is below 2 seconds skip, else move to 0
+            //but only if in playlist
+            Handle.Bot.skipToTime(TimeSpan.Zero);
         }
 
         private void registerEvents()
@@ -169,6 +175,11 @@ namespace DicsordBot
             Handle.Bot.StreamStateChanged += delegate (bool newState)
             {
                 IsLoading = false;
+            };
+
+            Handle.Bot.EarrapeStateChanged += delegate (bool isEarrape)
+            {
+                //TODO: handle earrape, or revert to last volume
             };
         }
 

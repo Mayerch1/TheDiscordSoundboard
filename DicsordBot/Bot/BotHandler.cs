@@ -37,8 +37,8 @@ namespace DicsordBot.Bot
 
         new public async Task enqueueAsync(Data.ButtonData btn)
         {
-            if (!IsServerConnected)
-                await connectToServerAsync();
+            if (!await connectToServerAsync())
+                return;
 
             try
             {
@@ -46,32 +46,28 @@ namespace DicsordBot.Bot
             }
             catch (System.IO.DirectoryNotFoundException ex)
             {
-                //FUTURE: show Dialog
                 Console.WriteLine("File Exception no dir");
             }
             catch (System.IO.FileNotFoundException ex)
             {
-                //FUTURE: show Dialog
                 Console.WriteLine("File Exception not Found");
             }
             catch (System.IO.InvalidDataException ex)
             {
-                //FUTURE: show Dialog
-                Console.WriteLine("File Exception invalid");
+                Console.WriteLine("File Exception invalid format");
             }
             catch (Exception ex)
             {
                 UnhandledException.initWindow(ex);
 
-                Console.WriteLine("EnqueueAsync others");
-                //TODO: catch all possible ex
+                Console.WriteLine("EnqueueAsync unhandled");
             }
         }
 
         new public async Task resumeStream()
         {
-            if (!IsServerConnected)
-                await connectToServerAsync();
+            if (!await connectToServerAsync())
+                return;
 
             if (!IsChannelConnected)
                 await connectToChannelAsync();
@@ -89,8 +85,8 @@ namespace DicsordBot.Bot
 
         new public async Task<bool> setGameState(string msg, string streamUrl = "", bool isStreaming = false)
         {
-            if (!IsServerConnected)
-                await connectToServerAsync();
+            if (!await connectToServerAsync())
+                return false;
 
             try
             {
@@ -110,95 +106,85 @@ namespace DicsordBot.Bot
 
         #region start stuff
 
-        public async Task connectToServerAsync()
+        public async Task<bool> connectToServerAsync()
         {
+            if (IsServerConnected)
+                return true;
+
             try
             {
                 await base.connectToServerAsync(Token);
             }
             catch (Discord.Net.HttpException ex)
             {
-                //FUTURE: show dialog
                 Console.WriteLine("connection Exception (Token)");
+                return false;
             }
             catch (System.Net.Http.HttpRequestException ex)
             {
-                //FUTURE: show dialog
                 Console.WriteLine("connection Exception (Timeout, ...)");
+                return false;
             }
             catch (Exception ex)
             {
-                UnhandledException.initWindow(ex, "Couldn'd connect to the Discord Servers");
+                UnhandledException.initWindow(ex, "Couldn't connect to the Discord Servers");
                 Console.WriteLine("general connection Exception");
+                return false;
             }
+
+            return true;
         }
 
-        public async Task connectToChannelAsync()
+        public async Task<bool> connectToChannelAsync()
         {
-            if (!IsServerConnected)
-                await connectToServerAsync();
+            if (!await connectToServerAsync())
+                return false;
 
-            //connect to bot owner
+            SocketGuildUser client = null;
+
+            //only search for client if auto-connect is wished
             if (ChannelId == 0)
             {
                 //this cannot throw, bc Connection is ensured above
                 var clientList = await getAllClients();
 
-                var client = getClient(clientList);
+                client = getClient(clientList);
 
                 if (client == null)
                 {
                     //FUTURE: no client found, show msg
                 }
-                //iterate through servers
-                try
-                {
-                    await base.connectToChannelAsync(client.VoiceChannel.Id);
-                }
-                catch (System.Threading.Tasks.TaskCanceledException ex)
-                {
-                    //FUTURE: show dialog
-                    Console.WriteLine("connetcion Exception");
-                }
-                catch (System.TimeoutException ex)
-                {
-                    Console.WriteLine("connetcion Exception");
-                    //FUTURE: show dialog
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine("connetcion Exception");
-                    UnhandledException.initWindow(ex, "Error while connecting to owner channel");
-                    //TODO: catch
-                    //connection lost while connecting
-                    //timeout
-                    //no permission to join
-                }
             }
-            else
+
+            try
             {
-                try
-                {
+                if (ChannelId == 0)
+                    //connect to bot owner
+                    await base.connectToChannelAsync(client.VoiceChannel.Id);
+                else
                     await base.connectToChannelAsync(ChannelId);
-                }
-                catch (System.Threading.Tasks.TaskCanceledException ex)
-                {
-                    //FUTURE: show dialog
-                    Console.WriteLine("connetcion Exception");
-                }
-                catch (System.TimeoutException ex)
-                {
-                    Console.WriteLine("connetcion Exception");
-                    //FUTURE: show dialog
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine("connetcion Exception");
-                    UnhandledException.initWindow(ex, "Error while connecting to specific channel");
-                    //TODO: catch
-                    //connection lost while connecting
-                }
             }
+            catch (System.Threading.Tasks.TaskCanceledException ex)
+            {
+                Console.WriteLine("connetcion Exception (aborted by user)");
+                return false;
+            }
+            catch (System.TimeoutException ex)
+            {
+                Console.WriteLine("connetcion Exception (timeout,...)");
+                //also thrown for missing rights to join
+
+                return false;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Unhandled connetcion Exception");
+                UnhandledException.initWindow(ex, "Error while connecting to a voice channel");
+                //TODO: catch
+                //connection lost while connecting
+                return false;
+            }
+            return true;
         }
 
         #endregion start stuff
@@ -207,8 +193,8 @@ namespace DicsordBot.Bot
 
         new public async Task<List<List<SocketVoiceChannel>>> getAllChannels()
         {
-            if (!IsServerConnected)
-                await connectToServerAsync();
+            if (!await connectToServerAsync())
+                return null;
 
             List<List<SocketVoiceChannel>> channelList = null;
 
@@ -218,7 +204,7 @@ namespace DicsordBot.Bot
             }
             catch (Exception ex)
             {
-                UnhandledException.initWindow(ex, "Could'n request channel List");
+                UnhandledException.initWindow(ex, "Couldn't get channel List");
                 return null;
             }
 
@@ -227,8 +213,8 @@ namespace DicsordBot.Bot
 
         new public async Task<List<List<SocketGuildUser>>> getAllClients()
         {
-            if (!IsServerConnected)
-                await connectToServerAsync();
+            if (!await connectToServerAsync())
+                return null;
 
             List<List<SocketGuildUser>> userList = null;
 
@@ -238,7 +224,7 @@ namespace DicsordBot.Bot
             }
             catch (Exception ex)
             {
-                UnhandledException.initWindow(ex, "Could'n request user List");
+                UnhandledException.initWindow(ex, "Couldn't get user List");
                 return null;
             }
 

@@ -17,7 +17,7 @@ namespace DicsordBot.Data
 
         private string name = null;
         private string borderBrushString = "#FFDDDDDD";
-        private string backgroundBrushString = "#FF000000";
+        private string backgroundBrushString = "#FFDDDDDD";
         private string foregroundBrushString = "#FF707070";
         private string fontString = "Segoe UI";
         private string file = null;

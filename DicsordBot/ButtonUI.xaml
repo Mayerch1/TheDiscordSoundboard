@@ -14,7 +14,7 @@
             <ItemsControl x:Name="btnControl" Margin="15">
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
-                        <Button Margin="10" Width="175" Height="75" Tag="{Binding ID}" Foreground="{Binding ForegroundBrush}" BorderBrush="{Binding BorderBrush}" Background="{Binding BackgoundBrush}" FontFamily="{Binding Font}"  Content="{Binding Name}" Click="btn_Instant_Click" MouseDown="btn_Instant_MouseDown" />
+                        <Button Margin="10" Width="175" Height="75" Tag="{Binding ID}" Foreground="{Binding ForegroundBrush}" BorderBrush="{Binding BorderBrush}" Background="{Binding BackgroundBrush}" FontFamily="{Binding Font}"  Content="{Binding Name}" Click="btn_Instant_Click" MouseDown="btn_Instant_MouseDown" />
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>
                 <ItemsControl.ItemsPanel>

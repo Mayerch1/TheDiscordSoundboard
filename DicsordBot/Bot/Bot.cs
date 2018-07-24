@@ -44,6 +44,10 @@ namespace DicsordBot.Bot
 
         public StreamStateHandler StreamStateChanged;
 
+        public delegate void EarrapeStateHandler(bool isEarrape);
+
+        public EarrapeStateHandler EarrapeStateChanged;
+
         #endregion event Handlers
 
         #region status fields
@@ -144,7 +148,7 @@ namespace DicsordBot.Bot
         protected async Task setGameState(string msg, string streamUrl = "", bool isStreaming = false)
         {
             if (!IsServerConnected)
-                throw new BotException(BotException.type.connection, "Not connectet to server", BotException.connectionError.NoServer);
+                throw new BotException(BotException.type.connection, "Not connected to the Servers, while Setting GameState", BotException.connectionError.NoServer);
 
             StreamType type = StreamType.NotStreaming;
             if (isStreaming)
@@ -179,9 +183,9 @@ namespace DicsordBot.Bot
             if (!IsChannelConnected)
             {
                 if (!IsServerConnected)
-                    throw new BotException(BotException.type.connection, "Not connected", BotException.connectionError.NoServer);
+                    throw new BotException(BotException.type.connection, "Not connected to Server, while trying to start stream", BotException.connectionError.NoServer);
                 else
-                    throw new BotException(BotException.type.connection, "Not connected", BotException.connectionError.NoChannel);
+                    throw new BotException(BotException.type.connection, "Not connected to a channel, while trying to start stream", BotException.connectionError.NoChannel);
             }
 
             if (!IsStreaming && IsServerConnected && AudioCl != null)
@@ -263,7 +267,9 @@ namespace DicsordBot.Bot
         private void loadOverrideSettings(Data.ButtonData btn)
         {
             if (btn.IsLoop)
-                IsLoop = btn.IsLoop;
+                EarrapeStateChanged(true);
+            else
+                EarrapeStateChanged(false);
         }
 
         private void applyVolume(ref byte[] buffer)
@@ -309,7 +315,7 @@ namespace DicsordBot.Bot
 
             if (!IsServerConnected)
             {
-                throw new BotException(BotException.type.connection, "No server connection", BotException.connectionError.NoServer);
+                throw new BotException(BotException.type.connection, "Not connected to the servers, while trying to connect to a channel", BotException.connectionError.NoServer);
             }
 
             AudioCl = await ((ISocketAudioChannel)Client.GetChannel(channelId)).ConnectAsync();
@@ -338,23 +344,16 @@ namespace DicsordBot.Bot
             if (!IsServerConnected)
                 return;
 
-            Console.WriteLine("Disconnecting from channel / stopping client");
-
             await disconnectFromChannelAsync();
 
             //wait until last packet is played
             while (IsChannelConnected)
                 await Task.Delay(10);
 
-            Console.WriteLine("Stopping Client...");
-
             await Client.StopAsync();
             await Client.LogoutAsync();
-            Console.WriteLine("Stopped Client");
 
             IsServerConnected = false;
-
-            Console.WriteLine("Last user-code was executed");
         }
 
         public async Task stopStreamAsync()
@@ -380,7 +379,7 @@ namespace DicsordBot.Bot
         protected List<List<SocketVoiceChannel>> getAllChannels()
         {
             if (!IsServerConnected)
-                throw new BotException(BotException.type.connection, "No Server-connection", BotException.connectionError.NoServer);
+                throw new BotException(BotException.type.connection, "Not connectet to the servers, while trying to get channel list", BotException.connectionError.NoServer);
 
             List<List<SocketVoiceChannel>> guildList = new List<List<SocketVoiceChannel>>();
 
@@ -408,7 +407,7 @@ namespace DicsordBot.Bot
         protected List<List<SocketGuildUser>> getAllClients()
         {
             if (!IsServerConnected)
-                throw new BotException(BotException.type.connection, "No Server-connection", BotException.connectionError.NoServer);
+                throw new BotException(BotException.type.connection, "Not connectet to the servers, while trying to get clint list", BotException.connectionError.NoServer);
 
             List<List<SocketGuildUser>> guildList = new List<List<SocketGuildUser>>();
 
