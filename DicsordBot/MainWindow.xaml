@@ -33,6 +33,7 @@
                         </Grid.ColumnDefinitions>
 
                         <Grid Grid.Column="0">
+
                             <!--Left Box-->
 
                             <TextBox Text="{Binding Volume}" />
@@ -62,7 +63,7 @@
                 Style="{StaticResource MaterialDesignFloatingActionButton}"
                 Click="btn_Play_Click"
 
-                      materialDesign:ButtonProgressAssist.IsIndicatorVisible="{Binding isLoading}"
+                      materialDesign:ButtonProgressAssist.IsIndicatorVisible="{Binding IsLoading}"
                       materialDesign:ButtonProgressAssist.Value="-1"
                       materialDesign:ButtonProgressAssist.IsIndeterminate="True"
                       Content="{materialDesign:PackIcon Play}" />
@@ -131,10 +132,10 @@
         <Border Height="60" DockPanel.Dock="Top" Background="White">
             <materialDesign:ColorZone Height="55" materialDesign:ShadowAssist.ShadowDepth="Depth1" materialDesign:ShadowAssist.ShadowEdges="Bottom">
                 <Button HorizontalAlignment="Right" Margin="0,0,20,0"
-          Style="{StaticResource MaterialDesignFloatingActionMiniLightButton}"
-          ToolTip="MaterialDesignFloatingActionMiniLightButton">
+                        Style="{StaticResource MaterialDesignFloatingActionMiniLightButton}"
+                        ToolTip="MaterialDesignFloatingActionMiniLightButton">
                     <Button.Background>
-                        <ImageBrush ImageSource="https://steamcdn-a.akamaihd.net/steamcommunity/public/images/avatars/f4/f4e7c86fc18c9469c8d608e980fc60a3901ebdcf_full.jpg" Stretch="Fill" TileMode="None" />
+                        <ImageBrush ImageSource="{Binding ClientAvatar}" Stretch="Fill" TileMode="None" />
                     </Button.Background>
                 </Button>
             </materialDesign:ColorZone>
@@ -142,7 +143,7 @@
 
         <Border Background="White" DockPanel.Dock="Right" materialDesign:ShadowAssist.ShadowDepth="Depth2" materialDesign:ShadowAssist.ShadowEdges="Top">
             <!--Main Grid-->
-            <local:ButtonUI />
+            <local:ButtonUI x:Name="ButtonUI" />
         </Border>
     </DockPanel>
 </Window>

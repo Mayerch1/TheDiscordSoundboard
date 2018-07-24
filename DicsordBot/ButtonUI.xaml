@@ -3,9 +3,22 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              xmlns:local="clr-namespace:DicsordBot"
              mc:Ignorable="d"
              d:DesignHeight="450" d:DesignWidth="800">
+
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Button.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Card.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.CheckBox.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Flipper.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Popupbox.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </UserControl.Resources>
 
     <Grid>
 
@@ -14,7 +27,114 @@
             <ItemsControl x:Name="btnControl" Margin="15">
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
-                        <Button Margin="10" Width="175" Height="75" Tag="{Binding ID}" Foreground="{Binding ForegroundBrush}" BorderBrush="{Binding BorderBrush}" Background="{Binding BackgroundBrush}" FontFamily="{Binding Font}"  Content="{Binding Name}" Click="btn_Instant_Click" MouseDown="btn_Instant_MouseDown" />
+
+                        <materialDesign:Flipper
+Style="{StaticResource MaterialDesignCardFlipper}">
+                            <materialDesign:Flipper.FrontContent>
+                                <StackPanel>
+                                    <Button
+                              Content="Edit"
+                              Command="{x:Static materialDesign:Flipper.FlipCommand}"
+                              Background="{Binding BackgroundBrush}" />
+
+                                    <Button
+                                 Style="{StaticResource MaterialDesignFlatButton}"
+                                 Margin="1"
+                                 Height="75"
+                                 Width="175"
+                                 Tag="{Binding ID}"
+                                 Foreground="{Binding ForegroundBrush}"
+                                 FontFamily="{Binding Font}"
+                                 Content="{Binding Name}"
+                                 Click="btn_Instant_Click"
+                                 MouseDown="btn_Instant_MouseDown" />
+                                </StackPanel>
+                            </materialDesign:Flipper.FrontContent>
+                            <materialDesign:Flipper.BackContent>
+                                <Grid
+                            Height="256"
+                            Width="200">
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition
+                                Height="Auto" />
+                                        <RowDefinition
+                                Height="*" />
+                                    </Grid.RowDefinitions>
+                                    <materialDesign:ColorZone
+                              Mode="Accent"
+                              Padding="6">
+                                        <StackPanel
+                                Orientation="Horizontal">
+                                            <Button
+                                  Style="{StaticResource MaterialDesignToolForegroundButton}"
+                                  Command="{x:Static materialDesign:Flipper.FlipCommand}"
+                                  HorizontalAlignment="Left">
+                                                <materialDesign:PackIcon
+                                    Kind="ArrowLeft"
+                                    HorizontalAlignment="Right" />
+                                            </Button>
+                                            <TextBlock
+                                  Margin="8 0 0 0"
+                                  VerticalAlignment="Center">
+                                  EDIT BUTTON
+                                            </TextBlock>
+                                        </StackPanel>
+                                    </materialDesign:ColorZone>
+                                    <Grid
+                              Grid.Row="1"
+                              Margin="0 6 0 0"
+                              HorizontalAlignment="Center"
+                              VerticalAlignment="Top"
+                              Width="172">
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition />
+                                            <RowDefinition />
+                                            <RowDefinition />
+                                            <RowDefinition />
+                                        </Grid.RowDefinitions>
+                                        <TextBox
+                                         materialDesign:HintAssist.Hint="Name"
+                                          materialDesign:HintAssist.IsFloating="True"
+                                           Margin="0 12 0 0"
+                                          Text="{Binding Name}" />
+
+                                        <TextBox
+                              Grid.Row="1"
+                              materialDesign:HintAssist.Hint="File"
+                              materialDesign:HintAssist.IsFloating="True"
+                              Margin="0 12 0 0"
+                                          Text="{Binding File}" />
+
+                                        <StackPanel
+                                Grid.Row="2"
+                                Orientation="Horizontal"
+                                Margin="0 12 0 0"
+                                HorizontalAlignment="Right">
+                                            <TextBlock
+                                  VerticalAlignment="Center">
+                                  Loop
+                                            </TextBlock>
+                                            <ToggleButton
+                                              IsChecked="{Binding IsLoop}"
+                                  Margin="8 0 0 0"></ToggleButton>
+                                        </StackPanel>
+                                        <StackPanel
+                                Grid.Row="3"
+                                Orientation="Horizontal"
+                                Margin="0 12 0 0"
+                                HorizontalAlignment="Right">
+                                            <TextBlock
+                                  VerticalAlignment="Center">
+                                  Boost
+                                            </TextBlock>
+                                            <ToggleButton
+                                            IsChecked="{Binding IsEarrape}"
+                                  Margin="8 0 0 0"></ToggleButton>
+                                        </StackPanel>
+                                    </Grid>
+                                </Grid>
+                            </materialDesign:Flipper.BackContent>
+                        </materialDesign:Flipper>
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>
                 <ItemsControl.ItemsPanel>

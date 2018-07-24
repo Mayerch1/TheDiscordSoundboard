@@ -51,6 +51,11 @@ namespace DicsordBot
             set { if (value != isLoading) { isLoading = value; OnPropertyChanged("IsLoading"); } }
         }
 
+        public string ClientAvatar
+        {
+            get { return Handle.Data.Persistent.ClientAvatar; }
+        }
+
         #endregion propertys
 
         public MainWindow()
@@ -168,8 +173,8 @@ namespace DicsordBot
         private void registerEvents()
         {
             //subsribe to intsant button event
-            //TODO: give buttonui a name, then uncomment
-            //ButtonUI.InstantButtonClicked += btn_InstantButton_Clicked;
+
+            ButtonUI.InstantButtonClicked += btn_InstantButton_Clicked;
 
             //event Handler for Stream-state of bot
             Handle.Bot.StreamStateChanged += delegate (bool newState)

@@ -47,6 +47,8 @@ namespace DicsordBot.Bot
             catch (System.IO.DirectoryNotFoundException ex)
             {
                 Console.WriteLine("File Exception no dir");
+      
+                
             }
             catch (System.IO.FileNotFoundException ex)
             {

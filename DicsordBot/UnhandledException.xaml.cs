@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
@@ -19,14 +20,24 @@ namespace DicsordBot
     /// <summary>
     /// Interaction logic for UnhandledException.xaml
     /// </summary>
-    public partial class UnhandledException : UserControl
+    public partial class UnhandledException : UserControl, INotifyPropertyChanged
     {
-        private Exception Ex { get; set; }
-        private string Info { get; set; }
-        private int LineNumber { get; set; }
-        private string FileName { get; set; }
-        private string Method { get; set; }
-        private string Class { get; set; }
+        private Exception ex;
+        private string info;
+        private int lineNumber;
+        private string fileName;
+        private string method;
+        private string className; 
+
+
+
+
+        public Exception Ex { get { return ex; } set { ex = value; OnPropertyChanged("Ex"); } }
+        public string Info { get { return info; } set {info = value; OnPropertyChanged("Info"); } }
+        public int LineNumber { get { return lineNumber; } set { lineNumber= value; OnPropertyChanged("LineNumber"); } }
+        public string FileName { get { return fileName; } set {fileName = value; OnPropertyChanged("FileName"); } }
+        public string Method { get { return method; } set { method= value; OnPropertyChanged("Method"); } }
+        public string Class { get { return className; } set { className= value; OnPropertyChanged("Class"); } }
 
         public UnhandledException(Exception _ex, string _Info = "")
         {
@@ -53,6 +64,19 @@ namespace DicsordBot
                 Content = new UnhandledException(_ex, _Info),
             };
             window.Show();
+        }
+
+
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        private void OnPropertyChanged(string info)
+        {
+            PropertyChangedEventHandler handler = PropertyChanged;
+            if (handler != null)
+            {
+                handler(this, new PropertyChangedEventArgs(info));
+            }
         }
     }
 }

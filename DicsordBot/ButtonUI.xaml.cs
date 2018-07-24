@@ -38,9 +38,11 @@ namespace DicsordBot
 
         private void btn_Instant_Click(object sender, RoutedEventArgs e)
         {
-            //event is handled in MainWindow
+            //event is handled in MainWindow          
 
             Button btn = (Button)sender;
+
+            
 
             int index = (int)btn.Tag;
 
@@ -51,11 +53,11 @@ namespace DicsordBot
         {
             if (e.RightButton == MouseButtonState.Pressed)
             {
-                //open settings for that Button
-                Button btn = (Button)sender;
-                int index = (int)btn.Tag;
+                ////open settings for that Button
+                //Button btn = (Button)sender;
+                //int index = (int)btn.Tag;
 
-                openButtonSettings(index);
+                //openButtonSettings(index);
             }
         }
 
@@ -69,5 +71,6 @@ namespace DicsordBot
 
             window.ShowDialog();
         }
+
     }
 }

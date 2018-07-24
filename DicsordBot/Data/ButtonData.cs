@@ -17,7 +17,7 @@ namespace DicsordBot.Data
 
         private string name = null;
         private string borderBrushString = "#FFDDDDDD";
-        private string backgroundBrushString = "#FFDDDDDD";
+        private string backgroundBrushString = "#FF0000";/*"#FFDDDDDD";*/
         private string foregroundBrushString = "#FF707070";
         private string fontString = "Segoe UI";
         private string file = null;
@@ -34,6 +34,7 @@ namespace DicsordBot.Data
         public string BorderBrushString { get { return borderBrushString; } set { borderBrushString = value; OnPropertyChanged("BorderBrushString"); } }
         public string BackgroundBrushString { get { return backgroundBrushString; } set { backgroundBrushString = value; OnPropertyChanged("BackgroundBrushString"); } }
         public string ForegroundBrushString { get { return foregroundBrushString; } set { foregroundBrushString = value; OnPropertyChanged("ForegroundBrushString"); } }
+
         public string FontString { get { return fontString; } set { fontString = value; OnPropertyChanged("FontString"); } }
 
         public string File { get { return file; } set { file = value; OnPropertyChanged("File"); } }
