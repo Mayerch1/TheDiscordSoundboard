@@ -78,7 +78,6 @@ namespace DicsordBot
         //return only the file name from a Path to a file
         private string evaluateName(string filePath)
         {
-            //TODO: refresh
             var fileType = System.IO.Path.GetFileName(filePath);
             var fileName = fileType.Substring(0, fileType.LastIndexOf('.'));
 

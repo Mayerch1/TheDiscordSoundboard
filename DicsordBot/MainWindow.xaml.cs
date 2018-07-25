@@ -19,6 +19,10 @@ namespace DicsordBot
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
+    ///
+
+    //TODO: insert button event for btn_loop_click
+
     public partial class MainWindow : Window, INotifyPropertyChanged
     {
         #region enums
@@ -79,7 +83,6 @@ namespace DicsordBot
             get { return loopStatus; }
             set
             {
-                //TODO: insert loop Handling
                 loopStatus = value;
                 OnPropertyChanged("LoopStatus");
             }
@@ -87,7 +90,6 @@ namespace DicsordBot
 
         public double TitleTime
         {
-            //TODO: test OnPropertyChanged
             get { return Handle.Bot.CurrentTime.TotalSeconds; }
             set { Handle.Bot.skipToTime(TimeSpan.FromSeconds(value)); }
         }
@@ -285,8 +287,10 @@ namespace DicsordBot
             };
             Handle.Bot.LoopStateChanged += delegate (bool isLoop)
             {
-                setLoopStatus(LoopState.LoopOne);
-                //TODO: insert button change
+                if (isLoop)
+                    setLoopStatus(LoopState.LoopOne);
+                else
+                    setLoopStatus(LoopState.LoopNone);
             };
         }
 
@@ -312,8 +316,7 @@ namespace DicsordBot
 
         private void btn_Previous_Click(object sender, RoutedEventArgs e)
         {
-            //FUTURE: if time is below 2 seconds skip, else move to 0
-            //but only if in playlist
+            //FUTURE: playlist: if time is below 2 seconds skip, else move to 0
             Handle.Bot.skipToTime(TimeSpan.Zero);
         }
 
