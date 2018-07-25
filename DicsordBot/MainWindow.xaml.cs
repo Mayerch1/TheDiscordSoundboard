@@ -24,6 +24,7 @@ namespace DicsordBot
         #region fields
 
         private bool isLoading;
+        private bool isEarrape;
         # endregion
 
         #region propertys
@@ -45,6 +46,27 @@ namespace DicsordBot
             }
         }
 
+        public bool IsEarrape
+        {
+            get { return isEarrape; }
+            set
+            {
+                isEarrape = value;
+                earrapeStatusChanged(isEarrape);
+                OnPropertyChanged("IsEarrape");
+            }
+        }
+
+        public bool IsLoop
+        {
+            get { return Handle.Bot.IsLoop; }
+            set
+            {
+                Handle.Bot.IsLoop = value;
+                OnPropertyChanged("IsLoop");
+            }
+        }
+
         public double TitleTime
         {
             //TODO: test OnPropertyChanged
@@ -56,6 +78,9 @@ namespace DicsordBot
         {
             get { return Handle.Bot.TitleLenght.TotalSeconds; }
         }
+
+        public string TotalTimeString { get { return TimeSpan.FromSeconds(TotalTime).ToString(@"mm\:ss"); } }
+        public string TitleTimeString { get { return TimeSpan.FromSeconds(TitleTime).ToString(@"mm\:ss"); } }
 
         public bool IsLoading
         {
@@ -77,6 +102,7 @@ namespace DicsordBot
             InitializeComponent();
 
             IsLoading = false;
+            isEarrape = false;
 
             //Don't even try, it's already changed
 
@@ -125,10 +151,13 @@ namespace DicsordBot
 
         private void dispatcherTimer_Tick(object sender, EventArgs e)
         {
+            //tell ui that positioning properties have changed
             if (Handle.Bot.IsStreaming)
             {
                 OnPropertyChanged("TotalTime");
                 OnPropertyChanged("TitleTime");
+                OnPropertyChanged("TotalTimeString");
+                OnPropertyChanged("TitleTimeString");
             }
         }
 
@@ -175,7 +204,44 @@ namespace DicsordBot
             }
         }
 
+        private void earrapeStatusChanged(bool isEarrape)
+        {
+            if (isEarrape)
+            {
+                Volume = 100;
+                //go around Volume calculations and slider visualisation
+                Handle.Bot.Volume = Data.PersistentData.earrapeValue;
+            }
+            else
+            {
+                //make sure earrape cannot be accessed by undo volume changes
+                Volume = LastVolume;
+            }
+        }
+
         #region event stuff
+
+        private void registerEvents()
+        {
+            //subsribe to intsant button event
+
+            ButtonUI.InstantButtonClicked += btn_InstantButton_Clicked;
+
+            //event Handler for Stream-state of bot
+            Handle.Bot.StreamStateChanged += delegate (bool newState)
+            {
+                IsLoading = false;
+            };
+
+            Handle.Bot.EarrapeStateChanged += delegate (bool isEarrape)
+            {
+                earrapeStatusChanged(isEarrape);
+            };
+            Handle.Bot.LoopStateChanged += delegate (bool isLoop)
+            {
+                Handle.Bot.IsLoop = isLoop;
+            };
+        }
 
         private async void btn_InstantButton_Clicked(int btnListIndex)
         {
@@ -202,33 +268,6 @@ namespace DicsordBot
             //FUTURE: if time is below 2 seconds skip, else move to 0
             //but only if in playlist
             Handle.Bot.skipToTime(TimeSpan.Zero);
-        }
-
-        private void registerEvents()
-        {
-            //subsribe to intsant button event
-
-            ButtonUI.InstantButtonClicked += btn_InstantButton_Clicked;
-
-            //event Handler for Stream-state of bot
-            Handle.Bot.StreamStateChanged += delegate (bool newState)
-            {
-                IsLoading = false;
-            };
-
-            Handle.Bot.EarrapeStateChanged += delegate (bool isEarrape)
-            {
-                //TODO: handle earrape, or revert to last volume
-                if (isEarrape)
-                    Volume = 3.5f;
-                else
-                    Volume = LastVolume;
-            };
-            Handle.Bot.LoopStateChanged += delegate (bool isLoop)
-            {
-                //TODO: handle loop
-                Handle.Bot.IsLoop = isLoop;
-            };
         }
 
         private void btn_Volume_Click(object sender, RoutedEventArgs e)

@@ -138,9 +138,9 @@ namespace DicsordBot.Bot
                 SkipTracks += 1;
         }
 
-        public void skipToTime(TimeSpan newTime)
+        public void skipToTime(TimeSpan newTime, bool enforce = false)
         {
-            if (IsStreaming)
+            if (IsStreaming || enforce)
             {
                 Reader.CurrentTime = newTime;
             }
@@ -243,7 +243,7 @@ namespace DicsordBot.Bot
                 if (IsLoop && !IsToAbort && SkipTracks == 0)
                 {
                     //move head to begin of file
-                    skipToTime(TimeSpan.Zero);
+                    skipToTime(TimeSpan.Zero, true);
                     await startStreamAsync(stream);
                 }
                 //next file in queue
@@ -281,9 +281,15 @@ namespace DicsordBot.Bot
             if (IsEarrape != btn.IsEarrape)
             {
                 if (btn.IsEarrape)
+                {
                     EarrapeStateChanged(true);
+                    IsEarrape = true;
+                }
                 else
+                {
                     EarrapeStateChanged(false);
+                    IsEarrape = false;
+                }
             }
             //if loop changes
             if (IsLoop != btn.IsLoop)

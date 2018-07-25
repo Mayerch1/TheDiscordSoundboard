@@ -27,13 +27,19 @@ namespace DicsordBot
 
         public InstantButtonClickedHandler InstantButtonClicked;
 
+        private List<Data.ButtonData> BtnList
+        {
+            get { return Handle.Data.Persistent.BtnList; }
+            set { Handle.Data.Persistent.BtnList = value; OnPropertyChanged("BtnList"); }
+        }
+
         public ButtonUI()
         {
             InitializeComponent();
 
             Handle.Data.resizeBtnList();
 
-            btnControl.ItemsSource = Handle.Data.Persistent.BtnList;
+            btnControl.ItemsSource = BtnList;
 
             this.DataContext = this;
         }
@@ -57,18 +63,16 @@ namespace DicsordBot
             OpenFileDialog openFileDialog = new OpenFileDialog();
 
             openFileDialog.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyMusic);
-            openFileDialog.Filter = "all supported types (*.mp3/*.wav/*.asf/*.wma/*.wmv/*.sami/*.smi/*.3g2/*.3gp/*.3gp2/*.3gpp/*.aac/*.adts/*.m4a/*.m4v/*.mov/*.mp4)|*.mp3;*.wav*.asf;*.wma;*.wmv;*.sami;*.smi;*.3g2;*.3gp;*.3gp2;*.3gpp;*.aac;*.adts;*.m4a;*.m4v;*.mov;*.mp4" +
+            openFileDialog.Filter = "all supported types (*.mp3/*.wav/*.asf/*.wma/*.wmv/*.sami/*.smi/*.3g2/*.3gp/*.3gp2/*.3gpp/*.aac/*.adts/*.m4a/*.m4v/*.mov/*.mp4)|*.mp3;*.wav;*.asf;*.wma;*.wmv;*.sami;*.smi;*.3g2;*.3gp;*.3gp2;*.3gpp;*.aac;*.adts;*.m4a;*.m4v;*.mov;*.mp4" +
                                     "|mp3/wav files (*.mp3/*.wav)|*.mp3;*.wav" +
                                      "|all files (*.*)|*.*";
 
             if (openFileDialog.ShowDialog() == true && openFileDialog.CheckFileExists)
             {
-                Handle.Data.Persistent.BtnList[index].File = openFileDialog.FileName;
-                Handle.Data.Persistent.BtnList[index].Name = evaluateName(openFileDialog.FileName);
+                BtnList[index].Name = evaluateName(openFileDialog.FileName);
+                BtnList[index].File = openFileDialog.FileName;
             }
-
-            //TODO: better way to refresh fields
-            btnControl.ItemsSource = Handle.Data.Persistent.BtnList;
+            //TODO: refresh button on fileChooser click
         }
 
         //return only the file name from a Path to a file

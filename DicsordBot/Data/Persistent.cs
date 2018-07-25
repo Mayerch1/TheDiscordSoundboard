@@ -11,6 +11,12 @@ namespace DicsordBot.Data
     [Serializable()]
     public class PersistentData : INotifyPropertyChanged
     {
+        #region consts
+
+        public const float earrapeValue = 2.5f;
+
+        #endregion consts
+
         #region persistend fields
 
         private bool isFirstStart = true;
