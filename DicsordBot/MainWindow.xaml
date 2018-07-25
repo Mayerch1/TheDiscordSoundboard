@@ -15,7 +15,7 @@
         <materialDesign:PackIcon x:Key="IconHighVolume"  Margin="5,0,5,0" Kind="VolumeHigh" Height="24" Width="24" />
     </Window.Resources>
 
-    <DockPanel LastChildFill="True">
+    <DockPanel LastChildFill="False">
 
         <Grid DockPanel.Dock="Bottom" Background="{StaticResource PrimaryBackgroundBrush}">
             <StackPanel>
@@ -70,54 +70,72 @@
                                     Background="{StaticResource PrimaryBackgroundBrush}"
                                     BorderBrush="{StaticResource PrimaryBackgroundBrush}"
                                     Style="{DynamicResource MaterialDesignFloatingActionMiniLightButton}"
-                                    ToolTip="MaterialDesignFloatingActionMiniLightButton" />
+                                    ToolTip="MaterialDesignFloatingActionMiniLightButton">
 
-                                <Button x:Name="btn_Repeat"
-                                      Style="{StaticResource MaterialDesignFlatButton}"
-                                      ToolTip="MaterialDesignFlatToggleButton">
+                                    <materialDesign:PackIcon
+
+                                          Kind="SkipNext"
+                                          Height="24"
+                                          Width="24" />
+                                </Button>
+
+                                <Button x:Name="btn_Repeat" HorizontalAlignment="Right"
+                                      Style="{StaticResource MaterialDesignFloatingActionMiniLightButton}"
+                                      ToolTip="MaterialDesignFloatingActionMiniLightButton"
+                                        Background="White"
+                                        BorderBrush="White"
+                                        materialDesign:ShadowAssist.ShadowDepth="Depth0">
+
                                     <materialDesign:PackIcon
                                         Kind="RepeatOnce"
                                         Height="21"
                                         Width="21" />
                                 </Button>
-
-                                <materialDesign:PackIcon
-
-                  Kind="SkipNext"
-                  Height="24"
-                  Width="24" />
                             </StackPanel>
                         </Grid>
 
                         <Grid Grid.Column="1" MaxWidth="800" MinWidth="100">
                             <!--Middle Box-->
-                            <StackPanel Orientation="Horizontal">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="50" />
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="50" />
+                                </Grid.ColumnDefinitions>
 
-                                <TextBlock Text="{Binding TitleTimeString}" />
+                                <Grid Grid.Column="0">
 
-                                <Slider VerticalAlignment="Center"
+                                    <TextBlock Text="{Binding TitleTimeString}" VerticalAlignment="Center" HorizontalAlignment="Center" />
+                                </Grid>
+
+                                <Grid Grid.Column="1">
+                                    <Slider VerticalAlignment="Center"
 
                                     x:Name="timeBar"
                                     Foreground="{StaticResource PrimaryAccentBrush}"
-                                    Margin="5,0,20,0"
+                                    Margin="0,0,0,0"
                                     TickFrequency="1"
                                     Orientation="Horizontal"
                                     Minimum="0"
                                     Maximum="{Binding TotalTime}"
                                     Value="{Binding TitleTime}"
                                     Width="Auto"
+                                    MinWidth="40"
                                     ToolTipService.ToolTip="{Binding Path=Value, ElementName=timeBar}">
-                                </Slider>
+                                    </Slider>
+                                </Grid>
 
-                                <TextBlock Text="{Binding TotalTimeString}" />
-                            </StackPanel>
+                                <Grid Grid.Column="2">
+                                    <TextBlock Text="{Binding TotalTimeString}"  VerticalAlignment="Center" HorizontalAlignment="Center" />
+                                </Grid>
+                            </Grid>
                         </Grid>
 
                         <Grid Grid.Column="2" MaxWidth="300" HorizontalAlignment="Right" Margin="0,0,20,0">
                             <!--Right Panel-->
                             <StackPanel Orientation="Horizontal">
 
-                                <Button x:Name ="btn_Volume" HorizontalAlignment="Left"
+                                <Button x:Name ="btn_Volume" HorizontalAlignment="Center"
                 Click="btn_Volume_Click"
                 materialDesign:ShadowAssist.ShadowDepth="Depth0"
                 Background="{StaticResource PrimaryBackgroundBrush}"
@@ -135,7 +153,7 @@
                                 <Slider VerticalAlignment="Center"
 
                                         Foreground="{StaticResource PrimaryAccentBrush}"
-                                        Margin="5,0,20,0"
+                                        Margin="5,0,0,0"
                                         TickFrequency="5"
                                         Orientation="Horizontal"
                                         Minimum="0"
@@ -156,11 +174,16 @@
 
                     <!--Header Left-->
                 </materialDesign:ColorZone>
+
+                <Button Content="SOUNDS" Height="50" Margin="0,20,0,0" Foreground="Black" Background="{StaticResource PrimaryForegroundBrush}" BorderBrush="{StaticResource PrimaryForegroundBrush}" materialDesign:ShadowAssist.ShadowDepth="Depth0" />
+
+                <Button Content="SETTINGS" Height="50" Margin="0,0,0,0" Foreground="Black" Background="{StaticResource PrimaryForegroundBrush}" BorderBrush="{StaticResource PrimaryForegroundBrush}" materialDesign:ShadowAssist.ShadowDepth="Depth0" />
             </StackPanel>
         </Border>
 
         <Border Height="60" DockPanel.Dock="Top" Background="{StaticResource PrimaryBackgroundBrush}">
             <materialDesign:ColorZone Height="55" materialDesign:ShadowAssist.ShadowDepth="Depth1" materialDesign:ShadowAssist.ShadowEdges="Bottom" Background="{StaticResource PrimaryBackgroundBrush}">
+
                 <Button HorizontalAlignment="Right" Margin="0,0,20,0"
                         Style="{StaticResource MaterialDesignFloatingActionMiniLightButton}"
                         ToolTip="MaterialDesignFloatingActionMiniLightButton"
@@ -173,7 +196,7 @@
             </materialDesign:ColorZone>
         </Border>
 
-        <Border Background="{StaticResource PrimaryBackgroundBrush}" DockPanel.Dock="Right" materialDesign:ShadowAssist.ShadowDepth="Depth2" materialDesign:ShadowAssist.ShadowEdges="Top">
+        <Border x:Name="MainGrid" Background="{StaticResource PrimaryBackgroundBrush}" DockPanel.Dock="Right" materialDesign:ShadowAssist.ShadowDepth="Depth2" materialDesign:ShadowAssist.ShadowEdges="Top">
             <!--Main Grid-->
             <local:ButtonUI x:Name="ButtonUI" />
         </Border>
