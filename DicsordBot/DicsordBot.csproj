@@ -171,18 +171,11 @@
     <Compile Include="Bot\BotException.cs" />
     <Compile Include="Bot\Bot.cs" />
     <Compile Include="Bot\BotHandler.cs" />
-    <Compile Include="ButtonSettingUI.xaml.cs">
-      <DependentUpon>ButtonSettingUI.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Data\Persistent.cs" />
     <Compile Include="Data\RuntimeData.cs" />
     <Compile Include="UnhandledException.xaml.cs">
       <DependentUpon>UnhandledException.xaml</DependentUpon>
     </Compile>
-    <Page Include="ButtonSettingUI.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="ButtonUI.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

@@ -32,17 +32,29 @@ namespace DicsordBot
 
         public double Volume
         {
-            get { return (double)Handle.Volume * 100.0f; }
+            get { return (double)Handle.Volume * (100.0f * (1 / Handle.Data.Persistent.VolumeCap)); }
             set
             {
                 if (value != Volume)
                 {
                     LastVolume = Volume;
-                    Handle.Volume = (float)value / 100.0f;
+                    Handle.Volume = (float)value / (100.0f * (1 / Handle.Data.Persistent.VolumeCap));
                     setVolumeIcon();
                     OnPropertyChanged("Volume");
                 }
             }
+        }
+
+        public double TitleTime
+        {
+            //TODO: test OnPropertyChanged
+            get { return Handle.Bot.CurrentTime.TotalSeconds; }
+            set { Handle.Bot.skipToTime(TimeSpan.FromSeconds(value)); }
+        }
+
+        public double TotalTime
+        {
+            get { return Handle.Bot.TitleLenght.TotalSeconds; }
         }
 
         public bool IsLoading
@@ -71,6 +83,8 @@ namespace DicsordBot
             registerEvents();
             initAsync();
 
+            initTimer();
+
             setVolumeIcon();
             DataContext = this;
 
@@ -98,6 +112,24 @@ namespace DicsordBot
             Handle.ChannelId = Handle.Data.Persistent.ChannelId;
 
             await Handle.Bot.connectToServerAsync();
+        }
+
+        private void initTimer()
+        {
+            //init timer, that fires every second to display time-slider
+            System.Windows.Threading.DispatcherTimer dispatcherTimer = new System.Windows.Threading.DispatcherTimer();
+            dispatcherTimer.Tick += new EventHandler(dispatcherTimer_Tick);
+            dispatcherTimer.Interval = new TimeSpan(0, 0, 1);
+            dispatcherTimer.Start();
+        }
+
+        private void dispatcherTimer_Tick(object sender, EventArgs e)
+        {
+            if (Handle.Bot.IsStreaming)
+            {
+                OnPropertyChanged("TotalTime");
+                OnPropertyChanged("TitleTime");
+            }
         }
 
         private async void initDelayedAsync()
@@ -155,11 +187,13 @@ namespace DicsordBot
 
         private void btn_Play_Click(object sender, RoutedEventArgs e)
         {
+            IsLoading = true;
             playClicked();
         }
 
         private void btn_Next_Click(object sender, RoutedEventArgs e)
         {
+            IsLoading = true;
             Handle.Bot.skipTrack();
         }
 
@@ -185,6 +219,15 @@ namespace DicsordBot
             Handle.Bot.EarrapeStateChanged += delegate (bool isEarrape)
             {
                 //TODO: handle earrape, or revert to last volume
+                if (isEarrape)
+                    Volume = 3.5f;
+                else
+                    Volume = LastVolume;
+            };
+            Handle.Bot.LoopStateChanged += delegate (bool isLoop)
+            {
+                //TODO: handle loop
+                Handle.Bot.IsLoop = isLoop;
             };
         }
 

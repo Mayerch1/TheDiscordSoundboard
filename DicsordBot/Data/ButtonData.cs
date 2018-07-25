@@ -16,10 +16,6 @@ namespace DicsordBot.Data
         #region saved fields
 
         private string name = null;
-        private string borderBrushString = "#FFDDDDDD";
-        private string backgroundBrushString = "#FFDDDDDD";
-        private string foregroundBrushString = "#FF707070";
-        private string fontString = "Segoe UI";
         private string file = null;
         private bool isEarrape = false;
         private bool isLoop = false;
@@ -31,12 +27,6 @@ namespace DicsordBot.Data
 
         public string Name { get { return name; } set { name = value; OnPropertyChanged("Name"); } }
 
-        public string BorderBrushString { get { return borderBrushString; } set { borderBrushString = value; OnPropertyChanged("BorderBrushString"); } }
-        public string BackgroundBrushString { get { return backgroundBrushString; } set { backgroundBrushString = value; OnPropertyChanged("BackgroundBrushString"); } }
-        public string ForegroundBrushString { get { return foregroundBrushString; } set { foregroundBrushString = value; OnPropertyChanged("ForegroundBrushString"); } }
-
-        public string FontString { get { return fontString; } set { fontString = value; OnPropertyChanged("FontString"); } }
-
         public string File { get { return file; } set { file = value; OnPropertyChanged("File"); } }
 
         public bool IsEarrape { get { return isEarrape; } set { isEarrape = value; OnPropertyChanged("IsEarrape"); } }
@@ -46,34 +36,6 @@ namespace DicsordBot.Data
         public int ID { get { return iD; } set { iD = value; OnPropertyChanged("ID"); } }
 
         #endregion propertys
-
-        #region noXml
-
-        [XmlIgnore]
-        public FontFamily Font
-        {
-            get { return new FontFamily(FontString); }
-        }
-
-        [XmlIgnore]
-        public Brush BorderBrush
-        {
-            get { return (Brush)new System.Windows.Media.BrushConverter().ConvertFromString(BorderBrushString); }
-        }
-
-        [XmlIgnore]
-        public Brush BackgroundBrush
-        {
-            get { return (Brush)new System.Windows.Media.BrushConverter().ConvertFromString(BackgroundBrushString); }
-        }
-
-        [XmlIgnore]
-        public Brush ForegroundBrush
-        {
-            get { return (Brush)new System.Windows.Media.BrushConverter().ConvertFromString(ForegroundBrushString); }
-        }
-
-        #endregion noXml
 
         #region event
 

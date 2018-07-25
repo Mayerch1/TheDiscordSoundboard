@@ -49,29 +49,6 @@ namespace DicsordBot
             InstantButtonClicked(index);
         }
 
-        private void btn_Instant_MouseDown(object sender, MouseButtonEventArgs e)
-        {
-            if (e.RightButton == MouseButtonState.Pressed)
-            {
-                ////open settings for that Button
-                //Button btn = (Button)sender;
-                //int index = (int)btn.Tag;
-
-                //openButtonSettings(index);
-            }
-        }
-
-        private void openButtonSettings(int index)
-        {
-            Window window = new Window
-            {
-                Title = "Settings",
-                Content = new ButtonSettingUI(index),
-            };
-
-            window.ShowDialog();
-        }
-
         private void btn_FileChooser_Click(object sender, RoutedEventArgs e)
         {
             Button btn = (Button)sender;
@@ -79,17 +56,19 @@ namespace DicsordBot
 
             OpenFileDialog openFileDialog = new OpenFileDialog();
 
-            openFileDialog.Filter = "mp3/wav files (*.mp3/*.wav)|*.mp3;*.wav|mp3 files (*.mp3)|*.mp3|wav files (*.wav)|*.wav";
+            openFileDialog.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyMusic);
+            openFileDialog.Filter = "all supported types (*.mp3/*.wav/*.asf/*.wma/*.wmv/*.sami/*.smi/*.3g2/*.3gp/*.3gp2/*.3gpp/*.aac/*.adts/*.m4a/*.m4v/*.mov/*.mp4)|*.mp3;*.wav*.asf;*.wma;*.wmv;*.sami;*.smi;*.3g2;*.3gp;*.3gp2;*.3gpp;*.aac;*.adts;*.m4a;*.m4v;*.mov;*.mp4" +
+                                    "|mp3/wav files (*.mp3/*.wav)|*.mp3;*.wav" +
+                                     "|all files (*.*)|*.*";
 
-            if (openFileDialog.ShowDialog() == true)
+            if (openFileDialog.ShowDialog() == true && openFileDialog.CheckFileExists)
             {
-                //TODO: refresh fields
                 Handle.Data.Persistent.BtnList[index].File = openFileDialog.FileName;
-                if (Handle.Data.Persistent.BtnList[index].Name == null)
-                {
-                    Handle.Data.Persistent.BtnList[index].Name = evaluateName(openFileDialog.FileName);
-                }
+                Handle.Data.Persistent.BtnList[index].Name = evaluateName(openFileDialog.FileName);
             }
+
+            //TODO: better way to refresh fields
+            btnControl.ItemsSource = Handle.Data.Persistent.BtnList;
         }
 
         //return only the file name from a Path to a file

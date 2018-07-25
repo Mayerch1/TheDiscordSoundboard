@@ -44,9 +44,10 @@ namespace DicsordBot.Data
             foreach (var element in Persistent.BtnList)
             {
                 //a button with file and name null is considered empty
-                if (element.Name != null && element.File != null)
+                if (!String.IsNullOrEmpty(element.Name) && !String.IsNullOrEmpty(element.File))
                     Persistent.HighestButtonToSave = element.ID;
             }
+            OnPropertyChanged("BtnList");
         }
 
         //delete empty List elements
@@ -54,14 +55,14 @@ namespace DicsordBot.Data
         public int resizeBtnList()
         {
             //downsize to minimum
-            if (Persistent.BtnList.Count > Persistent.VisibleButtons)
+            if (Persistent.BtnList.Count > Persistent.MinVisibleButtons)
             {
                 cleanBtnList();
             }
             //upsize again, if list is to short to display
-            if (Persistent.BtnList.Count < Persistent.VisibleButtons)
+            if (Persistent.BtnList.Count < Persistent.MinVisibleButtons)
             {
-                for (int i = Persistent.BtnList.Count; i < Persistent.VisibleButtons; i++)
+                for (int i = Persistent.BtnList.Count; i < Persistent.MinVisibleButtons; i++)
                 {
                     Persistent.BtnList.Add(mkDefaultButtonData());
                 }
@@ -116,19 +117,14 @@ namespace DicsordBot.Data
             {
                 loadDefaultValues();
             }
+            resizeBtnList();
         }
 
         //set all values to the default settings
         private void loadDefaultValues()
         {
-            /*---------Persistent-------*/
-
-            /* all future settings are init. here */
-
-            /*-----------Buttons-------*/
-
             //init the visible Buttons
-            for (int i = 0; i < Persistent.VisibleButtons; i++)
+            for (int i = 0; i < Persistent.MinVisibleButtons; i++)
             {
                 Persistent.BtnList.Add(mkDefaultButtonData());
             }
@@ -151,6 +147,7 @@ namespace DicsordBot.Data
 
             Properties.Settings.Default.Save();
 
+            //clear all empty buttons
             cleanBtnList();
 
             Type settingsType = Persistent.GetType();

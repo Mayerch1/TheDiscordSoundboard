@@ -35,8 +35,16 @@
                         <Grid Grid.Column="0">
 
                             <!--Left Box-->
-
-                            <TextBox Text="{Binding Volume}" />
+                            <Slider VerticalAlignment="Center"
+                                        x:Name="timeBar"
+                                        Foreground="{StaticResource PrimaryAccentBrush}"
+                                        Margin="5,0,20,0"
+                                        TickFrequency="1"
+                                        Orientation="Horizontal"
+                                        Minimum="0"
+                                        Maximum="{Binding TotalTime}"
+                                        Value="{Binding TitleTime}"
+                                        Width="240" />
                         </Grid>
 
                         <Grid Grid.Column="1">

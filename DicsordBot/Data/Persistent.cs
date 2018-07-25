@@ -20,8 +20,9 @@ namespace DicsordBot.Data
         private ulong channelId = 0;
         private string clientAvatar;
         private string token = null;
-        private int visibleButtons = 36;
+        private int minVisibleButtons = 36;
         private float volume = 0.5f;
+        private float volumeCap = 0.3f;
 
         #endregion persistend fields
 
@@ -40,9 +41,11 @@ namespace DicsordBot.Data
 
         public string Token { get { return token; } set { token = value; OnPropertyChanged("Token"); } }
 
-        public int VisibleButtons { get { return visibleButtons; } set { visibleButtons = value; OnPropertyChanged("VisibleButtons"); } }
+        public int MinVisibleButtons { get { return minVisibleButtons; } set { minVisibleButtons = value; OnPropertyChanged("VisibleButtons"); } }
 
         public float Volume { get { return volume; } set { volume = value; OnPropertyChanged("Volume"); } }
+
+        public float VolumeCap { get { return volumeCap; } set { volumeCap = value; OnPropertyChanged("VolumeCap"); } }
 
         #endregion persistend properties
 

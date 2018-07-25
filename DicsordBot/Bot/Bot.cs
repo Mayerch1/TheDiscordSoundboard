@@ -10,6 +10,7 @@ using System.Runtime.Serialization.Formatters.Binary;
 using System.Diagnostics;
 using System.Collections.Generic;
 using System;
+using System.ComponentModel;
 
 namespace DicsordBot.Bot
 {
@@ -48,6 +49,10 @@ namespace DicsordBot.Bot
 
         public EarrapeStateHandler EarrapeStateChanged;
 
+        public delegate void LoopStateHandler(bool isLoop);
+
+        public LoopStateHandler LoopStateChanged;
+
         #endregion event Handlers
 
         #region status fields
@@ -72,6 +77,9 @@ namespace DicsordBot.Bot
             private set { if (value != isStreaming) { isStreaming = value; StreamStateChanged(isStreaming); } }
         }
 
+        public TimeSpan CurrentTime { get { if (Reader != null) return Reader.CurrentTime; else return TimeSpan.Zero; } }
+        public TimeSpan TitleLenght { get { if (Reader != null) return Reader.TotalTime; else return TimeSpan.Zero; } }
+
         public bool IsBufferEmpty { get; set; }
 
         public bool IsLoop { get; set; } = false;
@@ -79,6 +87,7 @@ namespace DicsordBot.Bot
         private bool IsToAbort { get; set; } = false;
 
         private uint SkipTracks { get; set; }
+        private bool IsEarrape { get; set; } = false;
 
         #endregion status propertys
 
@@ -233,9 +242,8 @@ namespace DicsordBot.Bot
                 //reopen the same file
                 if (IsLoop && !IsToAbort && SkipTracks == 0)
                 {
-                    TimeSpan begin = TimeSpan.Zero;
                     //move head to begin of file
-                    skipToTime(begin);
+                    skipToTime(TimeSpan.Zero);
                     await startStreamAsync(stream);
                 }
                 //next file in queue
@@ -266,13 +274,25 @@ namespace DicsordBot.Bot
             }
         }
 
-        //if button has any override settings, load them
+        //if button has any override settings, raise their events
         private void loadOverrideSettings(Data.ButtonData btn)
         {
-            if (btn.IsLoop)
-                EarrapeStateChanged(true);
-            else
-                EarrapeStateChanged(false);
+            //if earrape changes
+            if (IsEarrape != btn.IsEarrape)
+            {
+                if (btn.IsEarrape)
+                    EarrapeStateChanged(true);
+                else
+                    EarrapeStateChanged(false);
+            }
+            //if loop changes
+            if (IsLoop != btn.IsLoop)
+            {
+                if (btn.IsLoop)
+                    LoopStateChanged(true);
+                else
+                    LoopStateChanged(false);
+            }
         }
 
         private void applyVolume(ref byte[] buffer)

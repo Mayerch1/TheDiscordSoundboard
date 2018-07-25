@@ -32,9 +32,9 @@
                             <materialDesign:Flipper.FrontContent>
                                 <StackPanel>
 
-                                    <Button Content="Edit" Command="{x:Static materialDesign:Flipper.FlipCommand}" Background="{Binding BackgroundBrush}" />
+                                    <Button Content="Edit" Command="{x:Static materialDesign:Flipper.FlipCommand}" Background="#FFDDDDDD" />
 
-                                    <Button Style="{StaticResource MaterialDesignFlatButton}" Height="75" Width="175" Tag="{Binding ID}" Foreground="{Binding ForegroundBrush}" FontFamily="{Binding Font}" Content="{Binding Name}" Click="btn_Instant_Click" MouseDown="btn_Instant_MouseDown" />
+                                    <Button Style="{StaticResource MaterialDesignFlatButton}" Height="75" Width="175" Tag="{Binding ID}" Foreground="#FF707070" FontFamily="Segoe UI" Content="{Binding Name}" Click="btn_Instant_Click" />
                                 </StackPanel>
                             </materialDesign:Flipper.FrontContent>
 
@@ -42,7 +42,7 @@
 
                                 <StackPanel Orientation="Vertical">
 
-                                    <Grid Height="256" Width="200">
+                                    <Grid Height="256" Width="175">
 
                                         <Grid.RowDefinitions>
                                             <RowDefinition Height="Auto" />
