@@ -294,6 +294,7 @@ namespace DicsordBot.Bot
             //if loop changes
             if (IsLoop != btn.IsLoop)
             {
+                //IsLoop will be set from outside
                 if (btn.IsLoop)
                     LoopStateChanged(true);
                 else

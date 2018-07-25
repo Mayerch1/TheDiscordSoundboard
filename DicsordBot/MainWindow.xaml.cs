@@ -21,17 +21,24 @@ namespace DicsordBot
     /// </summary>
     public partial class MainWindow : Window, INotifyPropertyChanged
     {
+        #region enums
+
+        public enum LoopState { LoopNone, LoopOne, LoopAll, NextMode };
+
+        #endregion enums
+
         #region fields
 
-        private bool isLoading;
-        private bool isEarrape;
+        private bool isLoading = false;
+        private bool isEarrape = false;
+        private LoopState loopStatus = LoopState.LoopNone;
         # endregion
 
         #region propertys
 
         private double LastVolume { get; set; }
 
-        public double Volume
+        private double Volume
         {
             get { return (double)Handle.Volume * (100.0f * (1 / Handle.Data.Persistent.VolumeCap)); }
             set
@@ -64,6 +71,17 @@ namespace DicsordBot
             {
                 Handle.Bot.IsLoop = value;
                 OnPropertyChanged("IsLoop");
+            }
+        }
+
+        public LoopState LoopStatus
+        {
+            get { return loopStatus; }
+            set
+            {
+                //TODO: insert loop Handling
+                loopStatus = value;
+                OnPropertyChanged("LoopStatus");
             }
         }
 
@@ -101,17 +119,13 @@ namespace DicsordBot
             Handle.Data.loadData();
             InitializeComponent();
 
-            IsLoading = false;
-            isEarrape = false;
-
-            //Don't even try, it's already changed
-
             registerEvents();
             initAsync();
 
             initTimer();
 
             setVolumeIcon();
+            setLoopStatus(LoopState.LoopNone);
             DataContext = this;
 
             initDelayedAsync();
@@ -190,6 +204,38 @@ namespace DicsordBot
             }
         }
 
+        private void setLoopStatus(LoopState nextState = LoopState.NextMode)
+        {
+            //rotate through loop status
+            if (nextState == LoopState.NextMode)
+            {
+                if (LoopStatus == LoopState.LoopNone)
+
+                    nextState = LoopState.LoopOne;
+                else if (LoopStatus == LoopState.LoopOne)
+
+                    nextState = LoopState.LoopAll;
+                else if (LoopStatus == LoopState.LoopAll)
+
+                    nextState = LoopState.LoopNone;
+            }
+
+            //set loop-Status to bot
+            if (nextState == LoopState.LoopOne)
+            {
+                Handle.Bot.IsLoop = true;
+            }
+            //unset loop to bot
+            else
+            {
+                Handle.Bot.IsLoop = false;
+            }
+
+            //TODO: set loop icon here
+
+            LoopStatus = nextState;
+        }
+
         private async void playClicked()
         {
             //toogle stream state, if stream is not empty
@@ -239,7 +285,8 @@ namespace DicsordBot
             };
             Handle.Bot.LoopStateChanged += delegate (bool isLoop)
             {
-                Handle.Bot.IsLoop = isLoop;
+                setLoopStatus(LoopState.LoopOne);
+                //TODO: insert button change
             };
         }
 
