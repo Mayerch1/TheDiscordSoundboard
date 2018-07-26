@@ -215,7 +215,7 @@ namespace DicsordBot.Bot
             return channelList;
         }
 
-        new public async Task<List<List<SocketGuildUser>>> getAllClients()
+        new public async Task<List<List<SocketGuildUser>>> getAllClients(bool allowOffline = false)
         {
             if (!await connectToServerAsync())
                 return null;
@@ -224,7 +224,7 @@ namespace DicsordBot.Bot
 
             try
             {
-                userList = base.getAllClients();
+                userList = base.getAllClients(allowOffline);
             }
             catch (Exception ex)
             {
