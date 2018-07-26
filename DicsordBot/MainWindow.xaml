@@ -12,21 +12,21 @@
         <Storyboard x:Key="OpenMenu">
             <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(FrameworkElement.Width)" Storyboard.TargetName="brd_LeftPanel">
                 <EasingDoubleKeyFrame KeyTime="0" Value="70" />
-                <EasingDoubleKeyFrame KeyTime="0:0:0.1" Value="200" />
+                <EasingDoubleKeyFrame KeyTime="0:0:0.01" Value="200" />
             </DoubleAnimationUsingKeyFrames>
             <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(FrameworkElement.Width)" Storyboard.TargetName="col_LeftPanel">
                 <EasingDoubleKeyFrame KeyTime="0" Value="70" />
-                <EasingDoubleKeyFrame KeyTime="0:0:0.1" Value="200" />
+                <EasingDoubleKeyFrame KeyTime="0:0:0.01" Value="200" />
             </DoubleAnimationUsingKeyFrames>
         </Storyboard>
         <Storyboard x:Key="CloseMenu">
             <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(FrameworkElement.Width)" Storyboard.TargetName="brd_LeftPanel">
                 <EasingDoubleKeyFrame KeyTime="0" Value="200" />
-                <EasingDoubleKeyFrame KeyTime="0:0:0.1" Value="70" />
+                <EasingDoubleKeyFrame KeyTime="0:0:0.01" Value="70" />
             </DoubleAnimationUsingKeyFrames>
             <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(FrameworkElement.Width)" Storyboard.TargetName="col_LeftPanel">
                 <EasingDoubleKeyFrame KeyTime="0" Value="200" />
-                <EasingDoubleKeyFrame KeyTime="0:0:0.1" Value="70" />
+                <EasingDoubleKeyFrame KeyTime="0:0:0.01" Value="70" />
             </DoubleAnimationUsingKeyFrames>
         </Storyboard>
         <materialDesign:PackIcon x:Key="IconMuteVolume" Margin="5,0,5,0" Kind="VolumeMute" Height="24" Width="24" />
@@ -41,7 +41,7 @@
         <EventTrigger RoutedEvent="ButtonBase.Click" SourceName="btn_ToggleMenu">
             <BeginStoryboard Storyboard="{StaticResource CloseMenu}" />
         </EventTrigger>
-        <!--<EventTrigger RoutedEvent="ButtonBase.Click" SourceName="btn_OpenMenu">
+        <!--<EventTrigger RoutedEvent="ButtonBase.Click" SourceName="btn_ToggleMenu">
             <BeginStoryboard Storyboard="{StaticResource OpenMenu}" />
         </EventTrigger>-->
     </Window.Triggers>
