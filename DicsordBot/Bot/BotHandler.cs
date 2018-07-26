@@ -59,6 +59,7 @@ namespace DicsordBot.Bot
             catch (Exception ex)
             {
                 UnhandledException.initWindow(ex);
+                await disconnectFromChannelAsync();
 
                 Console.WriteLine("EnqueueAsync unhandled");
             }
@@ -79,6 +80,7 @@ namespace DicsordBot.Bot
             catch (Exception ex)
             {
                 UnhandledException.initWindow(ex);
+                await disconnectFromChannelAsync();
                 //TODO: catch all possible ex
             }
         }
@@ -183,6 +185,7 @@ namespace DicsordBot.Bot
                 UnhandledException.initWindow(ex, "Error while connecting to a voice channel");
                 //TODO: catch
                 //connection lost while connecting
+
                 return false;
             }
             return true;

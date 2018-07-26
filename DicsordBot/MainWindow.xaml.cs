@@ -89,7 +89,7 @@ namespace DicsordBot
         public double TitleTime
         {
             get { return Handle.Bot.CurrentTime.TotalSeconds; }
-            set { Handle.Bot.skipToTime(TimeSpan.FromSeconds(value)); }
+            set { if (value < TotalTime) Handle.Bot.skipToTime(TimeSpan.FromSeconds(value)); }
         }
 
         public double TotalTime
