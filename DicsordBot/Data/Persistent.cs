@@ -13,7 +13,7 @@ namespace DicsordBot.Data
     {
         #region consts
 
-        public const float earrapeValue = 2.5f;
+        public const float earrapeValue = 5f;
 
         #endregion consts
 

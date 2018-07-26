@@ -40,7 +40,7 @@ namespace DicsordBot
 
         private double LastVolume { get; set; }
 
-        private double Volume
+        public double Volume
         {
             get { return (double)Handle.Volume * (100.0f * (1 / Handle.Data.Persistent.VolumeCap)); }
             set
@@ -118,6 +118,8 @@ namespace DicsordBot
             //need this, so other tasks will wait
             Handle.Data.loadData();
             InitializeComponent();
+
+            LastVolume = Volume;
 
             registerEvents();
             registerEmbedEvents(ButtonUI);
@@ -260,6 +262,7 @@ namespace DicsordBot
 
         private void earrapeStatusChanged(bool isEarrape)
         {
+            Handle.Bot.IsEarrape = isEarrape;
             if (isEarrape)
             {
                 Volume = 100;
@@ -332,6 +335,11 @@ namespace DicsordBot
         private void btn_Repeat_Click(object sender, RoutedEventArgs e)
         {
             setLoopStatus(LoopState.NextMode);
+        }
+
+        private void btn_Earrape_Click(object sender, RoutedEventArgs e)
+        {
+            IsEarrape = !IsEarrape;
         }
 
         private void btn_Volume_Click(object sender, RoutedEventArgs e)

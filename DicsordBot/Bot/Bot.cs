@@ -87,7 +87,7 @@ namespace DicsordBot.Bot
         private bool IsToAbort { get; set; } = false;
 
         private uint SkipTracks { get; set; }
-        private bool IsEarrape { get; set; } = false;
+        public bool IsEarrape { get; set; } = false;
 
         #endregion status propertys
 
@@ -254,7 +254,8 @@ namespace DicsordBot.Bot
                         --SkipTracks;
 
                     //reset for next song
-                    IsLoop = false;
+                    if (IsLoop)
+                        LoopStateChanged(false);
 
                     getStream(Queue.Dequeue());
                     await startStreamAsync(stream);
@@ -282,12 +283,10 @@ namespace DicsordBot.Bot
                 if (btn.IsEarrape)
                 {
                     EarrapeStateChanged(true);
-                    IsEarrape = true;
                 }
                 else
                 {
                     EarrapeStateChanged(false);
-                    IsEarrape = false;
                 }
             }
             //if loop changes
