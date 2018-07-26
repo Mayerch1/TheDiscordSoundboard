@@ -22,7 +22,7 @@
 
     <Grid>
 
-        <ScrollViewer>
+        <ScrollViewer VerticalScrollBarVisibility="Hidden">
 
             <ItemsControl x:Name="btnControl" Margin="15">
                 <ItemsControl.ItemTemplate>

@@ -215,7 +215,7 @@
             <StackPanel Orientation="Vertical">
                 <materialDesign:ColorZone Background="{StaticResource PrimaryForegroundBrush}" VerticalAlignment="Top" materialDesign:ShadowAssist.ShadowEdges="Bottom" materialDesign:ShadowAssist.ShadowDepth="Depth2" Height="55">
 
-                    <Button x:Name="btn_ToggleMenu" Content="Test" Height="50" Margin="5,5,5,5" Foreground="Black" Background="{StaticResource PrimaryForegroundBrush}" BorderBrush="{StaticResource PrimaryForegroundBrush}" materialDesign:ShadowAssist.ShadowDepth="Depth0" HorizontalAlignment="Left" Click="btn_ToggleMenu_Click" />
+                    <ToggleButton  Style="{DynamicResource MaterialDesignHamburgerToggleButton}" x:Name="btn_ToggleMenu" Height="50" Margin="5,5,5,5" Foreground="Black" Background="{StaticResource PrimaryForegroundBrush}" BorderBrush="{StaticResource PrimaryForegroundBrush}" materialDesign:ShadowAssist.ShadowDepth="Depth0" HorizontalAlignment="Left" Click="btn_ToggleMenu_Click" />
 
                     <!--Header Left-->
                 </materialDesign:ColorZone>
