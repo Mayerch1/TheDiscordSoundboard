@@ -287,8 +287,6 @@ namespace DicsordBot
 
         private void registerEvents()
         {
-            Handle.Data.Persistent.ClientNameChanged += Handle.ClientName_Changed;
-
             //event Handler for Stream-state of bot
             Handle.Bot.StreamStateChanged += delegate (bool newState)
             {

@@ -5,7 +5,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Media;
-using System.Xml.Serialization;
 
 namespace DicsordBot.Data
 {
@@ -46,7 +45,7 @@ namespace DicsordBot.Data
         public ulong ChannelId { get { return channelId; } set { channelId = value; OnPropertyChanged("ChannelId"); } }
 
         public string ClientAvatar { get { return clientAvatar; } set { clientAvatar = value; OnPropertyChanged("ClientAvatar"); } }
-        public string ClientName { get { return clientName; } set { clientName = value; OnPropertyChanged("ClientName"); ClientNameChanged(value); } }
+        public string ClientName { get { return clientName; } set { clientName = value; OnPropertyChanged("ClientName"); } }
 
         public string Token { get { return token; } set { token = value; OnPropertyChanged("Token"); } }
 
@@ -66,12 +65,6 @@ namespace DicsordBot.Data
 
         //all other settings go here
 
-        #region events
-
-        public delegate void ClientNameHandler(string newName);
-
-        public event ClientNameHandler ClientNameChanged;
-
         public event PropertyChangedEventHandler PropertyChanged;
 
         private void OnPropertyChanged(string info)
@@ -82,7 +75,5 @@ namespace DicsordBot.Data
                 handler(null, new PropertyChangedEventArgs(info));
             }
         }
-
-        #endregion events
     }
 }

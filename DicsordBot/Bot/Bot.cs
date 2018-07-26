@@ -432,7 +432,7 @@ namespace DicsordBot.Bot
         }
 
         //returns a List<List>, all online clients of all servers are contained
-        protected List<List<SocketGuildUser>> getAllClients(bool allowOffline)
+        protected List<List<SocketGuildUser>> getAllClients()
         {
             if (!IsServerConnected)
                 throw new BotException(BotException.type.connection, "Not connectet to the servers, while trying to get clint list", BotException.connectionError.NoServer);
@@ -447,7 +447,7 @@ namespace DicsordBot.Bot
 
                 foreach (var singleUser in users)
                 {
-                    if (singleUser.VoiceChannel != null || allowOffline)
+                    if (singleUser.VoiceChannel != null)
                         subList.Add(singleUser);
                 }
                 guildList.Add(subList);
