@@ -6,27 +6,28 @@
         xmlns:local="clr-namespace:DicsordBot"
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         mc:Ignorable="d"
-        Title="MainWindow" Height="767" Width="1434" Closing="MainWindow_Closing">
+        Title="MainWindow" Height="767" Width="1434" Closing="MainWindow_Closing"
+        ResizeMode="CanResizeWithGrip">
 
     <Window.Resources>
         <Storyboard x:Key="OpenMenu">
             <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(FrameworkElement.Width)" Storyboard.TargetName="brd_LeftPanel">
-                <EasingDoubleKeyFrame KeyTime="0" Value="70" />
-                <EasingDoubleKeyFrame KeyTime="0:0:0.01" Value="200" />
+
+                <EasingDoubleKeyFrame KeyTime="0" Value="200" />
             </DoubleAnimationUsingKeyFrames>
             <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(FrameworkElement.Width)" Storyboard.TargetName="col_LeftPanel">
-                <EasingDoubleKeyFrame KeyTime="0" Value="70" />
-                <EasingDoubleKeyFrame KeyTime="0:0:0.01" Value="200" />
+
+                <EasingDoubleKeyFrame KeyTime="0" Value="200" />
             </DoubleAnimationUsingKeyFrames>
         </Storyboard>
         <Storyboard x:Key="CloseMenu">
             <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(FrameworkElement.Width)" Storyboard.TargetName="brd_LeftPanel">
-                <EasingDoubleKeyFrame KeyTime="0" Value="200" />
-                <EasingDoubleKeyFrame KeyTime="0:0:0.01" Value="70" />
+
+                <EasingDoubleKeyFrame KeyTime="0" Value="70" />
             </DoubleAnimationUsingKeyFrames>
             <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(FrameworkElement.Width)" Storyboard.TargetName="col_LeftPanel">
-                <EasingDoubleKeyFrame KeyTime="0" Value="200" />
-                <EasingDoubleKeyFrame KeyTime="0:0:0.01" Value="70" />
+
+                <EasingDoubleKeyFrame KeyTime="0" Value="70" />
             </DoubleAnimationUsingKeyFrames>
         </Storyboard>
         <materialDesign:PackIcon x:Key="IconMuteVolume" Margin="5,0,5,0" Kind="VolumeMute" Height="24" Width="24" />
