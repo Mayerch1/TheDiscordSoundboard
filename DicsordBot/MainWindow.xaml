@@ -159,7 +159,7 @@
                                         Minimum="0"
                                         Maximum="100"
                                         Value="{Binding Volume}"
-                                        Width="240" />
+                                        Width="150" />
                             </StackPanel>
                         </Grid>
                     </Grid>
