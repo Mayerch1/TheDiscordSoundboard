@@ -23,10 +23,18 @@
 
                         <StackPanel Orientation="Vertical">
                             <!--Settings Content-->
-                            <TextBlock>
-                         Enter Token:
-                            </TextBlock>
+
+                            <TextBlock>Username:</TextBlock>
+                            <TextBox Text="{Binding ClientName}" Margin="50,0,50,0" />
+
+                            <TextBlock>Volume Cap:</TextBlock>
+                            <Slider Margin="50,0,50,0" Minimum="0" Maximum="1" Value="{Binding VolumeCap}" />
+
+                            <TextBlock>Enter Token:</TextBlock>
                             <TextBox Text="{Binding Token}" Margin="50,0,50,0" />
+
+                            <TextBlock>Storage Directory:</TextBlock>
+                            <TextBox Text="{Binding SettingsPath}" Margin="50,0,50,0" />
                         </StackPanel>
                     </Grid>
                 </materialDesign:ColorZone>

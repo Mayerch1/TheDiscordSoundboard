@@ -55,6 +55,19 @@ namespace DicsordBot
             }
         }
 
+        public static string ClientName
+        {
+            get { return Data.Persistent.ClientName; }
+            set
+            {
+                //set clientId, by resolving userName
+                Data.Persistent.ClientName = value;
+                var uId = BotData.resolveUserName(value);
+                if (uId.Result > 0)
+                    ClientId = uId.Result;
+            }
+        }
+
         #endregion handle shared data
     }
 }

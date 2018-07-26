@@ -23,6 +23,7 @@ namespace DicsordBot.Data
         private string settingsPath;
         private int highestButtonToSave = -1;
         private ulong clientId;
+        private string clientName;
         private ulong channelId = 0;
         private string clientAvatar;
         private string token = null;
@@ -44,6 +45,7 @@ namespace DicsordBot.Data
         public ulong ChannelId { get { return channelId; } set { channelId = value; OnPropertyChanged("ChannelId"); } }
 
         public string ClientAvatar { get { return clientAvatar; } set { clientAvatar = value; OnPropertyChanged("ClientAvatar"); } }
+        public string ClientName { get { return clientName; } set { clientName = value; OnPropertyChanged("ClientName"); } }
 
         public string Token { get { return token; } set { token = value; OnPropertyChanged("Token"); } }
 
