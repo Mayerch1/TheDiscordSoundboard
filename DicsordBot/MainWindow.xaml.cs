@@ -368,6 +368,10 @@ namespace DicsordBot
             MainGrid.Child = btnUI;
         }
 
+        private void btn_ToggleMenu_Click(object sender, RoutedEventArgs e)
+        {
+        }
+
         public event PropertyChangedEventHandler PropertyChanged;
 
         private void OnPropertyChanged(string info)
