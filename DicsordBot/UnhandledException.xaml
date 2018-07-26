@@ -8,23 +8,63 @@
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid Margin="20">
         <StackPanel>
-            <TextBlock>Description</TextBlock>
-            <TextBlock Text="{Binding Ex.Message}" />
 
-            <TextBlock>More info</TextBlock>
+            <TextBlock FontWeight="Bold">Descriptio</TextBlock>
             <TextBlock Text="{Binding Info}" />
 
-            <TextBlock>Class</TextBlock>
-            <TextBlock Text="{Binding Class}" />
+            <TextBlock FontWeight="Bold">Error Message</TextBlock>
+            <TextBlock Text="{Binding Ex.Message}" />
 
-            <TextBlock>File Name</TextBlock>
-            <TextBlock Text="{Binding FileName}" />
+            <Expander
+                HorizontalAlignment="Left"
 
-            <TextBlock>Method</TextBlock>
-            <TextBlock Text="{Binding Method}" />
+                Header="Developer Information">
+                <StackPanel>
+                    <TextBlock FontWeight="Bold">Class</TextBlock>
+                    <TextBlock Text="{Binding Class}" />
 
-            <TextBlock>Line Number</TextBlock>
-            <TextBlock Text="{Binding LineNumber}" />
+                    <TextBlock FontWeight="Bold">File Name</TextBlock>
+                    <TextBlock Text="{Binding FileName}" />
+
+                    <TextBlock FontWeight="Bold">Method</TextBlock>
+                    <TextBlock Text="{Binding Method}" />
+
+                    <TextBlock FontWeight="Bold">Line Number</TextBlock>
+                    <TextBlock Text="{Binding LineNumber}" />
+
+                    <TextBlock FontWeight="Bold">Column Number</TextBlock>
+                    <TextBlock Text="{Binding ColumnNumber}" />
+
+                    <Expander
+                        HorizontalAlignment="Left"
+                        Header="Complete StackTrace">
+
+                        <ItemsControl x:Name="StackTraceTemplate">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding Stack}" />
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </Expander>
+                </StackPanel>
+            </Expander>
+        </StackPanel>
+
+        <StackPanel VerticalAlignment="Bottom">
+            <TextBlock>
+                Give Some additional information, insult the developers or simply greet your parents
+            </TextBlock>
+            <TextBox  MinHeight="50" MinWidth="100">
+            </TextBox>
+            <StackPanel Orientation="Horizontal">
+                <Button HorizontalAlignment="Right">
+                    Send
+                </Button>
+                <TextBlock>
+                    All information above + your IP-address will be transmitted to, and saved at our servers.
+                </TextBlock>
+            </StackPanel>
         </StackPanel>
     </Grid>
 </UserControl>

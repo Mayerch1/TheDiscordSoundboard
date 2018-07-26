@@ -13,6 +13,9 @@
         <materialDesign:PackIcon x:Key="IconLowVolume" Margin="5,0,5,0" Kind="VolumeLow" Height="24" Width="24" />
         <materialDesign:PackIcon x:Key="IconMediumVolume" Margin="5,0,5,0" Kind="VolumeMedium" Height="24" Width="24" />
         <materialDesign:PackIcon x:Key="IconHighVolume"  Margin="5,0,5,0" Kind="VolumeHigh" Height="24" Width="24" />
+        <materialDesign:PackIcon x:Key="IconRepeatOnce" Kind="RepeatOnce" Height="21" Width="21" />
+        <materialDesign:PackIcon x:Key="IconRepeatOff" Kind="RepeatOff" Height="21" Width="21" />
+        <materialDesign:PackIcon x:Key="IconRepeatAll" Kind="Repeat" Height="21" Width="21" />
     </Window.Resources>
 
     <DockPanel LastChildFill="False">
@@ -80,6 +83,7 @@
                                 </Button>
 
                                 <Button x:Name="btn_Repeat" HorizontalAlignment="Right"
+                                        Click="btn_Repeat_Click"
                                       Style="{StaticResource MaterialDesignFloatingActionMiniLightButton}"
                                       ToolTip="MaterialDesignFloatingActionMiniLightButton"
                                         Background="White"
@@ -175,9 +179,9 @@
                     <!--Header Left-->
                 </materialDesign:ColorZone>
 
-                <Button Content="SOUNDS" Height="50" Margin="0,20,0,0" Foreground="Black" Background="{StaticResource PrimaryForegroundBrush}" BorderBrush="{StaticResource PrimaryForegroundBrush}" materialDesign:ShadowAssist.ShadowDepth="Depth0" />
+                <Button Content="SOUNDS" Height="50" Margin="0,20,0,0" Foreground="Black" Background="{StaticResource PrimaryForegroundBrush}" BorderBrush="{StaticResource PrimaryForegroundBrush}" materialDesign:ShadowAssist.ShadowDepth="Depth0" Click="btn_Sounds_Click" />
 
-                <Button Content="SETTINGS" Height="50" Margin="0,0,0,0" Foreground="Black" Background="{StaticResource PrimaryForegroundBrush}" BorderBrush="{StaticResource PrimaryForegroundBrush}" materialDesign:ShadowAssist.ShadowDepth="Depth0" />
+                <Button Content="SETTINGS" Height="50" Margin="0,0,0,0" Foreground="Black" Background="{StaticResource PrimaryForegroundBrush}" BorderBrush="{StaticResource PrimaryForegroundBrush}" materialDesign:ShadowAssist.ShadowDepth="Depth0" Click="btn_Settings_Click" />
             </StackPanel>
         </Border>
 
