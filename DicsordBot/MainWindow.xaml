@@ -139,19 +139,16 @@
                             <!--Right Panel-->
                             <StackPanel Orientation="Horizontal">
 
-                                <Button x:Name="btn_Earrape" HorizontalAlignment="Left"
-                                        Click="btn_Earrape_Click"
-                                        Style="{StaticResource MaterialDesignFloatingActionMiniLightButton}"
-                                        ToolTip="MaterialDesignFloatingActionMiniLightButton"
-                                        Background="{StaticResource PrimaryBackgroundBrush}"
-                                        BorderBrush="{StaticResource PrimaryBackgroundBrush}"
-                                        materialDesign:ShadowAssist.ShadowDepth="Depth0">
+                                <ToggleButton x:Name="btn_Earrape" HorizontalAlignment="Left"
+
+                                        Style="{StaticResource MaterialDesignFlatToggleButton}"
+                                        ToolTip="MaterialDesignFlatToggleButton">
 
                                     <materialDesign:PackIcon
                                         Kind="Nuke"
                                         Height="21"
                                         Width="21" />
-                                </Button>
+                                </ToggleButton>
 
                                 <Button x:Name ="btn_Volume" HorizontalAlignment="Center"
                                     Click="btn_Volume_Click"
