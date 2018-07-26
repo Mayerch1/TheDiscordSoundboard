@@ -8,7 +8,7 @@
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid>
         <StackPanel>
-            <TextBlock>
+            <TextBlock HorizontalAlignment="Center">
             Hier kommt so'n Settings kram
             </TextBlock>
 
@@ -18,4 +18,4 @@
             <TextBox Text="{Binding Token}" />
         </StackPanel>
     </Grid>
-</UserControl>
+</UserControl> 

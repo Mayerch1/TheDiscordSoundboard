@@ -18,7 +18,7 @@
         <materialDesign:PackIcon x:Key="IconRepeatAll" Kind="Repeat" Height="21" Width="21" />
     </Window.Resources>
 
-    <DockPanel LastChildFill="False">
+    <DockPanel LastChildFill="True">
 
         <Grid DockPanel.Dock="Bottom" Background="{StaticResource PrimaryBackgroundBrush}">
             <StackPanel>
@@ -139,19 +139,33 @@
                             <!--Right Panel-->
                             <StackPanel Orientation="Horizontal">
 
-                                <Button x:Name ="btn_Volume" HorizontalAlignment="Center"
-                Click="btn_Volume_Click"
-                materialDesign:ShadowAssist.ShadowDepth="Depth0"
-                Background="{StaticResource PrimaryBackgroundBrush}"
-                BorderBrush="{StaticResource PrimaryBackgroundBrush}"
-                Style="{StaticResource MaterialDesignFloatingActionMiniLightButton}"
-                ToolTip="MaterialDesignFloatingActionMiniLightButton">
+                                <Button x:Name="btn_Earrape" HorizontalAlignment="Left"
+                                        Click="btn_Earrape_Click"
+                                        Style="{StaticResource MaterialDesignFloatingActionMiniLightButton}"
+                                        ToolTip="MaterialDesignFloatingActionMiniLightButton"
+                                        Background="{StaticResource PrimaryBackgroundBrush}"
+                                        BorderBrush="{StaticResource PrimaryBackgroundBrush}"
+                                        materialDesign:ShadowAssist.ShadowDepth="Depth0">
 
                                     <materialDesign:PackIcon
-                      Margin="5,0,5,0"
-                      Kind="VolumeMute"
-                      Height="24"
-                      Width="24" />
+                                        Kind="Nuke"
+                                        Height="21"
+                                        Width="21" />
+                                </Button>
+
+                                <Button x:Name ="btn_Volume" HorizontalAlignment="Center"
+                                    Click="btn_Volume_Click"
+                                    materialDesign:ShadowAssist.ShadowDepth="Depth0"
+                                    Background="{StaticResource PrimaryBackgroundBrush}"
+                                    BorderBrush="{StaticResource PrimaryBackgroundBrush}"
+                                    Style="{StaticResource MaterialDesignFloatingActionMiniLightButton}"
+                                    ToolTip="MaterialDesignFloatingActionMiniLightButton">
+
+                                    <materialDesign:PackIcon
+                                          Margin="5,0,5,0"
+                                          Kind="VolumeMute"
+                                          Height="24"
+                                          Width="24" />
                                 </Button>
 
                                 <Slider VerticalAlignment="Center"
