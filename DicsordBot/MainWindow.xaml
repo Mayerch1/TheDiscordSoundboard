@@ -190,6 +190,8 @@
             <StackPanel Orientation="Vertical">
                 <materialDesign:ColorZone Background="{StaticResource PrimaryForegroundBrush}" VerticalAlignment="Top" materialDesign:ShadowAssist.ShadowEdges="Bottom" materialDesign:ShadowAssist.ShadowDepth="Depth2" Height="55">
 
+                    <Button Content="Test" Height="50" Margin=",5,5,5" Foreground="Black" Background="{StaticResource PrimaryForegroundBrush}" BorderBrush="{StaticResource PrimaryForegroundBrush}" materialDesign:ShadowAssist.ShadowDepth="Depth0" Click="btn_Sounds_Click" HorizontalAlignment="Left" />
+
                     <!--Header Left-->
                 </materialDesign:ColorZone>
 
