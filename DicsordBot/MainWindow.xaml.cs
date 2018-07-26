@@ -33,6 +33,7 @@ namespace DicsordBot
 
         private bool isLoading = false;
         private bool isEarrape = false;
+        private bool isMenuOpen = true;
         private LoopState loopStatus = LoopState.LoopNone;
         # endregion
 
@@ -104,6 +105,12 @@ namespace DicsordBot
         {
             get { return isLoading; }
             set { if (value != isLoading) { isLoading = value; OnPropertyChanged("IsLoading"); } }
+        }
+
+        public bool IsMenuOpen
+        {
+            get { return isMenuOpen; }
+            set { isMenuOpen = value; OnPropertyChanged("IsMenuOpen"); }
         }
 
         public string ClientAvatar
