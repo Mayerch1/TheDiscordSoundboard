@@ -255,7 +255,6 @@ namespace DicsordBot.Bot
 
                     //reset for next song
                     IsLoop = false;
-                    //IDEA: disable earrape
 
                     getStream(Queue.Dequeue());
                     await startStreamAsync(stream);

@@ -21,8 +21,6 @@ namespace DicsordBot
     /// </summary>
     ///
 
-    //TODO: insert button event for btn_loop_click
-
     public partial class MainWindow : Window, INotifyPropertyChanged
     {
         #region enums
@@ -122,6 +120,7 @@ namespace DicsordBot
             InitializeComponent();
 
             registerEvents();
+            registerEmbedEvents(ButtonUI);
             initAsync();
 
             initTimer();
@@ -184,6 +183,7 @@ namespace DicsordBot
 
             var client = Handle.BotData.extractClient(await Handle.Bot.getAllClients(), Handle.ClientId);
             Handle.BotData.updateAvatar(client);
+            OnPropertyChanged("ClientAvatar");
         }
 
         private void setVolumeIcon()
@@ -233,7 +233,13 @@ namespace DicsordBot
                 Handle.Bot.IsLoop = false;
             }
 
-            //TODO: set loop icon here
+            //set icon, based on loopstate
+            if (nextState == LoopState.LoopAll)
+                btn_Repeat.Content = FindResource("IconRepeatAll");
+            else if (nextState == LoopState.LoopOne)
+                btn_Repeat.Content = FindResource("IconRepeatOnce");
+            else if (nextState == LoopState.LoopNone)
+                btn_Repeat.Content = FindResource("IconRepeatOff");
 
             LoopStatus = nextState;
         }
@@ -269,12 +275,15 @@ namespace DicsordBot
 
         #region event stuff
 
-        private void registerEvents()
+        private void registerEmbedEvents(ButtonUI btnUI)
         {
             //subsribe to intsant button event
 
-            ButtonUI.InstantButtonClicked += btn_InstantButton_Clicked;
+            btnUI.InstantButtonClicked += btn_InstantButton_Clicked;
+        }
 
+        private void registerEvents()
+        {
             //event Handler for Stream-state of bot
             Handle.Bot.StreamStateChanged += delegate (bool newState)
             {
@@ -320,6 +329,11 @@ namespace DicsordBot
             Handle.Bot.skipToTime(TimeSpan.Zero);
         }
 
+        private void btn_Repeat_Click(object sender, RoutedEventArgs e)
+        {
+            setLoopStatus(LoopState.NextMode);
+        }
+
         private void btn_Volume_Click(object sender, RoutedEventArgs e)
         {
             if (Volume > 0)
@@ -330,6 +344,20 @@ namespace DicsordBot
             {
                 Volume = LastVolume;
             }
+        }
+
+        private void btn_Settings_Click(object sender, RoutedEventArgs e)
+        {
+            MainGrid.Child = null;
+            MainGrid.Child = new Settings();
+        }
+
+        private void btn_Sounds_Click(object sender, RoutedEventArgs e)
+        {
+            MainGrid.Child = null;
+            ButtonUI btnUI = new ButtonUI();
+            registerEmbedEvents(btnUI);
+            MainGrid.Child = btnUI;
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

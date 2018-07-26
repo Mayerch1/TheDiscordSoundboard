@@ -47,8 +47,6 @@ namespace DicsordBot.Bot
             catch (System.IO.DirectoryNotFoundException ex)
             {
                 Console.WriteLine("File Exception no dir");
-      
-                
             }
             catch (System.IO.FileNotFoundException ex)
             {
@@ -120,6 +118,7 @@ namespace DicsordBot.Bot
             catch (Discord.Net.HttpException ex)
             {
                 Console.WriteLine("connection Exception (Token)");
+                UnhandledException.initWindow(ex, "failed to connect to Server");
                 return false;
             }
             catch (System.Net.Http.HttpRequestException ex)

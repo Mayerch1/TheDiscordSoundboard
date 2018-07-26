@@ -43,5 +43,24 @@ namespace DicsordBot
             if (client != null)
                 Handle.Data.Persistent.ClientAvatar = "https://cdn.discordapp.com/avatars/" + client.Id + "/" + client.AvatarId + ".png?size=256";
         }
+
+        //resolve username-> id, return 0 if no user was found
+        public async Task<ulong> resolveUserName(string name)
+        {
+            List<List<SocketGuildUser>> clientList = await Handle.Bot.getAllClients();
+
+            foreach (var server in clientList)
+            {
+                foreach (var client in server)
+                {
+                    if (client.Username == name)
+                    {
+                        return client.Id;
+                    }
+                }
+            }
+
+            return 0;
+        }
     }
 }
