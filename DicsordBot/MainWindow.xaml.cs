@@ -10,6 +10,7 @@ using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
+using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
@@ -33,8 +34,9 @@ namespace DicsordBot
 
         private bool isLoading = false;
         private bool isEarrape = false;
-        private bool isMenuOpen = true;
+
         private LoopState loopStatus = LoopState.LoopNone;
+
         # endregion
 
         #region propertys
@@ -105,12 +107,6 @@ namespace DicsordBot
         {
             get { return isLoading; }
             set { if (value != isLoading) { isLoading = value; OnPropertyChanged("IsLoading"); } }
-        }
-
-        public bool IsMenuOpen
-        {
-            get { return isMenuOpen; }
-            set { isMenuOpen = value; OnPropertyChanged("IsMenuOpen"); }
         }
 
         public string ClientAvatar
@@ -294,6 +290,9 @@ namespace DicsordBot
 
         private void registerEvents()
         {
+            //event to resolve new clientName into clientId
+            Handle.Data.Persistent.ClientNameChanged += Handle.ClientName_Changed;
+
             //event Handler for Stream-state of bot
             Handle.Bot.StreamStateChanged += delegate (bool newState)
             {
@@ -369,6 +368,7 @@ namespace DicsordBot
 
         private void btn_Sounds_Click(object sender, RoutedEventArgs e)
         {
+            //change embeds for maingrit
             MainGrid.Child = null;
             ButtonUI btnUI = new ButtonUI();
             registerEmbedEvents(btnUI);
@@ -377,6 +377,14 @@ namespace DicsordBot
 
         private void btn_ToggleMenu_Click(object sender, RoutedEventArgs e)
         {
+            //start storyboard from resources in xaml
+            Storyboard sb;
+            if (btn_ToggleMenu.IsChecked == true)
+                sb = FindResource("OpenMenu") as Storyboard;
+            else
+                sb = FindResource("CloseMenu") as Storyboard;
+
+            sb.Begin();
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

@@ -13,6 +13,18 @@ namespace DicsordBot
 
         public static BotData BotData { get; set; } = new BotData();
 
+        #region events
+
+        public static void ClientName_Changed(string newName)
+        {
+            var id = BotData.resolveUserName(newName);
+
+            if (id.Result > 0)
+                Data.Persistent.ClientId = id.Result;
+        }
+
+        #endregion events
+
         #region handle shared data
 
         public static float Volume

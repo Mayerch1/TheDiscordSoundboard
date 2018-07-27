@@ -6,27 +6,28 @@
         xmlns:local="clr-namespace:DicsordBot"
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         mc:Ignorable="d"
-        Title="MainWindow" Height="767" Width="1434" Closing="MainWindow_Closing">
+        Title="MainWindow" Height="767" Width="1434" Closing="MainWindow_Closing"
+        ResizeMode="CanResizeWithGrip">
 
     <Window.Resources>
         <Storyboard x:Key="OpenMenu">
             <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(FrameworkElement.Width)" Storyboard.TargetName="brd_LeftPanel">
-                <EasingDoubleKeyFrame KeyTime="0" Value="70" />
-                <EasingDoubleKeyFrame KeyTime="0:0:0.01" Value="200" />
+
+                <EasingDoubleKeyFrame KeyTime="0" Value="200" />
             </DoubleAnimationUsingKeyFrames>
             <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(FrameworkElement.Width)" Storyboard.TargetName="col_LeftPanel">
-                <EasingDoubleKeyFrame KeyTime="0" Value="70" />
-                <EasingDoubleKeyFrame KeyTime="0:0:0.01" Value="200" />
+
+                <EasingDoubleKeyFrame KeyTime="0" Value="200" />
             </DoubleAnimationUsingKeyFrames>
         </Storyboard>
         <Storyboard x:Key="CloseMenu">
             <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(FrameworkElement.Width)" Storyboard.TargetName="brd_LeftPanel">
-                <EasingDoubleKeyFrame KeyTime="0" Value="200" />
-                <EasingDoubleKeyFrame KeyTime="0:0:0.01" Value="70" />
+
+                <EasingDoubleKeyFrame KeyTime="0" Value="70" />
             </DoubleAnimationUsingKeyFrames>
             <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(FrameworkElement.Width)" Storyboard.TargetName="col_LeftPanel">
-                <EasingDoubleKeyFrame KeyTime="0" Value="200" />
-                <EasingDoubleKeyFrame KeyTime="0:0:0.01" Value="70" />
+
+                <EasingDoubleKeyFrame KeyTime="0" Value="70" />
             </DoubleAnimationUsingKeyFrames>
         </Storyboard>
         <materialDesign:PackIcon x:Key="IconMuteVolume" Margin="5,0,5,0" Kind="VolumeMute" Height="24" Width="24" />
@@ -37,21 +38,13 @@
         <materialDesign:PackIcon x:Key="IconRepeatOff" Kind="RepeatOff" Height="21" Width="21" />
         <materialDesign:PackIcon x:Key="IconRepeatAll" Kind="Repeat" Height="21" Width="21" />
     </Window.Resources>
-    <Window.Triggers>
-        <EventTrigger RoutedEvent="ButtonBase.Click" SourceName="btn_ToggleMenu">
-            <BeginStoryboard Storyboard="{StaticResource CloseMenu}" />
-        </EventTrigger>
-        <!--<EventTrigger RoutedEvent="ButtonBase.Click" SourceName="btn_ToggleMenu">
-            <BeginStoryboard Storyboard="{StaticResource OpenMenu}" />
-        </EventTrigger>-->
-    </Window.Triggers>
 
     <DockPanel LastChildFill="True">
 
         <Grid DockPanel.Dock="Bottom" Background="{StaticResource PrimaryBackgroundBrush}">
             <StackPanel>
 
-                <materialDesign:ColorZone x:Name="col_LeftPanel"  Background="{StaticResource PrimaryForegroundBrush}" Height="5" Width="200" HorizontalAlignment="Left" />
+                <materialDesign:ColorZone x:Name="col_LeftPanel"  Background="{StaticResource PrimaryForegroundBrush}" Height="5" Width="70" HorizontalAlignment="Left" />
 
                 <materialDesign:ColorZone materialDesign:ShadowAssist.ShadowDepth="Depth2" materialDesign:ShadowAssist.ShadowEdges="Top" Height="75">
 
@@ -210,19 +203,29 @@
             </StackPanel>
         </Grid>
 
-        <Border Width="200" x:Name="brd_LeftPanel" Background="{StaticResource PrimaryForegroundBrush}" DockPanel.Dock="Left">
+        <Border Width="70" x:Name="brd_LeftPanel" Background="{StaticResource PrimaryForegroundBrush}" DockPanel.Dock="Left">
             <!--Left Panel-->
             <StackPanel Orientation="Vertical">
                 <materialDesign:ColorZone Background="{StaticResource PrimaryForegroundBrush}" VerticalAlignment="Top" materialDesign:ShadowAssist.ShadowEdges="Bottom" materialDesign:ShadowAssist.ShadowDepth="Depth2" Height="55">
 
-                    <Button x:Name="btn_ToggleMenu" Content="Test" Height="50" Margin="5,5,5,5" Foreground="Black" Background="{StaticResource PrimaryForegroundBrush}" BorderBrush="{StaticResource PrimaryForegroundBrush}" materialDesign:ShadowAssist.ShadowDepth="Depth0" HorizontalAlignment="Left" Click="btn_ToggleMenu_Click" />
+                    <ToggleButton  Style="{DynamicResource MaterialDesignHamburgerToggleButton}" x:Name="btn_ToggleMenu" Height="50" Margin="5,5,5,5" Foreground="Black" Background="{StaticResource PrimaryForegroundBrush}" BorderBrush="{StaticResource PrimaryForegroundBrush}" materialDesign:ShadowAssist.ShadowDepth="Depth0" HorizontalAlignment="Left" Click="btn_ToggleMenu_Click" />
 
                     <!--Header Left-->
                 </materialDesign:ColorZone>
 
-                <Button Content="SOUNDS" Height="50" Margin="0,20,0,0" Foreground="Black" Background="{StaticResource PrimaryForegroundBrush}" BorderBrush="{StaticResource PrimaryForegroundBrush}" materialDesign:ShadowAssist.ShadowDepth="Depth0" Click="btn_Sounds_Click" />
+                <StackPanel Orientation="Horizontal" Margin="0,0,0,0">
+                    <Button Height="50" Margin="0,20,0,0" Foreground="Black" Background="{x:Null}" BorderBrush="{x:Null}">
+                        <materialDesign:PackIcon Kind="Bug" Height="50" Width="50" />
+                    </Button>
+                    <Button Content="SOUNDS" Height="50" Margin="0,20,0,0" Foreground="Black" Background="{StaticResource PrimaryForegroundBrush}" BorderBrush="{StaticResource PrimaryForegroundBrush}" materialDesign:ShadowAssist.ShadowDepth="Depth0" Click="btn_Sounds_Click" />
+                </StackPanel>
 
-                <Button Content="SETTINGS" Height="50" Margin="0,0,0,0" Foreground="Black" Background="{StaticResource PrimaryForegroundBrush}" BorderBrush="{StaticResource PrimaryForegroundBrush}" materialDesign:ShadowAssist.ShadowDepth="Depth0" Click="btn_Settings_Click" />
+                <StackPanel Orientation="Horizontal" Margin="0,0,0,0">
+                    <Button Height="50" Margin="0,0,0,0" Foreground="Black" Background="{x:Null}" BorderBrush="{x:Null}">
+                        <materialDesign:PackIcon Kind="GithubBox" Height="50" Width="50" />
+                    </Button>
+                    <Button Content="SETTINGS" Height="50" Margin="0,0,0,0" Foreground="Black" Background="{StaticResource PrimaryForegroundBrush}" BorderBrush="{StaticResource PrimaryForegroundBrush}" materialDesign:ShadowAssist.ShadowDepth="Depth0" Click="btn_Settings_Click" />
+                </StackPanel>
             </StackPanel>
         </Border>
 

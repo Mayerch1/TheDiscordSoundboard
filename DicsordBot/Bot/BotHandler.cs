@@ -58,8 +58,8 @@ namespace DicsordBot.Bot
             }
             catch (Exception ex)
             {
-                UnhandledException.initWindow(ex);
                 await disconnectFromChannelAsync();
+                UnhandledException.initWindow(ex);
 
                 Console.WriteLine("EnqueueAsync unhandled");
             }
@@ -79,8 +79,9 @@ namespace DicsordBot.Bot
             }
             catch (Exception ex)
             {
-                UnhandledException.initWindow(ex);
                 await disconnectFromChannelAsync();
+                UnhandledException.initWindow(ex);
+
                 //TODO: catch all possible ex
             }
         }
@@ -120,7 +121,7 @@ namespace DicsordBot.Bot
             catch (Discord.Net.HttpException ex)
             {
                 Console.WriteLine("connection Exception (Token)");
-                UnhandledException.initWindow(ex, "failed to connect to Server");
+                //UnhandledException.initWindow(ex, "failed to connect to Server");
                 return false;
             }
             catch (System.Net.Http.HttpRequestException ex)
@@ -215,7 +216,7 @@ namespace DicsordBot.Bot
             return channelList;
         }
 
-        new public async Task<List<List<SocketGuildUser>>> getAllClients()
+        new public async Task<List<List<SocketGuildUser>>> getAllClients(bool acceptOffline = false)
         {
             if (!await connectToServerAsync())
                 return null;
@@ -224,7 +225,7 @@ namespace DicsordBot.Bot
 
             try
             {
-                userList = base.getAllClients();
+                userList = base.getAllClients(acceptOffline);
             }
             catch (Exception ex)
             {

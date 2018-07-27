@@ -65,6 +65,12 @@ namespace DicsordBot.Data
 
         //all other settings go here
 
+        #region events
+
+        public delegate void ClientNameHandler(string newName);
+
+        public event ClientNameHandler ClientNameChanged;
+
         public event PropertyChangedEventHandler PropertyChanged;
 
         private void OnPropertyChanged(string info)
@@ -75,5 +81,7 @@ namespace DicsordBot.Data
                 handler(null, new PropertyChangedEventArgs(info));
             }
         }
+
+        #endregion events
     }
 }
