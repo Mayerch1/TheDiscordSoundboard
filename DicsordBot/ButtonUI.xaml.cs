@@ -98,5 +98,10 @@ namespace DicsordBot
                 handler(null, new PropertyChangedEventArgs(info));
             }
         }
+
+        private void btn_Return_Click(object sender, RoutedEventArgs e)
+        {
+            Handle.Data.resizeBtnList();
+        }
     }
 }

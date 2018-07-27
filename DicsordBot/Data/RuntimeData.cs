@@ -39,6 +39,11 @@ namespace DicsordBot.Data
 
         private void HandleButtonPropertyChanged(object sender, EventArgs e)
         {
+            determinHighestButton();
+        }
+
+        private void determinHighestButton()
+        {
             Persistent.HighestButtonToSave = -1;
 
             foreach (var element in Persistent.BtnList)
@@ -54,15 +59,17 @@ namespace DicsordBot.Data
         //adds new elements, if more are to be displayed
         public int resizeBtnList()
         {
+            //determinHighestButton();
             //downsize to minimum
-            if (Persistent.BtnList.Count > Persistent.MinVisibleButtons)
-            {
-                cleanBtnList();
-            }
+            cleanBtnList();
+
             //upsize again, if list is to short to display
-            if (Persistent.BtnList.Count < Persistent.MinVisibleButtons)
+            if (Persistent.BtnList.Count < PersistentData.minVisibleButtons || Persistent.BtnList.Count < (Persistent.HighestButtonToSave + 2))
             {
-                for (int i = Persistent.BtnList.Count; i < Persistent.MinVisibleButtons; i++)
+                //use highest from both if values above (short if)
+                int highestBtn = PersistentData.minVisibleButtons > (Persistent.HighestButtonToSave + 2) ? PersistentData.minVisibleButtons : (Persistent.HighestButtonToSave + 2);
+
+                for (int i = Persistent.BtnList.Count; i < highestBtn; i++)
                 {
                     Persistent.BtnList.Add(mkDefaultButtonData());
                 }
@@ -124,7 +131,7 @@ namespace DicsordBot.Data
         private void loadDefaultValues()
         {
             //init the visible Buttons
-            for (int i = 0; i < Persistent.MinVisibleButtons; i++)
+            for (int i = 0; i < PersistentData.minVisibleButtons; i++)
             {
                 Persistent.BtnList.Add(mkDefaultButtonData());
             }

@@ -47,13 +47,16 @@ namespace DicsordBot
         //resolve username-> id, return 0 if no user was found
         public async Task<ulong> resolveUserName(string name)
         {
-            List<List<SocketGuildUser>> clientList = await Handle.Bot.getAllClients();
+            List<List<SocketGuildUser>> clientList = await Handle.Bot.getAllClients(true);
+
+            if (clientList == null)
+                return 0;
 
             foreach (var server in clientList)
             {
                 foreach (var client in server)
                 {
-                    if (client.Username == name)
+                    if (client.Username + '#' + client.Discriminator == name)
                     {
                         return client.Id;
                     }
