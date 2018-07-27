@@ -54,7 +54,7 @@
 
                                                 <StackPanel Orientation="Horizontal">
 
-                                                    <Button Style="{StaticResource MaterialDesignToolForegroundButton}" Command="{x:Static materialDesign:Flipper.FlipCommand}" HorizontalAlignment="Left">
+                                                    <Button Style="{StaticResource MaterialDesignToolForegroundButton}" Command="{x:Static materialDesign:Flipper.FlipCommand}" HorizontalAlignment="Left" Click="btn_Return_Click">
                                                         <materialDesign:PackIcon Kind="ArrowLeft" HorizontalAlignment="Right" />
                                                     </Button>
 

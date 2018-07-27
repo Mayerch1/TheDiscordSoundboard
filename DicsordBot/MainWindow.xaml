@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:DicsordBot"
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         mc:Ignorable="d"
-        Title="MainWindow" Height="767" Width="1434" Closing="MainWindow_Closing"
+        Title="MainWindow" Height="767" Width="1341" Closing="MainWindow_Closing"
         ResizeMode="CanResizeWithGrip">
 
     <Window.Resources>
