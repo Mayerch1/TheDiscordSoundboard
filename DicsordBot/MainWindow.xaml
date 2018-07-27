@@ -221,9 +221,20 @@
                     <!--Header Left-->
                 </materialDesign:ColorZone>
 
-                <Button Content="SOUNDS" Height="50" Margin="0,20,0,0" Foreground="Black" Background="{StaticResource PrimaryForegroundBrush}" BorderBrush="{StaticResource PrimaryForegroundBrush}" materialDesign:ShadowAssist.ShadowDepth="Depth0" Click="btn_Sounds_Click" />
+                <Button Height="75" Margin="0,20,0,0" Foreground="Black" Background="{StaticResource PrimaryForegroundBrush}" BorderBrush="{StaticResource PrimaryForegroundBrush}" materialDesign:ShadowAssist.ShadowDepth="Depth0" Click="btn_Sounds_Click"  HorizontalContentAlignment="Left">
+                    <StackPanel Orientation="Horizontal">
+                        <materialDesign:PackIcon Kind="ArrowRightDropCircleOutline" Height="35" Width="35" VerticalAlignment="Center" />
+                        <TextBlock Text="SOUNDS" FontSize="20"  Margin="10,0,0,0" VerticalAlignment="Center" />
+                    </StackPanel>
+                </Button>
 
-                <Button Content="SETTINGS" Height="50" Margin="0,0,0,0" Foreground="Black" Background="{StaticResource PrimaryForegroundBrush}" BorderBrush="{StaticResource PrimaryForegroundBrush}" materialDesign:ShadowAssist.ShadowDepth="Depth0" Click="btn_Settings_Click" />
+                <Button Height="75" Margin="0,0,0,0" Foreground="Black" Background="{StaticResource PrimaryForegroundBrush}" BorderBrush="{StaticResource PrimaryForegroundBrush}" materialDesign:ShadowAssist.ShadowDepth="Depth0" Click="btn_Settings_Click" HorizontalContentAlignment="Left">
+
+                    <StackPanel Orientation="Horizontal">
+                        <materialDesign:PackIcon Kind="Settings" Height="35" Width="35" VerticalAlignment="Center" />
+                        <TextBlock Text="SETTINGS" FontSize="20"  Margin="10,0,0,0" VerticalAlignment="Center" />
+                    </StackPanel>
+                </Button>
             </StackPanel>
         </Border>
 

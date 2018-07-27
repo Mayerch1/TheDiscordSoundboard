@@ -24,17 +24,65 @@
                         <StackPanel Orientation="Vertical">
                             <!--Settings Content-->
 
-                            <TextBlock>Username:</TextBlock>
-                            <TextBox Text="{Binding ClientName}" Margin="50,0,50,0" />
+                            <TextBlock Text="Appearance" FontSize="15" FontWeight="Bold" />
 
-                            <TextBlock>Volume Cap:</TextBlock>
-                            <Slider Margin="50,0,50,0" Minimum="0" Maximum="1" Value="{Binding VolumeCap}" />
+                            <Separator Margin="0,5,0,0" />
 
-                            <TextBlock>Enter Token:</TextBlock>
-                            <TextBox Text="{Binding Token}" Margin="50,0,50,0" />
+                            <StackPanel Orientation="Horizontal" Margin="0,20,0,0">
+                                <TextBlock Text="Light" Margin="10" FontSize="15" />
 
-                            <TextBlock>Storage Directory:</TextBlock>
-                            <TextBox Text="{Binding SettingsPath}" Margin="50,0,50,0" />
+                                <ToggleButton>
+                                </ToggleButton>
+
+                                <TextBlock Text="Dark" Margin="10" FontSize="15" />
+                            </StackPanel>
+
+                            <TextBlock Text="Application" FontSize="15" FontWeight="Bold" Margin="0,30,0,0" />
+
+                            <Separator Margin="0,5,0,0" />
+
+                            <TextBox
+                                Style="{StaticResource MaterialDesignTextFieldBoxTextBox}"
+                                Text="{Binding ClientName}"
+                                materialDesign:HintAssist.Hint="User Name"
+                                HorizontalAlignment="Left"
+                                Margin="0,20,0,0"
+                                VerticalAlignment="Top"
+                                AcceptsReturn="False"
+                                TextWrapping="NoWrap"
+                                Width="400" />
+
+                            <TextBox
+                                Style="{StaticResource MaterialDesignTextFieldBoxTextBox}"
+                                Text="{Binding Token}"
+                                materialDesign:HintAssist.Hint="Bot Token"
+                                HorizontalAlignment="Left"
+                                Margin="0,20,0,0"
+                                VerticalAlignment="Top"
+                                AcceptsReturn="False"
+                                TextWrapping="NoWrap"
+                                Width="400" />
+
+                            <TextBox
+                                Style="{StaticResource MaterialDesignTextFieldBoxTextBox}"
+                                Text="{Binding SettingsPath}"
+                                materialDesign:HintAssist.Hint="Storage Directory"
+                                HorizontalAlignment="Left"
+                                Margin="0,20,0,0"
+                                VerticalAlignment="Top"
+                                AcceptsReturn="False"
+                                TextWrapping="NoWrap"
+                                Width="400" />
+
+                            <StackPanel Orientation="Horizontal" Margin="5,5,0,0">
+                                <TextBlock VerticalAlignment="Bottom">Volume Cap</TextBlock>
+
+                                <Slider Minimum="0" Maximum="100" Style="{StaticResource MaterialDesignDiscreteSlider}"
+                                    Margin="10,0,0,0"
+                                    ToolTip="MaterialDesignDiscreteSlider"
+                                    Value="{Binding VolumeCap}"
+                                    Width="280" />
+                            </StackPanel>
                         </StackPanel>
                     </Grid>
                 </materialDesign:ColorZone>
