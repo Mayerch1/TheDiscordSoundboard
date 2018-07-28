@@ -33,7 +33,7 @@ namespace DicsordBot.Data
         private string token = null;
 
         private float volume = 0.5f;
-        private float volumeCap = 0.3f;
+        private int volumeCap = 30;
 
         #endregion persistend fields
 
@@ -56,7 +56,7 @@ namespace DicsordBot.Data
 
         public float Volume { get { return volume; } set { volume = value; OnPropertyChanged("Volume"); } }
 
-        public float VolumeCap { get { return volumeCap; } set { volumeCap = value; OnPropertyChanged("VolumeCap"); } }
+        public int VolumeCap { get { return volumeCap; } set { volumeCap = value; OnPropertyChanged("VolumeCap"); } }
 
         [XmlIgnore]
         public string ClientName { get { return clientName; } set { clientName = value; OnPropertyChanged("ClientName"); ClientNameChanged(value); } }

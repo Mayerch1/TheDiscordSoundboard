@@ -45,13 +45,13 @@ namespace DicsordBot
 
         public double Volume
         {
-            get { return (double)Handle.Volume * (100.0f * (1 / Handle.Data.Persistent.VolumeCap)); }
+            get { return ((double)Handle.Volume * 100) * (1 / (Handle.Data.Persistent.VolumeCap / 100.0f)); }
             set
             {
                 if (value != Volume)
                 {
                     LastVolume = Volume;
-                    Handle.Volume = (float)value / (100.0f * (1 / Handle.Data.Persistent.VolumeCap));
+                    Handle.Volume = ((float)value / 100) * (Handle.Data.Persistent.VolumeCap / 100.0f);
                     setVolumeIcon();
                     OnPropertyChanged("Volume");
                 }
