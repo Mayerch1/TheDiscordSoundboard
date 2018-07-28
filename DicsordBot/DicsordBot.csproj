@@ -167,6 +167,9 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="About.xaml.cs">
+      <DependentUpon>About.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Handle\BotData.cs" />
     <Compile Include="Bot\BotException.cs" />
     <Compile Include="Bot\Bot.cs" />
@@ -179,6 +182,10 @@
     <Compile Include="UnhandledException.xaml.cs">
       <DependentUpon>UnhandledException.xaml</DependentUpon>
     </Compile>
+    <Page Include="About.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="ButtonUI.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

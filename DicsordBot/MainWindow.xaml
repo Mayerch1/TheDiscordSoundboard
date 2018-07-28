@@ -208,9 +208,8 @@
             <StackPanel Orientation="Vertical">
                 <materialDesign:ColorZone Background="{StaticResource PrimaryForegroundBrush}" VerticalAlignment="Top" materialDesign:ShadowAssist.ShadowEdges="Bottom" materialDesign:ShadowAssist.ShadowDepth="Depth2" Height="55" HorizontalContentAlignment="Left">
 
-                    <ToggleButton  Style="{DynamicResource MaterialDesignHamburgerToggleButton}" x:Name="btn_ToggleMenu" Height="50" Margin="14,5,5,5" Foreground="Black" Background="{StaticResource PrimaryForegroundBrush}" BorderBrush="{StaticResource PrimaryForegroundBrush}" materialDesign:ShadowAssist.ShadowDepth="Depth0" VerticalAlignment="Center" Click="btn_ToggleMenu_Click" />
-
                     <!--Header Left-->
+                    <ToggleButton  Style="{DynamicResource MaterialDesignHamburgerToggleButton}" x:Name="btn_ToggleMenu" Height="50" Margin="14,5,5,5" Foreground="Black" Background="{StaticResource PrimaryForegroundBrush}" BorderBrush="{StaticResource PrimaryForegroundBrush}" materialDesign:ShadowAssist.ShadowDepth="Depth0" VerticalAlignment="Center" Click="btn_ToggleMenu_Click" />
                 </materialDesign:ColorZone>
 
                 <Button Height="75" Margin="0,20,0,0" Foreground="Black" Background="{StaticResource PrimaryForegroundBrush}" BorderBrush="{StaticResource PrimaryForegroundBrush}" materialDesign:ShadowAssist.ShadowDepth="Depth0" Click="btn_Sounds_Click"  HorizontalContentAlignment="Left">
@@ -225,6 +224,13 @@
                     <StackPanel Orientation="Horizontal">
                         <materialDesign:PackIcon Kind="Settings" Height="35" Width="35" VerticalAlignment="Center" />
                         <TextBlock Text="SETTINGS" FontSize="20"  Margin="10,0,0,0" VerticalAlignment="Center" />
+                    </StackPanel>
+                </Button>
+
+                <Button Height="75" Margin="0,0,0,0" Foreground="Black" Background="{StaticResource PrimaryForegroundBrush}" BorderBrush="{StaticResource PrimaryForegroundBrush}" materialDesign:ShadowAssist.ShadowDepth="Depth0" Click="btn_About_Click"  HorizontalContentAlignment="Left">
+                    <StackPanel Orientation="Horizontal">
+                        <materialDesign:PackIcon Kind="Information" Height="35" Width="35" VerticalAlignment="Center" />
+                        <TextBlock Text="ABOUT" FontSize="20"  Margin="10,0,0,0" VerticalAlignment="Center" />
                     </StackPanel>
                 </Button>
             </StackPanel>

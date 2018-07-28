@@ -360,6 +360,12 @@ namespace DicsordBot
             }
         }
 
+        private void btn_About_Click(object sender, RoutedEventArgs e)
+        {
+            MainGrid.Child = null;
+            MainGrid.Child = new About();
+        }
+
         private void btn_Settings_Click(object sender, RoutedEventArgs e)
         {
             MainGrid.Child = null;
@@ -399,5 +405,17 @@ namespace DicsordBot
         }
 
         #endregion event stuff
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+        }
+
+        private void Button_Click_1(object sender, RoutedEventArgs e)
+        {
+        }
+
+        private void Button_Click_2(object sender, RoutedEventArgs e)
+        {
+        }
     }
 }
