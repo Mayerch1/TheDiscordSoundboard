@@ -256,7 +256,10 @@
       <Install>false</Install>
     </BootstrapperPackage>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Resource Include="images\kitties.jpg" />
+    <Resource Include="images\paypal.png" />
+  </ItemGroup>
   <ItemGroup>
     <Resource Include="images\Sponsor_0.png" />
   </ItemGroup>

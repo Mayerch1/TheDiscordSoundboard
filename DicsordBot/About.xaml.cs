@@ -24,5 +24,10 @@ namespace DicsordBot
         {
             InitializeComponent();
         }
+
+        private void btn_Donate_Click(object sender, RoutedEventArgs e)
+        {
+            System.Diagnostics.Process.Start("https://www.paypal.me/CJMayer/4,99");
+        }
     }
 }
