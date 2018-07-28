@@ -161,7 +161,7 @@
                             <StackPanel Orientation="Horizontal">
 
                                 <ToggleButton x:Name="btn_Earrape" HorizontalAlignment="Left"
-
+                                       Click="btn_Earrape_Click"
                                         Style="{StaticResource MaterialDesignFlatToggleButton}"
                                         ToolTip="MaterialDesignFlatToggleButton">
 
