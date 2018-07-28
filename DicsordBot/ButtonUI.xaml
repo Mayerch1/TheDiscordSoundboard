@@ -42,77 +42,56 @@
 
                                 <StackPanel Orientation="Vertical">
 
-                                    <Grid Height="256" Width="175">
+                                    <Grid>
+                                        <materialDesign:ColorZone Mode="Accent" Padding="0" Background="{StaticResource PrimaryForegroundBrush}">
 
-                                        <Grid.RowDefinitions>
-                                            <RowDefinition Height="Auto" />
-                                            <RowDefinition Height="*" />
-                                        </Grid.RowDefinitions>
+                                            <StackPanel Orientation="Horizontal">
 
-                                        <Grid Grid.Row="0">
-                                            <materialDesign:ColorZone Mode="Accent" Padding="0" Background="{StaticResource PrimaryForegroundBrush}">
+                                                <Button Style="{StaticResource MaterialDesignToolForegroundButton}" Command="{x:Static materialDesign:Flipper.FlipCommand}" HorizontalAlignment="Left" Click="btn_Return_Click">
+                                                    <materialDesign:PackIcon Kind="ArrowLeft" HorizontalAlignment="Right" />
+                                                </Button>
 
-                                                <StackPanel Orientation="Horizontal">
-
-                                                    <Button Style="{StaticResource MaterialDesignToolForegroundButton}" Command="{x:Static materialDesign:Flipper.FlipCommand}" HorizontalAlignment="Left" Click="btn_Return_Click">
-                                                        <materialDesign:PackIcon Kind="ArrowLeft" HorizontalAlignment="Right" />
-                                                    </Button>
-
-                                                    <TextBlock Margin="0,0,0,0" VerticalAlignment="Center">
+                                                <TextBlock Margin="0,0,0,0" VerticalAlignment="Center">
                                                 EDIT
-                                                    </TextBlock>
-                                                </StackPanel>
-                                            </materialDesign:ColorZone>
-                                        </Grid>
-
-                                        <Grid Grid.Row="1" Margin="0,10,0,0" Background="{StaticResource PrimaryBackgroundBrush}">
-                                            <Grid.RowDefinitions>
-                                                <RowDefinition Height="Auto" />
-                                                <RowDefinition Height="Auto" />
-                                                <RowDefinition Height="Auto" />
-                                            </Grid.RowDefinitions>
-
-                                            <Grid Grid.Row="0" Margin="10,0,10,0" HorizontalAlignment="Center" VerticalAlignment="Top" Width="172">
-                                                <StackPanel Orientation="Vertical">
-
-                                                    <Button Click="btn_FileChooser_Click" Tag="{Binding ID}" VerticalAlignment="Top" Background="{StaticResource PrimaryAccentBrush}">
-                                                        <materialDesign:PackIcon Kind="File" Width="25" Height="25" />
-                                                    </Button>
-
-                                                    <TextBox materialDesign:HintAssist.Hint="Name" materialDesign:HintAssist.IsFloating="True" Margin="10,10,10,0" Text="{Binding Name}" VerticalAlignment="Center" />
-
-                                                    <TextBox materialDesign:HintAssist.Hint="File" materialDesign:HintAssist.IsFloating="True" Margin="10,10,10,0" Text="{Binding File}" VerticalAlignment="Bottom" />
-                                                </StackPanel>
-                                            </Grid>
-
-                                            <Grid Grid.Row="1" Margin="10,10,10,0" HorizontalAlignment="Center">
-
-                                                <Grid>
-                                                    <Grid.RowDefinitions>
-                                                        <RowDefinition Height="*" />
-                                                        <RowDefinition Height="*" />
-                                                    </Grid.RowDefinitions>
-
-                                                    <Grid.ColumnDefinitions>
-                                                        <ColumnDefinition Width="115" />
-                                                        <ColumnDefinition Width="50" />
-                                                    </Grid.ColumnDefinitions>
-
-                                                    <TextBlock Grid.Row="0" Grid.Column="0" Margin="10,15,10,10">
-                                                            Loop
-                                                    </TextBlock>
-
-                                                    <ToggleButton Grid.Row="0" Grid.Column="1" IsChecked="{Binding IsLoop}" Margin="0,15,10,10" />
-
-                                                    <TextBlock Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="10,5,10,10">
-                                                            Boost
-                                                    </TextBlock>
-
-                                                    <ToggleButton Grid.Row="1" Grid.Column="1" IsChecked="{Binding IsEarrape}" Margin="0,5,10,10" />
-                                                </Grid>
-                                            </Grid>
-                                        </Grid>
+                                                </TextBlock>
+                                            </StackPanel>
+                                        </materialDesign:ColorZone>
                                     </Grid>
+
+                                    <Grid Margin="10,10,10,0" HorizontalAlignment="Center" VerticalAlignment="Top" Width="172">
+                                        <StackPanel Orientation="Vertical">
+
+                                            <Button Click="btn_FileChooser_Click" Tag="{Binding ID}" VerticalAlignment="Top" Background="{StaticResource PrimaryAccentBrush}">
+                                                <materialDesign:PackIcon Kind="File" Width="25" Height="25" />
+                                            </Button>
+
+                                            <TextBox materialDesign:HintAssist.Hint="Name" materialDesign:HintAssist.IsFloating="True" Margin="0,10,10,0" Text="{Binding Name}" VerticalAlignment="Center" />
+
+                                            <TextBox materialDesign:HintAssist.Hint="File" materialDesign:HintAssist.IsFloating="True" Margin="0,10,10,0" Text="{Binding File}" VerticalAlignment="Bottom" />
+                                        </StackPanel>
+                                    </Grid>
+
+                                    <StackPanel Orientation="Horizontal" Width="100" Margin="15,15,10,10" HorizontalAlignment="Left">
+
+                                        <TextBlock  Text="Loop" HorizontalAlignment="Left" Width="50" VerticalAlignment="Center" />
+
+                                        <CheckBox Style="{StaticResource MaterialDesignCheckBox}" IsChecked="{Binding IsLoop}" Margin="10,0,0,0" VerticalAlignment="Center">
+                                            <CheckBox.LayoutTransform>
+                                                <ScaleTransform ScaleX="1.2" ScaleY="1.2" />
+                                            </CheckBox.LayoutTransform>
+                                        </CheckBox>
+                                    </StackPanel>
+
+                                    <StackPanel Orientation="Horizontal" Width="Auto" Margin="15,5,10,10">
+
+                                        <TextBlock  Text="Boosted" HorizontalAlignment="Left" Width="50" VerticalAlignment="Center" />
+
+                                        <CheckBox Style="{StaticResource MaterialDesignCheckBox}" IsChecked="{Binding IsEarrape}" Margin="10,0,0,0" VerticalAlignment="Center">
+                                            <CheckBox.LayoutTransform>
+                                                <ScaleTransform ScaleX="1.2" ScaleY="1.2" />
+                                            </CheckBox.LayoutTransform>
+                                        </CheckBox>
+                                    </StackPanel>
                                 </StackPanel>
                             </materialDesign:Flipper.BackContent>
                         </materialDesign:Flipper>
