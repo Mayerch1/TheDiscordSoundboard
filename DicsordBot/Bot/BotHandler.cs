@@ -114,6 +114,9 @@ namespace DicsordBot.Bot
             if (IsServerConnected)
                 return true;
 
+            if (Token == null || Token == "")
+                return false;
+
             try
             {
                 await base.connectToServerAsync(Token);

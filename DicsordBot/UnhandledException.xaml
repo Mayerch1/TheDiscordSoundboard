@@ -80,7 +80,7 @@
                 <TextBlock FontWeight="Bold">This unhandled exception is presented by:</TextBlock>
                 <Image Stretch="UniformToFill" StretchDirection="DownOnly">
                     <Image.Source>
-                        <BitmapImage UriSource="/images/Sponsor_0.png" />
+                        <BitmapImage UriSource="/res/Sponsor_0.png" />
                     </Image.Source>
                 </Image>
             </StackPanel>

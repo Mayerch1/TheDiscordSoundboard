@@ -1,6 +1,7 @@
 ﻿using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.IO;
 using System.Linq;
@@ -27,7 +28,7 @@ namespace DicsordBot
 
         public InstantButtonClickedHandler InstantButtonClicked;
 
-        private List<Data.ButtonData> BtnList
+        private ObservableCollection<Data.ButtonData> BtnList
         {
             get { return Handle.Data.Persistent.BtnList; }
             set { Handle.Data.Persistent.BtnList = value; OnPropertyChanged("BtnList"); }

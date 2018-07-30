@@ -15,12 +15,12 @@ namespace DicsordBot
 
         #region events
 
-        public static void ClientName_Changed(string newName)
+        public static async void ClientName_Changed(string newName)
         {
-            var id = BotData.resolveUserName(newName);
+            var id = await BotData.resolveUserName(newName);
 
-            if (id.Result > 0)
-                Data.Persistent.ClientId = id.Result;
+            if (id > 0)
+                Data.Persistent.ClientId = id;
         }
 
         #endregion events

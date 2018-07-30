@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Text;
@@ -21,7 +22,7 @@ namespace DicsordBot.Data
 
         #region persistend fields
 
-        private List<ButtonData> btnList = new List<ButtonData>();
+        private ObservableCollection<ButtonData> btnList = new ObservableCollection<ButtonData>();
 
         private bool isFirstStart = true;
         private string settingsPath;
@@ -38,8 +39,6 @@ namespace DicsordBot.Data
         #endregion persistend fields
 
         #region persistend properties
-
-        public List<ButtonData> BtnList { get { return btnList; } set { btnList = value; OnPropertyChanged("BtnList"); } }
 
         public bool IsFirstStart { get { return isFirstStart; } set { isFirstStart = value; OnPropertyChanged("IsFirstStart"); } }
         public string SettingsPath { get { return settingsPath; } set { settingsPath = value; OnPropertyChanged("SettingsPath"); } }
@@ -58,8 +57,9 @@ namespace DicsordBot.Data
 
         public int VolumeCap { get { return volumeCap; } set { volumeCap = value; OnPropertyChanged("VolumeCap"); } }
 
-        [XmlIgnore]
-        public string ClientName { get { return clientName; } set { clientName = value; OnPropertyChanged("ClientName"); ClientNameChanged(value); } }
+        public string ClientName { get { return clientName; } set { clientName = value; OnPropertyChanged("ClientName"); if (ClientNameChanged != null) ClientNameChanged(value); } }
+
+        public ObservableCollection<ButtonData> BtnList { get { return btnList; } set { btnList = value; OnPropertyChanged("BtnList"); } }
 
         #endregion persistend properties
 

@@ -27,7 +27,7 @@
                             Look at those sweet kitties, I wonder what happens, when you pet them.
                             </TextBlock>
                             <Button BorderBrush="{x:Null}" Background="{x:Null}" Height="350" Click="btn_Donate_Click">
-                                <Image MaxHeight="275" Source="/images/kitties.jpg" />
+                                <Image MaxHeight="275" Source="/res/kitties.jpg" />
                             </Button>
                         </StackPanel>
                     </Grid>
@@ -38,7 +38,16 @@
                     <Grid Margin="20,20,20,20">
 
                         <Button Margin="5" Width="250"  HorizontalAlignment="Center" Click="btn_Donate_Click">
-                            <Image Stretch="Uniform" Source="/images/paypal.png" />
+                            <Image Stretch="Uniform" Source="/res/paypal.png" />
+                        </Button>
+                    </Grid>
+                </materialDesign:ColorZone>
+
+                <materialDesign:ColorZone Background="{StaticResource PrimaryBackgroundBrush}" materialDesign:ShadowAssist.ShadowDepth="Depth2" materialDesign:ShadowAssist.ShadowEdges="All" Margin="5,5,5,5" Height="Auto">
+
+                    <Grid Margin="20,20,20,20">
+                        <Button Margin="5" Width="250" HorizontalAlignment="Center" Click="btn_license_Click">
+                            View License
                         </Button>
                     </Grid>
                 </materialDesign:ColorZone>
