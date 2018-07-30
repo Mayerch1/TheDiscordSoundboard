@@ -31,8 +31,12 @@
                         <materialDesign:Flipper Style="{StaticResource MaterialDesignCardFlipper}">
                             <materialDesign:Flipper.FrontContent>
                                 <StackPanel>
-
-                                    <Button Content="Edit" Command="{x:Static materialDesign:Flipper.FlipCommand}" Background="#FFDDDDDD" />
+                                    <Button VerticalAlignment="Top" HorizontalAlignment="Right" Command="{x:Static materialDesign:Flipper.FlipCommand}" Foreground="#FF707070" Background="{x:Null}" BorderBrush="{x:Null}">
+                                        <materialDesign:PackIcon
+                                            Kind="Settings"
+                                            Width="25"
+                                            Height="25" />
+                                    </Button>
 
                                     <Button Style="{StaticResource MaterialDesignFlatButton}" Height="75" Width="175" Tag="{Binding ID}" Foreground="#FF707070" FontFamily="Segoe UI" Content="{Binding Name}" Click="btn_Instant_Click" />
                                 </StackPanel>
@@ -45,16 +49,9 @@
                                     <Grid>
                                         <materialDesign:ColorZone Mode="Accent" Padding="0" Background="{StaticResource PrimaryForegroundBrush}">
 
-                                            <StackPanel Orientation="Horizontal">
-
-                                                <Button Style="{StaticResource MaterialDesignToolForegroundButton}" Command="{x:Static materialDesign:Flipper.FlipCommand}" HorizontalAlignment="Left" Click="btn_Return_Click">
-                                                    <materialDesign:PackIcon Kind="ArrowLeft" HorizontalAlignment="Right" />
-                                                </Button>
-
-                                                <TextBlock Margin="0,0,0,0" VerticalAlignment="Center">
-                                                EDIT
-                                                </TextBlock>
-                                            </StackPanel>
+                                            <Button Style="{StaticResource MaterialDesignToolForegroundButton}" Command="{x:Static materialDesign:Flipper.FlipCommand}" HorizontalAlignment="Stretch" Click="btn_Return_Click">
+                                                BACK
+                                            </Button>
                                         </materialDesign:ColorZone>
                                     </Grid>
 

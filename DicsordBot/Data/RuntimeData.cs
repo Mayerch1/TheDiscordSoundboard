@@ -159,7 +159,10 @@ namespace DicsordBot.Data
 
             Type settingsType = Persistent.GetType();
 
-            System.IO.Directory.CreateDirectory(Persistent.SettingsPath);
+            if (!String.IsNullOrEmpty(Persistent.SettingsPath))
+            {
+                System.IO.Directory.CreateDirectory(Persistent.SettingsPath);
+            }
 
             System.IO.StreamWriter file;
             try

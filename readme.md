@@ -48,14 +48,13 @@ You might also take a look at [this](https://github.com/reactiflux/discord-irc/w
 
 #### How to 'install' the Soundboard
 
-In order to use the Soundboard, you need to download some Dll's and put them in the directory of your executable. <br>
-All necessary Files are located in the [ReleasedVersions](ReleasedVersions) folder. <br>
-You'll find the ```necessaryDlls.zip``` in which all Dll's are saved.
+We've now got a new installer for this application.
 
-Then you'll copy all dlls and the .exe.config into one directory.
-Make sure, that the .exe and the .exe.config are named the same, so the executable can find it. <br>
+You only need to download and execute the install wizard.
+Follow all steps and instruction and everything will be set up correctly.
 
-If you compile the project by yourself, all Dll's except opus and libsodium should get generated.
+
+If you compile the project by yourself, the opus and libsodium dll's won't get generated, so you'll need to download them seperately.
 
 ---
 
@@ -72,7 +71,7 @@ For this you need to enter the settings Menu and enter the value in the correspo
 
 (Later on, there will be an hint, if the application can't find a valid token).
 
-![config file](doc/settingsFile.png "config file") 
+![Enter your token](doc/enterToken.png "Enter Token") 
 
 
 On the settings-page, you can set other properties on your desire, e.g. your username, the path to the stored settings, ...

@@ -73,7 +73,12 @@ namespace DicsordBot
                 BtnList[index].Name = evaluateName(openFileDialog.FileName);
                 BtnList[index].File = openFileDialog.FileName;
             }
-            //TODO: refresh button on fileChooser click
+
+            var parent = btn.Parent;
+
+            //var sibbling = parent;
+
+            //TODO: refresh button by refreshing sibblings
         }
 
         //return only the file name from a Path to a file
