@@ -289,15 +289,11 @@ namespace DicsordBot.Bot
                     EarrapeStateChanged(false);
                 }
             }
-            //if loop changes
-            if (IsLoop != btn.IsLoop)
-            {
-                //IsLoop will be set from outside
-                if (btn.IsLoop)
-                    LoopStateChanged(true);
-                else
-                    LoopStateChanged(false);
-            }
+            //trigger this every time
+
+            //IsLoop will be set from outside
+
+            LoopStateChanged(btn.IsLoop);
         }
 
         private void applyVolume(ref byte[] buffer)

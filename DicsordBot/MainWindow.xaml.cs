@@ -26,13 +26,12 @@ namespace DicsordBot
     {
         #region enums
 
-        public enum LoopState { LoopNone, LoopOne, LoopAll, NextMode };
+        public enum LoopState { LoopNone, LoopOne, LoopAll, LoopNext, LoopReset };
 
         #endregion enums
 
         #region fields
 
-        private bool isLoading = false;
         private bool isEarrape = false;
 
         private LoopState loopStatus = LoopState.LoopNone;
@@ -89,6 +88,8 @@ namespace DicsordBot
             }
         }
 
+        public bool IsLoopForced { get; set; } = false;
+
         public double TitleTime
         {
             get { return Handle.Bot.CurrentTime.TotalSeconds; }
@@ -102,12 +103,6 @@ namespace DicsordBot
 
         public string TotalTimeString { get { return TimeSpan.FromSeconds(TotalTime).ToString(@"mm\:ss"); } }
         public string TitleTimeString { get { return TimeSpan.FromSeconds(TitleTime).ToString(@"mm\:ss"); } }
-
-        public bool IsLoading
-        {
-            get { return isLoading; }
-            set { if (value != isLoading) { isLoading = value; OnPropertyChanged("IsLoading"); } }
-        }
 
         public string ClientAvatar
         {
@@ -211,10 +206,18 @@ namespace DicsordBot
             }
         }
 
-        private void setLoopStatus(LoopState nextState = LoopState.NextMode)
+        private void setLoopStatus(LoopState nextState = LoopState.LoopNext)
         {
+            //nothing changes
+            if (nextState == LoopStatus)
+            {
+                //in case bot double forced loop
+                IsLoopForced = false;
+                return;
+            }
+
             //rotate through loop status
-            if (nextState == LoopState.NextMode)
+            if (nextState == LoopState.LoopNext)
             {
                 if (LoopStatus == LoopState.LoopNone)
 
@@ -226,7 +229,18 @@ namespace DicsordBot
 
                     nextState = LoopState.LoopNone;
             }
+            //if loop was forced by bot, reset
+            else if (nextState == LoopState.LoopReset && IsLoopForced)
+            {
+                //reset loop mode
 
+                nextState = LoopState.LoopNone;
+            }
+            else if (nextState == LoopState.LoopReset)
+            {
+                //nothing changes
+                return;
+            }
             //set loop-Status to bot
             if (nextState == LoopState.LoopOne)
             {
@@ -241,6 +255,12 @@ namespace DicsordBot
             //set icon, based on loopstate
             if (nextState == LoopState.LoopAll)
                 btn_Repeat.Content = FindResource("IconRepeatAll");
+            else if (nextState == LoopState.LoopOne && IsLoopForced)
+            {
+                //show different icon for bot override
+                IsLoopForced = false;
+                btn_Repeat.Content = FindResource("IconRepeatOnce");
+            }
             else if (nextState == LoopState.LoopOne)
                 btn_Repeat.Content = FindResource("IconRepeatOnce");
             else if (nextState == LoopState.LoopNone)
@@ -252,7 +272,7 @@ namespace DicsordBot
         private async void playClicked()
         {
             //toogle stream state, if stream is not empty
-            IsLoading = true;
+
             if (Handle.Bot.IsStreaming)
             {
                 await Handle.Bot.stopStreamAsync();
@@ -296,7 +316,7 @@ namespace DicsordBot
             //event Handler for Stream-state of bot
             Handle.Bot.StreamStateChanged += delegate (bool newState)
             {
-                IsLoading = false;
+                //in case of future events when bot changes its state
             };
 
             Handle.Bot.EarrapeStateChanged += delegate (bool isEarrape)
@@ -306,9 +326,14 @@ namespace DicsordBot
             Handle.Bot.LoopStateChanged += delegate (bool isLoop)
             {
                 if (isLoop)
+                {
+                    IsLoopForced = true;
                     setLoopStatus(LoopState.LoopOne);
+                }
                 else
-                    setLoopStatus(LoopState.LoopNone);
+                {
+                    setLoopStatus(LoopState.LoopReset);
+                }
             };
         }
 
@@ -322,13 +347,11 @@ namespace DicsordBot
 
         private void btn_Play_Click(object sender, RoutedEventArgs e)
         {
-            IsLoading = true;
             playClicked();
         }
 
         private void btn_Next_Click(object sender, RoutedEventArgs e)
         {
-            IsLoading = true;
             Handle.Bot.skipTrack();
         }
 
@@ -340,7 +363,7 @@ namespace DicsordBot
 
         private void btn_Repeat_Click(object sender, RoutedEventArgs e)
         {
-            setLoopStatus(LoopState.NextMode);
+            setLoopStatus(LoopState.LoopNext);
         }
 
         private void btn_Earrape_Click(object sender, RoutedEventArgs e)
