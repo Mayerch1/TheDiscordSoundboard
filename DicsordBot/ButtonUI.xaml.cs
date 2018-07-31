@@ -28,21 +28,14 @@ namespace DicsordBot
 
         public InstantButtonClickedHandler InstantButtonClicked;
 
-        private ObservableCollection<Data.ButtonData> BtnList
-        {
-            get { return Handle.Data.Persistent.BtnList; }
-            set { Handle.Data.Persistent.BtnList = value; OnPropertyChanged("BtnList"); }
-        }
-
         public ButtonUI()
         {
             InitializeComponent();
 
             Handle.Data.resizeBtnList();
 
-            btnControl.ItemsSource = BtnList;
-
-            this.DataContext = this;
+            this.DataContext = Handle.Data.Persistent;
+            btnControl.ItemsSource = Handle.Data.Persistent.BtnList;
         }
 
         private void btn_Instant_Click(object sender, RoutedEventArgs e)
@@ -70,15 +63,50 @@ namespace DicsordBot
 
             if (openFileDialog.ShowDialog() == true && openFileDialog.CheckFileExists)
             {
-                BtnList[index].Name = evaluateName(openFileDialog.FileName);
-                BtnList[index].File = openFileDialog.FileName;
+                Handle.Data.Persistent.BtnList[index].Name = evaluateName(openFileDialog.FileName);
+                Handle.Data.Persistent.BtnList[index].File = openFileDialog.FileName;
+
+                var parent = (StackPanel)btn.Parent;
+
+                // changeBackFields(parent, index);
+                // changeFrontFields(parent, index);
             }
+        }
 
-            var parent = btn.Parent;
+        private void changeBackFields(StackPanel parent, int index)
+        {
+            var sibblings = parent.Children;
 
-            //var sibbling = parent;
+            foreach (var element in sibblings)
+            {
+                if (element is System.Windows.Controls.TextBox)
+                {
+                    var txtBox = (TextBox)element;
+                    if (txtBox.Name == "NameBox")
+                    {
+                        txtBox.Text = Handle.Data.Persistent.BtnList[index].Name;
+                    }
+                    else if (txtBox.Name == "FileBox")
+                    {
+                        txtBox.Text = Handle.Data.Persistent.BtnList[index].File;
+                    }
+                }
+            }
+        }
 
-            //TODO: refresh button by refreshing sibblings
+        private void changeFrontFields(StackPanel parent, int index)
+        {
+            var grid = (Grid)this.Content;
+
+            var gridChild = (UIElementCollection)grid.Children;
+            var scroller = (ScrollViewer)gridChild[0];
+
+            var control = (ItemsControl)scroller.Content;
+            var cards = control.Items;
+
+            var targetCard = cards[index];
+
+            var grandParents = (Grid)parent.Parent;
         }
 
         //return only the file name from a Path to a file

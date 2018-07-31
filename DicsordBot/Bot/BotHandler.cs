@@ -159,6 +159,7 @@ namespace DicsordBot.Bot
 
                 if (client == null)
                 {
+                    UnhandledException.initWindow(null, "Couldn't find owner in any voice channel.");
                     //FUTURE: no client found, show msg
                 }
             }

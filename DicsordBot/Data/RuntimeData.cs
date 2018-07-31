@@ -32,7 +32,7 @@ namespace DicsordBot.Data
 
         public RuntimeData()
         {
-            ButtonData.PropertyChanged += HandleButtonPropertyChanged;
+            //ButtonData.PropertyChanged += HandleButtonPropertyChanged;
         }
 
         #region ManageData
@@ -59,7 +59,7 @@ namespace DicsordBot.Data
         //adds new elements, if more are to be displayed
         public int resizeBtnList()
         {
-            //determinHighestButton();
+            determinHighestButton();
             //downsize to minimum
             cleanBtnList();
 

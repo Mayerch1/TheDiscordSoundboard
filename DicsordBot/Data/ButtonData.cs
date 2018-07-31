@@ -10,7 +10,7 @@ using System.Xml.Serialization;
 namespace DicsordBot.Data
 {
     [Serializable()]
-    public class ButtonData
+    public class ButtonData : INotifyPropertyChanged
 
     {
         #region saved fields
@@ -39,14 +39,13 @@ namespace DicsordBot.Data
 
         #region event
 
-        public static event PropertyChangedEventHandler PropertyChanged;
+        public event PropertyChangedEventHandler PropertyChanged;
 
-        private static void OnPropertyChanged(string info)
+        private void OnPropertyChanged(string info)
         {
-            PropertyChangedEventHandler handler = PropertyChanged;
-            if (handler != null)
+            if (PropertyChanged != null)
             {
-                handler(null, new PropertyChangedEventArgs(info));
+                PropertyChanged(this, new PropertyChangedEventArgs(info));
             }
         }
 

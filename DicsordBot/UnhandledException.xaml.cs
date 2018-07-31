@@ -50,22 +50,24 @@ namespace DicsordBot
             Ex = _ex;
             Info = _Info;
 
-            var st = new StackTrace(Ex, true);
-            var frame = st.GetFrame(0);
-
-            for (int i = 0; i < st.FrameCount; i++)
+            if (Ex != null)
             {
-                StackTrace.Add(new MyStack(st.GetFrame(i).GetMethod().DeclaringType.ToString()));
+                var st = new StackTrace(Ex, true);
+                var frame = st.GetFrame(0);
+
+                for (int i = 0; i < st.FrameCount; i++)
+                {
+                    StackTrace.Add(new MyStack(st.GetFrame(i).GetMethod().DeclaringType.ToString()));
+                }
+
+                LineNumber = frame.GetFileLineNumber();
+                ColumnNumber = frame.GetFileColumnNumber();
+                FileName = frame.GetFileName();
+                Method = frame.GetMethod().ToString();
+                Class = frame.GetMethod().DeclaringType.ToString();
+
+                StackTraceTemplate.ItemsSource = StackTrace;
             }
-
-            LineNumber = frame.GetFileLineNumber();
-            ColumnNumber = frame.GetFileColumnNumber();
-            FileName = frame.GetFileName();
-            Method = frame.GetMethod().ToString();
-            Class = frame.GetMethod().DeclaringType.ToString();
-
-            StackTraceTemplate.ItemsSource = StackTrace;
-
             this.DataContext = this;
         }
 
