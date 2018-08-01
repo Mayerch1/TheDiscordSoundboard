@@ -61,7 +61,7 @@
                                 VerticalAlignment="Top"
                                 AcceptsReturn="False"
                                 TextWrapping="NoWrap"
-                                Width="400" />
+                                Width="400" TextChanged="box_token_TextChanged" />
 
                             <TextBox
                                 Style="{StaticResource MaterialDesignTextFieldBoxTextBox}"

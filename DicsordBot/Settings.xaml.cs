@@ -25,5 +25,11 @@ namespace DicsordBot
             InitializeComponent();
             this.DataContext = Handle.Data.Persistent;
         }
+
+        private void box_token_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            TextBox box_token = (TextBox)sender;
+            Handle.Token = box_token.Text;
+        }
     }
 }
