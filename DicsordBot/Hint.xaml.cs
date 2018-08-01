@@ -31,9 +31,24 @@ namespace DicsordBot
         public Hint(string msg, string solution)
         {
             InitializeComponent();
+
+            ErrorMsg = msg;
+            Solution = solution;
+
+            ErrorBox.Text = ErrorMsg;
+            SolutionBox.Text = Solution;
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
+
+        private void checkBox_Click(object sender, RoutedEventArgs e)
+        {
+            CheckBox box = (CheckBox)sender;
+            if (box.IsChecked == true)
+                IgnoreWarning = true;
+            else
+                IgnoreWarning = false;
+        }
 
         private void OnPropertyChanged(string info)
         {

@@ -13,76 +13,70 @@
         </Grid.RowDefinitions>
 
         <Grid Grid.Row="0">
+            <ScrollViewer>
+                <StackPanel>
 
-            <StackPanel>
+                    <TextBlock FontWeight="Bold">Description</TextBlock>
+                    <TextBlock Text="{Binding Info}" />
 
-                <TextBlock FontWeight="Bold">Descriptio</TextBlock>
-                <TextBlock Text="{Binding Info}" />
+                    <TextBlock FontWeight="Bold">Error Message</TextBlock>
+                    <TextBlock Text="{Binding Ex.Message}" />
 
-                <TextBlock FontWeight="Bold">Error Message</TextBlock>
-                <TextBlock Text="{Binding Ex.Message}" />
-
-                <Expander
+                    <Expander
                 HorizontalAlignment="Left"
 
                 Header="Developer Information">
-                    <StackPanel>
-                        <TextBlock FontWeight="Bold">Class</TextBlock>
-                        <TextBlock Text="{Binding Class}" />
+                        <StackPanel>
+                            <TextBlock FontWeight="Bold">Class</TextBlock>
+                            <TextBlock Text="{Binding Class}" />
 
-                        <TextBlock FontWeight="Bold">File Name</TextBlock>
-                        <TextBlock Text="{Binding FileName}" />
+                            <TextBlock FontWeight="Bold">File Name</TextBlock>
+                            <TextBlock Text="{Binding FileName}" />
 
-                        <TextBlock FontWeight="Bold">Method</TextBlock>
-                        <TextBlock Text="{Binding Method}" />
+                            <TextBlock FontWeight="Bold">Method</TextBlock>
+                            <TextBlock Text="{Binding Method}" />
 
-                        <TextBlock FontWeight="Bold">Line Number</TextBlock>
-                        <TextBlock Text="{Binding LineNumber}" />
+                            <TextBlock FontWeight="Bold">Line Number</TextBlock>
+                            <TextBlock Text="{Binding LineNumber}" />
 
-                        <TextBlock FontWeight="Bold">Column Number</TextBlock>
-                        <TextBlock Text="{Binding ColumnNumber}" />
+                            <TextBlock FontWeight="Bold">Column Number</TextBlock>
+                            <TextBlock Text="{Binding ColumnNumber}" />
 
-                        <Expander
+                            <Expander
                         HorizontalAlignment="Left"
                         Header="Complete StackTrace">
 
-                            <ItemsControl x:Name="StackTraceTemplate">
-                                <ItemsControl.ItemTemplate>
-                                    <DataTemplate>
-                                        <TextBlock Text="{Binding Stack}" />
-                                    </DataTemplate>
-                                </ItemsControl.ItemTemplate>
-                            </ItemsControl>
-                        </Expander>
-                    </StackPanel>
-                </Expander>
-            </StackPanel>
-
-            <StackPanel VerticalAlignment="Bottom">
-                <TextBlock>
-                Give Some additional information, insult the developers or simply greet your parents
-                </TextBlock>
-                <TextBox  MinHeight="50" MinWidth="100">
-                </TextBox>
-                <StackPanel Orientation="Horizontal">
-                    <Button HorizontalAlignment="Right">
-                        Send
-                    </Button>
-                    <TextBlock>
-                    All information above + your IP-address will be transmitted to, and saved at our servers.
-                    </TextBlock>
+                                <ItemsControl x:Name="StackTraceTemplate">
+                                    <ItemsControl.ItemTemplate>
+                                        <DataTemplate>
+                                            <TextBlock Text="{Binding Stack}" />
+                                        </DataTemplate>
+                                    </ItemsControl.ItemTemplate>
+                                </ItemsControl>
+                            </Expander>
+                        </StackPanel>
+                    </Expander>
                 </StackPanel>
-            </StackPanel>
+            </ScrollViewer>
         </Grid>
 
         <Grid Grid.Row="1">
             <StackPanel>
-                <TextBlock FontWeight="Bold">This unhandled exception is presented by:</TextBlock>
-                <Image Stretch="UniformToFill" StretchDirection="DownOnly">
-                    <Image.Source>
-                        <BitmapImage UriSource="/res/Sponsor_0.png" />
-                    </Image.Source>
-                </Image>
+                <StackPanel VerticalAlignment="Top">
+                    <TextBlock>
+                Give Some additional information, insult the developers or simply greet your parents
+                    </TextBlock>
+                    <TextBox  MinHeight="50" MinWidth="100">
+                    </TextBox>
+                    <StackPanel Orientation="Horizontal">
+                        <Button HorizontalAlignment="Right">
+                            Send
+                        </Button>
+                        <TextBlock>
+                    All information above + your IP-address will be transmitted to, and saved at our servers.
+                        </TextBlock>
+                    </StackPanel>
+                </StackPanel>
             </StackPanel>
         </Grid>
     </Grid>

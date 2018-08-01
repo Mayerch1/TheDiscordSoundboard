@@ -8,9 +8,9 @@
              d:DesignHeight="300" d:DesignWidth="300">
     <Grid>
         <StackPanel>
-            <TextBlock Text="{Binding ErrorMsg}" />
-            <TextBlock Text="{Binding Solution}" />
-            <CheckBox IsChecked="{Binding IgnoreWarning}">
+            <TextBlock x:Name="ErrorBox" Text="{Binding ErrorMsg}" />
+            <TextBlock x:Name="SolutionBox" Text="{Binding Solution}" />
+            <CheckBox IsChecked="{Binding IgnoreWarning}" Click="checkBox_Click">
                 Ignore similiare Messages in the Future
             </CheckBox>
         </StackPanel>
