@@ -47,13 +47,10 @@ namespace DicsordBot
             get { return ((double)Handle.Volume * 100) * (1 / (Handle.Data.Persistent.VolumeCap / 100.0f)); }
             set
             {
-                if (value != Volume)
-                {
-                    LastVolume = Volume;
-                    Handle.Volume = ((float)value / 100) * (Handle.Data.Persistent.VolumeCap / 100.0f);
-                    setVolumeIcon();
-                    OnPropertyChanged("Volume");
-                }
+                LastVolume = Volume;
+                Handle.Volume = ((float)value / 100) * (Handle.Data.Persistent.VolumeCap / 100.0f);
+                setVolumeIcon();
+                OnPropertyChanged("Volume");
             }
         }
 
@@ -291,17 +288,17 @@ namespace DicsordBot
                 //store current volume
                 LastVolume = Volume;
 
-                //for visual 'effect'
-                Volume = 100;
-
                 //ignore Volume calculations, slider visualisation, stored volume
                 Handle.Bot.Volume = Data.PersistentData.earrapeValue;
+                btn_Earrape.IsChecked = true;
             }
             else
             {
-                //make sure earrape cannot be accessed by undo volume changes
                 Volume = LastVolume;
+                //make sure earrape cannot be accessed by undo volume changes
                 LastVolume = Volume;
+
+                btn_Earrape.IsChecked = false;
             }
         }
 
