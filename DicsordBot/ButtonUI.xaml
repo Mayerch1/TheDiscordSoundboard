@@ -30,16 +30,33 @@
 
                         <materialDesign:Flipper Style="{StaticResource MaterialDesignCardFlipper}">
                             <materialDesign:Flipper.FrontContent>
-                                <StackPanel>
-                                    <Button VerticalAlignment="Top" HorizontalAlignment="Right" Command="{x:Static materialDesign:Flipper.FlipCommand}" Foreground="#FF707070" Background="{x:Null}" BorderBrush="{x:Null}">
+
+                                <Grid Name="Test">
+
+                                    <Button  Style="{StaticResource MaterialDesignFlatButton}" Height="75" Width="175" Tag="{Binding ID}" Foreground="#FF707070" FontFamily="Segoe UI" Content="{Binding Name}" Click="btn_Instant_Click" />
+                                    <Button Name="TestButton" Height="Auto" Width="Auto" Command="{x:Static materialDesign:Flipper.FlipCommand}"  BorderBrush="{x:Null}" Foreground="#FF707070" HorizontalAlignment="Right" VerticalAlignment="Top">
                                         <materialDesign:PackIcon
                                             Kind="Settings"
                                             Width="25"
                                             Height="25" />
-                                    </Button>
+                                        <Button.Style>
+                                            <Style TargetType="{x:Type Button}">
 
-                                    <Button Style="{StaticResource MaterialDesignFlatButton}" Height="75" Width="175" Tag="{Binding ID}" Foreground="#FF707070" FontFamily="Segoe UI" Content="{Binding Name}" Click="btn_Instant_Click" />
-                                </StackPanel>
+                                                <Setter Property="Visibility" Value="Hidden" />
+
+                                                <Style.Triggers>
+
+                                                    <DataTrigger Binding="{Binding IsMouseOver, ElementName=Test}" Value="True">
+                                                        <Setter Property="Visibility" Value="Visible" />
+                                                    </DataTrigger>
+
+                                                    <Trigger Property="IsMouseOver" Value="True">
+                                                    </Trigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </Button.Style>
+                                    </Button>
+                                </Grid>
                             </materialDesign:Flipper.FrontContent>
 
                             <materialDesign:Flipper.BackContent>

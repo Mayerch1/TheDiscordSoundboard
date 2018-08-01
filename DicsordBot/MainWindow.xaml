@@ -79,13 +79,9 @@
                                 <Button x:Name="btn_Play"
                                    Background="{StaticResource PrimaryForegroundBrush}"
                                     Margin="10,0,10,0"
-                                        BorderBrush="{StaticResource PrimaryAccentBrush}"
+                                    BorderBrush="{StaticResource PrimaryAccentBrush}"
                                     Style="{StaticResource MaterialDesignFloatingActionButton}"
                                     Click="btn_Play_Click"
-
-                                      materialDesign:ButtonProgressAssist.IsIndicatorVisible="{Binding IsLoading}"
-                                      materialDesign:ButtonProgressAssist.Value="-1"
-                                      materialDesign:ButtonProgressAssist.IsIndeterminate="True"
                                       Content="{materialDesign:PackIcon Play}" />
 
                                 <Button x:Name="btn_Next"
