@@ -33,6 +33,11 @@ namespace DicsordBot.Data
         private string clientAvatar;
         private string token = null;
 
+        private bool ignoreFileWarning = false;
+        private bool ignoreTokenWarning = false;
+        private bool ignoreChannelWarning = false;
+        private bool ignoreClientWarning = false;
+
         private float volume = 0.5f;
         private int volumeCap = 30;
 
@@ -58,6 +63,11 @@ namespace DicsordBot.Data
         public int VolumeCap { get { return volumeCap; } set { volumeCap = value; OnPropertyChanged("VolumeCap"); } }
 
         public string ClientName { get { return clientName; } set { clientName = value; OnPropertyChanged("ClientName"); if (ClientNameChanged != null) ClientNameChanged(value); } }
+
+        public bool IgnoreFileWarning { get { return ignoreFileWarning; } set { ignoreFileWarning = value; OnPropertyChanged("IgnoreFileWarning"); } }
+        public bool IgnoreTokenWarning { get { return ignoreTokenWarning; } set { ignoreTokenWarning = value; OnPropertyChanged("IgnoreTokenWarning"); } }
+        public bool IgnoreChannelWarning { get { return ignoreChannelWarning; } set { ignoreChannelWarning = value; OnPropertyChanged("IgnoreChannelWarning"); } }
+        public bool IgnoreClientWarning { get { return ignoreClientWarning; } set { ignoreClientWarning = value; OnPropertyChanged("IgnoreClientWarning"); } }
 
         public ObservableCollection<ButtonData> BtnList { get { return btnList; } set { btnList = value; OnPropertyChanged("BtnList"); } }
 

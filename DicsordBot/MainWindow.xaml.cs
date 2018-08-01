@@ -126,7 +126,7 @@ namespace DicsordBot
             initTimer();
 
             setVolumeIcon();
-            setLoopStatus(LoopState.LoopNone);
+            btn_Repeat.Content = FindResource("IconRepeatOff");
             DataContext = this;
 
             initDelayedAsync();
@@ -288,14 +288,20 @@ namespace DicsordBot
             Handle.Bot.IsEarrape = isEarrape;
             if (isEarrape)
             {
+                //store current volume
+                LastVolume = Volume;
+
+                //for visual 'effect'
                 Volume = 100;
-                //go around Volume calculations and slider visualisation
+
+                //ignore Volume calculations, slider visualisation, stored volume
                 Handle.Bot.Volume = Data.PersistentData.earrapeValue;
             }
             else
             {
                 //make sure earrape cannot be accessed by undo volume changes
                 Volume = LastVolume;
+                LastVolume = Volume;
             }
         }
 
@@ -308,10 +314,15 @@ namespace DicsordBot
             btnUI.InstantButtonClicked += btn_InstantButton_Clicked;
         }
 
+        //call only once
         private void registerEvents()
         {
             //event to resolve new clientName into clientId
             Handle.Data.Persistent.ClientNameChanged += Handle.ClientName_Changed;
+            Handle.Bot.ChannelWarning += Handle.ChannelWarning_Show;
+            Handle.Bot.TokenWarning += Handle.TokenWarning_Show;
+            Handle.Bot.FileWarning += Handle.FileWarning_Show;
+            Handle.Bot.ClientWarning += Handle.ClientWarning_Show;
 
             //event Handler for Stream-state of bot
             Handle.Bot.StreamStateChanged += delegate (bool newState)
@@ -428,17 +439,5 @@ namespace DicsordBot
         }
 
         #endregion event stuff
-
-        private void Button_Click(object sender, RoutedEventArgs e)
-        {
-        }
-
-        private void Button_Click_1(object sender, RoutedEventArgs e)
-        {
-        }
-
-        private void Button_Click_2(object sender, RoutedEventArgs e)
-        {
-        }
     }
 }

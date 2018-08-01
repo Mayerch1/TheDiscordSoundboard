@@ -25,6 +25,26 @@ namespace DicsordBot.Bot
         {
         }
 
+        #region event handlers
+
+        public delegate void FileWarningThrown(string msg, string solution);
+
+        public FileWarningThrown FileWarning;
+
+        public delegate void TokenWarningThrown(string msg, string solution);
+
+        public TokenWarningThrown TokenWarning;
+
+        public delegate void ChannelWarningThrown(string msg, string solution);
+
+        public ChannelWarningThrown ChannelWarning;
+
+        public delegate void ClientWarningThrown(string msg, string solution);
+
+        public ClientWarningThrown ClientWarning;
+
+        #endregion event handlers
+
         #region properties
 
         public string Token { get; set; }
@@ -46,21 +66,20 @@ namespace DicsordBot.Bot
             }
             catch (System.IO.DirectoryNotFoundException ex)
             {
-                Console.WriteLine("File Exception no dir");
+                FileWarning("The Directory of containing the file could not be found.", "Please correct the file of Button number " + btn.ID + " (" + btn.Name + ").");
             }
             catch (System.IO.FileNotFoundException ex)
             {
-                Console.WriteLine("File Exception not Found");
+                FileWarning("The requested file couldn't be found.", "Please correct the file of Button number " + btn.ID + " (" + btn.Name + ").");
             }
             catch (System.IO.InvalidDataException ex)
             {
-                Console.WriteLine("File Exception invalid format");
+                FileWarning("The type of your file is currently not supported", "Please correct the file of Button number " + btn.ID + " (\"" + btn.Name + "\").");
             }
             catch (Exception ex)
             {
                 await disconnectFromChannelAsync();
-                UnhandledException.initWindow(ex);
-
+                UnhandledException.initWindow(ex, "Error while adding a new file to the queue. (Button Nr: " + btn.ID + ", Name: " + btn.Name + ").");
                 Console.WriteLine("EnqueueAsync unhandled");
             }
         }
@@ -80,7 +99,7 @@ namespace DicsordBot.Bot
             catch (Exception ex)
             {
                 await disconnectFromChannelAsync();
-                UnhandledException.initWindow(ex);
+                UnhandledException.initWindow(ex, "Failed to resume stream");
 
                 //TODO: catch all possible ex
             }
@@ -121,14 +140,17 @@ namespace DicsordBot.Bot
             {
                 await base.connectToServerAsync(Token);
             }
-            catch (Discord.Net.HttpException ex)
+            catch (Discord.Net.HttpException)
             {
+                TokenWarning("Your Token seems to be invalid", "Go to the settings tab and check your token.");
+
                 Console.WriteLine("connection Exception (Token)");
                 //UnhandledException.initWindow(ex, "failed to connect to Server");
                 return false;
             }
             catch (System.Net.Http.HttpRequestException ex)
             {
+                UnhandledException.initWindow(ex, "Can't establish a connection to the Discort-Servers");
                 Console.WriteLine("connection Exception (Timeout, ...)");
                 return false;
             }
@@ -159,8 +181,7 @@ namespace DicsordBot.Bot
 
                 if (client == null)
                 {
-                    UnhandledException.initWindow(null, "Couldn't find owner in any voice channel.");
-                    //FUTURE: no client found, show msg
+                    ClientWarning("The Bot couldn't locate his owner.", "Join a channel, specify another owner, or manually set a channel for the bot to join.");
                 }
             }
 
@@ -174,23 +195,18 @@ namespace DicsordBot.Bot
             }
             catch (System.Threading.Tasks.TaskCanceledException ex)
             {
-                Console.WriteLine("connetcion Exception (aborted by user)");
+                UnhandledException.initWindow(ex, "The User Cancelled the joining event.");
                 return false;
             }
-            catch (System.TimeoutException ex)
+            catch (System.TimeoutException)
             {
-                Console.WriteLine("connetcion Exception (timeout,...)");
-                //also thrown for missing rights to join
-
+                ChannelWarning("The bot can't connect to the specified channel", "Check for sufficient permissions to join the requested channel.");
                 return false;
             }
             catch (Exception ex)
             {
                 Console.WriteLine("Unhandled connetcion Exception");
                 UnhandledException.initWindow(ex, "Error while connecting to a voice channel");
-                //TODO: catch
-                //connection lost while connecting
-
                 return false;
             }
             return true;
@@ -211,9 +227,9 @@ namespace DicsordBot.Bot
             {
                 channelList = base.getAllChannels();
             }
-            catch (Exception ex)
+            catch
             {
-                UnhandledException.initWindow(ex, "Couldn't get channel List");
+                ChannelWarning("The bot can't download the channel-list", "Retry later.");
                 return null;
             }
 
@@ -231,9 +247,9 @@ namespace DicsordBot.Bot
             {
                 userList = base.getAllClients(acceptOffline);
             }
-            catch (Exception ex)
+            catch
             {
-                UnhandledException.initWindow(ex, "Couldn't get user List");
+                ChannelWarning("The bot can't download the client-list", "Retry later.");
                 return null;
             }
 

@@ -179,6 +179,9 @@
     <Compile Include="Bot\BotHandler.cs" />
     <Compile Include="Data\Persistent.cs" />
     <Compile Include="Data\RuntimeData.cs" />
+    <Compile Include="Hint.xaml.cs">
+      <DependentUpon>Hint.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Settings.xaml.cs">
       <DependentUpon>Settings.xaml</DependentUpon>
     </Compile>
@@ -190,6 +193,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="ButtonUI.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Hint.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

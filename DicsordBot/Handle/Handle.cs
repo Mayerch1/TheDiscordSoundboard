@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace DicsordBot
 {
@@ -21,6 +22,51 @@ namespace DicsordBot
 
             if (id > 0)
                 Data.Persistent.ClientId = id;
+        }
+
+        public static bool ShowWarning(string title, string msg, string solution)
+        {
+            Window window = new Window
+            {
+                Title = title,
+                Content = new Hint(msg, solution),
+                Width = 400,
+                Height = 250,
+            };
+            window.ShowDialog();
+            return ((Hint)window.Content).IgnoreWarning;
+        }
+
+        public static void FileWarning_Show(string msg, string solution)
+        {
+            if (!Data.Persistent.IgnoreFileWarning)
+            {
+                Data.Persistent.IgnoreFileWarning = ShowWarning("A File-Error occurred", msg, solution);
+            }
+        }
+
+        public static void ChannelWarning_Show(string msg, string solution)
+        {
+            if (!Data.Persistent.IgnoreChannelWarning)
+            {
+                Data.Persistent.IgnoreChannelWarning = ShowWarning("A Channel-Error occurred", msg, solution);
+            }
+        }
+
+        public static void TokenWarning_Show(string msg, string solution)
+        {
+            if (!Data.Persistent.IgnoreTokenWarning)
+            {
+                Data.Persistent.IgnoreTokenWarning = ShowWarning("A Token-Error occurred", msg, solution);
+            }
+        }
+
+        public static void ClientWarning_Show(string msg, string solution)
+        {
+            if (!Data.Persistent.IgnoreClientWarning)
+            {
+                Data.Persistent.IgnoreClientWarning = ShowWarning("A Token-Error occurred", msg, solution);
+            }
         }
 
         #endregion events

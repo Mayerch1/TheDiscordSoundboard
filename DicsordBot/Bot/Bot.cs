@@ -306,7 +306,39 @@ namespace DicsordBot.Bot
 
                 //float floatPair = bytePair * Volume;
 
-                bytePair = (short)(bytePair * Volume);
+                var customVol = Volume;
+                var overOne = Volume - 1;
+
+                if (Volume > 1)
+                {
+                    //for earrape, try to incr. middle and quiet sounds more than loud
+                    if ((ushort)bytePair < 10000)
+                    {
+                        customVol = Volume;
+                    }
+                    else if ((ushort)bytePair < 20000)
+                    {
+                        customVol = Volume - overOne * 0.30f;
+                    }
+                    else if ((ushort)bytePair < 30000)
+                    {
+                        customVol = Volume - overOne * 0.50f;
+                    }
+                    else if ((ushort)bytePair < 40000)
+                    {
+                        customVol = Volume - overOne * 0.60f;
+                    }
+                    else if ((ushort)bytePair < 50000)
+                    {
+                        customVol = Volume - overOne * 0.80f;
+                    }
+                    else
+                    {
+                        customVol = Volume - overOne * 0.95f;
+                    }
+                }
+
+                bytePair = (short)(bytePair * customVol);
 
                 //convert char back to 2 bytes
                 buffer[i] = (byte)bytePair;
