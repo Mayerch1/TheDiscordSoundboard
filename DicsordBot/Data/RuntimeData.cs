@@ -169,7 +169,7 @@ namespace DicsordBot.Data
             {
                 file = System.IO.File.CreateText(Persistent.SettingsPath + _file);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return;
             }

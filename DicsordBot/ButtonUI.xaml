@@ -40,7 +40,7 @@
                                             Width="25"
                                             Height="25" />
                                         <Button.Style>
-                                            <Style TargetType="{x:Type Button}">
+                                            <Style TargetType="{x:Type Button}" BasedOn="{StaticResource MaterialDesignFlatButton}">
 
                                                 <Setter Property="Visibility" Value="Hidden" />
 

@@ -64,15 +64,15 @@ namespace DicsordBot.Bot
             {
                 base.enqueueAsync(btn);
             }
-            catch (System.IO.DirectoryNotFoundException ex)
+            catch (System.IO.DirectoryNotFoundException)
             {
                 FileWarning("The Directory of containing the file could not be found.", "Please correct the file of Button number " + btn.ID + " (" + btn.Name + ").");
             }
-            catch (System.IO.FileNotFoundException ex)
+            catch (System.IO.FileNotFoundException)
             {
                 FileWarning("The requested file couldn't be found.", "Please correct the file of Button number " + btn.ID + " (" + btn.Name + ").");
             }
-            catch (System.IO.InvalidDataException ex)
+            catch (System.IO.InvalidDataException)
             {
                 FileWarning("The type of your file is currently not supported", "Please correct the file of Button number " + btn.ID + " (\"" + btn.Name + "\").");
             }
