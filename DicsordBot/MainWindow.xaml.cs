@@ -112,21 +112,34 @@ namespace DicsordBot
         {
             //need this, so other tasks will wait
             Handle.Data.loadData();
+
             InitializeComponent();
 
             LastVolume = Volume;
 
             registerEvents();
             registerEmbedEvents(ButtonUI);
-            initAsync();
 
             initTimer();
 
             setVolumeIcon();
+
             btn_Repeat.Content = FindResource("IconRepeatOff");
+
             DataContext = this;
 
-            initDelayedAsync();
+            if (Handle.Data.Persistent.IsFirstStart)
+            {
+                Handle.Data.Persistent.IsFirstStart = false;
+
+                btn_Settings_Click(null, null);
+            }
+            else
+            {
+                initAsync();
+
+                initDelayedAsync();
+            }
         }
 
         private void MainWindow_Closing(object sender, CancelEventArgs e)
@@ -324,7 +337,11 @@ namespace DicsordBot
             //event Handler for Stream-state of bot
             Handle.Bot.StreamStateChanged += delegate (bool newState)
             {
-                //in case of future events when bot changes its state
+                //display pause icon, if bot is streaming
+                if (newState)
+                    btn_Play.Content = FindResource("IconPause");
+                else
+                    btn_Play.Content = FindResource("IconPlay");
             };
 
             Handle.Bot.EarrapeStateChanged += delegate (bool isEarrape)

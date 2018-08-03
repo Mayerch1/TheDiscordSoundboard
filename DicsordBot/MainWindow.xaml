@@ -37,6 +37,8 @@
         <materialDesign:PackIcon x:Key="IconRepeatOnce" Kind="RepeatOnce" Height="21" Width="21" />
         <materialDesign:PackIcon x:Key="IconRepeatOff" Kind="RepeatOff" Height="21" Width="21" />
         <materialDesign:PackIcon x:Key="IconRepeatAll" Kind="Repeat" Height="21" Width="21" />
+        <materialDesign:PackIcon x:Key="IconPlay" Kind="Play" />
+        <materialDesign:PackIcon x:Key="IconPause" Kind="Pause" />
     </Window.Resources>
 
     <DockPanel LastChildFill="True">
