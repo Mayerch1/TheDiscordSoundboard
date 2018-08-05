@@ -296,23 +296,6 @@ namespace DicsordBot
         private void earrapeStatusChanged(bool isEarrape)
         {
             Handle.Bot.IsEarrape = isEarrape;
-            if (isEarrape)
-            {
-                //store current volume
-                LastVolume = Volume;
-
-                //ignore Volume calculations, slider visualisation, stored volume
-                Handle.Bot.Volume = Data.PersistentData.earrapeValue;
-                btn_Earrape.IsChecked = true;
-            }
-            else
-            {
-                Volume = LastVolume;
-                //make sure earrape cannot be accessed by undo volume changes
-                LastVolume = Volume;
-
-                btn_Earrape.IsChecked = false;
-            }
         }
 
         #region event stuff

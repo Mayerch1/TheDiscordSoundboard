@@ -98,7 +98,10 @@ namespace DicsordBot.Bot
         protected Queue<Data.ButtonData> Queue { get; set; }
 
         private MediaFoundationReader Reader { get; set; }
-        private MediaFoundationResampler Resampler { get; set; }
+        private MediaFoundationResampler ActiveResampler { get; set; }
+
+        private MediaFoundationResampler NormalResampler { get; set; }
+        private MediaFoundationResampler BoostResampler { get; set; }
         private WaveFormat OutFormat { get; set; }
 
         #endregion other vars
@@ -182,7 +185,20 @@ namespace DicsordBot.Bot
 
             Reader = new MediaFoundationReader(btn.File);
 
-            Resampler = new MediaFoundationResampler(Reader, OutFormat);
+            /*
+             * Generate one normal resampler,
+             * Generate one boosted resampler,
+             * in applyVolume() the matching resampler is assigned to activeResampler
+             */
+
+            NormalResampler = new MediaFoundationResampler(Reader, OutFormat);
+
+            var volumeSampler = new VolumeWaveProvider16(NormalResampler);
+            //this means 10,000%
+            volumeSampler.Volume = 100;
+            BoostResampler = new MediaFoundationResampler(volumeSampler, OutFormat);
+
+            ActiveResampler = NormalResampler;
 
             IsBufferEmpty = false;
 
@@ -205,7 +221,7 @@ namespace DicsordBot.Bot
                 if (stream == null)
                     stream = AudioCl.CreatePCMStream(AudioApplication.Music);
 
-                if (Resampler == null)
+                if (ActiveResampler == null)
                 {
                     stream.Close();
                     return;
@@ -219,7 +235,7 @@ namespace DicsordBot.Bot
                 IsStreaming = true;
 
                 //repeat, read new block into buffer -> stream buffer
-                while ((byteCount = Resampler.Read(buffer, 0, blockSize)) > 0)
+                while ((byteCount = ActiveResampler.Read(buffer, 0, blockSize)) > 0)
                 {
                     applyVolume(ref buffer);
 
@@ -298,51 +314,30 @@ namespace DicsordBot.Bot
 
         private void applyVolume(ref byte[] buffer)
         {
-            for (int i = 0; i < buffer.Length; i += 2)
+            if (IsEarrape)
             {
-                //convert a byte-Pair into one char (with 2 bytes)
-
-                short bytePair = (short)((buffer[i + 1] & 0xFF) << 8 | (buffer[i] & 0xFF));
-
-                //float floatPair = bytePair * Volume;
-
-                var customVol = Volume;
-                var overOne = Volume - 1;
-
-                if (Volume > 1)
+                ActiveResampler = BoostResampler;
+            }
+            else
+            {
+                ActiveResampler = NormalResampler;
+                for (int i = 0; i < buffer.Length; i += 2)
                 {
-                    //for earrape, try to incr. middle and quiet sounds more than loud
-                    if ((ushort)bytePair < 10000)
-                    {
-                        customVol = Volume;
-                    }
-                    else if ((ushort)bytePair < 20000)
-                    {
-                        customVol = Volume - overOne * 0.30f;
-                    }
-                    else if ((ushort)bytePair < 30000)
-                    {
-                        customVol = Volume - overOne * 0.50f;
-                    }
-                    else if ((ushort)bytePair < 40000)
-                    {
-                        customVol = Volume - overOne * 0.60f;
-                    }
-                    else if ((ushort)bytePair < 50000)
-                    {
-                        customVol = Volume - overOne * 0.80f;
-                    }
-                    else
-                    {
-                        customVol = Volume - overOne * 0.95f;
-                    }
+                    //convert a byte-Pair into one char (with 2 bytes)
+
+                    short bytePair = (short)((buffer[i + 1] & 0xFF) << 8 | (buffer[i] & 0xFF));
+
+                    //float floatPair = bytePair * Volume;
+
+                    var customVol = Volume;
+                    var overOne = Volume - 1;
+
+                    bytePair = (short)(bytePair * customVol);
+
+                    //convert char back to 2 bytes
+                    buffer[i] = (byte)bytePair;
+                    buffer[i + 1] = (byte)(bytePair >> 8);
                 }
-
-                bytePair = (short)(bytePair * customVol);
-
-                //convert char back to 2 bytes
-                buffer[i] = (byte)bytePair;
-                buffer[i + 1] = (byte)(bytePair >> 8);
             }
         }
 

@@ -16,7 +16,7 @@ namespace DicsordBot.Bot
      *
      * Catches and treats exception from base class
      *
-     * If not connected to channel, methods will return
+     * If not connected to channel, methods will return false (or void)
      */
 
     public class BotHandle : Bot
