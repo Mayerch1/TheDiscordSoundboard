@@ -231,6 +231,13 @@
                         <TextBlock Text="ABOUT" FontSize="20"  Margin="10,0,0,0" VerticalAlignment="Center" />
                     </StackPanel>
                 </Button>
+
+                <Button Height="75" Margin="0,0,0,0" Foreground="Black" Background="{StaticResource PrimaryForegroundBrush}" BorderBrush="{StaticResource PrimaryForegroundBrush}" materialDesign:ShadowAssist.ShadowDepth="Depth0" Click="btn_Tree_Click"  HorizontalContentAlignment="Left">
+                    <StackPanel Orientation="Horizontal">
+                        <materialDesign:PackIcon Kind="FileTree" Height="35" Width="35" VerticalAlignment="Center" />
+                        <TextBlock Text="TREE TEST" FontSize="20"  Margin="10,0,0,0" VerticalAlignment="Center" />
+                    </StackPanel>
+                </Button>
             </StackPanel>
         </Border>
 

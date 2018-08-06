@@ -15,7 +15,6 @@ namespace DicsordBot.Data
     {
         #region consts
 
-        public const float earrapeValue = 10f;
         public const int minVisibleButtons = 35;
 
         #endregion consts

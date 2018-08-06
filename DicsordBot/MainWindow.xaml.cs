@@ -397,6 +397,12 @@ namespace DicsordBot
             MainGrid.Child = new About();
         }
 
+        private void btn_Tree_Click(object sender, RoutedEventArgs e)
+        {
+            MainGrid.Child = null;
+            MainGrid.Child = new ChannelTree();
+        }
+
         private void btn_Settings_Click(object sender, RoutedEventArgs e)
         {
             MainGrid.Child = null;
