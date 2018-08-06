@@ -49,6 +49,7 @@ namespace DicsordBot.Bot
 
         public string Token { get; set; }
         public ulong ChannelId { get; set; }
+        private ulong CurrentChannelId { get; set; }
         public ulong ClientId { get; set; }
 
         #endregion properties
@@ -89,7 +90,8 @@ namespace DicsordBot.Bot
             if (!await connectToServerAsync())
                 return;
 
-            if (!IsChannelConnected)
+            //if channel id has changed, reconnect to new channel
+            if (!IsChannelConnected || ChannelId != CurrentChannelId)
                 await connectToChannelAsync();
 
             try
@@ -188,10 +190,16 @@ namespace DicsordBot.Bot
             try
             {
                 if (ChannelId == 0)
+                {
                     //connect to bot owner
                     await base.connectToChannelAsync(client.VoiceChannel.Id);
+                    CurrentChannelId = 0;
+                }
                 else
-                    await base.connectToChannelAsync(ChannelId);
+                {
+                    CurrentChannelId = ChannelId;
+                    await base.connectToChannelAsync(CurrentChannelId);
+                }
             }
             catch (System.Threading.Tasks.TaskCanceledException ex)
             {

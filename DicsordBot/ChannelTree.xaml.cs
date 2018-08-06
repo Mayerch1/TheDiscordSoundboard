@@ -25,20 +25,38 @@ namespace DicsordBot
 
         public ChannelTree()
         {
+            ChannelList = new List<SocketVoiceChannel>();
+
             InitializeComponent();
             initAsync();
-            //channelTree.ItemsSource = ChannelList;
-            treeView.ItemsSource = ChannelList;
+            channelViewControl.ItemsSource = ChannelList;
         }
 
         private async void initAsync()
         {
+            //get all channels from all servers
             var list = await Handle.Bot.getAllChannels();
-            ChannelList = list[0];
+            foreach (var element in list)
+            {
+                //sort channels by Position in Dc
+                var sortedElement = element.OrderBy(o => o.Position).ToList();
+                sortedElement.Add(null);
+                ChannelList.AddRange(sortedElement);
+            }
         }
 
-        private void Button_Click(object sender, RoutedEventArgs e)
+        private void btn_Click(object sender, RoutedEventArgs e)
         {
+            if (sender != null)
+            {
+                Button btn = (Button)sender;
+                Handle.ChannelId = (ulong)btn.Tag;
+            }
+        }
+
+        private void userJoin_Click(object sender, RoutedEventArgs e)
+        {
+            Handle.ChannelId = 0;
         }
     }
 }

@@ -9,14 +9,19 @@
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid>
         <ScrollViewer>
-            <TreeView x:Name="treeView">
+            <StackPanel>
+                <Button Width="700" Margin="5,5,5,20" Click="userJoin_Click">
+                    Join to owner
+                </Button>
 
-                <TreeView.ItemTemplate>
-                    <DataTemplate>
-                        <TreeViewItem Header="{Binding Name}" materialDesign:TreeViewAssist.AdditionalTemplate="{x:Static materialDesign:TreeViewAssist.SuppressAdditionalTemplate}" />
-                    </DataTemplate>
-                </TreeView.ItemTemplate>
-            </TreeView>
+                <ItemsControl x:Name="channelViewControl">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <Button Margin="5" Width="700" Content="{Binding Name}" Tag="{Binding Id}" Foreground="#FF707070"  Background="{x:Null}" Click="btn_Click" />
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </StackPanel>
         </ScrollViewer>
     </Grid>
 </UserControl>
