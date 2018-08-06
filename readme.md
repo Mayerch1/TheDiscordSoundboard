@@ -39,24 +39,44 @@ This brings the advantage of an guaranteed availability of the service, combined
 ---
 #### How to create the Bot:
 
-1. Create a bot at [this](https://discordapp.com/login?redirect_to=%2Fdevelopers%2Fapplications%2Fme) page
-![Create Bot](doc/createBot.png "Create Bot") 
+You need to create a bot at [this](https://discordapp.com/login?redirect_to=%2Fdevelopers%2Fapplications%2Fme) page, following the steps below.
+
+1. Create the application
+   * Click the button "Create Application"
+   * Enter a name and description
+   * Save all changes
+
+![Create Application](doc/createApplication.png "Create Application") 
+![Create Application 2](doc/createApplication_2.png "Create Application 2") 
 
 </br>
 
 2. Create a bot user
-  * Make sure to select the tickbox 'OAuth2-Code' needed
-  * Copy the user token. You'll need this to use the bot
-  * !Anyone with this token, gets full access to the bot, with all it's rights
-![Create User](doc/createUser.png "Create User") 
+  * Select the 'bot' tab on the left panel
+  * Click the 'add' button
+  * Copy the token or remember it for later use
+  * Tick the 'Requires OAuth2 code' checkbox
+  * Save those changes
+  
+![Create Bot](doc/createBot.png "Create Bot") 
+![Create Bot 2](doc/createBot_2.png "Create Bot 2") 
+
 
 3. Generate a 'OAuth2 URL'
-   * Use 'bot' as purpose
-   * Select at least the rights to Connect, Speak (and view channels)
-![Create OAuth](doc/createOAuth.png "Create OAuth") 
+   * Select the 'OAuth2' tab on the left panel
+   * Tick the 'bot' checkbox in the scope fields
+   * Select at least 'View Channels', 'Connect' and 'Speak' in the upcomming permissions field
+   * Open the URL inbetween the to fields, to invite the bot
+   
+![Create OAuth](doc/generateOAuth.png "Create OAuth") 
+![Create OAuth 2](doc/generateOAuth_2.png "Create OAuth 2") 
 
      
-* Copy the Link and invite the Bot to your server, by opening it.
+4. Invite it
+   * Select the Server to join
+   * Authorize the bot
+   
+![Invite](doc/inviteBot.png "Invite") 
 
 You might also take a look at [this](https://github.com/reactiflux/discord-irc/wiki/Creating-a-discord-bot-&-getting-a-token) useful instruction
 
@@ -76,10 +96,10 @@ If you compile the project by yourself, the opus and libsodium dll's won't get g
 
 #### How to use the Bot
 
->#### In the future, there's an short introduction sequence planned, which explains the >following steps on the first programm startup.
+>#### In the future, there's an short introduction sequence planned, which explains the following steps on the first programm startup.
 <br>
 
-Before you can start to stream a file, you need to specify the token you got when creating the bot.
+Before you can start to stream a file, you need to specify the token, gathered in step 2 when creating the bot.
 
 For this you need to enter the settings Menu and enter the value in the corresponting field
 
