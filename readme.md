@@ -33,7 +33,8 @@ This brings the advantage of an guaranteed availability of the service, combined
 ##### What the bot needs:
 
 1. Rights to join a channel (permanent)
-2. Rights to transmitt audio into that channel (permanent)
+2. Rights to transmit audio into that channel (permanent)
+3. Rights to view all channels (comfort feature)
 </br>
 
 ---

@@ -34,7 +34,7 @@
 
                                 <Grid Name="Test">
 
-                                    <Button Height="80" Width="175" Tag="{Binding ID}" Foreground="#FF707070" FontFamily="Segoe UI" Content="{Binding Name}" Click="btn_Instant_Click" BorderBrush="{x:Null}" BorderThickness="0" Background="{x:Null}">
+                                    <Button Height="80" Width="168" Tag="{Binding ID}" Foreground="#FF707070" FontFamily="Segoe UI" Content="{Binding Name}" Click="btn_Instant_Click" BorderBrush="{x:Null}" BorderThickness="0" Background="{x:Null}">
 
                                         <Button.Style>
                                             <Style TargetType="{x:Type Button}" BasedOn="{StaticResource MaterialDesignRaisedLightButton}">
@@ -83,7 +83,7 @@
                                         </materialDesign:ColorZone>
                                     </Grid>
 
-                                    <Grid Margin="10,10,10,0" HorizontalAlignment="Center" VerticalAlignment="Top" Width="172">
+                                    <Grid Margin="10,10,10,0" HorizontalAlignment="Center" VerticalAlignment="Top" Width="148">
                                         <StackPanel Orientation="Vertical">
 
                                             <Button Click="btn_FileChooser_Click" Tag="{Binding ID}" VerticalAlignment="Top" Background="{StaticResource PrimaryAccentBrush}">
