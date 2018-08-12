@@ -43,6 +43,10 @@ namespace DicsordBot.Bot
 
         public ClientWarningThrown ClientWarning;
 
+        public delegate void SnackBarWarningThrown(string msg);
+
+        public SnackBarWarningThrown SnackbarWarning;
+
         #endregion event handlers
 
         #region properties
@@ -67,15 +71,15 @@ namespace DicsordBot.Bot
             }
             catch (System.IO.DirectoryNotFoundException)
             {
-                FileWarning("The Directory of containing the file could not be found.", "Please correct the file of Button number " + btn.ID + " (" + btn.Name + ").");
+                SnackbarWarning("The Directory of Button " + btn.ID + " (" + btn.Name + ") could not be found.");
             }
             catch (System.IO.FileNotFoundException)
             {
-                FileWarning("The requested file couldn't be found.", "Please correct the file of Button number " + btn.ID + " (" + btn.Name + ").");
+                SnackbarWarning("The file of Button number " + btn.ID + " (" + btn.Name + ") could not be found.");
             }
             catch (System.IO.InvalidDataException)
             {
-                FileWarning("The type of your file is currently not supported", "Please correct the file of Button number " + btn.ID + " (\"" + btn.Name + "\").");
+                SnackbarWarning("The file-type file of Button number " + btn.ID + " (\"" + btn.Name + "\") is not supported.");
             }
             catch (Exception ex)
             {
@@ -144,7 +148,8 @@ namespace DicsordBot.Bot
             }
             catch (Discord.Net.HttpException)
             {
-                TokenWarning("Your Token seems to be invalid", "Go to the settings tab and check your token.");
+                //TokenWarning("Your Token seems to be invalid", "Go to the settings tab and check your token.");
+                SnackbarWarning("Invalid Token");
 
                 Console.WriteLine("connection Exception (Token)");
                 //UnhandledException.initWindow(ex, "failed to connect to Server");

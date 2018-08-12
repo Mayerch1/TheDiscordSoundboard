@@ -36,12 +36,16 @@ namespace DicsordBot
         {
             //get all channels from all servers
             var list = await Handle.Bot.getAllChannels();
-            foreach (var element in list)
+            //prevent crash, when not connected
+            if (list != null)
             {
-                //sort channels by Position in Dc
-                var sortedElement = element.OrderBy(o => o.Position).ToList();
-                sortedElement.Add(null);
-                ChannelList.AddRange(sortedElement);
+                foreach (var element in list)
+                {
+                    //sort channels by Position in Dc
+                    var sortedElement = element.OrderBy(o => o.Position).ToList();
+                    sortedElement.Add(null);
+                    ChannelList.AddRange(sortedElement);
+                }
             }
         }
 

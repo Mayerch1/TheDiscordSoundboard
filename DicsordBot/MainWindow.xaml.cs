@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MaterialDesignThemes.Wpf;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
@@ -127,6 +128,10 @@ namespace DicsordBot
             btn_Repeat.Content = FindResource("IconRepeatOff");
 
             DataContext = this;
+
+            var msgQueue = new SnackbarMessageQueue(TimeSpan.FromMilliseconds(3500));
+
+            snackBar_Hint.MessageQueue = (msgQueue);
 
             if (Handle.Data.Persistent.IsFirstStart)
             {
@@ -316,6 +321,7 @@ namespace DicsordBot
             Handle.Bot.TokenWarning += Handle.TokenWarning_Show;
             Handle.Bot.FileWarning += Handle.FileWarning_Show;
             Handle.Bot.ClientWarning += Handle.ClientWarning_Show;
+            Handle.Bot.SnackbarWarning += SnackBarWarning_Show;
 
             //event Handler for Stream-state of bot
             Handle.Bot.StreamStateChanged += delegate (bool newState)
@@ -343,6 +349,15 @@ namespace DicsordBot
                     setLoopStatus(LoopState.LoopReset);
                 }
             };
+        }
+
+        private void snackBar_Click()
+        {
+        }
+
+        private void SnackBarWarning_Show(string msg)
+        {
+            snackBar_Hint.MessageQueue.Enqueue(msg, "ROGER DODGER", snackBar_Click);
         }
 
         private async void btn_InstantButton_Clicked(int btnListIndex)
