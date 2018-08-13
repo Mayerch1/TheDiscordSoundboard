@@ -50,7 +50,7 @@
                                 VerticalAlignment="Top"
                                 AcceptsReturn="False"
                                 TextWrapping="NoWrap"
-                                Width="400" />
+                                Width="450" />
 
                             <TextBox
                                 Style="{StaticResource MaterialDesignTextFieldBoxTextBox}"
@@ -61,7 +61,7 @@
                                 VerticalAlignment="Top"
                                 AcceptsReturn="False"
                                 TextWrapping="NoWrap"
-                                Width="400" TextChanged="box_token_TextChanged" />
+                                Width="450" TextChanged="box_token_TextChanged" />
 
                             <TextBox
                                 Style="{StaticResource MaterialDesignTextFieldBoxTextBox}"
@@ -72,7 +72,7 @@
                                 VerticalAlignment="Top"
                                 AcceptsReturn="False"
                                 TextWrapping="NoWrap"
-                                Width="400" />
+                                Width="450" />
 
                             <StackPanel Orientation="Horizontal" Margin="5,5,0,0">
                                 <TextBlock VerticalAlignment="Bottom">Volume Cap</TextBlock>

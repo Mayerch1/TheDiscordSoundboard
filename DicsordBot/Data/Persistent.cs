@@ -31,6 +31,7 @@ namespace DicsordBot.Data
         private ulong channelId = 0;
         private string clientAvatar;
         private string token = null;
+        private int selectedServerIndex = 0;
 
         private bool ignoreFileWarning = false;
         private bool ignoreTokenWarning = false;
@@ -56,6 +57,8 @@ namespace DicsordBot.Data
         public string ClientAvatar { get { return clientAvatar; } set { clientAvatar = value; OnPropertyChanged("ClientAvatar"); } }
 
         public string Token { get { return token; } set { token = value; OnPropertyChanged("Token"); } }
+
+        public int SelectedServerIndex { get { return selectedServerIndex; } set { selectedServerIndex = value; OnPropertyChanged("SelectedServerIndex"); } }
 
         public float Volume { get { return volume; } set { volume = value; OnPropertyChanged("Volume"); } }
 

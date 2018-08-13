@@ -96,7 +96,10 @@ namespace DicsordBot.Bot
 
             //if channel id has changed, reconnect to new channel
             if (!IsChannelConnected || ChannelId != CurrentChannelId)
-                await connectToChannelAsync();
+            {
+                if (!await connectToChannelAsync())
+                    return;
+            }
 
             try
             {
@@ -188,7 +191,8 @@ namespace DicsordBot.Bot
 
                 if (client == null)
                 {
-                    ClientWarning("The Bot couldn't locate his owner.", "Join a channel, specify another owner, or manually set a channel for the bot to join.");
+                    SnackbarWarning("Cannot find specified owner.");
+                    return false;
                 }
             }
 
@@ -208,7 +212,7 @@ namespace DicsordBot.Bot
             }
             catch (System.Threading.Tasks.TaskCanceledException ex)
             {
-                UnhandledException.initWindow(ex, "The User Cancelled the joining event.");
+                UnhandledException.initWindow(ex, "The User broke the joining process.");
                 return false;
             }
             catch (System.TimeoutException)
@@ -218,7 +222,7 @@ namespace DicsordBot.Bot
             }
             catch (Exception ex)
             {
-                Console.WriteLine("Unhandled connetcion Exception");
+                Console.WriteLine("Unhandled connection Exception");
                 UnhandledException.initWindow(ex, "Error while connecting to a voice channel");
                 return false;
             }

@@ -22,6 +22,7 @@ namespace DicsordBot
     public partial class ChannelTree : UserControl
     {
         public List<SocketVoiceChannel> ChannelList { get; set; }
+        private List<List<SocketVoiceChannel>> CompleteList { get; set; }
 
         public ChannelTree()
         {
@@ -29,24 +30,35 @@ namespace DicsordBot
 
             InitializeComponent();
             initAsync();
+
             channelViewControl.ItemsSource = ChannelList;
         }
 
         private async void initAsync()
         {
             //get all channels from all servers
-            var list = await Handle.Bot.getAllChannels();
+            CompleteList = await Handle.Bot.getAllChannels();
             //prevent crash, when not connected
-            if (list != null)
+            if (CompleteList != null)
             {
-                foreach (var element in list)
+                //sort channels per server
+                for (int i = 0; i < CompleteList.Count; i++)
                 {
-                    //sort channels by Position in Dc
-                    var sortedElement = element.OrderBy(o => o.Position).ToList();
-                    sortedElement.Add(null);
-                    ChannelList.AddRange(sortedElement);
+                    CompleteList[i] = CompleteList[i].OrderBy(o => o.Position).ToList();
                 }
+
+                populateSelector();
             }
+        }
+
+        private void populateSelector()
+        {
+            foreach (var server in CompleteList)
+            {
+                serverSelector.Items.Add(server[0].Guild);
+            }
+            //TODO: select server, which was selected last time
+            //serverSelector.SelectedIndex = Handle.Data.Persistent.SelectedServerIndex;
         }
 
         private void btn_Click(object sender, RoutedEventArgs e)
@@ -61,6 +73,13 @@ namespace DicsordBot
         private void userJoin_Click(object sender, RoutedEventArgs e)
         {
             Handle.ChannelId = 0;
+        }
+
+        private void comboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            var box = (ComboBox)sender;
+            channelViewControl.ItemsSource = CompleteList[box.SelectedIndex];
+            Handle.Data.Persistent.SelectedServerIndex = box.SelectedIndex;
         }
     }
 }

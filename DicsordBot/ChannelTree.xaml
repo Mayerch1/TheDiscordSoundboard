@@ -10,14 +10,17 @@
     <Grid>
         <ScrollViewer>
             <StackPanel>
-                <Button Width="700" Margin="5,5,5,20" Click="userJoin_Click">
+                <Button Width="700" Margin="5,5,5,20" Background="{StaticResource PrimaryForegroundBrush}" Click="userJoin_Click">
                     Join to owner
                 </Button>
+
+                <ComboBox x:Name="serverSelector" Width="700" materialDesign:HintAssist.Hint="Server" SelectionChanged="comboBox_SelectionChanged">
+                </ComboBox>
 
                 <ItemsControl x:Name="channelViewControl">
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
-                            <Button Margin="5" Width="700" Content="{Binding Name}" Tag="{Binding Id}" Foreground="#FF707070"  Background="{x:Null}" Click="btn_Click" />
+                            <Button Margin="5" Width="700" Content="{Binding Name}" Tag="{Binding Id}" Background="{StaticResource PrimaryAccentBrush}" BorderBrush="{x:Null}" Click="btn_Click" />
                         </DataTemplate>
                     </ItemsControl.ItemTemplate>
                 </ItemsControl>
