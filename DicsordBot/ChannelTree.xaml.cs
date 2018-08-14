@@ -30,8 +30,6 @@ namespace DicsordBot
 
             InitializeComponent();
             initAsync();
-
-            channelViewControl.ItemsSource = ChannelList;
         }
 
         private async void initAsync()
@@ -57,8 +55,9 @@ namespace DicsordBot
             {
                 serverSelector.Items.Add(server[0].Guild);
             }
-            //TODO: select server, which was selected last time
-            //serverSelector.SelectedIndex = Handle.Data.Persistent.SelectedServerIndex;
+            //disply last selection
+            if (Handle.Data.Persistent.SelectedServerIndex < serverSelector.Items.Count)
+                serverSelector.SelectedIndex = Handle.Data.Persistent.SelectedServerIndex;
         }
 
         private void btn_Click(object sender, RoutedEventArgs e)

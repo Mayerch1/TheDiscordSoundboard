@@ -363,7 +363,7 @@ namespace DicsordBot
         private async void btn_InstantButton_Clicked(int btnListIndex)
         {
             await Handle.Bot.enqueueAsync(Handle.Data.Persistent.BtnList[btnListIndex]);
-            //IDEA: maybe skip, or interrupt current stream
+            //IDEA: skip when playlist, don't skip when instant buttons
             if (!Handle.Bot.IsStreaming)
                 await Handle.Bot.resumeStream();
         }

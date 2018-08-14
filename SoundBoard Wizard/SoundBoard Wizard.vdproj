@@ -4863,9 +4863,9 @@
         "Product"
         {
         "Name" = "8:Microsoft Visual Studio"
-        "ProductName" = "8:'The Discord Soundboard' (TDS)"
+        "ProductName" = "8:The Discord Soundboard (TDS)"
         "ProductCode" = "8:{99BC36A4-78BF-4093-AA5D-6EBA4582F014}"
-        "PackageCode" = "8:{31BAF1EA-3DB1-4EBA-B053-3DCC73617012}"
+        "PackageCode" = "8:{D574F1FB-A965-48F2-91F0-03365DCD275B}"
         "UpgradeCode" = "8:{AB825733-B479-49CD-8798-18CB61899CF5}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"

@@ -71,20 +71,24 @@ namespace DicsordBot.Bot
             }
             catch (System.IO.DirectoryNotFoundException)
             {
-                SnackbarWarning("The Directory of Button " + btn.ID + " (" + btn.Name + ") could not be found.");
+                SnackbarWarning("Directory of Button " + btn.ID + " could not be found.");
             }
             catch (System.IO.FileNotFoundException)
             {
-                SnackbarWarning("The file of Button number " + btn.ID + " (" + btn.Name + ") could not be found.");
+                SnackbarWarning("File of Button number " + btn.ID + " could not be found.");
             }
             catch (System.IO.InvalidDataException)
             {
-                SnackbarWarning("The file-type file of Button number " + btn.ID + " (\"" + btn.Name + "\") is not supported.");
+                SnackbarWarning("File of Button number " + btn.ID + " is damaged.");
+            }
+            catch (System.Runtime.InteropServices.COMException)
+            {
+                SnackbarWarning("File type of Button number " + btn.ID + " is not supported.");
             }
             catch (Exception ex)
             {
                 await disconnectFromChannelAsync();
-                UnhandledException.initWindow(ex, "Error while adding a new file to the queue. (Button Nr: " + btn.ID + ", Name: " + btn.Name + ").");
+                UnhandledException.initWindow(ex, "Error while adding a new file to the queue. (Button Nr: " + btn.ID + ", Name: \"" + btn.Name + "\").");
                 Console.WriteLine("EnqueueAsync unhandled");
             }
         }
@@ -158,9 +162,9 @@ namespace DicsordBot.Bot
                 //UnhandledException.initWindow(ex, "failed to connect to Server");
                 return false;
             }
-            catch (System.Net.Http.HttpRequestException ex)
+            catch (System.Net.Http.HttpRequestException)
             {
-                UnhandledException.initWindow(ex, "Can't establish a connection to the Discort-Servers");
+                ClientWarning("Can't reach the Discord-Servers due to timeout", "Check your internet connection, also check the availability of the discord server/api.");
                 Console.WriteLine("connection Exception (Timeout, ...)");
                 return false;
             }
