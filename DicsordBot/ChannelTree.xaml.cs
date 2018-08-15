@@ -66,6 +66,12 @@ namespace DicsordBot
             {
                 Button btn = (Button)sender;
                 Handle.ChannelId = (ulong)btn.Tag;
+
+                //set tempChannel depending on checkbox
+                if (checkBox_isPermanent.IsChecked == true)
+                    Handle.Bot.IsTempChannelId = false;
+                else
+                    Handle.Bot.IsTempChannelId = true;
             }
         }
 

@@ -53,6 +53,7 @@ namespace DicsordBot.Bot
 
         public string Token { get; set; }
         public ulong ChannelId { get; set; }
+        public bool IsTempChannelId { get; set; } = false;
         private ulong CurrentChannelId { get; set; }
         public ulong ClientId { get; set; }
 
@@ -88,7 +89,7 @@ namespace DicsordBot.Bot
             catch (Exception ex)
             {
                 await disconnectFromChannelAsync();
-                UnhandledException.initWindow(ex, "Error while adding a new file to the queue. (Button Nr: " + btn.ID + ", Name: \"" + btn.Name + "\").");
+                UnhandledException.initWindow(ex, "Trying to add a new file to the queue. (Button Nr: " + btn.ID + ", Name: \"" + btn.Name + "\").");
                 Console.WriteLine("EnqueueAsync unhandled");
             }
         }
@@ -112,7 +113,7 @@ namespace DicsordBot.Bot
             catch (Exception ex)
             {
                 await disconnectFromChannelAsync();
-                UnhandledException.initWindow(ex, "Failed to resume stream");
+                UnhandledException.initWindow(ex, "Trying to start/resume the stream");
 
                 //TODO: catch all possible ex
             }
@@ -129,7 +130,7 @@ namespace DicsordBot.Bot
             }
             catch (Exception ex)
             {
-                UnhandledException.initWindow(ex, "Failed to set GameStatus");
+                UnhandledException.initWindow(ex, "Trying to set a GameStatus");
                 Console.WriteLine("GameState Exception");
                 return false;
             }
@@ -155,11 +156,10 @@ namespace DicsordBot.Bot
             }
             catch (Discord.Net.HttpException)
             {
-                //TokenWarning("Your Token seems to be invalid", "Go to the settings tab and check your token.");
                 SnackbarWarning("Invalid Token");
 
                 Console.WriteLine("connection Exception (Token)");
-                //UnhandledException.initWindow(ex, "failed to connect to Server");
+
                 return false;
             }
             catch (System.Net.Http.HttpRequestException)
@@ -170,7 +170,7 @@ namespace DicsordBot.Bot
             }
             catch (Exception ex)
             {
-                UnhandledException.initWindow(ex, "Couldn't connect to the Discord Servers");
+                UnhandledException.initWindow(ex, "Trying to connect to the Discord Servers");
                 Console.WriteLine("general connection Exception");
                 return false;
             }
@@ -188,7 +188,7 @@ namespace DicsordBot.Bot
             //only search for client if auto-connect is wished
             if (ChannelId == 0)
             {
-                //this cannot throw, bc Connection is ensured above
+                //this should not throw, bc Connection is ensured above
                 var clientList = await getAllClients();
 
                 client = getClient(clientList);
@@ -211,12 +211,15 @@ namespace DicsordBot.Bot
                 else
                 {
                     CurrentChannelId = ChannelId;
+                    //reset channelId to 0, if property was set
+                    if (IsTempChannelId)
+                        ChannelId = 0;
                     await base.connectToChannelAsync(CurrentChannelId);
                 }
             }
             catch (System.Threading.Tasks.TaskCanceledException ex)
             {
-                UnhandledException.initWindow(ex, "The User broke the joining process.");
+                UnhandledException.initWindow(ex, "Trying to connect to a voice channel (cancelled).");
                 return false;
             }
             catch (System.TimeoutException)
@@ -227,7 +230,7 @@ namespace DicsordBot.Bot
             catch (Exception ex)
             {
                 Console.WriteLine("Unhandled connection Exception");
-                UnhandledException.initWindow(ex, "Error while connecting to a voice channel");
+                UnhandledException.initWindow(ex, "Trying to connect to a voice channel");
                 return false;
             }
             return true;
@@ -250,7 +253,7 @@ namespace DicsordBot.Bot
             }
             catch
             {
-                ChannelWarning("The bot can't download the channel-list", "Retry later.");
+                SnackbarWarning("Cannot request channel list");
                 return null;
             }
 

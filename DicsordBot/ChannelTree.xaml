@@ -10,17 +10,22 @@
     <Grid>
         <ScrollViewer>
             <StackPanel>
-                <Button Width="700" Margin="5,5,5,20" Background="{StaticResource PrimaryForegroundBrush}" Click="userJoin_Click">
+                <Button Width="700" Margin="5,5,5,20" Style="{StaticResource MaterialDesignRaisedButton}" Background="{StaticResource PrimaryForegroundBrush}" Click="userJoin_Click">
                     Join to owner
                 </Button>
 
-                <ComboBox x:Name="serverSelector" Width="700" materialDesign:HintAssist.Hint="Server" SelectionChanged="comboBox_SelectionChanged">
-                </ComboBox>
+                <StackPanel Orientation="Horizontal" Width="700">
+                    <ComboBox x:Name="serverSelector" Width="600" materialDesign:HintAssist.Hint="Server" SelectionChanged="comboBox_SelectionChanged">
+                    </ComboBox>
+                    <CheckBox x:Name="checkBox_isPermanent">
+                        Permanent
+                    </CheckBox>
+                </StackPanel>
 
                 <ItemsControl x:Name="channelViewControl">
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
-                            <Button Margin="5" Width="700" Content="{Binding Name}" Tag="{Binding Id}" Background="{StaticResource PrimaryAccentBrush}" BorderBrush="{x:Null}" Click="btn_Click" />
+                            <Button Margin="5" Width="700" Content="{Binding Name}" Tag="{Binding Id}" Style="{StaticResource MaterialDesignRaisedButton}" Background="{StaticResource PrimaryAccentBrush}" BorderBrush="{x:Null}" Click="btn_Click" />
                         </DataTemplate>
                     </ItemsControl.ItemTemplate>
                 </ItemsControl>

@@ -4,6 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:local="clr-namespace:DicsordBot"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              mc:Ignorable="d"
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid Margin="20">
@@ -16,46 +17,57 @@
             <ScrollViewer>
                 <StackPanel>
 
-                    <TextBlock FontWeight="Bold">Description</TextBlock>
-                    <TextBlock Text="{Binding Info}" />
+                    <materialDesign:ColorZone Background="{StaticResource PrimaryBackgroundBrush}" materialDesign:ShadowAssist.ShadowDepth="Depth1" materialDesign:ShadowAssist.ShadowEdges="Bottom" Margin="5" Height="50">
+                        <TextBlock x:Name="ErrorBox" TextWrapping="Wrap"  Text="An untreated error occured" VerticalAlignment="Center"  Margin="20,0,0,0" FontSize="18" materialDesign:ShadowAssist.ShadowDepth="Depth2" FontWeight="Bold" Foreground="#262626" />
+                    </materialDesign:ColorZone>
 
-                    <TextBlock FontWeight="Bold">Error Message</TextBlock>
-                    <TextBlock Text="{Binding Ex.Message}" />
-
-                    <Expander
-                HorizontalAlignment="Left"
-
-                Header="Developer Information">
+                    <materialDesign:ColorZone Background="{StaticResource PrimaryBackgroundBrush}" materialDesign:ShadowAssist.ShadowDepth="Depth2" materialDesign:ShadowAssist.ShadowEdges="All" Margin="5,5,5,5" Height="Auto">
                         <StackPanel>
-                            <TextBlock FontWeight="Bold">Class</TextBlock>
-                            <TextBlock Text="{Binding Class}" />
+                            <StackPanel>
+                                <TextBlock FontWeight="Bold">Occured when:</TextBlock>
+                                <TextBlock Text="{Binding Info}" />
+                            </StackPanel>
+                            <Separator Margin="0,10,0,5" />
+                            <StackPanel>
+                                <TextBlock FontWeight="Bold">Error:</TextBlock>
+                                <TextBlock Text="{Binding Ex.Message}" />
+                            </StackPanel>
+                        </StackPanel>
+                    </materialDesign:ColorZone>
 
-                            <TextBlock FontWeight="Bold">File Name</TextBlock>
-                            <TextBlock Text="{Binding FileName}" />
+                    <materialDesign:ColorZone Background="{StaticResource PrimaryBackgroundBrush}" materialDesign:ShadowAssist.ShadowDepth="Depth2" materialDesign:ShadowAssist.ShadowEdges="All" Margin="5,5,5,5" Height="Auto">
+                        <StackPanel>
+                            <Expander HorizontalAlignment="Stretch" Header="Developer Information">
+                                <StackPanel>
+                                    <TextBlock FontWeight="Bold">Stack</TextBlock>
+                                    <TextBlock Text="{Binding Class}" />
 
-                            <TextBlock FontWeight="Bold">Method</TextBlock>
-                            <TextBlock Text="{Binding Method}" />
+                                    <TextBlock FontWeight="Bold">File Name</TextBlock>
+                                    <TextBlock Text="{Binding FileName}" />
 
-                            <TextBlock FontWeight="Bold">Line Number</TextBlock>
-                            <TextBlock Text="{Binding LineNumber}" />
+                                    <TextBlock FontWeight="Bold">Method</TextBlock>
+                                    <TextBlock Text="{Binding Method}" />
 
-                            <TextBlock FontWeight="Bold">Column Number</TextBlock>
-                            <TextBlock Text="{Binding ColumnNumber}" />
+                                    <TextBlock FontWeight="Bold">Line Number</TextBlock>
+                                    <TextBlock Text="{Binding LineNumber}" />
 
-                            <Expander
-                        HorizontalAlignment="Left"
-                        Header="Complete StackTrace">
+                                    <TextBlock FontWeight="Bold">Column Number</TextBlock>
+                                    <TextBlock Text="{Binding ColumnNumber}" />
 
-                                <ItemsControl x:Name="StackTraceTemplate">
-                                    <ItemsControl.ItemTemplate>
-                                        <DataTemplate>
-                                            <TextBlock Text="{Binding Stack}" />
-                                        </DataTemplate>
-                                    </ItemsControl.ItemTemplate>
-                                </ItemsControl>
+                                    <Expander HorizontalAlignment="Left" Header="Complete StackTrace">
+
+                                        <ItemsControl x:Name="StackTraceTemplate">
+                                            <ItemsControl.ItemTemplate>
+                                                <DataTemplate>
+                                                    <TextBlock Text="{Binding Stack}" />
+                                                </DataTemplate>
+                                            </ItemsControl.ItemTemplate>
+                                        </ItemsControl>
+                                    </Expander>
+                                </StackPanel>
                             </Expander>
                         </StackPanel>
-                    </Expander>
+                    </materialDesign:ColorZone>
                 </StackPanel>
             </ScrollViewer>
         </Grid>
@@ -63,19 +75,17 @@
         <Grid Grid.Row="1">
             <StackPanel>
                 <StackPanel VerticalAlignment="Top">
-                    <TextBlock>
-                Give Some additional information, insult the developers or simply greet your parents
+                    <TextBlock Margin="5, 5,5,20">
+                        Want to help to improve this application?
                     </TextBlock>
-                    <TextBox  MinHeight="50" MinWidth="100">
-                    </TextBox>
-                    <StackPanel Orientation="Horizontal">
-                        <Button HorizontalAlignment="Right">
-                            Send
-                        </Button>
-                        <TextBlock>
-                    All information above + your IP-address will be transmitted to, and saved at our servers.
-                        </TextBlock>
-                    </StackPanel>
+                    <materialDesign:SmartHint></materialDesign:SmartHint>
+                    <TextBlock  Margin="5" MinWidth="100">
+                        Head over to Github and report this error with an description, how to reproduce this error.
+                    </TextBlock>
+
+                    <Button HorizontalAlignment="Left" Margin="5" Click="btn_report_Click" Style="{StaticResource MaterialDesignRaisedButton}" Foreground="{StaticResource PrimaryBackgroundBrush}">
+                        Github
+                    </Button>
                 </StackPanel>
             </StackPanel>
         </Grid>

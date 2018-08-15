@@ -71,6 +71,11 @@ namespace DicsordBot
             this.DataContext = this;
         }
 
+        private void btn_report_Click(object sender, EventArgs e)
+        {
+            System.Diagnostics.Process.Start("https://github.com/mayerch1/soundboard/issues/new/choose");
+        }
+
         public static void initWindow(Exception _ex, string _Info = "")
         {
             Window window = new Window

@@ -65,7 +65,7 @@ namespace DicsordBot
         {
             if (!Data.Persistent.IgnoreClientWarning)
             {
-                Data.Persistent.IgnoreClientWarning = ShowWarning("A Token-Error occurred", msg, solution);
+                Data.Persistent.IgnoreClientWarning = ShowWarning("A Client-Error occurred", msg, solution);
             }
         }
 
@@ -73,6 +73,9 @@ namespace DicsordBot
 
         #region handle shared data
 
+        /// <summary>
+        /// propertys of this class will be synced between Data.Persistent and Bot
+        /// </summary>
         public static float Volume
         {
             get { return Data.Persistent.Volume; }
