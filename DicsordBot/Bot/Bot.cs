@@ -14,17 +14,13 @@ using System.ComponentModel;
 
 namespace DicsordBot.Bot
 {
-    /*
-     * Thin Discord-Bot client
-     * Provides all functions for connecting/disconnecting to/from server
-     * Provides all functions to queue files and skip, pause the stream
-     *
-     * No error Handling, just crashes, when sth is wrong
-     *
-     * To use as standalone simply change all protected keywords to public
-     * But prepare for exceptions (and crashes, if not handled)
-    */
-
+    /// <summary>
+    /// Basic Bot class, directly communicates with the api, throws for every little sh
+    /// </summary>
+    /// <remarks>
+    /// can used as standalone but requires to change all 'protected' keywords to 'public' in order to be accessed, also it is not recommended
+    /// if bot is not connected to server or channel, it throws a BotException(...)
+    /// </remarks>
     public class Bot
     {
         #region config
@@ -41,16 +37,37 @@ namespace DicsordBot.Bot
 
         #region event Handlers
 
+        /// <summary>
+        /// StreamStateHandler delegate
+        /// </summary>
+        /// <param name="newState">new Streaming state</param>
         public delegate void StreamStateHandler(bool newState);
 
+        /// <summary>
+        /// StreamStateChanged filed
+        /// </summary>
         public StreamStateHandler StreamStateChanged;
 
+        /// <summary>
+        /// EarrapeStateHandler delegate
+        /// </summary>
+        /// <param name="isEarrape">new isEarrape value</param>
         public delegate void EarrapeStateHandler(bool isEarrape);
 
+        /// <summary>
+        /// EarrapeStateChanged field
+        /// </summary>
         public EarrapeStateHandler EarrapeStateChanged;
 
+        /// <summary>
+        /// LoopStateHandler delegate
+        /// </summary>
+        /// <param name="isLoop">new isLoop value</param>
         public delegate void LoopStateHandler(bool isLoop);
 
+        /// <summary>
+        /// LoopStateChanged field
+        /// </summary>
         public LoopStateHandler LoopStateChanged;
 
         #endregion event Handlers
@@ -63,30 +80,63 @@ namespace DicsordBot.Bot
 
         #region status propertys
 
-        //1.0 is 100%
-        //5.0 is earrape
-        //10.0 is just static noise
+        /// <summary>
+        /// Volume property
+        /// </summary>
+        /// <remarks>
+        /// 1.0 is 100%, 10.0 is static noise
+        /// </remarks>
         public float Volume { get; set; }
 
+        /// <summary>
+        /// IsServerConnected property
+        /// </summary>
         public bool IsServerConnected { get; set; }
+
+        /// <summary>
+        /// IsChannelConnected property
+        /// </summary>
         public bool IsChannelConnected { get; set; }
 
+        /// <summary>
+        /// IsStreaming property, calls StreamStateChanged delegate
+        /// </summary>
         public bool IsStreaming
         {
             get { return isStreaming; }
             private set { if (value != isStreaming) { isStreaming = value; StreamStateChanged(isStreaming); } }
         }
 
+        /// <summary>
+        /// CurrentTime property
+        /// </summary>
         public TimeSpan CurrentTime { get { if (Reader != null) return Reader.CurrentTime; else return TimeSpan.Zero; } }
+
+        /// <summary>
+        /// TitleLength property
+        /// </summary>
         public TimeSpan TitleLenght { get { if (Reader != null) return Reader.TotalTime; else return TimeSpan.Zero; } }
 
+        /// <summary>
+        /// IsBufferEmpy property
+        /// </summary>
         public bool IsBufferEmpty { get; set; }
 
+        /// <summary>
+        /// IsLoop property
+        /// </summary>
         public bool IsLoop { get; set; } = false;
 
+        /// <summary>
+        /// IsToAbort property
+        /// </summary>
         private bool IsToAbort { get; set; } = false;
 
         private uint SkipTracks { get; set; }
+
+        /// <summary>
+        /// IsEarrape property
+        /// </summary>
         public bool IsEarrape { get; set; } = false;
 
         #endregion status propertys
@@ -106,6 +156,9 @@ namespace DicsordBot.Bot
 
         #endregion other vars
 
+        /// <summary>
+        /// constructor inits important properties
+        /// </summary>
         public Bot()
         {
             //TOOD: maybe other format, to format more information
@@ -118,6 +171,10 @@ namespace DicsordBot.Bot
 
         #region controll stuff
 
+        /// <summary>
+        /// enqueues a btn into the queue, if queue is empy directly gather stream
+        /// </summary>
+        /// <param name="btn"></param>
         protected void enqueueAsync(Data.ButtonData btn)
         {
             if (!IsStreaming)
@@ -130,17 +187,29 @@ namespace DicsordBot.Bot
             }
         }
 
+        /// <summary>
+        /// start the stream
+        /// </summary>
+        /// <returns>Task</returns>
         protected async Task resumeStream()
         {
             await startStreamAsync();
         }
 
+        /// <summary>
+        /// skips the track, can be cummulated to skip multiple tracks
+        /// </summary>
         public void skipTrack()
         {
             if (IsStreaming)
                 SkipTracks += 1;
         }
 
+        /// <summary>
+        /// skips ahead to a timespan
+        /// </summary>
+        /// <param name="newTime">new Time</param>
+        /// <param name="enforce">enforce the skip, even if nothing is playing</param>
         public void skipToTime(TimeSpan newTime, bool enforce = false)
         {
             if (IsStreaming || enforce)
@@ -149,6 +218,10 @@ namespace DicsordBot.Bot
             }
         }
 
+        /// <summary>
+        /// skip over a time period
+        /// </summary>
+        /// <param name="skipTime">timeSpan to skip over</param>
         public void skipOverTime(TimeSpan skipTime)
         {
             if (IsStreaming)
@@ -157,6 +230,13 @@ namespace DicsordBot.Bot
             }
         }
 
+        /// <summary>
+        /// sets the GameState of the bot
+        /// </summary>
+        /// <param name="msg">Message to be displayed</param>
+        /// <param name="streamUrl">Url to twitch-stream, only relevant when isStreamin is true</param>
+        /// <param name="isStreaming">bool, if bot is streaming on twitch or not</param>
+        /// <returns>Task</returns>
         protected async Task setGameState(string msg, string streamUrl = "", bool isStreaming = false)
         {
             if (!IsServerConnected)
@@ -176,6 +256,10 @@ namespace DicsordBot.Bot
 
         #region play stuff
 
+        /// <summary>
+        /// gets the stream saved in btn.File
+        /// </summary>
+        /// <param name="btn">btn object</param>
         private void getStream(Data.ButtonData btn)
         {
             if (btn.File == null || btn.File == "")
@@ -205,6 +289,14 @@ namespace DicsordBot.Bot
             loadOverrideSettings(btn);
         }
 
+        /// <summary>
+        /// starts the stream
+        /// </summary>
+        /// <param name="stream">if one stream is already opened it goes here to prevent a gap in the audio line</param>
+        /// <returns>Task</returns>
+        /// <remarks>
+        /// calls itself again as long as isLoop is true
+        /// </remarks>
         private async Task startStreamAsync(AudioOutStream stream = null)
         {
             //IsChannelConnected gaurantees, to have IsServerConnected
@@ -290,7 +382,10 @@ namespace DicsordBot.Bot
             }
         }
 
-        //if button has any override settings, raise their events
+        /// <summary>
+        /// load all specific button settings, raise events to call back to ui for visual indication
+        /// </summary>
+        /// <param name="btn">btn object</param>
         private void loadOverrideSettings(Data.ButtonData btn)
         {
             //if earrape changes
@@ -312,6 +407,10 @@ namespace DicsordBot.Bot
             LoopStateChanged(btn.IsLoop);
         }
 
+        /// <summary>
+        /// split buffer and apply volume to each byte pair
+        /// </summary>
+        /// <param name="buffer">ref to byte array package of the current stream</param>
         private void applyVolume(ref byte[] buffer)
         {
             if (IsEarrape)
@@ -345,6 +444,11 @@ namespace DicsordBot.Bot
 
         #region start stuff
 
+        /// <summary>
+        /// connect to server
+        /// </summary>
+        /// <param name="token">bot token used to login</param>
+        /// <returns>Task</returns>
         protected async Task connectToServerAsync(string token)
         {
             if (IsServerConnected)
@@ -359,6 +463,11 @@ namespace DicsordBot.Bot
             IsServerConnected = true;
         }
 
+        /// <summary>
+        /// connect to specific channel
+        /// </summary>
+        /// <param name="channelId">id of channel to join</param>
+        /// <returns>Task</returns>
         protected async Task connectToChannelAsync(ulong channelId)
         {
             if (IsChannelConnected)
@@ -378,6 +487,11 @@ namespace DicsordBot.Bot
 
         #region stop stuff
 
+        /// <summary>
+        /// stop running streams and disconnect from channel
+        /// </summary>
+        /// <returns>Task</returns>
+        /// <see cref="stopStreamAsync()"/>
         public async Task disconnectFromChannelAsync()
         {
             if (!IsChannelConnected)
@@ -389,6 +503,12 @@ namespace DicsordBot.Bot
 
             IsChannelConnected = false;
         }
+
+        /// <summary>
+        /// disconnect from channel and close connection to sevrer
+        /// </summary>
+        /// <returns>Task</returns>
+        /// <see cref="disconnectFromChannelAsync()"/>
 
         public async Task disconnectFromServerAsync()
         {
@@ -407,6 +527,10 @@ namespace DicsordBot.Bot
             IsServerConnected = false;
         }
 
+        /// <summary>
+        /// stop a running stream
+        /// </summary>
+        /// <returns>Task</returns>
         public async Task stopStreamAsync()
         {
             if (!IsStreaming)
@@ -426,7 +550,10 @@ namespace DicsordBot.Bot
 
         #region get data
 
-        //returns a List<List>, all channels of all servers are contained
+        /// <summary>
+        /// get a list of all channels of all servers
+        /// </summary>
+        /// <returns>list of all servers, each contains a list of all channels</returns>
         protected List<List<SocketVoiceChannel>> getAllChannels()
         {
             if (!IsServerConnected)
@@ -454,6 +581,11 @@ namespace DicsordBot.Bot
             return guildList;
         }
 
+        /// <summary>
+        /// get a list of all clients of all servers
+        /// </summary>
+        /// <param name="acceptOffline">incude users which are offline</param>
+        /// <returns>list of all servers, each contains a list of all clients, regarding acceptOffline</returns>
         //returns a List<List>, all online clients of all servers are contained
         protected List<List<SocketGuildUser>> getAllClients(bool acceptOffline)
         {

@@ -7,18 +7,14 @@ using System.Threading.Tasks;
 
 namespace DicsordBot.Bot
 {
-    /*
-     * Handle for the Bot
-     *
-     * Derives from bot
-     * Warps the bot client into a failsafe environment
-     * Handles almost everythis or shows the UnhandledException Dialog
-     *
-     * Catches and treats exception from base class
-     *
-     * If not connected to channel, methods will return false (or void)
-     */
-
+    /// <summary>
+    /// BotHandle inherites from Bot, failsave frame around the bot class
+    /// </summary>
+    /// <remarks>
+    /// Does only communicate with api through its base 'Bot'
+    /// Catches and treats excetpion from base class
+    /// If not connected to channels, methods will return false (or void)
+    /// </remarks>
     public class BotHandle : Bot
     {
         public BotHandle()
@@ -27,40 +23,106 @@ namespace DicsordBot.Bot
 
         #region event handlers
 
+        /// <summary>
+        /// FileWarningThrown delegate
+        /// </summary>
+        /// <param name="msg">Error description</param>
+        /// <param name="solution">Solution for the error</param>
         public delegate void FileWarningThrown(string msg, string solution);
 
+        /// <summary>
+        /// FileWarningThrown field
+        /// </summary>
         public FileWarningThrown FileWarning;
 
+        /// <summary>
+        /// TokenWarningThrown delegate
+        /// </summary>
+        /// <param name="msg">Error description</param>
+        /// <param name="solution">Solution for the error</param>
         public delegate void TokenWarningThrown(string msg, string solution);
 
+        /// <summary>
+        /// TokenWarningThrown field
+        /// </summary>
         public TokenWarningThrown TokenWarning;
 
+        /// <summary>
+        /// ChannelWarningThrown delegate
+        /// </summary>
+        /// <param name="msg">Error description</param>
+        /// <param name="solution">Solution for the error</param>
         public delegate void ChannelWarningThrown(string msg, string solution);
 
+        /// <summary>
+        /// ChannelWarningThrown field
+        /// </summary>
         public ChannelWarningThrown ChannelWarning;
 
+        /// <summary>
+        /// ClientWarningThrown delegate
+        /// </summary>
+        /// <param name="msg">Error description</param>
+        /// <param name="solution">Solution for the error</param>
         public delegate void ClientWarningThrown(string msg, string solution);
 
+        /// <summary>
+        /// ClientWarningThrown field
+        /// </summary>
         public ClientWarningThrown ClientWarning;
 
+        /// <summary>
+        /// SnackBarWarningThrown delegate
+        /// </summary>
+        /// <param name="msg">Error description</param>
         public delegate void SnackBarWarningThrown(string msg);
 
+        /// <summary>
+        /// SnackBarWarningThrown field
+        /// </summary>
         public SnackBarWarningThrown SnackbarWarning;
 
         #endregion event handlers
 
         #region properties
 
+        /// <summary>
+        /// Token property
+        /// </summary>
         public string Token { get; set; }
+
+        /// <summary>
+        /// ChannelId property
+        /// </summary>
         public ulong ChannelId { get; set; }
+
+        /// <summary>
+        /// IsTempChannelId property
+        /// </summary>
         public bool IsTempChannelId { get; set; } = false;
+
+        /// <summary>
+        /// CurrentCahnnelId property
+        /// </summary>
         private ulong CurrentChannelId { get; set; }
+
+        /// <summary>
+        /// ClientId property
+        /// </summary>
         public ulong ClientId { get; set; }
 
         #endregion properties
 
         #region controll stuff
 
+        /// <summary>
+        /// enques a Button into the list, only the file property is relevant
+        /// </summary>
+        /// <param name="btn">ButtonData object which should be streamed</param>
+        /// <returns>Task</returns>
+        /// <remarks>
+        /// auto connects to Server, calls enqueAsync(ButtonData) of base
+        /// </remarks>
         new public async Task enqueueAsync(Data.ButtonData btn)
         {
             if (!await connectToServerAsync())
@@ -94,6 +156,13 @@ namespace DicsordBot.Bot
             }
         }
 
+        /// <summary>
+        /// resumes or starts the stream
+        /// </summary>
+        /// <returns>Task</returns>
+        /// <remarks>
+        /// auto connects to server and channel, calls resumeStream() of base
+        /// </remarks>
         new public async Task resumeStream()
         {
             if (!await connectToServerAsync())
@@ -119,6 +188,14 @@ namespace DicsordBot.Bot
             }
         }
 
+        /// <summary>
+        /// sets the GameState of the bot
+        /// </summary>
+        /// <param name="msg">Message to be displayed</param>
+        /// <param name="streamUrl">Url to twitch-stream, only relevant when isStreamin is true</param>
+        /// <param name="isStreaming">bool, if bot is streaming on twitch or not</param>
+        /// <returns>shows success of setting the game state</returns>
+        /// <remarks>calls setGameState() of base</remarks>
         new public async Task<bool> setGameState(string msg, string streamUrl = "", bool isStreaming = false)
         {
             if (!await connectToServerAsync())
@@ -142,6 +219,13 @@ namespace DicsordBot.Bot
 
         #region start stuff
 
+        /// <summary>
+        /// connects to the discord servers
+        /// </summary>
+        /// <returns>success of operation</returns>
+        /// <remarks>
+        /// if already connected, returns true, calls connectToServerAsync() of base
+        /// </remarks>
         public async Task<bool> connectToServerAsync()
         {
             if (IsServerConnected)
@@ -178,6 +262,13 @@ namespace DicsordBot.Bot
             return true;
         }
 
+        /// <summary>
+        /// connects to a channel
+        /// </summary>
+        /// <returns>success of operation</returns>
+        /// <remarks>
+        /// auto connects to server, gets current channel of Owner if ChannelId is 0, calls connectToChannelAsync() of base
+        /// </remarks>
         public async Task<bool> connectToChannelAsync()
         {
             if (!await connectToServerAsync())
@@ -240,6 +331,10 @@ namespace DicsordBot.Bot
 
         #region get data
 
+        /// <summary>
+        /// get a list of all channels of all servers
+        /// </summary>
+        /// <returns>list of all serves each with a list of all channels </returns>
         new public async Task<List<List<SocketVoiceChannel>>> getAllChannels()
         {
             if (!await connectToServerAsync())
@@ -260,6 +355,11 @@ namespace DicsordBot.Bot
             return channelList;
         }
 
+        /// <summary>
+        /// list of all clients
+        /// </summary>
+        /// <param name="acceptOffline">also show clients which are currently offline</param>
+        /// <returns>list of all serves each with a list of all channels</returns>
         new public async Task<List<List<SocketGuildUser>>> getAllClients(bool acceptOffline = false)
         {
             if (!await connectToServerAsync())
@@ -280,6 +380,11 @@ namespace DicsordBot.Bot
             return userList;
         }
 
+        /// <summary>
+        /// extract client (ClientId) out of the client list
+        /// </summary>
+        /// <param name="clientList">list of all servers, each with a list of all users</param>
+        /// <returns>client object with the id ClientId</returns>
         public SocketGuildUser getClient(List<List<SocketGuildUser>> clientList)
         {
             foreach (var server in clientList)

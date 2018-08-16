@@ -9,11 +9,17 @@ using System.Windows.Media;
 
 namespace DicsordBot.Data
 {
+    /// <summary>
+    /// contains runtime data + class for persistent data, handles and manages those data
+    /// </summary>
     public class RuntimeData : INotifyPropertyChanged
 
     {
         #region constants
 
+        /// <summary>
+        /// saveFile, Name of file
+        /// </summary>
         private const string saveFile = "\\Settings.xml";
 
         #endregion constants
@@ -26,6 +32,9 @@ namespace DicsordBot.Data
 
         #region properties
 
+        /// <summary>
+        /// Persistent property (class)
+        /// </summary>
         public PersistentData Persistent { get { return persistent; } set { persistent = value; OnPropertyChanged("Persistent"); } }
 
         #endregion properties
@@ -37,11 +46,22 @@ namespace DicsordBot.Data
 
         #region ManageData
 
+        /// <summary>
+        /// Handler, called if any Button property has changed
+        /// </summary>
+        /// <param name="sender">sender of event, not used</param>
+        /// <param name="e">EventArgs, not used</param>
         private void HandleButtonPropertyChanged(object sender, EventArgs e)
         {
             determinHighestButton();
         }
 
+        /// <summary>
+        /// gets the highest button which is to be saved and displayed + 1
+        /// </summary>
+        /// <remarks>
+        /// based on minVisibleButtons and the highest Button Nr which is not empty
+        /// </remarks>
         private void determinHighestButton()
         {
             Persistent.HighestButtonToSave = -1;
@@ -55,8 +75,11 @@ namespace DicsordBot.Data
             OnPropertyChanged("BtnList");
         }
 
-        //delete empty List elements
-        //adds new elements, if more are to be displayed
+        /// <summary>
+        /// shortens or lengthens buttonList based on the highest valid button
+        /// </summary>
+        /// <returns>new lenght of the buttonList</returns>
+        /// <see cref="determinHighestButton()"/>
         public int resizeBtnList()
         {
             determinHighestButton();
@@ -78,7 +101,12 @@ namespace DicsordBot.Data
             return Persistent.BtnList.Count;
         }
 
-        //remove all elements above the last with content
+        /// <summary>
+        /// shortens button list to the minimum without losing data
+        /// </summary>
+        /// <remarks>
+        /// disregards minVisibleButtons
+        /// </remarks>
         public void cleanBtnList()
         {
             int upper = Persistent.BtnList.Count;
@@ -93,7 +121,10 @@ namespace DicsordBot.Data
 
         #region Handle Save/Load
 
-        //load all data from the file
+        /// <summary>
+        /// load all data from saved xml, load default if failed
+        /// </summary>
+        /// <param name="_file">Name of *.xml setting without path</param>
         public void loadData(string _file = saveFile)
         {
             Persistent.SettingsPath = Properties.Settings.Default.Path;
@@ -127,7 +158,9 @@ namespace DicsordBot.Data
             resizeBtnList();
         }
 
-        //set all values to the default settings
+        /// <summary>
+        /// load default value for all settings
+        /// </summary>
         private void loadDefaultValues()
         {
             //init the visible Buttons
@@ -137,7 +170,10 @@ namespace DicsordBot.Data
             }
         }
 
-        //create a ButtonData with default values
+        /// <summary>
+        /// creates one default ButtonData object
+        /// </summary>
+        /// <returns>ButtonData object with default values and correct id</returns>
         private ButtonData mkDefaultButtonData()
         {
             ButtonData btnD = new ButtonData();
@@ -147,7 +183,10 @@ namespace DicsordBot.Data
             return btnD;
         }
 
-        //save all data to file
+        /// <summary>
+        /// saves all data into an xml file
+        /// </summary>
+        /// <param name="_file">Name of *.xml setting without path</param>
         public void saveData(string _file = saveFile)
         {
             Properties.Settings.Default.Path = Persistent.SettingsPath;

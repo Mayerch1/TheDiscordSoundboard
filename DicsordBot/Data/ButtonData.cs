@@ -9,6 +9,9 @@ using System.Xml.Serialization;
 
 namespace DicsordBot.Data
 {
+    /// <summary>
+    /// Represents on Button with all its properties, implements INotifyPropertyChanged
+    /// </summary>
     [Serializable()]
     public class ButtonData : INotifyPropertyChanged
 
@@ -25,14 +28,38 @@ namespace DicsordBot.Data
 
         #region propertys
 
+        /// <summary>
+        /// Name property
+        /// </summary>
         public string Name { get { return name; } set { name = value; OnPropertyChanged("Name"); } }
 
+        /// <summary>
+        /// File property
+        /// </summary>
+        /// <value>
+        /// path towards file in filesystem
+        /// </value>
         public string File { get { return file; } set { file = value; OnPropertyChanged("File"); } }
 
+        /// <summary>
+        /// IsEarrape property
+        /// </summary>
+        /// <value>
+        /// determins if boost should be applied
+        /// </value>
         public bool IsEarrape { get { return isEarrape; } set { isEarrape = value; OnPropertyChanged("IsEarrape"); } }
 
+        /// <summary>
+        /// IsLoop property
+        /// </summary>
         public bool IsLoop { get { return isLoop; } set { isLoop = value; OnPropertyChanged("IsLoop"); } }
 
+        /// <summary>
+        /// ID property
+        /// </summary>
+        /// <value>
+        /// incremental button id, also stored in tag of btn to assign ui-button to data-button
+        /// </value>
         public int ID { get { return iD; } set { iD = value; OnPropertyChanged("ID"); } }
 
         #endregion propertys
