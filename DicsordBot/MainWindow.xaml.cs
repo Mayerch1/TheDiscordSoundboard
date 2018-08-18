@@ -355,9 +355,26 @@ namespace DicsordBot
         {
         }
 
-        private void SnackBarWarning_Show(string msg)
+        private void SnackBarWarning_Show(string msg, Bot.BotHandle.SnackBarAction action)
         {
-            snackBar_Hint.MessageQueue.Enqueue(msg, "ROGER DODGER", snackBar_Click);
+            string optionMsg = action.ToString();
+            if (action == Bot.BotHandle.SnackBarAction.None)
+                optionMsg = "Roger Dodger";
+
+            Action handler;
+
+            switch (action)
+            {
+                case Bot.BotHandle.SnackBarAction.Settings:
+                    handler = btn_Settings_Click;
+                    break;
+
+                default:
+                    handler = snackBar_Click;
+                    break;
+            }
+
+            snackBar_Hint.MessageQueue.Enqueue(msg, optionMsg, handler);
         }
 
         private async void btn_InstantButton_Clicked(int btnListIndex)
@@ -419,6 +436,12 @@ namespace DicsordBot
         }
 
         private void btn_Settings_Click(object sender, RoutedEventArgs e)
+        {
+            //args are not needed, enables use for delegate events
+            btn_Settings_Click();
+        }
+
+        private void btn_Settings_Click()
         {
             MainGrid.Child = null;
             MainGrid.Child = new Settings();

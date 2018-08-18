@@ -10,7 +10,7 @@
 </br></br>
 
 Hi, 
-this is a small Discord-Soundboard for streaming Sounds/Music into Discord-voicechannels.
+this is a small Discord-Soundboard for streaming Sounds/Music into Discord - voice channels.
 <br>
 <br>
 In contrast to a Soundbot, this application hosts a bot on your local machine for the duration of the playback.
@@ -25,16 +25,27 @@ This brings the advantage of an guaranteed availability of the service, combined
 
 ---
 
+##### Planned Features (long term):
+
+1. Something similiar to a playlist mode
+2. Search mode, wich is providing titles via search on your disk for temporary use
+3. Hotkeys to trigger sounds
+3. Directly streaming from web plattforms (only if compatible with the law)
+
+---
+
 ### Instructions:
 
 
 ##### What you need:
-</br>
+<br/>
+
 1. A confirmed Discord Account (one time)
 2. Rights to invite a bot to your server (one time)
 3. Internet Connection (obviously)
 4. Some soundfiles to stream
-</br>
+
+<br/>
 
 ##### What the bot needs:
 
@@ -130,7 +141,9 @@ The next step is pressing the button, and the bot will join your channel (as lon
 
 > ###### F: Why can't I stream Videos from Youtube? <br>
 >    1. Downloading videos can be illegal in some cases. Further, the separation of sound and video is not allowed. (As we know so far) <br>
->    2. This bot is built to fill the gap for streaming files from your disk. There're plenty of very good music bots out there to play online-videos. So there's no need, to use your own bandwith to stream a youtube video, 
+>    2. This bot is built to fill the gap for streaming files from your disk. There're plenty of very good music bots out there to play online-videos. So there's no need, to use your own bandwith to stream a youtube video. <br/>
+>    <br/>
+>    But let's see what the future brings
 
 
 

@@ -72,10 +72,16 @@ namespace DicsordBot.Bot
         public ClientWarningThrown ClientWarning;
 
         /// <summary>
+        /// SnackBarAction enum, passed into delegate for informing eventhandler on requested information
+        /// </summary>
+        public enum SnackBarAction { Settings, None };
+
+        /// <summary>
         /// SnackBarWarningThrown delegate
         /// </summary>
         /// <param name="msg">Error description</param>
-        public delegate void SnackBarWarningThrown(string msg);
+        /// <param name="action">Enum for triggered action in event Handler</param>
+        public delegate void SnackBarWarningThrown(string msg, SnackBarAction action = SnackBarAction.None);
 
         /// <summary>
         /// SnackBarWarningThrown field
@@ -240,7 +246,7 @@ namespace DicsordBot.Bot
             }
             catch (Discord.Net.HttpException)
             {
-                SnackbarWarning("Invalid Token");
+                SnackbarWarning("Invalid Token", SnackBarAction.Settings);
 
                 Console.WriteLine("connection Exception (Token)");
 
@@ -286,7 +292,7 @@ namespace DicsordBot.Bot
 
                 if (client == null)
                 {
-                    SnackbarWarning("Cannot find specified owner.");
+                    SnackbarWarning("Cannot find specified owner.", SnackBarAction.None);
                     return false;
                 }
             }
