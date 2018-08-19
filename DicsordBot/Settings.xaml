@@ -23,7 +23,7 @@
 
                         <StackPanel Orientation="Vertical">
                             <!--Settings Content-->
-
+                            <!-- add when dark/light slider is working
                             <TextBlock Text="Appearance" FontSize="15" FontWeight="Bold" />
 
                             <Separator Margin="0,5,0,0" />
@@ -36,7 +36,7 @@
 
                                 <TextBlock Text="Dark" Margin="10" FontSize="15" />
                             </StackPanel>
-
+-->
                             <TextBlock Text="Application" FontSize="15" FontWeight="Bold" Margin="0,30,0,0" />
 
                             <Separator Margin="0,5,0,0" />

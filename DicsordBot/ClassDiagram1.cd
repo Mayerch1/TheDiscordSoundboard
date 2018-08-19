@@ -1,5 +1,13 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="DicsordBot.About" BaseTypeListCollapsed="true">
+    <Position X="8" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAQAAAAAAAAAAAAAAAAAAAAAAABAAAAAAAAAAAAAA=</HashCode>
+      <FileName>About.xaml.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
   <Class Name="DicsordBot.App" Collapsed="true">
     <Position X="0.5" Y="0.5" Width="1.5" />
     <TypeIdentifier>
@@ -8,7 +16,7 @@
     </TypeIdentifier>
   </Class>
   <Class Name="DicsordBot.ButtonUI" BaseTypeListCollapsed="true">
-    <Position X="16.25" Y="0.5" Width="1.5" />
+    <Position X="13.25" Y="0.5" Width="1.5" />
     <NestedTypes>
       <Delegate Name="DicsordBot.ButtonUI.InstantButtonClickedHandler" Collapsed="true">
         <TypeIdentifier>
@@ -17,32 +25,47 @@
       </Delegate>
     </NestedTypes>
     <TypeIdentifier>
-      <HashCode>AAACAAAAAAAAAAAAIAAAAAAAgAgBAAAIAAAAgABAAAA=</HashCode>
+      <HashCode>AAACAAAAAAAAgAAAMAAAAAAAgAgBAAAIAAAAgABAAAA=</HashCode>
       <FileName>ButtonUI.xaml.cs</FileName>
     </TypeIdentifier>
     <Lollipop Position="0.2" Collapsed="true" />
   </Class>
+  <Class Name="DicsordBot.ChannelListManager">
+    <Position X="13.25" Y="7" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAYAAAAAAAAIAAAAAAAAAAAQAAAAAA=</HashCode>
+      <FileName>ChannelListManager.cs</FileName>
+    </TypeIdentifier>
+  </Class>
   <Class Name="DicsordBot.BotData">
-    <Position X="0.5" Y="3.25" Width="1.5" />
+    <Position X="3" Y="3.75" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAAIAAAAAAAAgAAAAAEAAAAAAA=</HashCode>
       <FileName>Handle\BotData.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="DicsordBot.Handle">
-    <Position X="0.5" Y="5.5" Width="1.5" />
+    <Position X="0.5" Y="3.75" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAEAAAAAAACAAAAAgAAAAAAAAAIAABAAQAYAAAABAAA=</HashCode>
+      <HashCode>AAEAACAAAACAAAAAgQABEAAAAAIAABABQAYAAAABAAA=</HashCode>
       <FileName>Handle\Handle.cs</FileName>
     </TypeIdentifier>
     <ShowAsAssociation>
       <Property Name="Bot" />
-      <Property Name="BotData" />
       <Property Name="Data" />
+      <Property Name="BotData" />
     </ShowAsAssociation>
   </Class>
+  <Class Name="DicsordBot.Hint" BaseTypeListCollapsed="true">
+    <Position X="11.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAABAIAAAQAAAAIAAAAAAAgAIAAAAAQAgAAEAAAAA=</HashCode>
+      <FileName>Hint.xaml.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
   <Class Name="DicsordBot.MainWindow" BaseTypeListCollapsed="true">
-    <Position X="18" Y="0.5" Width="1.5" />
+    <Position X="15" Y="0.5" Width="1.5" />
     <NestedTypes>
       <Enum Name="DicsordBot.MainWindow.LoopState" Collapsed="true">
         <TypeIdentifier>
@@ -51,36 +74,36 @@
       </Enum>
     </NestedTypes>
     <TypeIdentifier>
-      <HashCode>QAAAEpFAEIAAAoUAYBABACAA4AAAEQEAARMwCAEAAAM=</HashCode>
+      <HashCode>QAAAEJFAMIAEAoUAYBABACAA4AgAEQEEARsxKAEAAAE=</HashCode>
       <FileName>MainWindow.xaml.cs</FileName>
     </TypeIdentifier>
     <Lollipop Position="0.2" Collapsed="true" />
   </Class>
-  <Class Name="DicsordBot.Settings" Collapsed="true" BaseTypeListCollapsed="true">
-    <Position X="2.5" Y="0.5" Width="1.5" />
+  <Class Name="DicsordBot.Settings" BaseTypeListCollapsed="true">
+    <Position X="9.75" Y="0.5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <HashCode>AAAAAAAAAAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Settings.xaml.cs</FileName>
     </TypeIdentifier>
     <Lollipop Position="0.2" Collapsed="true" />
   </Class>
   <Class Name="DicsordBot.UnhandledException" BaseTypeListCollapsed="true">
-    <Position X="13.25" Y="0.5" Width="1.5" />
+    <Position X="16.75" Y="0.5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AIACAIAAAAAAAiACIAIoAAAAjAAAAAAAQEAAAEBABgA=</HashCode>
+      <HashCode>AIACAIAAAAAAAiACIAIoAAgAjAAAAAAAQEAAAEBABgA=</HashCode>
       <FileName>UnhandledException.xaml.cs</FileName>
     </TypeIdentifier>
     <Lollipop Position="0.2" Collapsed="true" />
   </Class>
   <Class Name="DicsordBot.MyStack">
-    <Position X="9.25" Y="0.5" Width="1.5" />
+    <Position X="6.5" Y="11.75" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAgAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>UnhandledException.xaml.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="DicsordBot.Bot.Bot">
-    <Position X="4.75" Y="7" Width="1.5" />
+    <Position X="4.25" Y="5.75" Width="1.5" />
     <NestedTypes>
       <Delegate Name="DicsordBot.Bot.Bot.StreamStateHandler" Collapsed="true">
         <TypeIdentifier>
@@ -99,12 +122,12 @@
       </Delegate>
     </NestedTypes>
     <TypeIdentifier>
-      <HashCode>ASAAQDwAgA0MEAkACQAiEBIAQiAAAMAAGRIRwBRAAAQ=</HashCode>
+      <HashCode>ASAAADwAgA0MEAkACQAiEBIAQiAAAMAAGRIRwBRAgAQ=</HashCode>
       <FileName>Bot\Bot.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="DicsordBot.Bot.BotException">
-    <Position X="11.25" Y="0.5" Width="1.5" />
+    <Position X="1" Y="7.75" Width="1.5" />
     <NestedTypes>
       <Enum Name="DicsordBot.Bot.BotException.type" Collapsed="true">
         <TypeIdentifier>
@@ -123,21 +146,54 @@
     </TypeIdentifier>
   </Class>
   <Class Name="DicsordBot.Bot.BotHandle">
-    <Position X="2.75" Y="7" Width="1.5" />
+    <Position X="2.5" Y="5.75" Width="1.5" />
+    <NestedTypes>
+      <Delegate Name="DicsordBot.Bot.BotHandle.FileWarningThrown" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Bot\BotHandler.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Delegate>
+      <Delegate Name="DicsordBot.Bot.BotHandle.TokenWarningThrown" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Bot\BotHandler.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Delegate>
+      <Delegate Name="DicsordBot.Bot.BotHandle.ChannelWarningThrown" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Bot\BotHandler.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Delegate>
+      <Delegate Name="DicsordBot.Bot.BotHandle.ClientWarningThrown" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Bot\BotHandler.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Delegate>
+      <Enum Name="DicsordBot.Bot.BotHandle.SnackBarAction" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Bot\BotHandler.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Enum>
+      <Delegate Name="DicsordBot.Bot.BotHandle.SnackBarWarningThrown" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Bot\BotHandler.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Delegate>
+    </NestedTypes>
     <TypeIdentifier>
-      <HashCode>AGAAAAAAAAAAAAgAgAAAEAIAAAAAAAAAAAQQQABBAAA=</HashCode>
+      <HashCode>AGAAAAAAAAEAAAgAhAAQEBIAAAAAEAAAABYQQABBAAA=</HashCode>
       <FileName>Bot\BotHandler.cs</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="DicsordBot.Data.ButtonData">
-    <Position X="12.75" Y="7.25" Width="1.5" />
+  <Class Name="DicsordBot.Data.ButtonData" BaseTypeListCollapsed="true">
+    <Position X="10.25" Y="5.25" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAgAEAIIABAAQAgAAFAAAABQAAAAAAAAA=</HashCode>
       <FileName>Data\ButtonData.cs</FileName>
     </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
   </Class>
   <Class Name="DicsordBot.Data.PersistentData" BaseTypeListCollapsed="true">
-    <Position X="10.25" Y="6.75" Width="1.5" />
+    <Position X="8.5" Y="5.25" Width="1.5" />
     <NestedTypes>
       <Delegate Name="DicsordBot.Data.PersistentData.ClientNameHandler" Collapsed="true">
         <TypeIdentifier>
@@ -146,16 +202,16 @@
       </Delegate>
     </NestedTypes>
     <TypeIdentifier>
-      <HashCode>AAEAAEAAgAAAAAAg4AYAAAAGggAAAAAgwIYAAAAHhAI=</HashCode>
+      <HashCode>QAEACEgAgAAgAAAg4gYAAAgGggBAAAAgwoYAgACHhAA=</HashCode>
       <FileName>Data\Persistent.cs</FileName>
     </TypeIdentifier>
     <ShowAsCollectionAssociation>
-      <Property Name="BtnList" />
+      <Field Name="btnList" />
     </ShowAsCollectionAssociation>
     <Lollipop Position="0.2" Collapsed="true" />
   </Class>
   <Class Name="DicsordBot.Data.RuntimeData" BaseTypeListCollapsed="true">
-    <Position X="7.75" Y="6.25" Width="1.5" />
+    <Position X="6.75" Y="5.25" Width="1.5" />
     <TypeIdentifier>
       <HashCode>EAAAABAAAAAAAAIAYBIAAAAAgEAEAABQgAAAAAAAAAA=</HashCode>
       <FileName>Data\RuntimeData.cs</FileName>
@@ -166,16 +222,23 @@
     <Lollipop Position="0.2" Collapsed="true" />
   </Class>
   <Class Name="DicsordBot.Properties.Resources" Collapsed="true">
-    <Position X="2.5" Y="1.5" Width="1.5" />
+    <Position X="0.5" Y="1.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAABEAAAAQAAAAAAAAAAAAAAAIA=</HashCode>
     </TypeIdentifier>
   </Class>
   <Class Name="DicsordBot.Properties.Settings" Collapsed="true">
-    <Position X="0.5" Y="1.5" Width="1.5" />
+    <Position X="2.25" Y="0.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAIAAAAAIAAAAAABAAAAAAAAAAAAAAA=</HashCode>
     </TypeIdentifier>
   </Class>
+  <Struct Name="DicsordBot.MyTreeItem">
+    <Position X="9.75" Y="2" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAEAAAAAAAAAAAEAAAAAAAAAAAAAgA=</HashCode>
+      <FileName>ChannelListManager.cs</FileName>
+    </TypeIdentifier>
+  </Struct>
   <Font Name="Segoe UI" Size="9" />
 </ClassDiagram>

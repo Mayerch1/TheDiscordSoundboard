@@ -107,6 +107,8 @@ namespace DicsordBot
             get { return Handle.Data.Persistent.ClientAvatar; }
         }
 
+        private bool IsChannelListOpened { get; set; } = false;
+
         #endregion propertys
 
         public MainWindow()
@@ -196,9 +198,22 @@ namespace DicsordBot
             //delay this method by 2,5 seconds
             await Task.Delay(2500);
 
+            //resolve user to get avatar-url
             var client = Handle.BotData.extractClient(await Handle.Bot.getAllClients(), Handle.ClientId);
             Handle.BotData.updateAvatar(client);
             OnPropertyChanged("ClientAvatar");
+
+            //get channel list to display in TreeView
+            await initChannelList();
+        }
+
+        private async Task initChannelList()
+        {
+            //receives channel list + displays it when menu is opened
+            ChannelListManager channelMgr = new ChannelListManager();
+            await channelMgr.initAsync();
+
+            channelMgr.populateTree(tree_channelList);
         }
 
         private void setVolumeIcon()
@@ -323,6 +338,8 @@ namespace DicsordBot
             Handle.Bot.ClientWarning += Handle.ClientWarning_Show;
             Handle.Bot.SnackbarWarning += SnackBarWarning_Show;
 
+            AddHandler(TreeViewItem.ExpandedEvent, new RoutedEventHandler(tree_ItemExpanded));
+
             //event Handler for Stream-state of bot
             Handle.Bot.StreamStateChanged += delegate (bool newState)
             {
@@ -333,10 +350,12 @@ namespace DicsordBot
                     btn_Play.Content = FindResource("IconPlay");
             };
 
+            //earrape event
             Handle.Bot.EarrapeStateChanged += delegate (bool isEarrape)
             {
                 earrapeStatusChanged(isEarrape);
             };
+            //loop state event
             Handle.Bot.LoopStateChanged += delegate (bool isLoop)
             {
                 if (isLoop)
@@ -353,6 +372,7 @@ namespace DicsordBot
 
         private void snackBar_Click()
         {
+            //this is called, when no action is required/provided
         }
 
         private void SnackBarWarning_Show(string msg, Bot.BotHandle.SnackBarAction action)
@@ -429,12 +449,6 @@ namespace DicsordBot
             MainGrid.Child = new About();
         }
 
-        private void btn_Tree_Click(object sender, RoutedEventArgs e)
-        {
-            MainGrid.Child = null;
-            MainGrid.Child = new ChannelTree();
-        }
-
         private void btn_Settings_Click(object sender, RoutedEventArgs e)
         {
             //args are not needed, enables use for delegate events
@@ -466,6 +480,72 @@ namespace DicsordBot
                 sb = FindResource("CloseMenu") as Storyboard;
 
             sb.Begin();
+        }
+
+        private void btn_Avatar_Click(object sender, RoutedEventArgs e)
+        {
+            Storyboard sb;
+
+            if (IsChannelListOpened)
+            {
+                sb = FindResource("CloseChannelList") as Storyboard;
+                IsChannelListOpened = false;
+            }
+            else
+            {
+                sb = FindResource("OpenChannelList") as Storyboard;
+
+                IsChannelListOpened = true;
+            }
+
+            sb.Begin();
+        }
+
+        private void tree_Channel_SelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
+        {
+            //get new selected tree
+            try
+            {
+                var channel = (MyTreeItem)e.NewValue;
+                Handle.ChannelId = channel.id;
+
+                //TODO: reenable choice, if permanent or not
+
+                if (channel.id != 0)
+                {
+                    string snackMsg;
+                    //if (checkBox_isPermanent.IsChecked == true){
+                    //    Handle.Bot.IsTempChannelId = false;
+                    //      snackMsg = "Selected (perm.)";
+                    //}
+                    //else{
+                    Handle.Bot.IsTempChannelId = true;
+                    snackMsg = "Selected (temp.)";
+                    //}
+                    SnackBarWarning_Show(snackMsg, Bot.BotHandle.SnackBarAction.None);
+                }
+                else
+                {
+                    SnackBarWarning_Show("Default", Bot.BotHandle.SnackBarAction.None);
+                }
+            }
+            catch { }
+
+            //get first expanded element, to save it for restart
+        }
+
+        private void tree_ItemExpanded(object sender, RoutedEventArgs e)
+        {
+            Handle.Data.Persistent.SelectedServerIndex = (int)((TreeViewItem)e.Source).Tag;
+        }
+
+        private void Window_PreviewMouseDown(object sender, MouseButtonEventArgs e)
+        {
+            //collapse channel popup
+            if (IsChannelListOpened && !grd_ChannelList.IsMouseOver && !btn_Avatar.IsMouseOver)
+            {
+                btn_Avatar_Click(null, null);
+            }
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
