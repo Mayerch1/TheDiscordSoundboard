@@ -24,6 +24,8 @@ namespace DicsordBot
     /// </summary>
     public partial class ButtonUI : INotifyPropertyChanged
     {
+#pragma warning disable CS1591
+
         public delegate void InstantButtonClickedHandler(int btnListIndex);
 
         public InstantButtonClickedHandler InstantButtonClicked;
@@ -137,5 +139,7 @@ namespace DicsordBot
         {
             Handle.Data.resizeBtnList();
         }
+
+#pragma warning restore CS1591
     }
 }

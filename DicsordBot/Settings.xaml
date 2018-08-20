@@ -37,14 +37,32 @@
                                 <TextBlock Text="Dark" Margin="10" FontSize="15" />
                             </StackPanel>
 -->
-                            <TextBlock Text="Application" FontSize="15" FontWeight="Bold" Margin="0,30,0,0" />
+
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="Application" FontSize="15" FontWeight="Bold" Margin="0,30,0,0" />
+                                <Button
+                                    Click="btn_Help_Click"
+                                    Margin="0,20,0,0"
+                                    materialDesign:ShadowAssist.ShadowDepth="Depth0"
+                                    Background="{StaticResource PrimaryBackgroundBrush}"
+                                    BorderBrush="{StaticResource PrimaryBackgroundBrush}"
+                                    Style="{DynamicResource MaterialDesignFloatingActionMiniLightButton}"
+                                    ToolTip="Open the instruction">
+
+                                    <materialDesign:PackIcon
+
+                                          Kind="HelpCircleOutline"
+                                          Height="15"
+                                          Width="15" />
+                                </Button>
+                            </StackPanel>
 
                             <Separator Margin="0,5,0,0" />
 
                             <TextBox
                                 Style="{StaticResource MaterialDesignTextFieldBoxTextBox}"
                                 Text="{Binding ClientName}"
-                                materialDesign:HintAssist.Hint="User Name"
+                                materialDesign:HintAssist.Hint="UserName#1234"
                                 HorizontalAlignment="Left"
                                 Margin="0,20,0,0"
                                 VerticalAlignment="Top"
@@ -79,7 +97,7 @@
 
                                 <Slider Minimum="1" Maximum="100" Style="{StaticResource MaterialDesignDiscreteSlider}"
                                     Margin="10,0,0,0"
-
+                                    ToolTip="Set Maximum Volume to this percentage"
                                     Value="{Binding VolumeCap}"
                                     Width="280" />
                             </StackPanel>

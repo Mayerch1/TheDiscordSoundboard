@@ -21,6 +21,7 @@ namespace DicsordBot
     /// </summary>
     public partial class Hint : UserControl, INotifyPropertyChanged
     {
+#pragma warning disable CS1591
         private string errorMsg, solution;
         private bool ignoreWarning = false;
 
@@ -58,5 +59,7 @@ namespace DicsordBot
                 handler(null, new PropertyChangedEventArgs(info));
             }
         }
+
+#pragma warning restore CS1591
     }
 }

@@ -25,6 +25,8 @@ namespace DicsordBot
 
     public partial class MainWindow : Window, INotifyPropertyChanged
     {
+#pragma warning disable CS1591
+
         #region enums
 
         public enum LoopState { LoopNone, LoopOne, LoopAll, LoopNext, LoopReset };
@@ -204,10 +206,10 @@ namespace DicsordBot
             OnPropertyChanged("ClientAvatar");
 
             //get channel list to display in TreeView
-            await initChannelList();
+            initChannelList();
         }
 
-        private async Task initChannelList()
+        private async void initChannelList()
         {
             //receives channel list + displays it when menu is opened
             ChannelListManager channelMgr = new ChannelListManager();
@@ -494,7 +496,8 @@ namespace DicsordBot
             else
             {
                 sb = FindResource("OpenChannelList") as Storyboard;
-
+                //TODO: check for long delays
+                initChannelList();
                 IsChannelListOpened = true;
             }
 
@@ -509,27 +512,28 @@ namespace DicsordBot
                 var channel = (MyTreeItem)e.NewValue;
                 Handle.ChannelId = channel.id;
 
-                //TODO: reenable choice, if permanent or not
-
+                //set new channel and temp/perm parameter
+                string snackMsg;
                 if (channel.id != 0)
                 {
-                    string snackMsg;
-                    //if (checkBox_isPermanent.IsChecked == true){
-                    //    Handle.Bot.IsTempChannelId = false;
-                    //      snackMsg = "Selected (perm.)";
-                    //}
-                    //else{
-                    Handle.Bot.IsTempChannelId = true;
-                    snackMsg = "Selected (temp.)";
-                    //}
-                    SnackBarWarning_Show(snackMsg, Bot.BotHandle.SnackBarAction.None);
+                    if (box_IsPermanentChannel.IsChecked == true)
+                    {
+                        Handle.Bot.IsTempChannelId = false;
+                        snackMsg = "Using new channel permanently";
+                    }
+                    else
+                    {
+                        Handle.Bot.IsTempChannelId = true;
+                        snackMsg = "Using new channel the next time";
+                    }
                 }
                 else
                 {
-                    SnackBarWarning_Show("Default", Bot.BotHandle.SnackBarAction.None);
+                    snackMsg = "Joining to owner permanently";
                 }
+                SnackBarWarning_Show(snackMsg, Bot.BotHandle.SnackBarAction.None);
             }
-            catch { }
+            catch {/* do nothing if someting other than a channel is selected*/ }
 
             //get first expanded element, to save it for restart
         }
@@ -571,5 +575,7 @@ namespace DicsordBot
         }
 
         #endregion event stuff
+
+#pragma warning restore CS1591
     }
 }

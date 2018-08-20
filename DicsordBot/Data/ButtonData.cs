@@ -66,8 +66,15 @@ namespace DicsordBot.Data
 
         #region event
 
+        /// <summary>
+        /// PropertyChanged Event handler
+        /// </summary>
         public event PropertyChangedEventHandler PropertyChanged;
 
+        /// <summary>
+        /// propertychanged method, notifies the actual handler
+        /// </summary>
+        /// <param name="info"></param>
         private void OnPropertyChanged(string info)
         {
             if (PropertyChanged != null)

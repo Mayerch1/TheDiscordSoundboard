@@ -22,6 +22,8 @@ namespace DicsordBot
     /// </summary>
     public partial class UnhandledException : UserControl, INotifyPropertyChanged
     {
+#pragma warning disable CS1591
+
         private Exception ex;
         private string info;
         private int lineNumber;
@@ -29,6 +31,7 @@ namespace DicsordBot
         private string fileName;
         private string method;
         private string className;
+        private string exString = "A null referenced expeption was caught";
 
         public Exception Ex { get { return ex; } set { ex = value; OnPropertyChanged("Ex"); } }
         public string Info { get { return info; } set { info = value; OnPropertyChanged("Info"); } }
@@ -38,6 +41,8 @@ namespace DicsordBot
         public string FileName { get { return fileName; } set { fileName = value; OnPropertyChanged("FileName"); } }
         public string Method { get { return method; } set { method = value; OnPropertyChanged("Method"); } }
         public string Class { get { return className; } set { className = value; OnPropertyChanged("Class"); } }
+
+        public string ExString { get { return exString; } set { exString = value; OnPropertyChanged("ExString"); } }
 
         public List<MyStack> StackTrace { get; set; }
         public List<string> MethodTrace { get; set; }
@@ -67,13 +72,35 @@ namespace DicsordBot
                 Class = frame.GetMethod().DeclaringType.ToString();
 
                 StackTraceTemplate.ItemsSource = StackTrace;
+
+                ExString = "Occured when: " + Info + "\n";
+                ExString += "Error: " + Ex.Message + "\n";
+
+                ExString += "--Developer Information--\n";
+                ExString += "Stack: " + Class + "\n";
+                ExString += "File: " + FileName + "\n";
+                ExString += "Method: " + Method + "\n";
+                ExString += "Line: " + LineNumber + "\n";
+                ExString += "Column: " + ColumnNumber + "\n";
+
+                ExString += "--Complete Stacktrace--\n";
+                foreach (var lvl in StackTrace)
+                {
+                    ExString += lvl.Stack + "\n";
+                }
             }
+
             this.DataContext = this;
         }
 
         private void btn_report_Click(object sender, EventArgs e)
         {
-            System.Diagnostics.Process.Start("https://github.com/mayerch1/soundboard/issues/new/choose");
+            System.Diagnostics.Process.Start(Data.PersistentData.urlToGitRepo + "issues/new/choose");
+        }
+
+        private void btn_copy_Click(object sender, EventArgs e)
+        {
+            Clipboard.SetText(ExString);
         }
 
         public static void initWindow(Exception _ex, string _Info = "")
@@ -107,4 +134,6 @@ namespace DicsordBot
 
         public string Stack { get; set; }
     }
+
+#pragma warning restore CS1591
 }

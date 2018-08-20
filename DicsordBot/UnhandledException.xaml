@@ -6,11 +6,11 @@
              xmlns:local="clr-namespace:DicsordBot"
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              mc:Ignorable="d"
-             d:DesignHeight="450" d:DesignWidth="800">
+             d:DesignHeight="600" d:DesignWidth="700">
     <Grid Margin="20">
         <Grid.RowDefinitions>
-            <RowDefinition Height="3*" />
-            <RowDefinition Height="*" />
+            <RowDefinition Height="5*" />
+            <RowDefinition Height="2*" />
         </Grid.RowDefinitions>
 
         <Grid Grid.Row="0">
@@ -73,21 +73,52 @@
         </Grid>
 
         <Grid Grid.Row="1">
-            <StackPanel>
-                <StackPanel VerticalAlignment="Top">
-                    <TextBlock Margin="5, 5,5,20">
-                        Want to help to improve this application?
-                    </TextBlock>
-                    <materialDesign:SmartHint></materialDesign:SmartHint>
-                    <TextBlock  Margin="5" MinWidth="100">
-                        Head over to Github and report this error with an description, how to reproduce this error.
-                    </TextBlock>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
 
-                    <Button HorizontalAlignment="Left" Margin="5" Click="btn_report_Click" Style="{StaticResource MaterialDesignRaisedButton}" Foreground="{StaticResource PrimaryBackgroundBrush}">
-                        Github
-                    </Button>
+            <Grid Grid.Column="0">
+
+                <TextBlock HorizontalAlignment="Center" VerticalAlignment="Top">
+                        We're sorry for this error, but here's a cute dog.
+                </TextBlock>
+                <Image Margin="0,25,0,0" Stretch="Uniform" Source="/res/dog-waiting.jpg"  />
+            </Grid>
+            <Grid Grid.Column="1">
+
+                <StackPanel>
+                    <StackPanel VerticalAlignment="Top">
+                        <TextBlock Margin="5, 5,5,20">
+                        Want to help to improve this application?
+                        </TextBlock>
+                        <materialDesign:SmartHint></materialDesign:SmartHint>
+                        <TextBlock  Margin="5" MinWidth="100">
+                        Copy this error and head over to Github to report this error with an description, how to reproduce this error.
+                        </TextBlock>
+
+                        <StackPanel Orientation="Horizontal">
+                            <Button
+                                    Click="btn_copy_Click"
+                                    materialDesign:ShadowAssist.ShadowDepth="Depth0"
+                                    Background="{StaticResource PrimaryBackgroundBrush}"
+                                    BorderBrush="{StaticResource PrimaryBackgroundBrush}"
+                                    Style="{DynamicResource MaterialDesignFloatingActionMiniLightButton}"
+                                    ToolTip="MaterialDesignFloatingActionMiniLightButton">
+
+                                <materialDesign:PackIcon
+
+                                          Kind="ContentCopy"
+                                          Height="24"
+                                          Width="24" />
+                            </Button>
+                            <Button HorizontalAlignment="Left" Margin="5" Click="btn_report_Click" Style="{StaticResource MaterialDesignRaisedButton}" Foreground="{StaticResource PrimaryBackgroundBrush}">
+                                Github
+                            </Button>
+                        </StackPanel>
+                    </StackPanel>
                 </StackPanel>
-            </StackPanel>
+            </Grid>
         </Grid>
     </Grid>
 </UserControl>

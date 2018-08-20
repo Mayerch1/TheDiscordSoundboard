@@ -26,6 +26,11 @@ namespace DicsordBot.Data
         /// </remarks>
         public const int minVisibleButtons = 35;
 
+        /// <summary>
+        /// this is the url pointing at the git repository of this project. It is mainly referenced for help buttons
+        /// </summary>
+        public const string urlToGitRepo = "https://github.com/mayerch1/TheDiscordSoundboard/";
+
         #endregion consts
 
         #region persistend fields
@@ -182,8 +187,15 @@ namespace DicsordBot.Data
         /// </summary>
         public event ClientNameHandler ClientNameChanged;
 
+        /// <summary>
+        /// PropertyChanged Event handler
+        /// </summary>
         public event PropertyChangedEventHandler PropertyChanged;
 
+        /// <summary>
+        /// propertychanged method, notifies the actual handler
+        /// </summary>
+        /// <param name="info"></param>
         private void OnPropertyChanged(string info)
         {
             PropertyChangedEventHandler handler = PropertyChanged;

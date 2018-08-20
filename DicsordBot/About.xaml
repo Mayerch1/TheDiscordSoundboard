@@ -24,9 +24,9 @@
 
                         <StackPanel>
                             <TextBlock Margin="5" HorizontalAlignment="Center" FontWeight="Bold">
-                            Look at those sweet kitties, I wonder what happens, when you pet them.
+                            Look at those sweet kitties, aren't they adorable?
                             </TextBlock>
-                            <Button BorderBrush="{x:Null}" Background="{x:Null}" Height="350" Click="btn_Donate_Click">
+                            <Button BorderBrush="{x:Null}" Background="{x:Null}" Height="350">
                                 <Image MaxHeight="275" Source="/res/kitties.jpg" />
                             </Button>
                         </StackPanel>

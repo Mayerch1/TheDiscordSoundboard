@@ -21,6 +21,9 @@ namespace DicsordBot
     /// </summary>
     public partial class About : UserControl
     {
+        /// <summary>
+        /// constructor of class
+        /// </summary>
         public About()
         {
             InitializeComponent();

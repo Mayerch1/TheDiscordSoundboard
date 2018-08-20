@@ -145,6 +145,13 @@ namespace DicsordBot.Bot
 
         private DiscordSocketClient Client { get; set; }
         private IAudioClient AudioCl { get; set; }
+
+        /// <summary>
+        /// queue of files which are going to be played
+        /// </summary>
+        /// <remarks>
+        /// Contains data representation of Buttons, to also store settings like a custom loop-state
+        /// </remarks>
         protected Queue<Data.ButtonData> Queue { get; set; }
 
         private MediaFoundationReader Reader { get; set; }

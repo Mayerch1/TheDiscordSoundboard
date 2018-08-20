@@ -20,16 +20,28 @@ namespace DicsordBot
     /// </summary>
     public partial class Settings : UserControl
     {
+        /// <summary>
+        /// constructor for Settings class, sets Datacontext
+        /// </summary>
         public Settings()
         {
             InitializeComponent();
             this.DataContext = Handle.Data.Persistent;
         }
 
+        /// <summary>
+        /// eventhandler for changed text in the bot-token box
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void box_token_TextChanged(object sender, TextChangedEventArgs e)
         {
-            TextBox box_token = (TextBox)sender;
-            Handle.Token = box_token.Text;
+            Handle.Token = ((TextBox)sender).Text;
+        }
+
+        private void btn_Help_Click(object sender, RoutedEventArgs e)
+        {
+            System.Diagnostics.Process.Start(Data.PersistentData.urlToGitRepo + "tree/master/DiscordBot/doc/BotCreation.md");
         }
     }
 }

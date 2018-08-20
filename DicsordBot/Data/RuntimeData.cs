@@ -39,6 +39,9 @@ namespace DicsordBot.Data
 
         #endregion properties
 
+        /// <summary>
+        /// constructor of class
+        /// </summary>
         public RuntimeData()
         {
             //ButtonData.PropertyChanged += HandleButtonPropertyChanged;
@@ -225,8 +228,15 @@ namespace DicsordBot.Data
 
         #region events
 
+        /// <summary>
+        /// PropertyChanged Event handler
+        /// </summary>
         public event PropertyChangedEventHandler PropertyChanged;
 
+        /// <summary>
+        /// propertychanged method, notifies the actual handler
+        /// </summary>
+        /// <param name="info"></param>
         private void OnPropertyChanged(string info)
         {
             PropertyChangedEventHandler handler = PropertyChanged;

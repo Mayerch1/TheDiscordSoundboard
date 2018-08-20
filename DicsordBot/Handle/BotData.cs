@@ -18,7 +18,7 @@ namespace DicsordBot
         /// <summary>
         /// get the client object from a client list of all online clients
         /// </summary>
-        /// <param name="clientList">list of all clients on all servers (List<Server<Clients>>)</param>
+        /// <param name="clientList">list of all clients on all servers (<code>List&lt;Server&lt;Clients&gt;&gt;</code>)</param>
         /// <param name="id">id of requested client (owner)</param>
         /// <returns>client object of owner</returns>
         public SocketGuildUser extractClient(List<List<SocketGuildUser>> clientList, ulong id)

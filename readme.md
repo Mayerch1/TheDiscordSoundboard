@@ -55,46 +55,7 @@ This brings the advantage of an guaranteed availability of the service, combined
 ---
 #### How to create the Bot:
 
-You need to create a bot at [this](https://discordapp.com/login?redirect_to=%2Fdevelopers%2Fapplications%2Fme) page, following the steps below.
-
-1. Create the application
-   * Click the button "Create Application"
-   * Enter a name and description
-   * Save all changes
-
-![Create Application](doc/createApplication.png "Create Application") 
-![Create Application 2](doc/createApplication_2.png "Create Application 2") 
-
-</br>
-
-2. Create a bot user
-  * Select the 'bot' tab on the left panel
-  * Click the 'add' button
-  * Copy the token or remember it for later use
-  * Tick the 'Requires OAuth2 code' checkbox
-  * Save those changes
-  
-![Create Bot](doc/createBot.png "Create Bot") 
-![Create Bot 2](doc/createBot_2.png "Create Bot 2") 
-
-
-3. Generate a 'OAuth2 URL'
-   * Select the 'OAuth2' tab on the left panel
-   * Tick the 'bot' checkbox in the scope fields
-   * Select at least 'View Channels', 'Connect' and 'Speak' in the upcomming permissions field
-   * Open the URL inbetween the to fields, to invite the bot
-   
-![Create OAuth](doc/generateOAuth.png "Create OAuth") 
-![Create OAuth 2](doc/generateOAuth_2.png "Create OAuth 2") 
-
-     
-4. Invite it
-   * Select the Server to join
-   * Authorize the bot
-   
-![Invite](doc/inviteBot.png "Invite") 
-
-You might also take a look at [this](https://github.com/reactiflux/discord-irc/wiki/Creating-a-discord-bot-&-getting-a-token) useful instruction
+If you don't already know the procedure, check out [this](doc/BotCreation.md) instruction ([doc/BotCreation.md](doc/BotCreation.md))
 
 ---
 
@@ -112,18 +73,25 @@ If you compile the project by yourself, the opus and libsodium dll's won't get g
 
 #### How to use the Bot
 
->#### In the future, there's an short introduction sequence planned, which explains the following steps on the first programm startup.
+>##### In the future, there's an short introduction sequence planned, which explains the following steps on the first programm startup.
 <br>
 
-Before you can start to stream a file, you need to specify the token, gathered in step 2 when creating the bot.
+Before you can start to stream a file, you need to specify the ```token```, gathered in the first step when creating the bot.
 
 For this you need to enter the settings Menu and enter the value in the corresponding field
-
 
 ![Enter your token](doc/enterToken.png "Enter Token") 
 
 
-On the settings-page, you can set other properties on your desire, e.g. your username for auto-join, the path to the stored settings, ...
+When entered the username and your token you can go ahead and edit the buttons on your desire.
+Multiple button presses will add it to a queue.
+
+When no username is specified, you will have to select a channel on the top right corner, by clicking on the circle.
+![Set Buttons and Channel](doc/ButtonChannelSettings.png "Button Settings")
+
+
+
+
 
 <br>
 <br>

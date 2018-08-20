@@ -17,6 +17,9 @@ namespace DicsordBot.Bot
     /// </remarks>
     public class BotHandle : Bot
     {
+        /// <summary>
+        /// constructor of class
+        /// </summary>
         public BotHandle()
         {
         }
@@ -71,10 +74,14 @@ namespace DicsordBot.Bot
         /// </summary>
         public ClientWarningThrown ClientWarning;
 
+#pragma warning disable CS1591
+
         /// <summary>
-        /// SnackBarAction enum, passed into delegate for informing eventhandler on requested information
+        ///  SnackBarAction enum, passed into delegate for informing eventhandler on requested information
         /// </summary>
         public enum SnackBarAction { Settings, None };
+
+#pragma warning restore CS1591
 
         /// <summary>
         /// SnackBarWarningThrown delegate
