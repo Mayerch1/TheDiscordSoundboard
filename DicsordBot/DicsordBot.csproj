@@ -54,7 +54,7 @@
     <ApplicationIcon>res\speaker.ico</ApplicationIcon>
   </PropertyGroup>
   <PropertyGroup>
-    <SignManifests>false</SignManifests>
+    <SignManifests>true</SignManifests>
   </PropertyGroup>
   <PropertyGroup>
     <ManifestCertificateThumbprint>77824901CA1D4D0FCA0B50837263447F7C811A2E</ManifestCertificateThumbprint>
