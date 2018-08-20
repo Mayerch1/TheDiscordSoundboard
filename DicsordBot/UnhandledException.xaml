@@ -1,0 +1,124 @@
+﻿<UserControl x:Class="DicsordBot.UnhandledException"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:local="clr-namespace:DicsordBot"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             mc:Ignorable="d"
+             d:DesignHeight="600" d:DesignWidth="700">
+    <Grid Margin="20">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="5*" />
+            <RowDefinition Height="2*" />
+        </Grid.RowDefinitions>
+
+        <Grid Grid.Row="0">
+            <ScrollViewer>
+                <StackPanel>
+
+                    <materialDesign:ColorZone Background="{StaticResource PrimaryBackgroundBrush}" materialDesign:ShadowAssist.ShadowDepth="Depth1" materialDesign:ShadowAssist.ShadowEdges="Bottom" Margin="5" Height="50">
+                        <TextBlock x:Name="ErrorBox" TextWrapping="Wrap"  Text="An untreated error occured" VerticalAlignment="Center"  Margin="20,0,0,0" FontSize="18" materialDesign:ShadowAssist.ShadowDepth="Depth2" FontWeight="Bold" Foreground="#262626" />
+                    </materialDesign:ColorZone>
+
+                    <materialDesign:ColorZone Background="{StaticResource PrimaryBackgroundBrush}" materialDesign:ShadowAssist.ShadowDepth="Depth2" materialDesign:ShadowAssist.ShadowEdges="All" Margin="5,5,5,5" Height="Auto">
+                        <StackPanel>
+                            <StackPanel>
+                                <TextBlock FontWeight="Bold">Occured when:</TextBlock>
+                                <TextBlock Text="{Binding Info}" />
+                            </StackPanel>
+                            <Separator Margin="0,10,0,5" />
+                            <StackPanel>
+                                <TextBlock FontWeight="Bold">Error:</TextBlock>
+                                <TextBlock Text="{Binding Ex.Message}" />
+                            </StackPanel>
+                        </StackPanel>
+                    </materialDesign:ColorZone>
+
+                    <materialDesign:ColorZone Background="{StaticResource PrimaryBackgroundBrush}" materialDesign:ShadowAssist.ShadowDepth="Depth2" materialDesign:ShadowAssist.ShadowEdges="All" Margin="5,5,5,5" Height="Auto">
+                        <StackPanel>
+                            <Expander HorizontalAlignment="Stretch" Header="Developer Information">
+                                <StackPanel>
+                                    <TextBlock FontWeight="Bold">Stack</TextBlock>
+                                    <TextBlock Text="{Binding Class}" />
+
+                                    <TextBlock FontWeight="Bold">File Name</TextBlock>
+                                    <TextBlock Text="{Binding FileName}" />
+
+                                    <TextBlock FontWeight="Bold">Method</TextBlock>
+                                    <TextBlock Text="{Binding Method}" />
+
+                                    <TextBlock FontWeight="Bold">Line Number</TextBlock>
+                                    <TextBlock Text="{Binding LineNumber}" />
+
+                                    <TextBlock FontWeight="Bold">Column Number</TextBlock>
+                                    <TextBlock Text="{Binding ColumnNumber}" />
+
+                                    <Expander HorizontalAlignment="Left" Header="Complete StackTrace">
+
+                                        <ItemsControl x:Name="StackTraceTemplate">
+                                            <ItemsControl.ItemTemplate>
+                                                <DataTemplate>
+                                                    <TextBlock Text="{Binding Stack}" />
+                                                </DataTemplate>
+                                            </ItemsControl.ItemTemplate>
+                                        </ItemsControl>
+                                    </Expander>
+                                </StackPanel>
+                            </Expander>
+                        </StackPanel>
+                    </materialDesign:ColorZone>
+                </StackPanel>
+            </ScrollViewer>
+        </Grid>
+
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+
+            <Grid Grid.Column="0">
+
+                <TextBlock HorizontalAlignment="Center" VerticalAlignment="Top">
+                        We're sorry for this error, but here's a cute dog.
+                </TextBlock>
+                <Image Margin="0,25,0,0" Stretch="Uniform" Source="/res/dog-waiting.jpg"  />
+            </Grid>
+            <Grid Grid.Column="1">
+
+                <StackPanel>
+                    <StackPanel VerticalAlignment="Top">
+                        <TextBlock Margin="5, 5,5,20">
+                        Want to help to improve this application?
+                        </TextBlock>
+                        <materialDesign:SmartHint></materialDesign:SmartHint>
+                        <TextBlock  Margin="5" MinWidth="100">
+                        Copy this error and head over to Github to report this error with an description, how to reproduce this error.
+                        </TextBlock>
+
+                        <StackPanel Orientation="Horizontal">
+                            <Button
+                                    Click="btn_copy_Click"
+                                    materialDesign:ShadowAssist.ShadowDepth="Depth0"
+                                    Background="{StaticResource PrimaryBackgroundBrush}"
+                                    BorderBrush="{StaticResource PrimaryBackgroundBrush}"
+                                    Style="{DynamicResource MaterialDesignFloatingActionMiniLightButton}"
+                                    ToolTip="MaterialDesignFloatingActionMiniLightButton">
+
+                                <materialDesign:PackIcon
+
+                                          Kind="ContentCopy"
+                                          Height="24"
+                                          Width="24" />
+                            </Button>
+                            <Button HorizontalAlignment="Left" Margin="5" Click="btn_report_Click" Style="{StaticResource MaterialDesignRaisedButton}" Foreground="{StaticResource PrimaryBackgroundBrush}">
+                                Github
+                            </Button>
+                        </StackPanel>
+                    </StackPanel>
+                </StackPanel>
+            </Grid>
+        </Grid>
+    </Grid>
+</UserControl>
