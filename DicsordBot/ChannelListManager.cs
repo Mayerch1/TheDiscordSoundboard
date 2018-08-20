@@ -72,7 +72,6 @@ namespace DicsordBot
                 errorBranch.Items.Add("Check Token");
                 errorBranch.Items.Add("Check Permissions");
                 errorBranch.Items.Add("Check Status of Discord Server");
-
                 tree.Items.Add(errorBranch);
             }
         }

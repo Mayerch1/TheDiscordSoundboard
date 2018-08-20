@@ -513,7 +513,7 @@ namespace DicsordBot
                 Handle.ChannelId = channel.id;
 
                 //set new channel and temp/perm parameter
-                string snackMsg;
+                string snackMsg = "";
                 if (channel.id != 0)
                 {
                     if (box_IsPermanentChannel.IsChecked == true)
