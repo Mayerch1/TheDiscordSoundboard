@@ -64,9 +64,12 @@
         <Grid x:Name="grd_ChannelList" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="0,60,20,0" Width="0" Height="0" Grid.ZIndex="1">
             <!-- is closed on startup-->
             <materialDesign:ColorZone x:Name="col_ChannelList" materialDesign:ShadowAssist.ShadowDepth="Depth2" materialDesign:ShadowAssist.ShadowEdges="Top" Height="400" Width="250">
-                <ScrollViewer PanningMode="VerticalOnly">
-                    <TreeView x:Name="tree_channelList" SelectedItemChanged="tree_Channel_SelectedItemChanged">
-                    </TreeView>
+                <ScrollViewer
+                    PanningMode="VerticalOnly"
+                    PreviewMouseWheel="scroll_channelList_PreviewMouseWheel"
+                    HorizontalScrollBarVisibility="Disabled"
+                    VerticalScrollBarVisibility="Hidden">
+                    <TreeView x:Name="tree_channelList" SelectedItemChanged="tree_channelList_SelectedItemChanged" />
                 </ScrollViewer>
             </materialDesign:ColorZone>
         </Grid>

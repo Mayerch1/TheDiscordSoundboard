@@ -338,7 +338,7 @@ namespace DicsordBot
             Handle.Bot.ClientWarning += Handle.ClientWarning_Show;
             Handle.Bot.SnackbarWarning += SnackBarWarning_Show;
 
-            AddHandler(TreeViewItem.ExpandedEvent, new RoutedEventHandler(tree_ItemExpanded));
+            AddHandler(TreeViewItem.ExpandedEvent, new RoutedEventHandler(tree_channelList_ItemExpanded));
 
             //event Handler for Stream-state of bot
             Handle.Bot.StreamStateChanged += delegate (bool newState)
@@ -501,7 +501,7 @@ namespace DicsordBot
             sb.Begin();
         }
 
-        private void tree_Channel_SelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
+        private void tree_channelList_SelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
         {
             //get new selected tree
             try
@@ -534,9 +534,20 @@ namespace DicsordBot
             //get first expanded element, to save it for restart
         }
 
-        private void tree_ItemExpanded(object sender, RoutedEventArgs e)
+        private void tree_channelList_ItemExpanded(object sender, RoutedEventArgs e)
         {
-            Handle.Data.Persistent.SelectedServerIndex = (int)((TreeViewItem)e.Source).Tag;
+            TreeViewItem treeItem = e.Source as TreeViewItem;
+
+            if (treeItem.Tag != null)
+                Handle.Data.Persistent.SelectedServerIndex = (int)treeItem.Tag;
+        }
+
+        private void scroll_channelList_PreviewMouseWheel(object sender, MouseWheelEventArgs e)
+        {
+            //intercept scrollevent and make scrollviewer accept the wheel
+            ScrollViewer scv = (ScrollViewer)sender;
+            scv.ScrollToVerticalOffset(scv.VerticalOffset - e.Delta / 10);
+            e.Handled = true;
         }
 
         private void Window_PreviewMouseDown(object sender, MouseButtonEventArgs e)

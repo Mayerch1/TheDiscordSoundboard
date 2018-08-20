@@ -1,6 +1,4 @@
 
-## THIS BRANCH IS UNDER CONSTRUCTION, AND NOT FULLY FUNCTIONAL
----
 <img src="DicsordBot/res/speaker.png" alt="drawing" style="width:100px;"/>
 
 

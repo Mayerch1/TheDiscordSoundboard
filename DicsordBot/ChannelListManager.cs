@@ -72,12 +72,9 @@ namespace DicsordBot
                 errorBranch.Items.Add("Check Token");
                 errorBranch.Items.Add("Check Permissions");
                 errorBranch.Items.Add("Check Status of Discord Server");
+
                 tree.Items.Add(errorBranch);
             }
-
-            //TODO: display last selection
-            //if (Handle.Data.Persistent.SelectedServerIndex < serverSelector.Items.Count)
-            //    serverSelector.SelectedIndex = Handle.Data.Persistent.SelectedServerIndex;
         }
     }
 
