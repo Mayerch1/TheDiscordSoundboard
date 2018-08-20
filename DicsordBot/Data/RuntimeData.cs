@@ -132,9 +132,9 @@ namespace DicsordBot.Data
         {
             Persistent.SettingsPath = Properties.Settings.Default.Path;
 
-            if (Persistent.SettingsPath == null || Persistent.SettingsPath == "")
+            if (String.IsNullOrWhiteSpace(Persistent.SettingsPath))
             {
-                Persistent.SettingsPath = System.Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\DiscordBot";
+                Persistent.SettingsPath = System.Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\DiscordSoundboard";
             }
 
             if (System.IO.File.Exists(Persistent.SettingsPath + _file))
