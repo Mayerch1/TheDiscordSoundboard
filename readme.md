@@ -56,7 +56,7 @@ This brings the advantage of an guaranteed availability of the service, combined
 ---
 #### How to create the Bot:
 
-If you don't already know the procedure, check out [this](wiki/Configure-The-Bot) instruction in the wiki ([wiki/Configure-The-Bot.md](wiki/Configure-The-Bot))
+If you don't already know the procedure, check out [this](https://github.com/Mayerch1/TheDiscordSoundboard/wiki/Configure-The-Bot) instruction in the wiki ([wiki/Configure-The-Bot.md](https://github.com/Mayerch1/TheDiscordSoundboard/wiki/Configure-The-Bot))
 
 ---
 
@@ -64,7 +64,7 @@ If you don't already know the procedure, check out [this](wiki/Configure-The-Bot
 
 We've now got a new installer for this application.
 
-You only need to [download](releases/latest) and execute the install wizard.
+You only need to [download](https://github.com/Mayerch1/TheDiscordSoundboard/releases/latest) and execute the install wizard.
 Follow all steps and instruction and everything will be set up correctly.
 
 
@@ -77,7 +77,7 @@ If you compile the project by yourself, the opus and libsodium dll's won't get g
 >##### In the future, there's maybe coming an introduction sequence, which explains all important steps on the first programm startup.
 <br>
 
-To see, how to set up the application on it's first startup, have a look at [this](wiki/First-Startup) wiki page ([wiki/First-Startup](wiki/First-Startup)).
+To see, how to set up the application on it's first startup, have a look at [this](https://github.com/Mayerch1/TheDiscordSoundboard/wiki/First-Startup) wiki page ([wiki/First-Startup](https://github.com/Mayerch1/TheDiscordSoundboard/wiki/First-Startup)).
 
 
 ---
