@@ -31,6 +31,11 @@ namespace DicsordBot.Data
         /// </summary>
         public const string urlToGitRepo = "https://github.com/mayerch1/TheDiscordSoundboard/";
 
+        /// <summary>
+        /// version of this build, refers to the github release number
+        /// </summary>
+        public const string version = "2.0.0";
+
         #endregion consts
 
         #region persistend fields

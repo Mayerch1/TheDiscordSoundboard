@@ -200,6 +200,7 @@
     <Compile Include="UnhandledException.xaml.cs">
       <DependentUpon>UnhandledException.xaml</DependentUpon>
     </Compile>
+    <Compile Include="UpdateChecker.cs" />
     <Page Include="About.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

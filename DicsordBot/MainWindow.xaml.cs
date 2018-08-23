@@ -133,8 +133,8 @@ namespace DicsordBot
 
             DataContext = this;
 
+            //init snackbar msg
             var msgQueue = new SnackbarMessageQueue(TimeSpan.FromMilliseconds(3500));
-
             snackBar_Hint.MessageQueue = (msgQueue);
 
             if (Handle.Data.Persistent.IsFirstStart)
@@ -146,7 +146,6 @@ namespace DicsordBot
             else
             {
                 initAsync();
-
                 initDelayedAsync();
             }
         }
@@ -172,6 +171,10 @@ namespace DicsordBot
             Handle.ChannelId = Handle.Data.Persistent.ChannelId;
 
             await Handle.Bot.connectToServerAsync();
+            if (await UpdateChecker.CheckForUpdate())
+            {
+                SnackBarWarning_Show("A newer version available", Bot.BotHandle.SnackBarAction.Update);
+            }
         }
 
         private void initTimer()
@@ -389,6 +392,10 @@ namespace DicsordBot
             {
                 case Bot.BotHandle.SnackBarAction.Settings:
                     handler = btn_Settings_Click;
+                    break;
+
+                case Bot.BotHandle.SnackBarAction.Update:
+                    handler = UpdateChecker.OpenUpdatePage;
                     break;
 
                 default:

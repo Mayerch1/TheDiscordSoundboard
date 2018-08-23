@@ -79,7 +79,7 @@ namespace DicsordBot.Bot
         /// <summary>
         ///  SnackBarAction enum, passed into delegate for informing eventhandler on requested information
         /// </summary>
-        public enum SnackBarAction { Settings, None };
+        public enum SnackBarAction { Settings, Update, None };
 
 #pragma warning restore CS1591
 
