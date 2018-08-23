@@ -173,7 +173,7 @@ namespace DicsordBot
             await Handle.Bot.connectToServerAsync();
             if (await UpdateChecker.CheckForUpdate())
             {
-                SnackBarWarning_Show("A newer version available", Bot.BotHandle.SnackBarAction.Update);
+                SnackBarWarning_Show("A newer version is available", Bot.BotHandle.SnackBarAction.Update);
             }
         }
 
