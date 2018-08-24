@@ -43,6 +43,7 @@ namespace DicsordBot.Data
         private ObservableCollection<ButtonData> btnList = new ObservableCollection<ButtonData>();
 
         private bool isFirstStart = true;
+
         private string settingsPath;
         private int highestButtonToSave = -1;
         private ulong clientId;
