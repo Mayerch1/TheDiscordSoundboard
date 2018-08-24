@@ -41,7 +41,7 @@ namespace DicsordBot
 
         private void btn_Help_Click(object sender, RoutedEventArgs e)
         {
-            System.Diagnostics.Process.Start(Data.PersistentData.urlToGitRepo + "tree/master/doc/BotCreation.md");
+            System.Diagnostics.Process.Start(Data.PersistentData.urlToGitRepo + "wiki/Settings#application");
         }
     }
 }

@@ -4865,7 +4865,7 @@
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:The Discord Soundboard (TDS)"
         "ProductCode" = "8:{62E737D0-4DFC-4A7F-B512-B458D22A878E}"
-        "PackageCode" = "8:{1B203EA2-0E61-4BDC-8A79-F88667288616}"
+        "PackageCode" = "8:{26130927-0140-4D49-9977-9E39A0FE2906}"
         "UpgradeCode" = "8:{AB825733-B479-49CD-8798-18CB61899CF5}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"
@@ -5397,7 +5397,7 @@
                             "ContextData" = "8:"
                             "Attributes" = "3:0"
                             "Setting" = "3:2"
-                            "Value" = "8:"
+                            "Value" = "8:_BFF3AE574C7D4127B8064B3C5C6850E3"
                             "UsePlugInResources" = "11:TRUE"
                             }
                             "Sunken"
@@ -5666,7 +5666,7 @@
                             "ContextData" = "8:"
                             "Attributes" = "3:0"
                             "Setting" = "3:2"
-                            "Value" = "8:"
+                            "Value" = "8:_BFF3AE574C7D4127B8064B3C5C6850E3"
                             "UsePlugInResources" = "11:TRUE"
                             }
                             "Sunken"
