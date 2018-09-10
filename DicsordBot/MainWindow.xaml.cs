@@ -122,13 +122,17 @@ namespace DicsordBot
 
             LastVolume = Volume;
 
+            //events
             registerEvents();
             registerEmbedEvents(ButtonUI);
 
+            //file watcher
+            FileWatcher.StartMonitor(Handle.Data.Persistent.MediaSources);
+
             initTimer();
 
+            //ui
             setVolumeIcon();
-
             btn_Repeat.Content = FindResource("IconRepeatOff");
 
             DataContext = this;
@@ -137,6 +141,7 @@ namespace DicsordBot
             var msgQueue = new SnackbarMessageQueue(TimeSpan.FromMilliseconds(3500));
             snackBar_Hint.MessageQueue = (msgQueue);
 
+            //first startup sequence
             if (Handle.Data.Persistent.IsFirstStart)
             {
                 Handle.Data.Persistent.IsFirstStart = false;

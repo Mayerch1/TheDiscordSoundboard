@@ -59,9 +59,13 @@ namespace DicsordBot
             OpenFileDialog openFileDialog = new OpenFileDialog();
 
             openFileDialog.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyMusic);
-            openFileDialog.Filter = "all supported types (*.mp3/*.wav/*.asf/*.wma/*.wmv/*.sami/*.smi/*.3g2/*.3gp/*.3gp2/*.3gpp/*.aac/*.adts/*.m4a/*.m4v/*.mov/*.mp4)|*.mp3;*.wav;*.asf;*.wma;*.wmv;*.sami;*.smi;*.3g2;*.3gp;*.3gp2;*.3gpp;*.aac;*.adts;*.m4a;*.m4v;*.mov;*.mp4" +
+
+            string allFormats = "*" + Handle.Data.Persistent.supportedFormats.Aggregate((i, j) => i + ";" + "*" + j);
+            string allFormatString = "all supported types |" + allFormats;
+
+            openFileDialog.Filter = allFormatString +
                                     "|mp3/wav files (*.mp3/*.wav)|*.mp3;*.wav" +
-                                     "|all files (*.*)|*.*";
+                                    "|all files (*.*)|*.*";
 
             if (openFileDialog.ShowDialog() == true && openFileDialog.CheckFileExists)
             {

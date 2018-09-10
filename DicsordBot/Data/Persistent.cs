@@ -36,11 +36,17 @@ namespace DicsordBot.Data
         /// </summary>
         public const string version = "2.0.0";
 
+        /// <summary>
+        /// a list with all supported formats (only ending)
+        /// </summary>
+        public readonly List<string> supportedFormats = new List<string> { "mp3", "wav", "asf", "wma", "wmv", "sami", "smi", "3g2", "3gp", "3pg2", "3pgg", "aac", "adts", "m4a", "m4v", "mov", "mp4" };
+
         #endregion consts
 
         #region persistend fields
 
         private ObservableCollection<ButtonData> btnList = new ObservableCollection<ButtonData>();
+        private ObservableCollection<string> mediaSources = new ObservableCollection<string>();
 
         private bool isFirstStart = true;
 
@@ -169,6 +175,14 @@ namespace DicsordBot.Data
         /// IgnoreClientWarning property
         /// </summary>
         public bool IgnoreClientWarning { get { return ignoreClientWarning; } set { ignoreClientWarning = value; OnPropertyChanged("IgnoreClientWarning"); } }
+
+        /// <summary>
+        /// MediaSources property
+        /// </summary>
+        /// <value>
+        /// list of all locations to monitor for files
+        /// </value>
+        public ObservableCollection<string> MediaSources { get { return mediaSources; } set { mediaSources = value; OnPropertyChanged("MediaSources"); } }
 
         /// <summary>
         /// BtnList property
