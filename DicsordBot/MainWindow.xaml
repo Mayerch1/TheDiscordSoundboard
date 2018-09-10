@@ -116,7 +116,7 @@
                                     Background="{StaticResource PrimaryBackgroundBrush}"
                                     BorderBrush="{StaticResource PrimaryBackgroundBrush}"
                                     Style="{StaticResource MaterialDesignFloatingActionMiniLightButton}"
-                                    ToolTip="MaterialDesignFloatingActionMiniLightButton"
+                                    ToolTip="Pervious"
                                     HorizontalAlignment="Left">
 
                                         <materialDesign:PackIcon
@@ -140,7 +140,7 @@
                                     Background="{StaticResource PrimaryBackgroundBrush}"
                                     BorderBrush="{StaticResource PrimaryBackgroundBrush}"
                                     Style="{DynamicResource MaterialDesignFloatingActionMiniLightButton}"
-                                    ToolTip="MaterialDesignFloatingActionMiniLightButton">
+                                            ToolTip="Next">
 
                                         <materialDesign:PackIcon
 
@@ -152,7 +152,7 @@
                                     <Button x:Name="btn_Repeat" HorizontalAlignment="Right"
                                         Click="btn_Repeat_Click"
                                       Style="{StaticResource MaterialDesignFloatingActionMiniLightButton}"
-                                      ToolTip="MaterialDesignFloatingActionMiniLightButton"
+                                      ToolTip="Repeat"
                                         Background="White"
                                         BorderBrush="White"
                                         materialDesign:ShadowAssist.ShadowDepth="Depth0">
@@ -208,7 +208,7 @@
                                     <ToggleButton x:Name="btn_Earrape" HorizontalAlignment="Left"
                                        Click="btn_Earrape_Click"
                                         Style="{StaticResource MaterialDesignFlatToggleButton}"
-                                        ToolTip="MaterialDesignFlatToggleButton">
+                                        ToolTip="Boost">
 
                                         <materialDesign:PackIcon
                                         Kind="Nuke"
@@ -222,7 +222,7 @@
                                     Background="{StaticResource PrimaryBackgroundBrush}"
                                     BorderBrush="{StaticResource PrimaryBackgroundBrush}"
                                     Style="{StaticResource MaterialDesignFloatingActionMiniLightButton}"
-                                    ToolTip="MaterialDesignFloatingActionMiniLightButton">
+                                    ToolTip="Mute">
 
                                         <materialDesign:PackIcon
                                           Margin="5,0,5,0"
