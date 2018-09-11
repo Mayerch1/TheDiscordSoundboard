@@ -78,6 +78,8 @@ namespace DicsordBot
             {
                 indexFolder(dir, ignoreDuplicates);
             }
+            //sort by name
+            Handle.Data.Files = new ObservableCollection<Data.FileData>(Handle.Data.Files.OrderBy(o => o.Name));
         }
 
         /// <summary>

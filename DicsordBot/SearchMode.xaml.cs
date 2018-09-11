@@ -27,6 +27,10 @@ namespace DicsordBot
         private ObservableCollection<Data.FileData> filteredFiles;
         public ObservableCollection<Data.FileData> FilteredFiles { get { return filteredFiles; } set { filteredFiles = value; OnPropertyChanged("FilteredFiles"); } }
 
+        public delegate void ListItemClickedHandler(uint tag);
+
+        public ListItemClickedHandler ListItemClicked;
+
         public SearchMode()
         {
             //make deep copy
@@ -38,6 +42,8 @@ namespace DicsordBot
 
         private void filterListBox(string filter)
         {
+            //clear list and apply filter
+
             if (!string.IsNullOrEmpty(filter))
             {
                 FilteredFiles.Clear();
@@ -63,14 +69,6 @@ namespace DicsordBot
             filterListBox(((TextBox)sender).Text);
         }
 
-        private void scroll_channelList_PreviewMouseWheel(object sender, MouseWheelEventArgs e)
-        {
-            //intercept scrollevent and make scrollviewer accept the wheel
-            ScrollViewer scv = (ScrollViewer)sender;
-            scv.ScrollToVerticalOffset(scv.VerticalOffset - e.Delta / 10);
-            e.Handled = true;
-        }
-
         public event PropertyChangedEventHandler PropertyChanged;
 
         private void OnPropertyChanged(string info)
@@ -82,6 +80,13 @@ namespace DicsordBot
         }
 
         #endregion event
+
+        private void stack_list_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            uint tag = (uint)((StackPanel)sender).Tag;
+
+            ListItemClicked(tag);
+        }
     }
 
 #pragma warning restore CS1591

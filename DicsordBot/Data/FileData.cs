@@ -14,10 +14,28 @@ namespace DicsordBot.Data
     [Serializable()]
     public class FileData : INotifyPropertyChanged
     {
+        private static uint globalId = 0;
+
+        /// <summary>
+        /// constructor, sets the unique id
+        /// </summary>
+        public FileData()
+        {
+            id = globalId++;
+        }
+
         private string name = "";
         private string path = "";
         private string author = "";
+
+        private readonly uint id;
+
         private TimeSpan length = TimeSpan.Zero;
+
+        /// <summary>
+        /// unique id of object
+        /// </summary>
+        public uint Id { get { return id; } }
 
         /// <summary>
         /// Name of file

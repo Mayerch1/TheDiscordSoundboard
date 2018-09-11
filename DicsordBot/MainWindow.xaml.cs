@@ -332,11 +332,16 @@ namespace DicsordBot
 
         #region event stuff
 
-        private void registerEmbedEvents(ButtonUI btnUI)
+        private void registerEmbedEvents(object embed)
         {
             //subsribe to intsant button event
+            var btnUI = embed as ButtonUI;
+            var searchMode = embed as SearchMode;
 
-            btnUI.InstantButtonClicked += btn_InstantButton_Clicked;
+            if (btnUI != null)
+                btnUI.InstantButtonClicked += btn_InstantButton_Clicked;
+            else if (searchMode != null)
+                searchMode.ListItemClicked += list_Item_Clicked;
         }
 
         //call only once
@@ -413,9 +418,31 @@ namespace DicsordBot
             snackBar_Hint.MessageQueue.Enqueue(msg, optionMsg, handler);
         }
 
-        private async void btn_InstantButton_Clicked(int btnListIndex)
+        private void btn_InstantButton_Clicked(int btnListIndex)
         {
-            await Handle.Bot.enqueueAsync(Handle.Data.Persistent.BtnList[btnListIndex]);
+            triggerBotReplay(Handle.Data.Persistent.BtnList[btnListIndex]);
+        }
+
+        private void list_Item_Clicked(uint index)
+        {
+            //search for file with tag
+            foreach (var file in Handle.Data.Files)
+            {
+                if (file.Id == index)
+                {
+                    //create ButtonData to feed to bot
+                    Data.ButtonData data = new Data.ButtonData();
+                    data.Name = file.Name;
+                    data.File = file.Path;
+
+                    triggerBotReplay(data);
+                }
+            }
+        }
+
+        private async void triggerBotReplay(Data.ButtonData data)
+        {
+            await Handle.Bot.enqueueAsync(data);
             //IDEA: skip when playlist, don't skip when instant buttons
             if (!Handle.Bot.IsStreaming)
                 await Handle.Bot.resumeStream();
@@ -489,7 +516,10 @@ namespace DicsordBot
         private void btn_Search_Click(object sender, RoutedEventArgs e)
         {
             MainGrid.Child = null;
-            MainGrid.Child = new SearchMode();
+            SearchMode searchMode = new SearchMode();
+            registerEmbedEvents(searchMode);
+
+            MainGrid.Child = searchMode;
         }
 
         private void btn_ToggleMenu_Click(object sender, RoutedEventArgs e)

@@ -20,7 +20,9 @@
             <ListBox x:Name="list_All" ItemsSource="{Binding FilteredFiles}">
                 <ListBox.ItemTemplate>
                     <DataTemplate>
-                        <Label Content="{Binding Name}" />
+                        <StackPanel Orientation="Horizontal" Tag="{Binding Id}" MouseLeftButtonDown="stack_list_MouseLeftButtonDown">
+                            <Label Content="{Binding Name}" />
+                        </StackPanel>
                     </DataTemplate>
                 </ListBox.ItemTemplate>
             </ListBox>
