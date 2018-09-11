@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Serialization;
 
 namespace DicsordBot.Data
 {
@@ -36,7 +37,17 @@ namespace DicsordBot.Data
         /// <summary>
         /// the dateTime of the last replay
         /// </summary>
+        [XmlIgnore]
         public TimeSpan Length { get { return length; } set { length = value; OnPropertyChanged("Length"); } }
+
+        /// <summary>
+        /// for serializing the Timespan
+        /// </summary>
+        public long LengthTicks
+        {
+            get { return length.Ticks; }
+            set { length = new TimeSpan(value); }
+        }
 
         #region event
 

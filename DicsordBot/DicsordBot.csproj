@@ -202,6 +202,9 @@
     <Compile Include="Hint.xaml.cs">
       <DependentUpon>Hint.xaml</DependentUpon>
     </Compile>
+    <Compile Include="SearchMode.xaml.cs">
+      <DependentUpon>SearchMode.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Settings.xaml.cs">
       <DependentUpon>Settings.xaml</DependentUpon>
     </Compile>
@@ -238,6 +241,10 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="SearchMode.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Settings.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

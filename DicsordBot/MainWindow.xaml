@@ -264,6 +264,13 @@
                         </StackPanel>
                     </Button>
 
+                    <Button Height="75" Margin="0,0,0,0" Foreground="Black" Background="{StaticResource PrimaryForegroundBrush}" BorderBrush="{StaticResource PrimaryForegroundBrush}" materialDesign:ShadowAssist.ShadowDepth="Depth0" Click="btn_Search_Click"  HorizontalContentAlignment="Left">
+                        <StackPanel Orientation="Horizontal">
+                            <materialDesign:PackIcon Kind="Magnify" Height="35" Width="35" VerticalAlignment="Center" />
+                            <TextBlock Text="Search" FontSize="20"  Margin="10,0,0,0" VerticalAlignment="Center" />
+                        </StackPanel>
+                    </Button>
+
                     <Button Height="75" Margin="0,0,0,0" Foreground="Black" Background="{StaticResource PrimaryForegroundBrush}" BorderBrush="{StaticResource PrimaryForegroundBrush}" materialDesign:ShadowAssist.ShadowDepth="Depth0" Click="btn_Settings_Click" HorizontalContentAlignment="Left">
 
                         <StackPanel Orientation="Horizontal">

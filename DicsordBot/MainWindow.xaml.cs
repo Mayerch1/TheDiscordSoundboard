@@ -153,6 +153,8 @@ namespace DicsordBot
                 initAsync();
                 initDelayedAsync();
             }
+
+            FileWatcher.indexFiles(Handle.Data.Persistent.MediaSources);
         }
 
         private void MainWindow_Closing(object sender, CancelEventArgs e)
@@ -482,6 +484,12 @@ namespace DicsordBot
             ButtonUI btnUI = new ButtonUI();
             registerEmbedEvents(btnUI);
             MainGrid.Child = btnUI;
+        }
+
+        private void btn_Search_Click(object sender, RoutedEventArgs e)
+        {
+            MainGrid.Child = null;
+            MainGrid.Child = new SearchMode();
         }
 
         private void btn_ToggleMenu_Click(object sender, RoutedEventArgs e)

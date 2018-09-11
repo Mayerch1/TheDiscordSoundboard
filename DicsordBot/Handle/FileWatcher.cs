@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace DicsordBot
@@ -11,7 +12,7 @@ namespace DicsordBot
     /// <summary>
     /// static class for monitoring files on disk
     /// </summary>
-    public class FileWatcher
+    public static class FileWatcher
     {
         private static bool checkForValidFile(string path)
         {
@@ -25,15 +26,25 @@ namespace DicsordBot
 
         private static Data.FileData getAllFileInfo(FileSystemEventArgs e)
         {
+            return getAllFileInfo(e.FullPath, e.Name);
+        }
+
+        private static Data.FileData getAllFileInfo(string FullPath)
+        {
+            return getAllFileInfo(FullPath, Path.GetFileName(FullPath));
+        }
+
+        private static Data.FileData getAllFileInfo(string FullPath, string Name)
+        {
             Data.FileData file = new Data.FileData();
 
-            file.Name = e.Name.Remove(e.Name.LastIndexOf('.'));
-            file.Path = e.FullPath;
+            file.Name = Name.Remove(Name.LastIndexOf('.'));
+            file.Path = FullPath;
 
             TagLib.File f;
             try
             {
-                f = TagLib.File.Create(e.FullPath);
+                f = TagLib.File.Create(FullPath);
             }
             catch { return file; }
 
@@ -49,6 +60,70 @@ namespace DicsordBot
         }
 
         /// <summary>
+        /// updates list of files, keeps old list, runs in background thread
+        /// </summary>
+        /// <param name="sources">all directories to search</param>
+        /// <param name="ignoreDuplicates">if true, doesn't test if file is already in list</param>
+        public static void indexFiles(ObservableCollection<string> sources, bool ignoreDuplicates = false)
+        {
+            Thread worker = new Thread(() => indexFilesThread(sources, ignoreDuplicates));
+
+            worker.IsBackground = true;
+            worker.Start();
+        }
+
+        private static void indexFilesThread(ObservableCollection<string> sources, bool ignoreDuplicates = false)
+        {
+            foreach (var dir in sources)
+            {
+                indexFolder(dir, ignoreDuplicates);
+            }
+        }
+
+        /// <summary>
+        /// recursive function for searching indexing a folder
+        /// </summary>
+        /// <param name="path">path to directory</param>
+        /// <param name="ignoreDuplicates">if true, doesn't test if file is already in list</param>
+        private static void indexFolder(string path, bool ignoreDuplicates)
+        {
+            string[] files = Directory.GetFiles(path);
+            string[] subDirs = Directory.GetDirectories(path);
+
+            foreach (var singleFile in files)
+            {
+                indexFile(singleFile, ignoreDuplicates);
+            }
+
+            foreach (var singleDir in subDirs)
+            {
+                indexFolder(singleDir, ignoreDuplicates);
+            }
+        }
+
+        /// <summary>
+        /// add file to list, if it's a supported format
+        /// </summary>
+        /// <param name="path">path to file</param>
+        /// <param name="ignoreDuplicates">if true, doesn't test if file is already in list</param>
+        private static void indexFile(string path, bool ignoreDuplicates)
+        {
+            if (!ignoreDuplicates)
+            {
+                //check for existing files, to avoid duplicates
+                foreach (var singleFile in Handle.Data.Files)
+                {
+                    if (singleFile.Path == path) return;
+                }
+            }
+
+            if (checkForValidFile(path))
+            {
+                Handle.Data.Files.Add(getAllFileInfo(path));
+            }
+        }
+
+        /// <summary>
         /// inits one watcher for each path
         /// </summary>
         /// <param name="sources">collection of paths to directories to watch</param>
@@ -59,10 +134,16 @@ namespace DicsordBot
         }
 
         /// <summary>
-        /// init watcher for the specific path
+        /// if a new sources was added, this adds a fileWatcher for that directory. <see cref="indexFiles(ObservableCollection{string}, bool)"/> should also be called
         /// </summary>
-        /// <param name="source">path to monitored directory</param>
-        public static void initWatcher(string source)
+        ///
+        /// <param name="source">path to directory</param>
+        public static void addWatcher(string source)
+        {
+            initWatcher(source);
+        }
+
+        private static void initWatcher(string source)
         {
             FileSystemWatcher fsW = new FileSystemWatcher();
             fsW.Path = source;
@@ -76,12 +157,9 @@ namespace DicsordBot
             fsW.EnableRaisingEvents = true;
         }
 
-        /// <summary>
-        /// when new file is created
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        public static void FileSystemWatcher_Created(object sender, FileSystemEventArgs e)
+        #region events
+
+        private static void FileSystemWatcher_Created(object sender, FileSystemEventArgs e)
         {
             if (checkForValidFile(e.FullPath))
             {
@@ -91,12 +169,7 @@ namespace DicsordBot
             }
         }
 
-        /// <summary>
-        /// when file was renamed
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        public static void FileSystemWatcher_Renamed(object sender, FileSystemEventArgs e)
+        private static void FileSystemWatcher_Renamed(object sender, FileSystemEventArgs e)
         {
             string oldPath = ((RenamedEventArgs)e).OldFullPath;
 
@@ -110,12 +183,7 @@ namespace DicsordBot
             }
         }
 
-        /// <summary>
-        /// when file was changed
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        public static void FileSystemWatcher_Changed(object sender, FileSystemEventArgs e)
+        private static void FileSystemWatcher_Changed(object sender, FileSystemEventArgs e)
         {
             for (int i = 0; i < Handle.Data.Files.Count; i++)
             {
@@ -127,12 +195,7 @@ namespace DicsordBot
             }
         }
 
-        /// <summary>
-        /// when file was deleted
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        public static void FileSystemWatcher_Deleted(object sender, FileSystemEventArgs e)
+        private static void FileSystemWatcher_Deleted(object sender, FileSystemEventArgs e)
         {
             for (int i = 0; i < Handle.Data.Files.Count; i++)
             {
@@ -142,7 +205,8 @@ namespace DicsordBot
                     break;
                 }
             }
-            Console.WriteLine("Test");
         }
+
+        #endregion events
     }
 }

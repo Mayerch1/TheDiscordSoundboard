@@ -39,6 +39,7 @@ namespace DicsordBot.Data
         /// <summary>
         /// a list with all supported formats (only ending)
         /// </summary>
+        [XmlIgnore]
         public readonly List<string> supportedFormats = new List<string> { "mp3", "wav", "asf", "wma", "wmv", "sami", "smi", "3g2", "3gp", "3pg2", "3pgg", "aac", "adts", "m4a", "m4v", "mov", "mp4" };
 
         #endregion consts
