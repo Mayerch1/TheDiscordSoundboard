@@ -7,12 +7,23 @@
              mc:Ignorable="d"
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid>
-        <ListBox x:Name="list_All" ItemsSource="{Binding Files}">
-            <ListBox.ItemTemplate>
-                <DataTemplate>
-                    <Label Content="{Binding Name}" />
-                </DataTemplate>
-            </ListBox.ItemTemplate>
-        </ListBox>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="10*" />
+        </Grid.RowDefinitions>
+
+        <Grid Grid.Row="0">
+            <TextBox TextChanged="box_Search_TextChanged" />
+        </Grid>
+
+        <Grid Grid.Row="1">
+            <ListBox x:Name="list_All" ItemsSource="{Binding FilteredFiles}">
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <Label Content="{Binding Name}" />
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+        </Grid>
     </Grid>
 </UserControl>
