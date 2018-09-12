@@ -88,7 +88,7 @@ namespace DicsordBot
             }
         }
 
-        public bool IsLoopForced { get; set; } = false;
+        public bool IsLoopForcedByBot { get; set; } = false;
 
         public double TitleTime
         {
@@ -187,9 +187,10 @@ namespace DicsordBot
         private void initTimer()
         {
             //init timer, that fires every second to display time-slider
+            //ticks 4 times a second
             System.Windows.Threading.DispatcherTimer dispatcherTimer = new System.Windows.Threading.DispatcherTimer();
             dispatcherTimer.Tick += new EventHandler(dispatcherTimer_Tick);
-            dispatcherTimer.Interval = new TimeSpan(0, 0, 1);
+            dispatcherTimer.Interval = new TimeSpan(0, 0, 0, 0, 250);
             dispatcherTimer.Start();
         }
 
@@ -253,8 +254,7 @@ namespace DicsordBot
             //nothing changes
             if (nextState == LoopStatus)
             {
-                //in case bot double forced loop
-                IsLoopForced = false;
+                //in case bot forced loop, but it's already set
                 return;
             }
 
@@ -272,15 +272,15 @@ namespace DicsordBot
                     nextState = LoopState.LoopNone;
             }
             //if loop was forced by bot, reset
-            else if (nextState == LoopState.LoopReset && IsLoopForced)
+            else if (nextState == LoopState.LoopReset && IsLoopForcedByBot)
             {
                 //reset loop mode
-
                 nextState = LoopState.LoopNone;
+                IsLoopForcedByBot = false;
             }
-            else if (nextState == LoopState.LoopReset)
+            else if (nextState == LoopState.LoopReset && !IsLoopForcedByBot)
             {
-                //nothing changes
+                //in case, user changed mode since bot override, nothing changes
                 return;
             }
             //set loop-Status to bot
@@ -297,10 +297,9 @@ namespace DicsordBot
             //set icon, based on loopstate
             if (nextState == LoopState.LoopAll)
                 btn_Repeat.Content = FindResource("IconRepeatAll");
-            else if (nextState == LoopState.LoopOne && IsLoopForced)
+            else if (nextState == LoopState.LoopOne && IsLoopForcedByBot)
             {
                 //show different icon for bot override
-                IsLoopForced = false;
                 btn_Repeat.Content = FindResource("IconRepeatOnce");
             }
             else if (nextState == LoopState.LoopOne)
@@ -377,11 +376,12 @@ namespace DicsordBot
             {
                 if (isLoop)
                 {
-                    IsLoopForced = true;
+                    IsLoopForcedByBot = true;
                     setLoopStatus(LoopState.LoopOne);
                 }
                 else
                 {
+                    //isLoopForcedByBot is reset in the method
                     setLoopStatus(LoopState.LoopReset);
                 }
             };
@@ -420,7 +420,8 @@ namespace DicsordBot
 
         private void btn_InstantButton_Clicked(int btnListIndex)
         {
-            triggerBotReplay(Handle.Data.Persistent.BtnList[btnListIndex]);
+            //interrupt stream
+            triggerBotInstantReplay(Handle.Data.Persistent.BtnList[btnListIndex]);
         }
 
         private void list_Item_Clicked(uint index)
@@ -435,15 +436,28 @@ namespace DicsordBot
                     data.Name = file.Name;
                     data.File = file.Path;
 
-                    triggerBotReplay(data);
+                    //interrupt current stream
+                    triggerBotInstantReplay(data);
                 }
             }
         }
 
-        private async void triggerBotReplay(Data.ButtonData data)
+        private async void triggerBotInstantReplay(Data.ButtonData data)
+        {
+            //place song in front of queue
+            await Handle.Bot.enqueuePriorityAsync(data);
+
+            //start or skip current track
+            if (!Handle.Bot.IsStreaming)
+                await Handle.Bot.resumeStream();
+            else
+                Handle.Bot.skipTrack();
+        }
+
+        private async void triggerBotQueueReplay(Data.ButtonData data)
         {
             await Handle.Bot.enqueueAsync(data);
-            //IDEA: skip when playlist, don't skip when instant buttons
+
             if (!Handle.Bot.IsStreaming)
                 await Handle.Bot.resumeStream();
         }
@@ -466,12 +480,16 @@ namespace DicsordBot
 
         private void btn_Repeat_Click(object sender, RoutedEventArgs e)
         {
+            IsLoopForcedByBot = false;
             setLoopStatus(LoopState.LoopNext);
         }
 
         private void btn_Earrape_Click(object sender, RoutedEventArgs e)
         {
-            IsEarrape = !IsEarrape;
+            if (((System.Windows.Controls.Primitives.ToggleButton)sender).IsChecked == true)
+                IsEarrape = true;
+            else
+                IsEarrape = false;
         }
 
         private void btn_Volume_Click(object sender, RoutedEventArgs e)

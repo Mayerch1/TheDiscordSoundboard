@@ -129,7 +129,7 @@ namespace DicsordBot.Bot
         #region controll stuff
 
         /// <summary>
-        /// enques a Button into the list, only the file property is relevant
+        /// enques a Button into the list, only the file property is relevant. Loop and Boost are optional
         /// </summary>
         /// <param name="btn">ButtonData object which should be streamed</param>
         /// <returns>Task</returns>
@@ -138,12 +138,33 @@ namespace DicsordBot.Bot
         /// </remarks>
         new public async Task enqueueAsync(Data.ButtonData btn)
         {
+            await enqueueRegardingPriorityAsync(btn, false);
+        }
+
+        /// <summary>
+        /// enques a Button infront of the lsit, only the file property is relevant. Loop and Boost are optional
+        /// </summary>
+        /// <param name="btn">ButtonData object which should be streamed</param>
+        /// <returns>Task</returns>
+        /// <remarks>
+        /// auto connects to Server, calls enqueAsync(ButtonData) of base
+        /// </remarks>
+        new public async Task enqueuePriorityAsync(Data.ButtonData btn)
+        {
+            await enqueueRegardingPriorityAsync(btn, true);
+        }
+
+        private async Task enqueueRegardingPriorityAsync(Data.ButtonData btn, bool isPriority)
+        {
             if (!await connectToServerAsync())
                 return;
 
             try
             {
-                base.enqueueAsync(btn);
+                if (isPriority)
+                    base.enqueuePriorityAsync(btn);
+                else
+                    base.enqueueAsync(btn);
             }
             catch (System.IO.DirectoryNotFoundException)
             {

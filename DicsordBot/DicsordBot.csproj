@@ -308,8 +308,6 @@
   <ItemGroup>
     <Resource Include="res\dog-waiting.jpg" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="File\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

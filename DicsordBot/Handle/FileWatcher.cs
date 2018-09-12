@@ -38,6 +38,7 @@ namespace DicsordBot
         {
             Data.FileData file = new Data.FileData();
 
+            //name is set based on file name
             file.Name = Name.Remove(Name.LastIndexOf('.'));
             file.Path = FullPath;
 
@@ -53,7 +54,18 @@ namespace DicsordBot
             if (performers.Length > 0)
                 file.Author = performers[0];
 
-            file.Length = f.Properties.Duration;
+            //only set if genres are existing
+            var genres = f.Tag.Genres;
+            if (genres.Length > 0)
+                file.Genre = genres[0];
+
+            var album = f.Tag.Album;
+            if (album != null)
+                file.Album = album;
+
+            var length = f.Properties.Duration;
+            if (length != null)
+                file.Length = length;
 
             f.Dispose();
             return file;
@@ -80,6 +92,7 @@ namespace DicsordBot
             }
             //sort by name
             Handle.Data.Files = new ObservableCollection<Data.FileData>(Handle.Data.Files.OrderBy(o => o.Name));
+            Console.WriteLine("Finished indexing files");
         }
 
         /// <summary>

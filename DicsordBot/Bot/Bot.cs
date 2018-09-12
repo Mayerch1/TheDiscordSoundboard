@@ -152,7 +152,7 @@ namespace DicsordBot.Bot
         /// <remarks>
         /// Contains data representation of Buttons, to also store settings like a custom loop-state
         /// </remarks>
-        protected Queue<Data.ButtonData> Queue { get; set; }
+        private List<Data.ButtonData> Queue { get; set; }
 
         private MediaFoundationReader Reader { get; set; }
         private MediaFoundationResampler ActiveResampler { get; set; }
@@ -168,8 +168,7 @@ namespace DicsordBot.Bot
         /// </summary>
         public Bot()
         {
-            //TOOD: maybe other format, to format more information
-            Queue = new Queue<Data.ButtonData>();
+            Queue = new List<Data.ButtonData>();
             IsStreaming = false;
             IsChannelConnected = false;
             IsServerConnected = false;
@@ -190,7 +189,24 @@ namespace DicsordBot.Bot
             }
             else
             {
-                Queue.Enqueue(btn);
+                Queue.Add(btn);
+            }
+        }
+
+        /// <summary>
+        /// enqueues a btn at the first position of the queue
+        /// </summary>
+        /// <param name="btn"></param>
+        protected void enqueuePriorityAsync(Data.ButtonData btn)
+        {
+            if (!IsStreaming)
+            {
+                getStream(btn);
+            }
+            else
+            {
+                //insert on first position
+                Queue.Insert(0, btn);
             }
         }
 
@@ -372,7 +388,11 @@ namespace DicsordBot.Bot
                     if (IsLoop)
                         LoopStateChanged(false);
 
-                    getStream(Queue.Dequeue());
+                    //queue must contain at least one item
+                    var nextTitle = Queue[0];
+                    Queue.RemoveAt(0);
+                    getStream(nextTitle);
+
                     await startStreamAsync(stream);
                 }
                 //exit stream

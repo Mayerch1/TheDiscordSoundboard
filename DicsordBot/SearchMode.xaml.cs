@@ -40,6 +40,19 @@ namespace DicsordBot
             this.DataContext = this;
         }
 
+        private bool checkContainLowerCase(Data.FileData file, string filter)
+        {
+            string filterLow = filter.ToLower();
+
+            if (file.Name.ToLower().Contains(filterLow) || file.Author.ToLower().Contains(filterLow)
+                || file.Album.ToLower().Contains(filterLow) || file.Genre.ToLower().Contains(filterLow))
+            {
+                return true;
+            }
+            else
+                return false;
+        }
+
         private void filterListBox(string filter)
         {
             //clear list and apply filter
@@ -47,10 +60,11 @@ namespace DicsordBot
             if (!string.IsNullOrEmpty(filter))
             {
                 FilteredFiles.Clear();
+
                 foreach (var file in Handle.Data.Files)
                 {
                     //add all files matching
-                    if (file.Name.ToLower().Contains(filter.ToLower()))
+                    if (checkContainLowerCase(file, filter))
                         FilteredFiles.Add(file);
                 }
             }

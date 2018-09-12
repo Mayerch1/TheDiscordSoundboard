@@ -27,6 +27,8 @@ namespace DicsordBot.Data
         private string name = "";
         private string path = "";
         private string author = "";
+        private string album = "";
+        private string genre = "";
 
         private readonly uint id;
 
@@ -51,6 +53,16 @@ namespace DicsordBot.Data
         /// Author of the title
         /// </summary>
         public string Author { get { return author; } set { author = value; OnPropertyChanged("Author"); } }
+
+        /// <summary>
+        /// Album of the title
+        /// </summary>
+        public string Album { get { return album; } set { album = value; OnPropertyChanged("Album"); } }
+
+        /// <summary>
+        /// Genre of the title
+        /// </summary>
+        public string Genre { get { return genre; } set { genre = value; OnPropertyChanged("Genre"); } }
 
         /// <summary>
         /// the dateTime of the last replay
