@@ -34,6 +34,8 @@
                     <DataTemplate>
                         <StackPanel Orientation="Horizontal" Tag="{Binding Id}" MouseLeftButtonDown="stack_list_MouseLeftButtonDown">
                             <Label Content="{Binding Name}" />
+                            <Label HorizontalAlignment="Center" Content="{Binding Author}" />
+                            <Label HorizontalAlignment="Right" Content="{Binding LengthString}" />
                         </StackPanel>
                     </DataTemplate>
                 </ListBox.ItemTemplate>
