@@ -65,7 +65,13 @@ namespace DicsordBot.Data
         public string Genre { get { return genre; } set { genre = value; OnPropertyChanged("Genre"); } }
 
         /// <summary>
-        /// the dateTime of the last replay
+        /// the length of title as string mm:ss
+        /// </summary>
+        [XmlIgnore]
+        public string LengthString { get { return (Length).ToString(@"mm\:ss"); } }
+
+        /// <summary>
+        /// the length of title as TimeSpan
         /// </summary>
         [XmlIgnore]
         public TimeSpan Length { get { return length; } set { length = value; OnPropertyChanged("Length"); } }
