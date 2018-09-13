@@ -64,9 +64,12 @@
         <Grid x:Name="grd_ChannelList" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="0,60,20,0" Width="0" Height="0" Grid.ZIndex="1">
             <!-- channel selector-->
             <!-- is closed on startup-->
-            <materialDesign:ColorZone x:Name="col_ChannelList" materialDesign:ShadowAssist.ShadowDepth="Depth2" materialDesign:ShadowAssist.ShadowEdges="Top" Height="400" Width="250">
+            <materialDesign:ColorZone x:Name="col_ChannelList" materialDesign:ShadowAssist.ShadowDepth="Depth1" materialDesign:ShadowAssist.ShadowEdges="All" Height="400" Width="250" CornerRadius="5">
+                <materialDesign:ColorZone.Background>
+                    <SolidColorBrush Color="White" Opacity="1" />
+                </materialDesign:ColorZone.Background>
 
-                <DockPanel>
+                <StackPanel Margin="0,5,0,0">
                     <DockPanel DockPanel.Dock="Top" HorizontalAlignment="Stretch">
                         <TextBlock Margin="5" DockPanel.Dock="Left" Text="Permanent Selection" />
                         <CheckBox
@@ -77,7 +80,8 @@
                             Style="{StaticResource MaterialDesignSwitchDarkToggleButton}"
                             ToolTip="Toggle this to make the bot always join this channel" />
                     </DockPanel>
-                    <Separator />
+
+                    <Separator Background="#eaeaea" />
 
                     <ScrollViewer
                     PanningMode="VerticalOnly"
@@ -86,7 +90,7 @@
                     VerticalScrollBarVisibility="Hidden">
                         <TreeView x:Name="tree_channelList" SelectedItemChanged="tree_channelList_SelectedItemChanged" />
                     </ScrollViewer>
-                </DockPanel>
+                </StackPanel>
             </materialDesign:ColorZone>
         </Grid>
         <DockPanel LastChildFill="True" Grid.ZIndex="0">
