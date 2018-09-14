@@ -15,23 +15,22 @@ using System.Windows.Shapes;
 
 namespace DicsordBot
 {
+#pragma warning disable CS1591
+
     /// <summary>
     /// Interaction logic for PlaylistMode.xaml
     /// </summary>
-    public partial class PlaylistMode : Page
+    public partial class PlaylistMode : UserControl
     {
-#pragma warning disable CS1591
+        public delegate void PlaylistItemPlayHandler(uint tag);
+
+        public PlaylistItemPlayHandler PlaylistItemPlay;
 
         public PlaylistMode()
         {
             InitializeComponent();
         }
-
-        private void btn_addPlaylist_Click(object sender, RoutedEventArgs e)
-        {
-            //show add dialog
-        }
+    }
 
 #pragma warning restore CS1591
-    }
 }

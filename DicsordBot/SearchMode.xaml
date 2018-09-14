@@ -32,10 +32,17 @@
             <ListBox x:Name="list_All" ItemsSource="{Binding FilteredFiles}">
                 <ListBox.ItemTemplate>
                     <DataTemplate>
+                        <!-- TODO: use something different?-->
                         <StackPanel Orientation="Horizontal" Tag="{Binding Id}" MouseLeftButtonDown="stack_list_MouseLeftButtonDown">
+                            <!-- TODO: spacer, left, middle and right aligned-->
                             <Label Content="{Binding Name}" />
                             <Label HorizontalAlignment="Center" Content="{Binding Author}" />
                             <Label HorizontalAlignment="Right" Content="{Binding LengthString}" />
+
+                            <!--TODO: button dropdown  -->
+                            <Button>
+                                <materialDesign:PackIcon Kind="DotsVertical" />
+                            </Button>
                         </StackPanel>
                     </DataTemplate>
                 </ListBox.ItemTemplate>

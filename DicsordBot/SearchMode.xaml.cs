@@ -27,9 +27,9 @@ namespace DicsordBot
         private ObservableCollection<Data.FileData> filteredFiles;
         public ObservableCollection<Data.FileData> FilteredFiles { get { return filteredFiles; } set { filteredFiles = value; OnPropertyChanged("FilteredFiles"); } }
 
-        public delegate void ListItemClickedHandler(uint tag);
+        public delegate void ListItemPlayHandler(uint tag);
 
-        public ListItemClickedHandler ListItemClicked;
+        public ListItemPlayHandler ListItemPlay;
 
         public SearchMode()
         {
@@ -99,7 +99,7 @@ namespace DicsordBot
         {
             uint tag = (uint)((StackPanel)sender).Tag;
 
-            ListItemClicked(tag);
+            ListItemPlay(tag);
         }
     }
 

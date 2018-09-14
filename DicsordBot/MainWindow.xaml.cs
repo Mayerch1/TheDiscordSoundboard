@@ -333,14 +333,20 @@ namespace DicsordBot
 
         private void registerEmbedEvents(object embed)
         {
-            //subsribe to intsant button event
-            var btnUI = embed as ButtonUI;
-            var searchMode = embed as SearchMode;
+            Type objType = embed.GetType();
 
-            if (btnUI != null)
-                btnUI.InstantButtonClicked += btn_InstantButton_Clicked;
-            else if (searchMode != null)
-                searchMode.ListItemClicked += list_Item_Clicked;
+            if (objType == typeof(ButtonUI))
+            {
+                ((ButtonUI)embed).InstantButtonClicked += btn_InstantButton_Clicked;
+            }
+            else if (objType == typeof(SearchMode))
+            {
+                ((SearchMode)embed).ListItemPlay += List_Item_Play;
+            }
+            else if (objType == typeof(PlaylistMode))
+            {
+                ((PlaylistMode)embed).PlaylistItemPlay += Playlist_Item_Play;
+            }
         }
 
         //call only once
@@ -424,7 +430,7 @@ namespace DicsordBot
             triggerBotInstantReplay(Handle.Data.Persistent.BtnList[btnListIndex]);
         }
 
-        private void list_Item_Clicked(uint index)
+        private void List_Item_Play(uint index)
         {
             //search for file with tag
             foreach (var file in Handle.Data.Files)
@@ -440,6 +446,11 @@ namespace DicsordBot
                     triggerBotInstantReplay(data);
                 }
             }
+        }
+
+        private void Playlist_Item_Play(uint index)
+        {
+            //TODO: handle playlist played
         }
 
         private async void triggerBotInstantReplay(Data.ButtonData data)
@@ -514,6 +525,14 @@ namespace DicsordBot
         {
             //args are not needed, enables use for delegate events
             btn_Settings_Click();
+        }
+
+        private void btn_Playlist_Click(object sender, RoutedEventArgs e)
+        {
+            MainGrid.Child = null;
+            PlaylistMode playUI = new PlaylistMode();
+            registerEmbedEvents(playUI);
+            MainGrid.Child = playUI;
         }
 
         private void btn_Settings_Click()
