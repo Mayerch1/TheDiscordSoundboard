@@ -43,5 +43,22 @@ namespace DicsordBot
         {
             System.Diagnostics.Process.Start(Data.PersistentData.urlToGitRepo + "wiki/Settings#application");
         }
+
+        private void btn_DirChooser_Click(object sender, RoutedEventArgs e)
+        {
+            using (var dialog = new System.Windows.Forms.FolderBrowserDialog())
+            {
+                //show dialog to add a new media-source
+                dialog.SelectedPath = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
+                System.Windows.Forms.DialogResult result = dialog.ShowDialog();
+
+                if (result == System.Windows.Forms.DialogResult.OK)
+                {
+                    //add selected source to list
+                    if (!Handle.Data.Persistent.MediaSources.Contains(dialog.SelectedPath))
+                        Handle.Data.Persistent.MediaSources.Add(dialog.SelectedPath);
+                }
+            }
+        }
     }
 }

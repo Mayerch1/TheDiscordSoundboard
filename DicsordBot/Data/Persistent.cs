@@ -48,6 +48,7 @@ namespace DicsordBot.Data
 
         private ObservableCollection<ButtonData> btnList = new ObservableCollection<ButtonData>();
         private ObservableCollection<string> mediaSources = new ObservableCollection<string>();
+        private ObservableCollection<FileData> playlistFiles = new ObservableCollection<FileData>();
 
         private bool isFirstStart = true;
 
@@ -184,6 +185,11 @@ namespace DicsordBot.Data
         /// list of all locations to monitor for files
         /// </value>
         public ObservableCollection<string> MediaSources { get { return mediaSources; } set { mediaSources = value; OnPropertyChanged("MediaSources"); } }
+
+        /// <summary>
+        ///contains the files representing the playlist
+        /// </summary>
+        public ObservableCollection<FileData> PlaylistFiles { get { return playlistFiles; } set { playlistFiles = value; OnPropertyChanged("PlaylistFiles"); } }
 
         /// <summary>
         /// BtnList property
