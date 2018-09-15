@@ -29,7 +29,7 @@ namespace DicsordBot.Data
         public Playlist(string _name)
         {
             id = sId++;
-            Name = _name;
+            name = _name;
         }
 
         #region fileds
@@ -37,7 +37,7 @@ namespace DicsordBot.Data
         private static uint sId = 0;
 
         private ObservableCollection<FileData> tracks = new ObservableCollection<FileData>();
-        private string name;
+        private string name = "";
         private readonly uint id;
 
         #endregion fileds
@@ -57,7 +57,7 @@ namespace DicsordBot.Data
         /// <summary>
         /// unique id
         /// </summary>
-        public uint Id { get { return Id; } }
+        public uint Id { get { return id; } }
 
         #endregion properties
 

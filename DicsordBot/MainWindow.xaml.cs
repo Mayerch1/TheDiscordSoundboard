@@ -363,14 +363,7 @@ namespace DicsordBot
             AddHandler(TreeViewItem.ExpandedEvent, new RoutedEventHandler(tree_channelList_ItemExpanded));
 
             //event Handler for Stream-state of bot
-            Handle.Bot.StreamStateChanged += delegate (bool newState)
-            {
-                //display pause icon, if bot is streaming
-                if (newState)
-                    btn_Play.Content = FindResource("IconPause");
-                else
-                    btn_Play.Content = FindResource("IconPlay");
-            };
+            Handle.Bot.StreamStateChanged += bot_streamState_Changed;
 
             //earrape event
             Handle.Bot.EarrapeStateChanged += delegate (bool isEarrape)
@@ -457,11 +450,14 @@ namespace DicsordBot
             {
                 if (playlist.Id == id)
                 {
-                    //add each file to queue, start with fileIndex
-                    for (uint i = fileIndex; i < playlist.Tracks.Count; i++)
+                    if (fileIndex < playlist.Tracks.Count)
                     {
-                        triggerBotQueueReplay(new Data.ButtonData(playlist.Tracks[(int)i].Name, playlist.Tracks[(int)i].Path));
-                        //TODO: use more accesible queue
+                        //add first button
+                        triggerBotInstantReplay(new Data.ButtonData(playlist.Tracks[(int)fileIndex].Name, playlist.Tracks[(int)fileIndex].Path));
+                        //set playlist properties
+                        Handle.Data.PlaylistIndex = id;
+                        Handle.Data.PlaylistFileIndex = fileIndex;
+                        Handle.Data.IsPlaylistPlaying = true;
                     }
                 }
             }
@@ -477,6 +473,47 @@ namespace DicsordBot
                 await Handle.Bot.resumeStream();
             else
                 Handle.Bot.skipTrack();
+        }
+
+        private void bot_streamState_Changed(bool newState)
+        {
+            //display pause icon, if bot is streaming
+            if (newState)
+                btn_Play.Content = FindResource("IconPause");
+            else
+            {
+                btn_Play.Content = FindResource("IconPlay");
+
+                //take next title in playlist
+                if (Handle.Data.IsPlaylistPlaying)
+                {
+                    foreach (var playlist in Handle.Data.Playlists)
+                    {
+                        if (playlist.Id == Handle.Data.PlaylistIndex)
+                        {
+                            //only if list is not finished
+                            if (++Handle.Data.PlaylistFileIndex < playlist.Tracks.Count)
+                            {
+                                //play next track
+                                int index = (int)Handle.Data.PlaylistFileIndex;
+                                triggerBotQueueReplay(new Data.ButtonData(playlist.Tracks[index].Name, playlist.Tracks[index].Path));
+                            }
+                            else
+                            {
+                                if (LoopStatus == LoopState.LoopAll)
+                                {
+                                    Handle.Data.PlaylistFileIndex = 0;
+                                    //call this function again, to equeue the playlist
+                                    triggerBotQueueReplay(new Data.ButtonData(playlist.Tracks[0].Name, playlist.Tracks[0].Path));
+                                }
+                                else
+                                    //set properties for finished playlist
+                                    Handle.Data.IsPlaylistPlaying = false;
+                            }
+                        }
+                    }
+                }
+            }
         }
 
         private async void triggerBotQueueReplay(Data.ButtonData data)
@@ -635,12 +672,11 @@ namespace DicsordBot
                 SnackBarWarning_Show(snackMsg, Bot.BotHandle.SnackBarAction.None);
             }
             catch {/* do nothing if someting other than a channel is selected*/ }
-
-            //get first expanded element, to save it for restart
         }
 
         private void tree_channelList_ItemExpanded(object sender, RoutedEventArgs e)
         {
+            //get first expanded element, to save it for restart
             TreeViewItem treeItem = e.Source as TreeViewItem;
 
             if (treeItem.Tag != null)

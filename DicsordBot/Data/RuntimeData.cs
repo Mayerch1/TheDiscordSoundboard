@@ -30,6 +30,9 @@ namespace DicsordBot.Data
         private PersistentData persistent = new PersistentData();
         private ObservableCollection<FileData> files = new ObservableCollection<FileData>();
         private ObservableCollection<Playlist> playLists = new ObservableCollection<Playlist>();
+        private uint playlistIndex = 0;
+        private uint playlistFileIndex = 0;
+        private bool isPlaylistPlaying = false;
 
         #endregion fields
 
@@ -49,6 +52,21 @@ namespace DicsordBot.Data
         /// List of all playlists
         /// </summary>
         public ObservableCollection<Playlist> Playlists { get { return playLists; } set { playLists = value; OnPropertyChanged("PlayLists"); } }
+
+        /// <summary>
+        /// index of currently played playlist
+        /// </summary>
+        public uint PlaylistIndex { get { return playlistIndex; } set { playlistIndex = value; OnPropertyChanged("PlaylistIndex"); } }
+
+        /// <summary>
+        /// file index of position in playlist
+        /// </summary>
+        public uint PlaylistFileIndex { get { return playlistFileIndex; } set { playlistFileIndex = value; OnPropertyChanged("PlaylistFileIndex"); } }
+
+        /// <summary>
+        /// IsPlaylistPlaying property
+        /// </summary>
+        public bool IsPlaylistPlaying { get { return isPlaylistPlaying; } set { isPlaylistPlaying = value; OnPropertyChanged("IsPlaylistPlaying"); } }
 
         #endregion properties
 
@@ -148,8 +166,7 @@ namespace DicsordBot.Data
                 Persistent.SettingsPath = System.Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + applicationDirectory;
             }
 
-            Persistent = (PersistentData)loadObject(Persistent, saveFile);
-            if (Persistent == null)
+            if ((Persistent = (PersistentData)loadObject(Persistent, saveFile)) == null)
             {
                 //create new one, old one was overwirtten with =null
                 Persistent = new PersistentData();
@@ -158,9 +175,15 @@ namespace DicsordBot.Data
             //normalize btn
             resizeBtnList();
 
-            //do nothing on failure
-            Files = (ObservableCollection<FileData>)loadObject(Files, fileFile);
-            Playlists = (ObservableCollection<Playlist>)loadObject(Playlists, playlistFile);
+            if ((Files = (ObservableCollection<FileData>)loadObject(Files, fileFile)) == null)
+            {
+                Files = new ObservableCollection<FileData>();
+            }
+
+            if ((Playlists = (ObservableCollection<Playlist>)loadObject(Playlists, playlistFile)) == null)
+            {
+                Playlists = new ObservableCollection<Playlist>();
+            }
         }
 
         /// <summary>

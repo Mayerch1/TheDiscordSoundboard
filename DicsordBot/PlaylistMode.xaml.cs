@@ -33,6 +33,7 @@ namespace DicsordBot
 
         private void btn_playlistAdd_Click(object sender, RoutedEventArgs e)
         {
+            PlaylistItemPlay(0, 0);
             //TODO: playlist add dialog or dropdown
         }
     }

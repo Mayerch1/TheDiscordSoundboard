@@ -14,8 +14,6 @@ namespace DicsordBot.Data
     [Serializable()]
     public class FileData : INotifyPropertyChanged
     {
-        private static uint globalId = 0;
-
         /// <summary>
         /// constructor, sets the unique id
         /// </summary>
@@ -23,6 +21,18 @@ namespace DicsordBot.Data
         {
             id = globalId++;
         }
+
+        /// <summary>
+        /// constructor, sets the unique id
+        /// </summary>
+        /// <param name="_path">path to file</param>
+        public FileData(string _path)
+        {
+            path = _path;
+            id = globalId++;
+        }
+
+        private static uint globalId = 0;
 
         private string name = "";
         private string path = "";
