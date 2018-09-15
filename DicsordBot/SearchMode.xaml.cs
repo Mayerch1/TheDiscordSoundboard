@@ -112,7 +112,7 @@ namespace DicsordBot
         private void context_AddQueue_Click(object sender, RoutedEventArgs e)
         {
             //This should crash
-            uint tag = (uint)((FrameworkElement)sender).Tag;
+            //uint tag = (uint)((FrameworkElement)sender).Tag;
 
             //ListItemPlay(tag, false);
         }
