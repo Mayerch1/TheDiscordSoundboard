@@ -16,6 +16,37 @@ namespace DicsordBot.Data
     public class ButtonData : INotifyPropertyChanged
 
     {
+        #region constructors
+
+        /// <summary>
+        /// default constructor
+        /// </summary>
+        public ButtonData()
+        {
+        }
+
+        /// <summary>
+        /// constructor
+        /// </summary>
+        /// <param name="_file">path to file</param>
+        public ButtonData(string _file)
+        {
+            File = _file;
+        }
+
+        /// <summary>
+        /// constructor
+        /// </summary>
+        /// <param name="_name">name of file</param>
+        /// <param name="_file">path to file</param>
+        public ButtonData(string _name, string _file)
+        {
+            Name = _name;
+            File = _file;
+        }
+
+        #endregion constructors
+
         #region saved fields
 
         private string name = null;

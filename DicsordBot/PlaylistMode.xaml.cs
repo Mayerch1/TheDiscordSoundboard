@@ -22,13 +22,18 @@ namespace DicsordBot
     /// </summary>
     public partial class PlaylistMode : UserControl
     {
-        public delegate void PlaylistItemPlayHandler(uint tag);
+        public delegate void PlaylistItemPlayHandler(uint tag, uint fileIndex);
 
         public PlaylistItemPlayHandler PlaylistItemPlay;
 
         public PlaylistMode()
         {
             InitializeComponent();
+        }
+
+        private void btn_playlistAdd_Click(object sender, RoutedEventArgs e)
+        {
+            //TODO: playlist add dialog or dropdown
         }
     }
 

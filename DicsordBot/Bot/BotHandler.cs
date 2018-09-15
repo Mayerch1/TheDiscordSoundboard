@@ -217,8 +217,6 @@ namespace DicsordBot.Bot
             {
                 await disconnectFromChannelAsync();
                 UnhandledException.initWindow(ex, "Trying to start/resume the stream");
-
-                //TODO: catch all possible ex
             }
         }
 

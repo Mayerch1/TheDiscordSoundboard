@@ -191,7 +191,7 @@
     <Compile Include="About.xaml.cs">
       <DependentUpon>About.xaml</DependentUpon>
     </Compile>
-    <Compile Include="ChannelListManager.cs" />
+    <Compile Include="Handle\ChannelListManager.cs" />
     <Compile Include="Data\FileData.cs" />
     <Compile Include="Data\Playlist.cs" />
     <Compile Include="Handle\FileWatcher.cs" />
@@ -204,6 +204,7 @@
     <Compile Include="Hint.xaml.cs">
       <DependentUpon>Hint.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Handle\HotkeyManager.cs" />
     <Compile Include="PlaylistMode.xaml.cs">
       <DependentUpon>PlaylistMode.xaml</DependentUpon>
     </Compile>
@@ -216,7 +217,7 @@
     <Compile Include="UnhandledException.xaml.cs">
       <DependentUpon>UnhandledException.xaml</DependentUpon>
     </Compile>
-    <Compile Include="UpdateChecker.cs" />
+    <Compile Include="Handle\UpdateChecker.cs" />
     <Page Include="About.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

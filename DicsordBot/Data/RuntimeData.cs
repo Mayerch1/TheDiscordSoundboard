@@ -18,8 +18,10 @@ namespace DicsordBot.Data
     {
         #region constants
 
+        private const string applicationDirectory = "\\DiscordSoundboard";
         private const string saveFile = "\\Settings.xml";
         private const string fileFile = "\\Files.xml";
+        private const string playlistFile = "\\Playlist.xml";
 
         #endregion constants
 
@@ -27,6 +29,7 @@ namespace DicsordBot.Data
 
         private PersistentData persistent = new PersistentData();
         private ObservableCollection<FileData> files = new ObservableCollection<FileData>();
+        private ObservableCollection<Playlist> playLists = new ObservableCollection<Playlist>();
 
         #endregion fields
 
@@ -41,6 +44,11 @@ namespace DicsordBot.Data
         /// Files property (collection of classes)
         /// </summary>
         public ObservableCollection<FileData> Files { get { return files; } set { files = value; OnPropertyChanged("Files"); } }
+
+        /// <summary>
+        /// List of all playlists
+        /// </summary>
+        public ObservableCollection<Playlist> Playlists { get { return playLists; } set { playLists = value; OnPropertyChanged("PlayLists"); } }
 
         #endregion properties
 
@@ -114,7 +122,7 @@ namespace DicsordBot.Data
         /// <remarks>
         /// disregards minVisibleButtons
         /// </remarks>
-        public void cleanBtnList()
+        private void cleanBtnList()
         {
             int upper = Persistent.BtnList.Count;
 
@@ -129,60 +137,61 @@ namespace DicsordBot.Data
         #region Handle Save/Load
 
         /// <summary>
-        /// load all data from saved xml, load default if failed
+        /// loads all Propertys of RuntimeData from different xml files
         /// </summary>
-        /// <param name="_persistentFile">Name of *.xml setting without path</param>
-        /// <param name="_fileFile">Name of *.xml for all music files</param>
-        public void loadData(string _persistentFile = saveFile, string _fileFile = fileFile)
+        public void loadAll()
         {
             Persistent.SettingsPath = Properties.Settings.Default.Path;
 
             if (String.IsNullOrWhiteSpace(Persistent.SettingsPath))
             {
-                Persistent.SettingsPath = System.Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\DiscordSoundboard";
+                Persistent.SettingsPath = System.Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + applicationDirectory;
             }
 
+            Persistent = (PersistentData)loadObject(Persistent, saveFile);
+            if (Persistent == null)
+            {
+                //create new one, old one was overwirtten with =null
+                Persistent = new PersistentData();
+                loadDefaultValues();
+            }
+            //normalize btn
+            resizeBtnList();
+
+            //do nothing on failure
+            Files = (ObservableCollection<FileData>)loadObject(Files, fileFile);
+            Playlists = (ObservableCollection<Playlist>)loadObject(Playlists, playlistFile);
+        }
+
+        /// <summary>
+        /// deserialises a specific object, passed as parameter
+        /// </summary>
+        /// <param name="target">object to load</param>
+        /// <param name="_file">path to file, including name</param>
+        /// <returns>returns null on failure</returns>
+        private object loadObject(object target, string _file)
+        {
             //load persistent data
-            if (System.IO.File.Exists(Persistent.SettingsPath + _persistentFile))
+            if (System.IO.File.Exists(Persistent.SettingsPath + _file))
             {
                 try
                 {
-                    System.IO.StreamReader file = System.IO.File.OpenText(Persistent.SettingsPath + _persistentFile);
-                    Type settType = Persistent.GetType();
-                    System.Xml.Serialization.XmlSerializer xmlSerial = new System.Xml.Serialization.XmlSerializer(settType);
-                    object oData = xmlSerial.Deserialize(file);
+                    System.IO.StreamReader file = System.IO.File.OpenText(Persistent.SettingsPath + _file);
+                    Type fileType = target.GetType();
 
-                    Persistent = (PersistentData)oData;
+                    System.Xml.Serialization.XmlSerializer xmlSerial = new System.Xml.Serialization.XmlSerializer(fileType);
+                    target = xmlSerial.Deserialize(file);
                     file.Close();
+                    return target;
                 }
                 catch
                 {
-                    loadDefaultValues();
+                    return null;
                 }
             }
             else
             {
-                loadDefaultValues();
-            }
-            resizeBtnList();
-
-            //load music files
-            if (System.IO.File.Exists(Persistent.SettingsPath + _fileFile))
-            {
-                try
-                {
-                    System.IO.StreamReader file = System.IO.File.OpenText(Persistent.SettingsPath + _fileFile);
-                    Type settType = Files.GetType();
-                    System.Xml.Serialization.XmlSerializer xmlSerial = new System.Xml.Serialization.XmlSerializer(settType);
-                    object oData = xmlSerial.Deserialize(file);
-
-                    Files = (ObservableCollection<FileData>)oData;
-                    file.Close();
-                }
-                catch
-                {
-                    return;
-                }
+                return null;
             }
         }
 
@@ -214,22 +223,29 @@ namespace DicsordBot.Data
         }
 
         /// <summary>
-        /// saves all data into an xml file
+        /// saves all property of RuntimeData in different files
         /// </summary>
-        /// <param name="_persistentFile">Name of *.xml setting without path</param>
-        ///  /// <param name="_fileFile">Name of *.xml for all music files</param>
-        public void saveData(string _persistentFile = saveFile, string _fileFile = fileFile)
+        public void saveAll()
         {
             Properties.Settings.Default.Path = Persistent.SettingsPath;
-
             Properties.Settings.Default.Save();
 
-            //clear all empty buttons
             cleanBtnList();
+            saveObject(Persistent, saveFile);
+            saveObject(Files, fileFile);
+            saveObject(Playlists, playlistFile);
+        }
 
-            //save all persistent data
-            Type settingsType = Persistent.GetType();
+        /// <summary>
+        /// serializes an object and saves it into an file
+        /// </summary>
+        /// <param name="target">object to serialize</param>
+        /// <param name="_file">path for saving, including file name</param>
+        private void saveObject(object target, string _file)
+        {
+            Type fileType = target.GetType();
 
+            //test for existing dir
             if (!String.IsNullOrEmpty(Persistent.SettingsPath))
             {
                 System.IO.Directory.CreateDirectory(Persistent.SettingsPath);
@@ -238,28 +254,7 @@ namespace DicsordBot.Data
             System.IO.StreamWriter file;
             try
             {
-                file = System.IO.File.CreateText(Persistent.SettingsPath + _persistentFile);
-            }
-            catch (Exception)
-            {
-                return;
-            }
-            if (settingsType.IsSerializable)
-            {
-                System.Xml.Serialization.XmlSerializer serializer = new System.Xml.Serialization.XmlSerializer(settingsType);
-                serializer.Serialize(file, Persistent);
-                file.Flush();
-                file.Close();
-            }
-
-            //save all files
-            Type fileType = Files.GetType();
-
-            //directory must exist from saving persistent data
-            System.IO.StreamWriter fileWr;
-            try
-            {
-                fileWr = System.IO.File.CreateText(Persistent.SettingsPath + _fileFile);
+                file = System.IO.File.CreateText(Persistent.SettingsPath + _file);
             }
             catch (Exception)
             {
@@ -267,10 +262,11 @@ namespace DicsordBot.Data
             }
             if (fileType.IsSerializable)
             {
+                //serialize
                 System.Xml.Serialization.XmlSerializer serializer = new System.Xml.Serialization.XmlSerializer(fileType);
-                serializer.Serialize(fileWr, Files);
-                fileWr.Flush();
-                fileWr.Close();
+                serializer.Serialize(file, target);
+                file.Flush();
+                file.Close();
             }
         }
 

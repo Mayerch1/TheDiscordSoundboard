@@ -116,7 +116,7 @@ namespace DicsordBot
         public MainWindow()
         {
             //need this, so other tasks will wait
-            Handle.Data.loadData();
+            Handle.Data.loadAll();
 
             InitializeComponent();
 
@@ -165,7 +165,7 @@ namespace DicsordBot
 
         private async void cleanUp()
         {
-            Handle.Data.saveData();
+            Handle.Data.saveAll();
 
             await Handle.Bot.disconnectFromServerAsync();
         }
@@ -448,9 +448,23 @@ namespace DicsordBot
             }
         }
 
-        private void Playlist_Item_Play(uint index)
+        private void Playlist_Item_Play(uint id, uint fileIndex = 0)
         {
-            //TODO: handle playlist played
+            //TODO: test for function
+
+            //search for playlist
+            foreach (var playlist in Handle.Data.Playlists)
+            {
+                if (playlist.Id == id)
+                {
+                    //add each file to queue, start with fileIndex
+                    for (uint i = fileIndex; i < playlist.Tracks.Count; i++)
+                    {
+                        triggerBotQueueReplay(new Data.ButtonData(playlist.Tracks[(int)i].Name, playlist.Tracks[(int)i].Path));
+                        //TODO: use more accesible queue
+                    }
+                }
+            }
         }
 
         private async void triggerBotInstantReplay(Data.ButtonData data)
@@ -583,7 +597,7 @@ namespace DicsordBot
             else
             {
                 sb = FindResource("OpenChannelList") as Storyboard;
-                //TODO: check for long delays
+
                 initChannelList();
                 IsChannelListOpened = true;
             }
