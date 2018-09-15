@@ -41,10 +41,11 @@ namespace DicsordBot
             //0 lets the bot search and join for the owner
             tree.Items.Add(new MyTreeItem("Join to owner", 0));
 
-            if (CompleteList != null)
+            if (CompleteList != null && CompleteList.Count > 0 && CompleteList[0].Count > 0)
             {
                 for (int i = 0; i < CompleteList.Count; i++)
                 {
+                    //TODO: possible crash, when servers are not loaded fast enough
                     var server = CompleteList[i];
 
                     TreeViewItem newBranch = new TreeViewItem();

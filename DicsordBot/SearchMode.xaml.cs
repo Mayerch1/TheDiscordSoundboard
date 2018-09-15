@@ -27,7 +27,7 @@ namespace DicsordBot
         private ObservableCollection<Data.FileData> filteredFiles;
         public ObservableCollection<Data.FileData> FilteredFiles { get { return filteredFiles; } set { filteredFiles = value; OnPropertyChanged("FilteredFiles"); } }
 
-        public delegate void ListItemPlayHandler(uint tag);
+        public delegate void ListItemPlayHandler(uint tag, bool isPriority);
 
         public ListItemPlayHandler ListItemPlay;
 
@@ -99,7 +99,22 @@ namespace DicsordBot
         {
             uint tag = (uint)((StackPanel)sender).Tag;
 
-            ListItemPlay(tag);
+            ListItemPlay(tag, true);
+        }
+
+        private void btn_addBtnContext_Click(object sender, RoutedEventArgs e)
+        {
+            var btn = sender as FrameworkElement;
+            if (btn != null)
+                btn.ContextMenu.IsOpen = true;
+        }
+
+        private void context_AddQueue_Click(object sender, RoutedEventArgs e)
+        {
+            //This should crash
+            uint tag = (uint)((FrameworkElement)sender).Tag;
+
+            //ListItemPlay(tag, false);
         }
     }
 

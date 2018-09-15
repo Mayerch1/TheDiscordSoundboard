@@ -423,7 +423,7 @@ namespace DicsordBot
             triggerBotInstantReplay(Handle.Data.Persistent.BtnList[btnListIndex]);
         }
 
-        private void List_Item_Play(uint index)
+        private void List_Item_Play(uint index, bool isPriority = true)
         {
             //search for file with tag
             foreach (var file in Handle.Data.Files)
@@ -435,8 +435,12 @@ namespace DicsordBot
                     data.Name = file.Name;
                     data.File = file.Path;
 
-                    //interrupt current stream
-                    triggerBotInstantReplay(data);
+                    if (isPriority)
+                        //interrupt current stream
+                        triggerBotInstantReplay(data);
+                    else
+
+                        triggerBotQueueReplay(data);
                 }
             }
         }

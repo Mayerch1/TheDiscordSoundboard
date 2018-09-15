@@ -36,13 +36,33 @@
                         <StackPanel Orientation="Horizontal" Tag="{Binding Id}" MouseLeftButtonDown="stack_list_MouseLeftButtonDown">
                             <!-- TODO: spacer, left, middle and right aligned-->
                             <Label Content="{Binding Name}" />
+
                             <Label HorizontalAlignment="Center" Content="{Binding Author}" />
+
                             <Label HorizontalAlignment="Right" Content="{Binding LengthString}" />
 
                             <!--TODO: button dropdown  -->
-                            <Button>
-                                <materialDesign:PackIcon Kind="DotsVertical" />
-                            </Button>
+                            <MenuItem x:Name="btn_addBtnContext" Click="btn_addBtnContext_Click">
+                                <MenuItem.Icon>
+                                    <materialDesign:PackIcon Kind="DotsHorizontal" />
+                                </MenuItem.Icon>
+                                <MenuItem.ContextMenu>
+                                    <ContextMenu>
+                                        <MenuItem Header="Add to Queue"
+                                                 Tag="{Binding Source={x:Static Application.Current}, Path=FilteredFiles.Id}"
+                                                  Click="context_AddQueue_Click" />
+
+                                        <MenuItem Header="Add to Playlist...">
+                                            <MenuItem.ContextMenu>
+                                                <ContextMenu>
+                                                    <MenuItem Header="Test1" />
+                                                    <MenuItem Header="Test2" />
+                                                </ContextMenu>
+                                            </MenuItem.ContextMenu>
+                                        </MenuItem>
+                                    </ContextMenu>
+                                </MenuItem.ContextMenu>
+                            </MenuItem>
                         </StackPanel>
                     </DataTemplate>
                 </ListBox.ItemTemplate>
