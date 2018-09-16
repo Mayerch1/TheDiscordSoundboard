@@ -97,7 +97,7 @@ namespace DicsordBot
 
         private void stack_list_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
-            uint tag = (uint)((StackPanel)sender).Tag;
+            uint tag = (uint)((FrameworkElement)sender).Tag;
 
             ListItemPlay(tag, true);
         }
