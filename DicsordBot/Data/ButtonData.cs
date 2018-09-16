@@ -54,6 +54,8 @@ namespace DicsordBot.Data
         private bool isEarrape = false;
         private bool isLoop = false;
         private int iD;
+        private uint hotkey_vk = 0;
+        private uint hotkey_mod = 0;
 
         #endregion saved fields
 
@@ -84,6 +86,16 @@ namespace DicsordBot.Data
         /// IsLoop property
         /// </summary>
         public bool IsLoop { get { return isLoop; } set { isLoop = value; OnPropertyChanged("IsLoop"); } }
+
+        /// <summary>
+        /// virtual keycode of assigned hotkey
+        /// </summary>
+        public uint Hotkey_VK { get { return hotkey_vk; } set { hotkey_vk = value; OnPropertyChanged("Hotkey_VK"); } }
+
+        /// <summary>
+        /// modifier code of assigned hotkey
+        /// </summary>
+        public uint Hotkey_MOD { get { return hotkey_mod; } set { hotkey_mod = value; OnPropertyChanged("Hotkey_MOD"); } }
 
         /// <summary>
         /// ID property

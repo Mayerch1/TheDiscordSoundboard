@@ -191,6 +191,7 @@
     <Compile Include="About.xaml.cs">
       <DependentUpon>About.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Data\Hotkey.cs" />
     <Compile Include="Handle\ChannelListManager.cs" />
     <Compile Include="Data\FileData.cs" />
     <Compile Include="Data\Playlist.cs" />

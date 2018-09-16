@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -10,6 +11,7 @@ using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
+using System.Windows.Interop;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
@@ -150,6 +152,7 @@ namespace DicsordBot
             }
             else
             {
+                initHotkeys();
                 initAsync();
                 initDelayedAsync();
             }
@@ -160,8 +163,26 @@ namespace DicsordBot
         private void MainWindow_Closing(object sender, CancelEventArgs e)
         {
             cleanUp();
+            terminateHotkeys();
             Console.WriteLine("Last user-code was executed");
         }
+
+        #region hotkeys
+
+        private void initHotkeys()
+        {
+            HotkeyManager.initHotkeys(this);
+            //register all saved hotkeys
+            foreach (var hotkey in Handle.Data.Persistent.HotkeyList)
+                HotkeyManager.RegisterHotKey(this, hotkey.mod_code, hotkey.vk_code);
+        }
+
+        private void terminateHotkeys()
+        {
+            HotkeyManager.terminateHotkeys(this);
+        }
+
+        #endregion hotkeys
 
         private async void cleanUp()
         {
@@ -359,6 +380,7 @@ namespace DicsordBot
             Handle.Bot.FileWarning += Handle.FileWarning_Show;
             Handle.Bot.ClientWarning += Handle.ClientWarning_Show;
             Handle.Bot.SnackbarWarning += SnackBarWarning_Show;
+            HotkeyManager.RegisteredHotkeyPressed += Hotkey_Pressed;
 
             AddHandler(TreeViewItem.ExpandedEvent, new RoutedEventHandler(tree_channelList_ItemExpanded));
 
@@ -384,6 +406,22 @@ namespace DicsordBot
                     setLoopStatus(LoopState.LoopReset);
                 }
             };
+        }
+
+        private void Hotkey_Pressed(IntPtr lParam)
+        {
+            Console.WriteLine("Hotkey pressed: " + lParam.ToString("x"));
+
+            //spereate keyCodes from lParam
+            uint keyCode = ((uint)lParam & 0xFF0000) >> (4 * 4);
+            uint modCode = (uint)lParam & 0x00FFFF;
+
+            //find button and trigger replay
+            foreach (var hotkey in Handle.Data.Persistent.HotkeyList)
+            {
+                if (keyCode == hotkey.vk_code && modCode == hotkey.mod_code && hotkey.btn_id >= 0)
+                    btn_InstantButton_Clicked(hotkey.btn_id);
+            }
         }
 
         private void snackBar_Click()
