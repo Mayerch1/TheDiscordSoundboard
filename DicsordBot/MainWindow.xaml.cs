@@ -158,6 +158,7 @@ namespace DicsordBot
             }
 
             FileWatcher.indexFiles(Handle.Data.Persistent.MediaSources);
+           
         }
 
         private void MainWindow_Closing(object sender, CancelEventArgs e)

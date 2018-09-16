@@ -102,14 +102,20 @@ namespace DicsordBot
             ListItemPlay(tag, true);
         }
 
-        private void btn_addBtnContext_Click(object sender, RoutedEventArgs e)
+        private void menu_openContext_Click(object sender, RoutedEventArgs e)
         {
             var btn = sender as FrameworkElement;
             if (btn != null)
                 btn.ContextMenu.IsOpen = true;
         }
 
-        private void context_AddQueue_Click(object sender, RoutedEventArgs e)
+        private void menu_addToQueue_Clicked(object sender, RoutedEventArgs e)
+        {
+            uint tag = (uint)((FrameworkElement)sender).Tag;
+            ListItemPlay(tag, false);
+        }
+
+        private void context_AddPlaylist_Click(object sender, RoutedEventArgs e)
         {
             //This should crash
             //uint tag = (uint)((FrameworkElement)sender).Tag;
