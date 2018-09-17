@@ -37,7 +37,13 @@
 
                     <Grid Margin="20,20,20,20">
 
-                        <Button Margin="5" Width="250"  HorizontalAlignment="Center" Click="btn_Donate_Click">
+                        <Button 
+                            Margin="5" 
+                            Width="250"  
+                            HorizontalAlignment="Center"
+                            Background="{StaticResource PrimaryAccentBrush}"
+                            BorderBrush="{StaticResource PrimaryAccentBrush}" 
+                            Click="btn_Donate_Click">
                             <Image Stretch="Uniform" Source="/res/paypal.png" />
                         </Button>
                     </Grid>
@@ -46,9 +52,15 @@
                 <materialDesign:ColorZone Background="{StaticResource PrimaryBackgroundBrush}" materialDesign:ShadowAssist.ShadowDepth="Depth2" materialDesign:ShadowAssist.ShadowEdges="All" Margin="5,5,5,5" Height="Auto">
 
                     <Grid Margin="20,20,20,20">
-                        <Button Margin="5" Width="250" HorizontalAlignment="Center" Click="btn_license_Click">
-                            View License
-                        </Button>
+                        <Button Margin="5" 
+                                Width="250"
+                                HorizontalAlignment="Center"
+                                Background="{StaticResource PrimaryAccentBrush}"
+                                BorderBrush="{StaticResource PrimaryAccentBrush}" 
+                                Click="btn_license_Click"
+                                Content="View License"/>
+                      
+
                     </Grid>
                 </materialDesign:ColorZone>
             </StackPanel>

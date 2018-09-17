@@ -39,9 +39,19 @@ namespace DicsordBot
             Handle.Token = ((TextBox)sender).Text;
         }
 
-        private void btn_Help_Click(object sender, RoutedEventArgs e)
+        private void btn_Help_Application_Click(object sender, RoutedEventArgs e)
         {
-            System.Diagnostics.Process.Start(Data.PersistentData.urlToGitRepo + "wiki/Settings#application");
+            openHelpPage("Settings#application");
+        }
+
+        private void btn_Help_Files_Click(object sender, RoutedEventArgs e)
+        {
+            openHelpPage("Settings#files");
+        }
+
+        private void openHelpPage(string page)
+        {
+            System.Diagnostics.Process.Start(Data.PersistentData.urlToGitRepo + "wiki/" + page);
         }
 
         private void btn_DirChooser_Click(object sender, RoutedEventArgs e)

@@ -45,7 +45,6 @@ namespace DicsordBot
             {
                 for (int i = 0; i < CompleteList.Count; i++)
                 {
-                    //TODO: possible crash, when servers are not loaded fast enough
                     var server = CompleteList[i];
 
                     TreeViewItem newBranch = new TreeViewItem();

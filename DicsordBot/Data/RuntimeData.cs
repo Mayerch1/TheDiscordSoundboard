@@ -29,7 +29,7 @@ namespace DicsordBot.Data
 
         private PersistentData persistent = new PersistentData();
         private ObservableCollection<FileData> files = new ObservableCollection<FileData>();
-        private ObservableCollection<Playlist> playLists = new ObservableCollection<Playlist>();
+        private ObservableCollection<Playlist> playlists = new ObservableCollection<Playlist>();
         private uint playlistIndex = 0;
         private uint playlistFileIndex = 0;
         private bool isPlaylistPlaying = false;
@@ -51,7 +51,7 @@ namespace DicsordBot.Data
         /// <summary>
         /// List of all playlists
         /// </summary>
-        public ObservableCollection<Playlist> Playlists { get { return playLists; } set { playLists = value; OnPropertyChanged("PlayLists"); } }
+        public ObservableCollection<Playlist> Playlists { get { return playlists; } set { playlists = value; OnPropertyChanged("PlayLists"); } }
 
         /// <summary>
         /// index of currently played playlist

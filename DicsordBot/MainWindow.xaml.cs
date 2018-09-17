@@ -158,7 +158,6 @@ namespace DicsordBot
             }
 
             FileWatcher.indexFiles(Handle.Data.Persistent.MediaSources);
-           
         }
 
         private void MainWindow_Closing(object sender, CancelEventArgs e)
@@ -470,9 +469,7 @@ namespace DicsordBot
                 if (file.Id == index)
                 {
                     //create ButtonData to feed to bot
-                    Data.ButtonData data = new Data.ButtonData();
-                    data.Name = file.Name;
-                    data.File = file.Path;
+                    Data.ButtonData data = new Data.ButtonData(file.Name, file.Path);
 
                     if (isPriority)
                         //interrupt current stream
@@ -486,8 +483,6 @@ namespace DicsordBot
 
         private void Playlist_Item_Play(uint id, uint fileIndex = 0)
         {
-            //TODO: test for function
-
             //search for playlist
             foreach (var playlist in Handle.Data.Playlists)
             {
@@ -563,7 +558,9 @@ namespace DicsordBot
         {
             await Handle.Bot.enqueueAsync(data);
 
-            if (!Handle.Bot.IsStreaming)
+            //TODO: check fix, add title to queue when on pause mode
+            //only resume, if not streaming + not in pause mode
+            if (!Handle.Bot.IsStreaming && Handle.Bot.IsBufferEmpty)
                 await Handle.Bot.resumeStream();
         }
 
@@ -580,7 +577,21 @@ namespace DicsordBot
         private void btn_Previous_Click(object sender, RoutedEventArgs e)
         {
             //FUTURE: playlist: if time is below 2 seconds skip, else move to 0
-            Handle.Bot.skipToTime(TimeSpan.Zero);
+            //TODO: test future implementation
+
+            //skip prev title in playlist, when in playlist-mode and <2s
+            if (Handle.Data.IsPlaylistPlaying && Handle.Bot.CurrentTime.TotalSeconds < 2)
+            {
+                if (Handle.Data.PlaylistFileIndex > 0)
+                {
+                    //move playlist reader, skip
+                    Handle.Data.PlaylistFileIndex -= 2;
+                    Handle.Bot.skipTrack();
+                }
+            }
+            else
+                //skip to beginning of track
+                Handle.Bot.skipToTime(TimeSpan.Zero);
         }
 
         private void btn_Repeat_Click(object sender, RoutedEventArgs e)
