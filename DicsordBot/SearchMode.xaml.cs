@@ -26,6 +26,7 @@ namespace DicsordBot
     {
         private ObservableCollection<Data.FileData> filteredFiles;
         public ObservableCollection<Data.FileData> FilteredFiles { get { return filteredFiles; } set { filteredFiles = value; OnPropertyChanged("FilteredFiles"); } }
+        public ObservableCollection<Data.Playlist> Playlists { get { return Handle.Data.Playlists; } set { Handle.Data.Playlists = value; OnPropertyChanged("Playlists"); } }
 
         public delegate void ListItemPlayHandler(uint tag, bool isPriority);
 
@@ -104,6 +105,7 @@ namespace DicsordBot
 
         private void menu_openContext_Click(object sender, RoutedEventArgs e)
         {
+            //that's ugly, but it gets the 'grandParent' to open the context
             var listElement = sender as FrameworkElement;
             if (listElement != null)
             {
@@ -121,6 +123,28 @@ namespace DicsordBot
         {
             uint tag = (uint)((FrameworkElement)sender).Tag;
             ListItemPlay(tag, false);
+        }
+
+        private void menu_createAndAddPlaylist_Click(object sender, RoutedEventArgs e)
+        {
+            var location = this.PointToScreen(new Point(0, 0));
+            var dialog = new PlaylistAddDialog(location.X, location.Y, this.ActualWidth, this.ActualHeight);
+
+            //create new playlist from dialog result
+            var result = dialog.ShowDialog();
+            if (result == true)
+            {
+                Handle.Data.Playlists.Add(new Data.Playlist(dialog.PlaylistName));
+            }
+
+            uint tag = (uint)((FrameworkElement)sender).Tag;
+
+            //search for title with tag
+            foreach (var title in Handle.Data.Files)
+            {
+                if (title.Id == tag)
+                    Handle.Data.Playlists[Handle.Data.Playlists.Count - 1].Tracks.Add(title);
+            }
         }
 
         private void context_AddPlaylist_Click(object sender, RoutedEventArgs e)

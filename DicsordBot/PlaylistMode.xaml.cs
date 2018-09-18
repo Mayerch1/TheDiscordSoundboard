@@ -25,6 +25,7 @@ namespace DicsordBot
         public PlaylistMode()
         {
             InitializeComponent();
+            this.DataContext = Handle.Data;
         }
 
         public delegate void PlaylistItemPlayHandler(uint tag, uint fileIndex);
@@ -33,19 +34,13 @@ namespace DicsordBot
 
         private void btn_playlistAdd_Click(object sender, RoutedEventArgs e)
         {
-            //TODO: playlist add dialog or dropdown
-            var dialog = new PlaylistAddDialog();
+            var location = this.PointToScreen(new Point(0, 0));
+            var dialog = new PlaylistAddDialog(location.X, location.Y, this.ActualWidth, this.ActualHeight);
 
-            Window window = new Window
-            {
-                Title = "Create a new Playlist",
-                Content = dialog,
-            };
-
-            var result = window.ShowDialog();
+            var result = dialog.ShowDialog();
             if (result == true)
             {
-                //TODO: add playlist
+                Handle.Data.Playlists.Add(new Data.Playlist(dialog.PlaylistName));
             }
         }
 

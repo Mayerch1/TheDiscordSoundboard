@@ -10,7 +10,6 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
 using System.Windows.Shapes;
 
 namespace DicsordBot
@@ -20,15 +19,23 @@ namespace DicsordBot
     /// <summary>
     /// Interaction logic for PlaylistAddDialog.xaml
     /// </summary>
-    public partial class PlaylistAddDialog : UserControl
+    public partial class PlaylistAddDialog : Window
     {
-        public PlaylistAddDialog()
+        public string PlaylistName { get { return box_Name.Text; } set { box_Name.Text = value; } }
+
+        public PlaylistAddDialog(double x, double y, double pWidth, double pHeight)
         {
             InitializeComponent();
+            double finalX = (x + pWidth / 2) - (this.Width / 2);
+            double finalY = (y + pHeight / 2) - (this.Height / 2);
+            this.Left = finalX;
+            this.Top = finalY;
         }
 
-        private void btn_accept_Click(object sender, RoutedEventArgs e)
+        private void btn_Accept_Click(object sender, RoutedEventArgs e)
         {
+            DialogResult = true;
+            this.Close();
         }
     }
 

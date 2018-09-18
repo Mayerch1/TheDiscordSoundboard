@@ -9,9 +9,14 @@
     <Grid x:Name="PlaylistGrid">
         <WrapPanel>
             <Button Content="New" Click="btn_playlistAdd_Click" />
-            <Button Content="Dummy 1" Tag="0" />
-            <Button Content="Dummy 2" Tag="1" />
-            <Button Content="Dummy 3" Tag="2" />
+
+            <ItemsControl Margin="15" ItemsSource="{Binding Playlists}">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Button Margin="5" Content="{Binding Name}" Tag="{Binding Id}" Click="btn_playlistOpen_Click" />
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
         </WrapPanel>
     </Grid>
 </UserControl>
