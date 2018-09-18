@@ -28,9 +28,13 @@ namespace DicsordBot
             this.DataContext = Handle.Data;
         }
 
-        public delegate void PlaylistItemPlayHandler(uint tag, uint fileIndex);
+        public delegate void PlaylistItemEnqueuedHandler(Data.FileData file);
 
-        public PlaylistItemPlayHandler PlaylistItemPlay;
+        public PlaylistItemEnqueuedHandler PlaylistItemEnqueued;
+
+        public delegate void PlaylistStartPlayHandler(uint listIndex, uint fileTag);
+
+        public PlaylistStartPlayHandler PlaylistStartPlay;
 
         private void btn_playlistAdd_Click(object sender, RoutedEventArgs e)
         {
@@ -53,7 +57,20 @@ namespace DicsordBot
             PlaylistGrid.Children.RemoveAt(0);
             var playList = new PlaylistSingleView(index);
 
+            playList.SinglePlaylistStartPlay += InnerPlaylistPlay;
+            playList.SinglePlaylistItemEnqueued += PlaylistItemQueued;
+
             PlaylistGrid.Children.Add(playList);
+        }
+
+        private void PlaylistItemQueued(Data.FileData file)
+        {
+            PlaylistItemEnqueued(file);
+        }
+
+        private void InnerPlaylistPlay(uint listIndex, uint FileTag)
+        {
+            PlaylistStartPlay(listIndex, FileTag);
         }
     }
 

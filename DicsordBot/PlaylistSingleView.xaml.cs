@@ -24,15 +24,19 @@ namespace DicsordBot
     /// </summary>
     public partial class PlaylistSingleView : UserControl, INotifyPropertyChanged
     {
-        public PlaylistSingleView()
-        {
-            InitializeComponent();
-        }
+        public delegate void SinglePlaylistItemEnqueuedHandler(Data.FileData file);
+
+        public SinglePlaylistItemEnqueuedHandler SinglePlaylistItemEnqueued;
+
+        public delegate void SinglePlaylistStartPlayHandler(uint listIndex, uint fileTag);
+
+        public SinglePlaylistStartPlayHandler SinglePlaylistStartPlay;
 
         public PlaylistSingleView(uint _index)
         {
             index = _index;
             InitializeComponent();
+            this.DataContext = this;
         }
 
         private uint index = 0;
@@ -41,11 +45,14 @@ namespace DicsordBot
 
         private void stack_list_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
+            //start to replay the complete list
             uint tag = (uint)((FrameworkElement)sender).Tag;
+            SinglePlaylistStartPlay(index, tag);
         }
 
         private void menu_openContext_Click(object sender, RoutedEventArgs e)
         {
+            //find grandparent to opent context
             var listElement = sender as FrameworkElement;
             if (listElement != null)
             {
@@ -61,7 +68,14 @@ namespace DicsordBot
 
         private void menu_addToQueue_Clicked(object sender, RoutedEventArgs e)
         {
+            //enque clicked file
             uint tag = (uint)((FrameworkElement)sender).Tag;
+
+            foreach (var file in PlaylistFiles)
+            {
+                if (file.Id == tag)
+                    SinglePlaylistItemEnqueued(file);
+            }
         }
 
         private void context_AddPlaylist_Click(object sender, RoutedEventArgs e)

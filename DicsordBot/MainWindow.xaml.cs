@@ -367,7 +367,10 @@ namespace DicsordBot
             }
             else if (objType == typeof(PlaylistMode))
             {
-                ((PlaylistMode)embed).PlaylistItemPlay += Playlist_Item_Play;
+                //TODO: correct functions
+                ((PlaylistMode)embed).PlaylistStartPlay += Playlist_Play;
+
+                ((PlaylistMode)embed).PlaylistItemEnqueued += Playlist_SingleFile_Play;
             }
         }
 
@@ -456,6 +459,8 @@ namespace DicsordBot
             snackBar_Hint.MessageQueue.Enqueue(msg, optionMsg, handler);
         }
 
+        #region BotPlayDelegates
+
         private void btn_InstantButton_Clicked(int btnListIndex)
         {
             //interrupt stream
@@ -482,19 +487,25 @@ namespace DicsordBot
             }
         }
 
-        private void Playlist_Item_Play(uint id, uint fileIndex = 0)
+        private void Playlist_SingleFile_Play(Data.FileData file)
+        {
+            triggerBotQueueReplay(new Data.ButtonData(file.Name, file.Path));
+        }
+
+        private void Playlist_Play(uint listId, uint fileIndex = 0)
         {
             //search for playlist
             foreach (var playlist in Handle.Data.Playlists)
             {
-                if (playlist.Id == id)
+                if (playlist.Id == listId)
                 {
+                    //select file by index of list
                     if (fileIndex < playlist.Tracks.Count)
                     {
                         //add first button
                         triggerBotInstantReplay(new Data.ButtonData(playlist.Tracks[(int)fileIndex].Name, playlist.Tracks[(int)fileIndex].Path));
                         //set playlist properties
-                        Handle.Data.PlaylistIndex = id;
+                        Handle.Data.PlaylistIndex = listId;
                         Handle.Data.PlaylistFileIndex = fileIndex;
                         Handle.Data.IsPlaylistPlaying = true;
                     }
@@ -513,6 +524,18 @@ namespace DicsordBot
             else
                 Handle.Bot.skipTrack();
         }
+
+        private async void triggerBotQueueReplay(Data.ButtonData data)
+        {
+            await Handle.Bot.enqueueAsync(data);
+
+            //TODO: check fix, add title to queue when on pause mode
+            //only resume, if not streaming + not in pause mode
+            if (!Handle.Bot.IsStreaming && Handle.Bot.IsBufferEmpty)
+                await Handle.Bot.resumeStream();
+        }
+
+        #endregion BotPlayDelegates
 
         private void bot_streamState_Changed(bool newState)
         {
@@ -553,16 +576,6 @@ namespace DicsordBot
                     }
                 }
             }
-        }
-
-        private async void triggerBotQueueReplay(Data.ButtonData data)
-        {
-            await Handle.Bot.enqueueAsync(data);
-
-            //TODO: check fix, add title to queue when on pause mode
-            //only resume, if not streaming + not in pause mode
-            if (!Handle.Bot.IsStreaming && Handle.Bot.IsBufferEmpty)
-                await Handle.Bot.resumeStream();
         }
 
         private void btn_Play_Click(object sender, RoutedEventArgs e)

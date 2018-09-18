@@ -26,13 +26,6 @@
                                 <MenuItem Header="Add to Queue"
                                               Tag="{Binding Id}"
                                                   Click="menu_addToQueue_Clicked" />
-
-                                <MenuItem Header="Add to Playlist...">
-
-                                    <MenuItem Header="New Playlist..." />
-                                    <MenuItem Header="Test1" />
-                                    <MenuItem Header="Test2" />
-                                </MenuItem>
                             </ContextMenu>
                         </Grid.ContextMenu>
 
