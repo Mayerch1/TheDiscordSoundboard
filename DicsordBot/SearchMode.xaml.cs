@@ -104,9 +104,17 @@ namespace DicsordBot
 
         private void menu_openContext_Click(object sender, RoutedEventArgs e)
         {
-            var btn = sender as FrameworkElement;
-            if (btn != null)
-                btn.ContextMenu.IsOpen = true;
+            var listElement = sender as FrameworkElement;
+            if (listElement != null)
+            {
+                var parent = listElement.Parent as FrameworkElement;
+                if (parent != null)
+                {
+                    var grandParent = parent.Parent as FrameworkElement;
+                    if (grandParent != null)
+                        grandParent.ContextMenu.IsOpen = true;
+                }
+            }
         }
 
         private void menu_addToQueue_Clicked(object sender, RoutedEventArgs e)

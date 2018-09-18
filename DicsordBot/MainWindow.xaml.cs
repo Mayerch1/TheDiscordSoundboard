@@ -143,6 +143,8 @@ namespace DicsordBot
             var msgQueue = new SnackbarMessageQueue(TimeSpan.FromMilliseconds(3500));
             snackBar_Hint.MessageQueue = (msgQueue);
 
+            initHotkeys();
+
             //first startup sequence
             if (Handle.Data.Persistent.IsFirstStart)
             {
@@ -152,7 +154,6 @@ namespace DicsordBot
             }
             else
             {
-                initHotkeys();
                 initAsync();
                 initDelayedAsync();
             }
@@ -648,7 +649,7 @@ namespace DicsordBot
 
         private void btn_Sounds_Click(object sender, RoutedEventArgs e)
         {
-            //change embeds for maingrit
+            //change embeds for maingrid
             MainGrid.Child = null;
             ButtonUI btnUI = new ButtonUI();
             registerEmbedEvents(btnUI);

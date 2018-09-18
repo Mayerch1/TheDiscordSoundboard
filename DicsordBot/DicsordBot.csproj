@@ -206,8 +206,14 @@
       <DependentUpon>Hint.xaml</DependentUpon>
     </Compile>
     <Compile Include="Handle\HotkeyManager.cs" />
+    <Compile Include="PlaylistAddDialog.xaml.cs">
+      <DependentUpon>PlaylistAddDialog.xaml</DependentUpon>
+    </Compile>
     <Compile Include="PlaylistMode.xaml.cs">
       <DependentUpon>PlaylistMode.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="PlaylistSingleView.xaml.cs">
+      <DependentUpon>PlaylistSingleView.xaml</DependentUpon>
     </Compile>
     <Compile Include="SearchMode.xaml.cs">
       <DependentUpon>SearchMode.xaml</DependentUpon>
@@ -248,9 +254,17 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="PlaylistAddDialog.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="PlaylistMode.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="PlaylistSingleView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="SearchMode.xaml">
       <SubType>Designer</SubType>

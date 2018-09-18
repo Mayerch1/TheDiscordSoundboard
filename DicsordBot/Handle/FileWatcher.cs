@@ -72,23 +72,34 @@ namespace DicsordBot
         }
 
         /// <summary>
+        /// updates list of files, deletes old list, runs in background thread
+        /// </summary>
+        /// <param name="sources">all directories to search</param>
+        /// <param name="allowDuplicates">if true, doesn't test if file is already in list</param>
+        public static void indexCleanFiles(ObservableCollection<string> sources, bool allowDuplicates = false)
+        {
+            Handle.Data.Files.Clear();
+            indexFiles(sources, allowDuplicates);
+        }
+
+        /// <summary>
         /// updates list of files, keeps old list, runs in background thread
         /// </summary>
         /// <param name="sources">all directories to search</param>
-        /// <param name="ignoreDuplicates">if true, doesn't test if file is already in list</param>
-        public static void indexFiles(ObservableCollection<string> sources, bool ignoreDuplicates = false)
+        /// <param name="allowDuplicatos">if true, doesn't test if file is already in list</param>
+        public static void indexFiles(ObservableCollection<string> sources, bool allowDuplicatos = false)
         {
-            Thread worker = new Thread(() => indexFilesThread(sources, ignoreDuplicates));
+            Thread worker = new Thread(() => indexFilesThread(sources, allowDuplicatos));
 
             worker.IsBackground = true;
             worker.Start();
         }
 
-        private static void indexFilesThread(ObservableCollection<string> sources, bool ignoreDuplicates = false)
+        private static void indexFilesThread(ObservableCollection<string> sources, bool allowDuplicates = false)
         {
             foreach (var dir in sources)
             {
-                indexFolder(dir, ignoreDuplicates);
+                indexFolder(dir, allowDuplicates);
             }
             //sort by name
             Handle.Data.Files = new ObservableCollection<Data.FileData>(Handle.Data.Files.OrderBy(o => o.Name));
@@ -99,20 +110,20 @@ namespace DicsordBot
         /// recursive function for searching indexing a folder
         /// </summary>
         /// <param name="path">path to directory</param>
-        /// <param name="ignoreDuplicates">if true, doesn't test if file is already in list</param>
-        private static void indexFolder(string path, bool ignoreDuplicates)
+        /// <param name="allowDuplicates">if true, doesn't test if file is already in list</param>
+        private static void indexFolder(string path, bool allowDuplicates)
         {
             string[] files = Directory.GetFiles(path);
             string[] subDirs = Directory.GetDirectories(path);
 
             foreach (var singleFile in files)
             {
-                indexFile(singleFile, ignoreDuplicates);
+                indexFile(singleFile, allowDuplicates);
             }
 
             foreach (var singleDir in subDirs)
             {
-                indexFolder(singleDir, ignoreDuplicates);
+                indexFolder(singleDir, allowDuplicates);
             }
         }
 
@@ -120,10 +131,10 @@ namespace DicsordBot
         /// add file to list, if it's a supported format
         /// </summary>
         /// <param name="path">path to file</param>
-        /// <param name="ignoreDuplicates">if true, doesn't test if file is already in list</param>
-        private static void indexFile(string path, bool ignoreDuplicates)
+        /// <param name="allowDuplicates">if true, doesn't test if file is already in list</param>
+        private static void indexFile(string path, bool allowDuplicates)
         {
-            if (!ignoreDuplicates)
+            if (!allowDuplicates)
             {
                 //check for existing files, to avoid duplicates
                 foreach (var singleFile in Handle.Data.Files)

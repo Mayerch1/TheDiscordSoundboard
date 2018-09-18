@@ -22,19 +22,43 @@ namespace DicsordBot
     /// </summary>
     public partial class PlaylistMode : UserControl
     {
-        public delegate void PlaylistItemPlayHandler(uint tag, uint fileIndex);
-
-        public PlaylistItemPlayHandler PlaylistItemPlay;
-
         public PlaylistMode()
         {
             InitializeComponent();
         }
 
+        public delegate void PlaylistItemPlayHandler(uint tag, uint fileIndex);
+
+        public PlaylistItemPlayHandler PlaylistItemPlay;
+
         private void btn_playlistAdd_Click(object sender, RoutedEventArgs e)
         {
-            PlaylistItemPlay(0, 0);
             //TODO: playlist add dialog or dropdown
+            var dialog = new PlaylistAddDialog();
+
+            Window window = new Window
+            {
+                Title = "Create a new Playlist",
+                Content = dialog,
+            };
+
+            var result = window.ShowDialog();
+            if (result == true)
+            {
+                //TODO: add playlist
+            }
+        }
+
+        private void btn_playlistOpen_Click(object sender, RoutedEventArgs e)
+        {
+            //opens new playlist as single view
+            uint index = (uint)((FrameworkElement)sender).Tag;
+
+            //change embeds for maingrit
+            PlaylistGrid.Children.RemoveAt(0);
+            var playList = new PlaylistSingleView(index);
+
+            PlaylistGrid.Children.Add(playList);
         }
     }
 

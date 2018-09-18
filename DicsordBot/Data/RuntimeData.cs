@@ -170,6 +170,8 @@ namespace DicsordBot.Data
             {
                 //create new one, old one was overwirtten with =null
                 Persistent = new PersistentData();
+                //Persistent=new... destroyed this information
+                Persistent.SettingsPath = System.Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + applicationDirectory;
                 loadDefaultValues();
             }
             //normalize btn

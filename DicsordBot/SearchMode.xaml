@@ -32,7 +32,7 @@
             <ListBox x:Name="list_All" ItemsSource="{Binding FilteredFiles}">
                 <ListBox.ItemTemplate>
                     <DataTemplate>
-                        <!-- TODO: use something different?-->
+
                         <Grid Tag="{Binding Id}" MouseLeftButtonDown="stack_list_MouseLeftButtonDown">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="*" />
@@ -40,7 +40,21 @@
                                 <ColumnDefinition Width="*" />
                                 <ColumnDefinition Width="*" />
                             </Grid.ColumnDefinitions>
-                            <!-- TODO: spacer, left, middle and right aligned-->
+
+                            <Grid.ContextMenu>
+                                <ContextMenu>
+                                    <MenuItem Header="Add to Queue"
+                                              Tag="{Binding Id}"
+                                                  Click="menu_addToQueue_Clicked" />
+
+                                    <MenuItem Header="Add to Playlist...">
+
+                                        <MenuItem Header="New Playlist..." />
+                                        <MenuItem Header="Test1" />
+                                        <MenuItem Header="Test2" />
+                                    </MenuItem>
+                                </ContextMenu>
+                            </Grid.ContextMenu>
 
                             <Grid Grid.Column="0">
                                 <Label Content="{Binding Name}" />
@@ -53,38 +67,13 @@
                             <Grid Grid.Column="2">
                                 <Label Content="{Binding LengthString}" />
                             </Grid>
-                            <!--TODO: button dropdown  -->
+
                             <Grid Grid.Column="3">
-                                <MenuItem Click="menu_addToQueue_Clicked" Tag="{Binding Id}">
+                                <MenuItem Click="menu_openContext_Click" Tag="{Binding Id}">
                                     <MenuItem.Icon>
-                                        <materialDesign:PackIcon Kind="Plus" />
+                                        <materialDesign:PackIcon Kind="DotsHorizontal" />
                                     </MenuItem.Icon>
                                 </MenuItem>
-
-                                <!--
-                <MenuItem x:Name="btn_addBtnContext" Click="menu_openContext_Click">
-                  <MenuItem.Icon>
-                    <materialDesign:PackIcon Kind="DotsHorizontal" />
-                  </MenuItem.Icon>
-
-                                <MenuItem.ContextMenu>
-                                    <ContextMenu>
-                                        <MenuItem Header="Add to Queue"
-                                                 Tag="{Binding Source={x:Static Application.Current}, Path=FilteredFiles.Id}"
-                                                  Click="context_AddPlaylist_Click" />
-
-                                        <MenuItem Header="Add to Playlist...">
-                                            <MenuItem.ContextMenu>
-                                                <ContextMenu>
-                                                    <MenuItem Header="Test1" />
-                                                    <MenuItem Header="Test2" />
-                                                </ContextMenu>
-                                            </MenuItem.ContextMenu>
-                                        </MenuItem>
-                                    </ContextMenu>
-                                </MenuItem.ContextMenu>
-                </MenuItem>
-                -->
                             </Grid>
                         </Grid>
                     </DataTemplate>
