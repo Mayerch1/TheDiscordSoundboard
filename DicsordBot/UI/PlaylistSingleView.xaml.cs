@@ -45,23 +45,27 @@ namespace DicsordBot
 
         private void stack_list_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
-            //start to replay the complete list
-            uint tag = (uint)((FrameworkElement)sender).Tag;
-
-            //get the index of the tagged file
-            for (int i = 0; i < PlaylistFiles.Count; i++)
+            //only on double click
+            if (e.ChangedButton == MouseButton.Left && e.ClickCount == 2)
             {
-                if (PlaylistFiles[i].Id == tag)
+                //start to replay the complete list
+                uint tag = (uint)((FrameworkElement)sender).Tag;
+
+                //get the index of the tagged file
+                for (int i = 0; i < PlaylistFiles.Count; i++)
                 {
-                    SinglePlaylistStartPlay(index, (uint)i);
-                    break;
+                    if (PlaylistFiles[i].Id == tag)
+                    {
+                        SinglePlaylistStartPlay(index, (uint)i);
+                        break;
+                    }
                 }
             }
         }
 
         private void menu_openContext_Click(object sender, RoutedEventArgs e)
         {
-            //find grandparent to opent context
+            //find grandparent to open context
             var listElement = sender as FrameworkElement;
             if (listElement != null)
             {
@@ -125,6 +129,26 @@ namespace DicsordBot
         }
 
         #endregion events
+
+        private void stack_list_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Delete)
+            {
+                while (list_All.SelectedItems.Count > 0)
+                {
+                    var item = list_All.SelectedItems[0];
+
+                    for (int i = 0; i < PlaylistFiles.Count; i++)
+                    {
+                        if ((Data.FileData)item == PlaylistFiles[i])
+                        {
+                            PlaylistFiles.RemoveAt(i);
+                            break;
+                        }
+                    }
+                }
+            }
+        }
     }
 
 #pragma warning restore CS1591

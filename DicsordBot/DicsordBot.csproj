@@ -202,6 +202,9 @@
     <Compile Include="Bot\BotHandler.cs" />
     <Compile Include="Data\Persistent.cs" />
     <Compile Include="Data\RuntimeData.cs" />
+    <Compile Include="UI\ButtonHotkeyWindow.xaml.cs">
+      <DependentUpon>ButtonHotkeyWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="UI\Hint.xaml.cs">
       <DependentUpon>Hint.xaml</DependentUpon>
     </Compile>
@@ -226,6 +229,10 @@
     </Compile>
     <Compile Include="Handle\UpdateChecker.cs" />
     <Page Include="UI\About.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\ButtonHotkeyWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

@@ -367,7 +367,6 @@ namespace DicsordBot
             }
             else if (objType == typeof(PlaylistMode))
             {
-                //TODO: correct functions
                 ((PlaylistMode)embed).PlaylistStartPlay += Playlist_Play;
 
                 ((PlaylistMode)embed).PlaylistItemEnqueued += Playlist_SingleFile_Play;
@@ -417,7 +416,7 @@ namespace DicsordBot
             Console.WriteLine("Hotkey pressed: " + lParam.ToString("x"));
 
             //spereate keyCodes from lParam
-            uint keyCode = ((uint)lParam & 0xFF0000) >> (4 * 4);
+            uint keyCode = (((uint)lParam >> 16) & 0xFFFF);
             uint modCode = (uint)lParam & 0x00FFFF;
 
             //find button and trigger replay
@@ -531,7 +530,6 @@ namespace DicsordBot
         {
             await Handle.Bot.enqueueAsync(data);
 
-            //TODO: check fix, add title to queue when on pause mode
             //only resume, if not streaming + not in pause mode
             if (!Handle.Bot.IsStreaming && Handle.Bot.IsBufferEmpty)
                 await Handle.Bot.resumeStream();

@@ -79,6 +79,16 @@ namespace DicsordBot
             }
         }
 
+        private void btn_HotkeyEditor_Click(object sender, RoutedEventArgs e)
+        {
+            int tag = (int)((FrameworkElement)sender).Tag;
+
+            var location = this.PointToScreen(new Point(0, 0));
+            var dialog = new UI.ButtonHotkeyWindow(tag, location.X, location.Y, this.ActualWidth, this.ActualHeight);
+
+            dialog.ShowDialog();
+        }
+
         private void changeBackFields(StackPanel parent, int index)
         {
             var sibblings = parent.Children;

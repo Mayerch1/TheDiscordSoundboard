@@ -75,7 +75,6 @@ namespace DicsordBot
 
             if (!RegisterHotKey(helper.Handle, HOTKEY_ID, MOD_CTRL, VK_CODE))
             {
-                //TODO: handle error
             }
         }
 
@@ -106,6 +105,59 @@ namespace DicsordBot
         private static void OnHotKeyPressed(IntPtr lParam)
         {
             RegisteredHotkeyPressed(lParam);
+        }
+
+        /// <summary>
+        /// returns tuple of pressed modifiers
+        /// </summary>
+        /// <param name="modCode">modCode for combined modifiers</param>
+        /// <returns>isShift, isCtrl, isWin, isAlt</returns>
+        public static Tuple<bool, bool, bool, bool> getBoolFromCode(uint modCode)
+        {
+            bool shift = false, alt = false, win = false, ctrl = false;
+
+            if ((modCode & 0x1) == 1)
+                alt = true;
+            if ((modCode & 0x2) == 2)
+                ctrl = true;
+            if ((modCode & 0x4) == 4)
+                shift = true;
+            if ((modCode & 0x8) == 8)
+                win = true;
+
+            return Tuple.Create(shift, ctrl, win, alt);
+        }
+
+        /// <summary>
+        /// returns modifier code of requested modifiers
+        /// </summary>
+        /// <param name="isShift">isShift attribute</param>
+        /// <param name="isCtrl">isCtrl attribute</param>
+        /// <param name="isWin">isWin attribute</param>
+        /// <param name="isAlt">isAlt attribute</param>
+        /// <returns>modCode for combined modifiers</returns>
+        public static uint getCodeFromBool(bool isShift, bool isCtrl, bool isWin, bool isAlt)
+        {
+            uint result = 0;
+
+            if (isAlt)
+            {
+                result = result | 0x1;
+            }
+            if (isCtrl)
+            {
+                result = result | 0x2;
+            }
+            if (isShift)
+            {
+                result = result | 0x4;
+            }
+            if (isWin)
+            {
+                result = result | 0x8;
+            }
+
+            return result;
         }
     }
 }

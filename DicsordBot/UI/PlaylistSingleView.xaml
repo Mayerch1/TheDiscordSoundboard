@@ -8,7 +8,7 @@
              mc:Ignorable="d"
              d:DesignHeight="300" d:DesignWidth="300" Drop="UserControl_Drop" AllowDrop="True">
     <Grid>
-        <ListBox x:Name="list_All" ItemsSource="{Binding PlaylistFiles}">
+        <ListBox x:Name="list_All" ItemsSource="{Binding PlaylistFiles}" SelectionMode="Extended" KeyDown="stack_list_KeyDown">
             <ListBox.ItemTemplate>
                 <DataTemplate>
 
