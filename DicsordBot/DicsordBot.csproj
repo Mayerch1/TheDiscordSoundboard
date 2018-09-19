@@ -188,7 +188,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="About.xaml.cs">
+    <Compile Include="UI\About.xaml.cs">
       <DependentUpon>About.xaml</DependentUpon>
     </Compile>
     <Compile Include="Data\Hotkey.cs" />
@@ -202,38 +202,38 @@
     <Compile Include="Bot\BotHandler.cs" />
     <Compile Include="Data\Persistent.cs" />
     <Compile Include="Data\RuntimeData.cs" />
-    <Compile Include="Hint.xaml.cs">
+    <Compile Include="UI\Hint.xaml.cs">
       <DependentUpon>Hint.xaml</DependentUpon>
     </Compile>
     <Compile Include="Handle\HotkeyManager.cs" />
-    <Compile Include="PlaylistAddDialog.xaml.cs">
+    <Compile Include="UI\PlaylistAddDialog.xaml.cs">
       <DependentUpon>PlaylistAddDialog.xaml</DependentUpon>
     </Compile>
-    <Compile Include="PlaylistMode.xaml.cs">
+    <Compile Include="UI\PlaylistMode.xaml.cs">
       <DependentUpon>PlaylistMode.xaml</DependentUpon>
     </Compile>
-    <Compile Include="PlaylistSingleView.xaml.cs">
+    <Compile Include="UI\PlaylistSingleView.xaml.cs">
       <DependentUpon>PlaylistSingleView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="SearchMode.xaml.cs">
+    <Compile Include="UI\SearchMode.xaml.cs">
       <DependentUpon>SearchMode.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Settings.xaml.cs">
+    <Compile Include="UI\Settings.xaml.cs">
       <DependentUpon>Settings.xaml</DependentUpon>
     </Compile>
-    <Compile Include="UnhandledException.xaml.cs">
+    <Compile Include="UI\UnhandledException.xaml.cs">
       <DependentUpon>UnhandledException.xaml</DependentUpon>
     </Compile>
     <Compile Include="Handle\UpdateChecker.cs" />
-    <Page Include="About.xaml">
+    <Page Include="UI\About.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="ButtonUI.xaml">
+    <Page Include="UI\ButtonUI.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Hint.xaml">
+    <Page Include="UI\Hint.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -246,7 +246,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Data\ButtonData.cs" />
-    <Compile Include="ButtonUI.xaml.cs">
+    <Compile Include="UI\ButtonUI.xaml.cs">
       <DependentUpon>ButtonUI.xaml</DependentUpon>
     </Compile>
     <Compile Include="Handle\Handle.cs" />
@@ -254,27 +254,27 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Page Include="PlaylistAddDialog.xaml">
+    <Page Include="UI\PlaylistAddDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="PlaylistMode.xaml">
+    <Page Include="UI\PlaylistMode.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="PlaylistSingleView.xaml">
+    <Page Include="UI\PlaylistSingleView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="SearchMode.xaml">
+    <Page Include="UI\SearchMode.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Settings.xaml">
+    <Page Include="UI\Settings.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="UnhandledException.xaml">
+    <Page Include="UI\UnhandledException.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -306,7 +306,9 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config" />
+    <None Include="App.config">
+      <SubType>Designer</SubType>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.6.1">

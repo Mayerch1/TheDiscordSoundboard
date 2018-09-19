@@ -86,6 +86,22 @@ namespace DicsordBot
             //ListItemPlay(tag, false);
         }
 
+        private void UserControl_Drop(object sender, DragEventArgs e)
+        {
+            if (e.Data != null && e.Data.GetDataPresent(DataFormats.FileDrop))
+            {
+                string[] files = (string[])e.Data.GetData(DataFormats.FileDrop);
+                foreach (var track in files)
+                {
+                    if (FileWatcher.checkForValidFile(track))
+                    {
+                        Data.FileData fileData = FileWatcher.getAllFileInfo(track);
+                        Handle.Data.Playlists[(int)index].Tracks.Add(fileData);
+                    }
+                }
+            }
+        }
+
         #region events
 
         public event PropertyChangedEventHandler PropertyChanged;

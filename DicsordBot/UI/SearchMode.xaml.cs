@@ -21,7 +21,7 @@ namespace DicsordBot
 #pragma warning disable CS1591
 
     /// <summary>
-    /// Interaction logic for SearchMode.xaml
+    /// This class is a shame for anyone who wants to produce clean code
     /// </summary>
     public partial class SearchMode : UserControl, INotifyPropertyChanged
     {
@@ -107,6 +107,7 @@ namespace DicsordBot
         private void menu_openContext_Click(object sender, RoutedEventArgs e)
         {
             //that's ugly, but it gets the 'grandParent' to open the context
+            //#prettyCodeAward2018
             var listElement = sender as FrameworkElement;
             if (listElement != null)
             {

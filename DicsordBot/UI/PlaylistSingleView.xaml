@@ -6,7 +6,7 @@
              xmlns:local="clr-namespace:DicsordBot"
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              mc:Ignorable="d"
-             d:DesignHeight="300" d:DesignWidth="300">
+             d:DesignHeight="300" d:DesignWidth="300" Drop="UserControl_Drop" AllowDrop="True">
     <Grid>
         <ListBox x:Name="list_All" ItemsSource="{Binding PlaylistFiles}">
             <ListBox.ItemTemplate>

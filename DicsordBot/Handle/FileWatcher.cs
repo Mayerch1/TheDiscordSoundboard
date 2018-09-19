@@ -14,7 +14,12 @@ namespace DicsordBot
     /// </summary>
     public static class FileWatcher
     {
-        private static bool checkForValidFile(string path)
+        /// <summary>
+        /// checks wether the filetype is on the whitelist
+        /// </summary>
+        /// <param name="path">path to file</param>
+        /// <returns>true, if file is allowed and supported</returns>
+        public static bool checkForValidFile(string path)
         {
             string format = path.Substring(path.LastIndexOf('.') + 1);
 
@@ -29,7 +34,12 @@ namespace DicsordBot
             return getAllFileInfo(e.FullPath, e.Name);
         }
 
-        private static Data.FileData getAllFileInfo(string FullPath)
+        /// <summary>
+        /// get all important information from a given file
+        /// </summary>
+        /// <param name="FullPath">Path to file</param>
+        /// <returns>Data.FileData object, describing the file</returns>
+        public static Data.FileData getAllFileInfo(string FullPath)
         {
             return getAllFileInfo(FullPath, Path.GetFileName(FullPath));
         }
