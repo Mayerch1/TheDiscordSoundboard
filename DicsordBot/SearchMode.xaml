@@ -29,11 +29,11 @@
         </Grid>
 
         <Grid Grid.Row="1" Margin="0,0,0,0">
-            <ListBox x:Name="list_All" ItemsSource="{Binding FilteredFiles}">
+            <ListBox x:Name="list_All" ItemsSource="{Binding FilteredFiles}" SelectionMode="Extended">
                 <ListBox.ItemTemplate>
                     <DataTemplate>
 
-                        <Grid Tag="{Binding Id}" MouseLeftButtonDown="stack_list_MouseLeftButtonDown">
+                        <Grid Tag="{Binding Id}" MouseLeftButtonDown="stack_list_MouseLeftButtonDown" ContextMenuOpening="context_ContextMenuOpening">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="*" />
                                 <ColumnDefinition Width="*" />
@@ -43,13 +43,6 @@
 
                             <Grid.ContextMenu>
                                 <ContextMenu>
-                                    <MenuItem Header="Add to Queue"
-                                              Tag="{Binding Id}"
-                                                  Click="menu_addToQueue_Clicked" />
-
-                                    <MenuItem Header="Add to Playlist...">
-                                        <MenuItem Header="New Playlist..." Tag="{Binding Id}" Click="menu_createAndAddPlaylist_Click" />
-                                    </MenuItem>
                                 </ContextMenu>
                             </Grid.ContextMenu>
 
