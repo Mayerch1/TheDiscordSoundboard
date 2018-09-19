@@ -39,6 +39,7 @@
                                 <ColumnDefinition Width="*" />
                                 <ColumnDefinition Width="*" />
                                 <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="*" />
                             </Grid.ColumnDefinitions>
 
                             <Grid.ContextMenu>
@@ -47,18 +48,25 @@
                             </Grid.ContextMenu>
 
                             <Grid Grid.Column="0">
-                                <Label Content="{Binding Name}" />
+                                <Button Tag="{Binding Id}"
+                                        Click="btn_playItem_Click">
+                                    <materialDesign:PackIcon Kind="Play" />
+                                </Button>
                             </Grid>
 
                             <Grid Grid.Column="1">
-                                <Label Content="{Binding Author}" />
+                                <Label Content="{Binding Name}" />
                             </Grid>
 
                             <Grid Grid.Column="2">
-                                <Label Content="{Binding LengthString}" />
+                                <Label Content="{Binding Author}" />
                             </Grid>
 
                             <Grid Grid.Column="3">
+                                <Label Content="{Binding LengthString}" />
+                            </Grid>
+
+                            <Grid Grid.Column="4">
                                 <MenuItem Click="menu_openContext_Click" Tag="{Binding Id}">
                                     <MenuItem.Icon>
                                         <materialDesign:PackIcon Kind="DotsHorizontal" />

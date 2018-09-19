@@ -99,6 +99,17 @@ namespace DicsordBot
 
         private void stack_list_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
+            //only on double click
+            if (e.ChangedButton == MouseButton.Left && e.ClickCount == 2)
+            {
+                uint tag = (uint)((FrameworkElement)sender).Tag;
+
+                ListItemPlay(tag, true);
+            }
+        }
+
+        private void btn_playItem_Click(object sender, RoutedEventArgs e)
+        {
             uint tag = (uint)((FrameworkElement)sender).Tag;
 
             ListItemPlay(tag, true);
