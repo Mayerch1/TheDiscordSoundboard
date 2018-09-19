@@ -47,7 +47,16 @@ namespace DicsordBot
         {
             //start to replay the complete list
             uint tag = (uint)((FrameworkElement)sender).Tag;
-            SinglePlaylistStartPlay(index, tag);
+
+            //get the index of the tagged file
+            for (int i = 0; i < PlaylistFiles.Count; i++)
+            {
+                if (PlaylistFiles[i].Id == tag)
+                {
+                    SinglePlaylistStartPlay(index, (uint)i);
+                    break;
+                }
+            }
         }
 
         private void menu_openContext_Click(object sender, RoutedEventArgs e)

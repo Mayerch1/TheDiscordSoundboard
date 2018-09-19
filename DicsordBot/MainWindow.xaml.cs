@@ -492,7 +492,9 @@ namespace DicsordBot
             triggerBotQueueReplay(new Data.ButtonData(file.Name, file.Path));
         }
 
-        private void Playlist_Play(uint listId, uint fileIndex = 0)
+        /// <param name="listId">unique id field of playlists</param>
+        /// <param name="fileIndex">index in the array of all playList files</param>
+        private void Playlist_Play(uint listId, uint fileIndex)
         {
             //search for playlist
             foreach (var playlist in Handle.Data.Playlists)
@@ -537,10 +539,10 @@ namespace DicsordBot
 
         #endregion BotPlayDelegates
 
-        private void bot_streamState_Changed(bool newState)
+        private async void bot_streamState_Changed(bool newState)
         {
             //display pause icon, if bot is streaming
-            if (newState)
+            if (newState/* is playing */)
                 btn_Play.Content = FindResource("IconPause");
             else
             {
@@ -559,6 +561,8 @@ namespace DicsordBot
                                 //play next track
                                 int index = (int)Handle.Data.PlaylistFileIndex;
                                 triggerBotQueueReplay(new Data.ButtonData(playlist.Tracks[index].Name, playlist.Tracks[index].Path));
+                                if (!Handle.Bot.IsStreaming)
+                                    await Handle.Bot.resumeStream();
                             }
                             else
                             {

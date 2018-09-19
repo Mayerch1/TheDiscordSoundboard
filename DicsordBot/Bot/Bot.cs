@@ -183,7 +183,7 @@ namespace DicsordBot.Bot
         /// <param name="btn"></param>
         protected void enqueueAsync(Data.ButtonData btn)
         {
-            if (!IsStreaming)
+            if (!IsStreaming && IsBufferEmpty)
             {
                 getStream(btn);
             }
