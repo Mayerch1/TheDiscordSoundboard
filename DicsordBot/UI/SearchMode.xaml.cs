@@ -144,6 +144,22 @@ namespace DicsordBot.UI
             ListItemPlay(tag, false);
         }
 
+        private void btn_addMultipleToQueue_Clicked(object sender, RoutedEventArgs e)
+        {
+            //TODO: implement
+            foreach (Data.FileData selected in list_All.SelectedItems)
+            {
+                ListItemPlay(selected.Id, false);
+            }
+        }
+
+        private void btn_addMultipleToPlaylist_Click(object sender, RoutedEventArgs e)
+        {
+            var btn = ((FrameworkElement)sender);
+
+            btn.ContextMenu.IsOpen = true;
+        }
+
         private void context_createAndAddPlaylist_Click(object sender, RoutedEventArgs e)
         {
             //create menu, to create new playlsit
@@ -169,8 +185,13 @@ namespace DicsordBot.UI
         {
             //tag of sender is id of playlsit
             uint listId = (uint)((FrameworkElement)sender).Tag;
-
+            //get tag of parent
+            //uint fileTag = (uint)((FrameworkElement)((FrameworkElement)sender).Parent).Tag;
             addTitleToList(listId, list_All.SelectedItems);
+        }
+
+        private void context_Multiple_ContextMenuOpening(object sender, ContextMenuEventArgs e)
+        {
         }
 
         private void addTitleToList(uint listId, IList selectedFiles)

@@ -10,7 +10,8 @@
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="*" />
-            <RowDefinition Height="10*" />
+            <RowDefinition Height="1*" />
+            <RowDefinition Height="12*" />
         </Grid.RowDefinitions>
 
         <Grid Grid.Row="0">
@@ -28,7 +29,38 @@
             </StackPanel>
         </Grid>
 
-        <Grid Grid.Row="1" Margin="0,0,0,0">
+        <Grid Grid.Row="1">
+            <materialDesign:ColorZone Background="#eaeaea" Height="30" VerticalAlignment="Center" materialDesign:ShadowAssist.ShadowDepth="Depth1">
+                <DockPanel LastChildFill="True">
+
+                    <Button  Click="btn_addMultipleToQueue_Clicked" Background="{StaticResource PrimaryForegroundBrush}" BorderBrush="{StaticResource PrimaryAccentBrush}">
+                        <StackPanel Orientation="Horizontal">
+                            <materialDesign:PackIcon Kind="Plus" Height="20" Width="20" VerticalAlignment="Center" Margin="0,0,0,0" Foreground="Gray" />
+                            <TextBlock Text="Add selection to queue" />
+                        </StackPanel>
+                    </Button>
+
+                    <Button Click="btn_addMultipleToPlaylist_Click" Background="{StaticResource PrimaryForegroundBrush}" BorderBrush="{StaticResource PrimaryAccentBrush}" ContextMenuOpening="context_Multiple_ContextMenuOpening">
+                        <StackPanel Orientation="Horizontal">
+                            <materialDesign:PackIcon Kind="PlaylistPlus" Height="20" Width="20" VerticalAlignment="Center" Margin="0,0,0,0" Foreground="Gray" />
+                            <TextBlock Text="Add selection to playlist..." />
+                        </StackPanel>
+                        <Button.ContextMenu>
+                            <ContextMenu>
+                                <MenuItem Header="Test">
+                                    <MenuItem Header="Test2" />
+                                    <MenuItem Header="Test3" />
+                                </MenuItem>
+                            </ContextMenu>
+                        </Button.ContextMenu>
+                    </Button>
+
+                    <TextBlock Text="I don't know, something like thaaaat, TODO: collapse when no selection (Non functional yet)" />
+                </DockPanel>
+            </materialDesign:ColorZone>
+        </Grid>
+
+        <Grid Grid.Row="2" Margin="0,0,0,0">
             <ListBox x:Name="list_All" ItemsSource="{Binding FilteredFiles}" SelectionMode="Extended">
                 <ListBox.ItemTemplate>
                     <DataTemplate>
