@@ -13,7 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace DicsordBot
+namespace DicsordBot.UI
 {
 #pragma warning disable CS1591
 
@@ -39,7 +39,7 @@ namespace DicsordBot
         private void btn_playlistAdd_Click(object sender, RoutedEventArgs e)
         {
             var location = this.PointToScreen(new Point(0, 0));
-            var dialog = new PlaylistAddDialog(location.X, location.Y, this.ActualWidth, this.ActualHeight);
+            var dialog = new UI.PlaylistAddDialog(location.X, location.Y, this.ActualWidth, this.ActualHeight);
 
             var result = dialog.ShowDialog();
             if (result == true)
@@ -55,7 +55,7 @@ namespace DicsordBot
 
             //change embeds for maingrit
             PlaylistGrid.Children.RemoveAt(0);
-            var playList = new PlaylistSingleView(index);
+            var playList = new UI.PlaylistSingleView(index);
 
             playList.SinglePlaylistStartPlay += InnerPlaylistPlay;
             playList.SinglePlaylistItemEnqueued += PlaylistItemQueued;

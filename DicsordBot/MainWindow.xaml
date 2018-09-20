@@ -4,6 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:DicsordBot"
+        xmlns:UIScope="clr-namespace:DicsordBot.UI"
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         mc:Ignorable="d"
         Title="The Discord Soundboard" Height="767" Width="1309" Closing="MainWindow_Closing"
@@ -320,7 +321,7 @@
                 <!--Main Grid-->
                 <Grid>
                     <Grid>
-                        <local:ButtonUI x:Name="ButtonUI" />
+                        <UIScope:ButtonUI x:Name="ButtonUI" />
                     </Grid>
                     <Grid VerticalAlignment="Bottom" HorizontalAlignment="Center" Height="50">
                         <materialDesign:Snackbar MessageQueue="{materialDesign:MessageQueue}" x:Name="snackBar_Hint" />

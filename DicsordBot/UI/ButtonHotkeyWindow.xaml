@@ -38,7 +38,7 @@
                                 Background="{StaticResource PrimaryBackgroundBrush}"
                                 BorderBrush="{StaticResource PrimaryBackgroundBrush}"
                                 Foreground="{StaticResource PrimaryForegroundBrush}">
-                            <materialDesign:PackIcon Kind="WindowClose" />
+                            <materialDesign:PackIcon Kind="Close" />
                         </Button>
                     </StackPanel>
                 </StackPanel>

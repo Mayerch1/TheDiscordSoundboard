@@ -357,20 +357,20 @@ namespace DicsordBot
         {
             Type objType = embed.GetType();
 
-            if (objType == typeof(ButtonUI))
+            if (objType == typeof(UI.ButtonUI))
             {
-                ((ButtonUI)embed).InstantButtonClicked += btn_InstantButton_Clicked;
-                ((ButtonUI)embed).HotkeyChanged += Hotkey_Changed;
+                ((UI.ButtonUI)embed).InstantButtonClicked += btn_InstantButton_Clicked;
+                ((UI.ButtonUI)embed).HotkeyChanged += Hotkey_Changed;
             }
-            else if (objType == typeof(SearchMode))
+            else if (objType == typeof(UI.SearchMode))
             {
-                ((SearchMode)embed).ListItemPlay += List_Item_Play;
+                ((UI.SearchMode)embed).ListItemPlay += List_Item_Play;
             }
-            else if (objType == typeof(PlaylistMode))
+            else if (objType == typeof(UI.PlaylistMode))
             {
-                ((PlaylistMode)embed).PlaylistStartPlay += Playlist_Play;
+                ((UI.PlaylistMode)embed).PlaylistStartPlay += Playlist_Play;
 
-                ((PlaylistMode)embed).PlaylistItemEnqueued += Playlist_SingleFile_Play;
+                ((UI.PlaylistMode)embed).PlaylistItemEnqueued += Playlist_SingleFile_Play;
             }
         }
 
@@ -647,7 +647,7 @@ namespace DicsordBot
         private void btn_About_Click(object sender, RoutedEventArgs e)
         {
             MainGrid.Child = null;
-            MainGrid.Child = new About();
+            MainGrid.Child = new UI.About();
         }
 
         private void btn_Settings_Click(object sender, RoutedEventArgs e)
@@ -659,7 +659,7 @@ namespace DicsordBot
         private void btn_Playlist_Click(object sender, RoutedEventArgs e)
         {
             MainGrid.Child = null;
-            PlaylistMode playUI = new PlaylistMode();
+            UI.PlaylistMode playUI = new UI.PlaylistMode();
             registerEmbedEvents(playUI);
             MainGrid.Child = playUI;
         }
@@ -667,14 +667,14 @@ namespace DicsordBot
         private void btn_Settings_Click()
         {
             MainGrid.Child = null;
-            MainGrid.Child = new Settings();
+            MainGrid.Child = new UI.Settings();
         }
 
         private void btn_Sounds_Click(object sender, RoutedEventArgs e)
         {
             //change embeds for maingrid
             MainGrid.Child = null;
-            ButtonUI btnUI = new ButtonUI();
+            UI.ButtonUI btnUI = new UI.ButtonUI();
             registerEmbedEvents(btnUI);
             MainGrid.Child = btnUI;
         }
@@ -682,7 +682,7 @@ namespace DicsordBot
         private void btn_Search_Click(object sender, RoutedEventArgs e)
         {
             MainGrid.Child = null;
-            SearchMode searchMode = new SearchMode();
+            UI.SearchMode searchMode = new UI.SearchMode();
             registerEmbedEvents(searchMode);
 
             MainGrid.Child = searchMode;

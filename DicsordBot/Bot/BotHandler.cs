@@ -185,7 +185,7 @@ namespace DicsordBot.Bot
             catch (Exception ex)
             {
                 await disconnectFromChannelAsync();
-                UnhandledException.initWindow(ex, "Trying to add a new file to the queue. (Button Nr: " + btn.ID + ", Name: \"" + btn.Name + "\").");
+                UI.UnhandledException.initWindow(ex, "Trying to add a new file to the queue. (Button Nr: " + btn.ID + ", Name: \"" + btn.Name + "\").");
                 Console.WriteLine("EnqueueAsync unhandled");
             }
         }
@@ -216,7 +216,7 @@ namespace DicsordBot.Bot
             catch (Exception ex)
             {
                 await disconnectFromChannelAsync();
-                UnhandledException.initWindow(ex, "Trying to start/resume the stream");
+                UI.UnhandledException.initWindow(ex, "Trying to start/resume the stream");
             }
         }
 
@@ -239,7 +239,7 @@ namespace DicsordBot.Bot
             }
             catch (Exception ex)
             {
-                UnhandledException.initWindow(ex, "Trying to set a GameStatus");
+                UI.UnhandledException.initWindow(ex, "Trying to set a GameStatus");
                 Console.WriteLine("GameState Exception");
                 return false;
             }
@@ -286,7 +286,7 @@ namespace DicsordBot.Bot
             }
             catch (Exception ex)
             {
-                UnhandledException.initWindow(ex, "Trying to connect to the Discord Servers");
+                UI.UnhandledException.initWindow(ex, "Trying to connect to the Discord Servers");
                 Console.WriteLine("general connection Exception");
                 return false;
             }
@@ -342,7 +342,7 @@ namespace DicsordBot.Bot
             }
             catch (System.Threading.Tasks.TaskCanceledException ex)
             {
-                UnhandledException.initWindow(ex, "Trying to connect to a voice channel (cancelled).");
+                UI.UnhandledException.initWindow(ex, "Trying to connect to a voice channel (cancelled).");
                 return false;
             }
             catch (System.TimeoutException)
@@ -353,7 +353,7 @@ namespace DicsordBot.Bot
             catch (Exception ex)
             {
                 Console.WriteLine("Unhandled connection Exception");
-                UnhandledException.initWindow(ex, "Trying to connect to a voice channel");
+                UI.UnhandledException.initWindow(ex, "Trying to connect to a voice channel");
                 return false;
             }
             return true;

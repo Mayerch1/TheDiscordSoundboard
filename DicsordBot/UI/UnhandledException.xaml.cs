@@ -15,7 +15,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace DicsordBot
+namespace DicsordBot.UI
 {
     /// <summary>
     /// Interaction logic for UnhandledException.xaml

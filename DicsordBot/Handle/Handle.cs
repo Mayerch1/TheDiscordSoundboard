@@ -55,12 +55,12 @@ namespace DicsordBot
             Window window = new Window
             {
                 Title = title,
-                Content = new Hint(msg, solution),
+                Content = new UI.Hint(msg, solution),
                 Width = 400,
                 Height = 250,
             };
             window.ShowDialog();
-            return ((Hint)window.Content).IgnoreWarning;
+            return ((UI.Hint)window.Content).IgnoreWarning;
         }
 
         /// <summary>
