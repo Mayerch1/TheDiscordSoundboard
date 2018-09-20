@@ -28,6 +28,7 @@ namespace DicsordBot.Data
         #region fields
 
         private PersistentData persistent = new PersistentData();
+
         private ObservableCollection<FileData> files = new ObservableCollection<FileData>();
         private ObservableCollection<Playlist> playlists = new ObservableCollection<Playlist>();
         private uint playlistIndex = 0;

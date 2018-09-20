@@ -4,6 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:DicsordBot.UI"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         mc:Ignorable="d"
         Title="ButtonHotkeyWindow" Height="250" Width="450" ResizeMode="NoResize" WindowStyle="None">
 
@@ -15,19 +16,53 @@
             </Grid.RowDefinitions>
 
             <Grid Grid.Row="0">
-                <StackPanel Orientation="Horizontal">
-                    <TextBox x:Name="box_Hotkey" Text="" Width="125" KeyDown="box_Hotkey_KeyDown" />
+                <StackPanel Orientation="Vertical" VerticalAlignment="Bottom">
+
+                    <StackPanel Margin="10,0,10,85" Orientation="Horizontal">
+                        <TextBlock Text="Editing Hotkey of " />
+                        <TextBlock x:Name="box_ButtonInfo" Text="xyz (Nr. x)" />
+                    </StackPanel>
+
                     <StackPanel Orientation="Vertical">
 
-                        <CheckBox x:Name="box_shift" Content="Shift" />
-                        <CheckBox x:Name="box_ctrl" Content="Ctrl" />
-                        <CheckBox x:Name="box_win" Content="Win" />
-                        <CheckBox x:Name="box_alt" Content="Alt" />
+                        <CheckBox x:Name="box_shift" Content="Shift" Checked="box_Checked" Unchecked="box_Checked" />
+                        <CheckBox x:Name="box_ctrl" Content="Ctrl" Checked="box_Checked"  Unchecked="box_Checked" />
+                        <CheckBox x:Name="box_win" Content="Win" Checked="box_Checked"  Unchecked="box_Checked" />
+                        <CheckBox x:Name="box_alt" Content="Alt" Checked="box_Checked"  Unchecked="box_Checked" />
+                    </StackPanel>
+
+                    <StackPanel Orientation="Horizontal">
+                        <TextBox x:Name="box_Hotkey" Text="" Width="125" KeyDown="box_Hotkey_KeyDown" />
+                        <Button Click="btn_clearHotkey_Click"
+                                VerticalAlignment="Bottom"
+                                Background="{StaticResource PrimaryBackgroundBrush}"
+                                BorderBrush="{StaticResource PrimaryBackgroundBrush}"
+                                Foreground="{StaticResource PrimaryForegroundBrush}">
+                            <materialDesign:PackIcon Kind="WindowClose" />
+                        </Button>
                     </StackPanel>
                 </StackPanel>
             </Grid>
             <Grid Grid.Row="1">
-                <Button Content="Accept" Click="btn_Accept_Click" IsDefault="True" Background="{StaticResource PrimaryAccentBrush}" />
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="3*" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+
+                <Separator VerticalAlignment="Top" />
+
+                <Grid Grid.Column="0">
+                    <StackPanel x:Name="stack_warning" VerticalAlignment="Center" Orientation="Horizontal" Visibility="Hidden">
+                        <materialDesign:PackIcon Kind="AlertOctagon" />
+                        <TextBlock Text="Conflict with existing hotkey for button nr: " />
+                        <TextBlock x:Name="stack_warning_btnId" />
+                        <TextBlock Text=" detected" />
+                    </StackPanel>
+                </Grid>
+
+                <Grid Grid.Column="1">
+                    <Button Content="Save" Click="btn_Accept_Click" Background="{StaticResource PrimaryAccentBrush}" />
+                </Grid>
             </Grid>
         </Grid>
     </Border>

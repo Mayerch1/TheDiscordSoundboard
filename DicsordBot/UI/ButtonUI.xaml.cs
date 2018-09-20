@@ -30,6 +30,10 @@ namespace DicsordBot
 
         public InstantButtonClickedHandler InstantButtonClicked;
 
+        public delegate void HotkeyChangedHandler();
+
+        public HotkeyChangedHandler HotkeyChanged;
+
         public ButtonUI()
         {
             InitializeComponent();
@@ -86,7 +90,9 @@ namespace DicsordBot
             var location = this.PointToScreen(new Point(0, 0));
             var dialog = new UI.ButtonHotkeyWindow(tag, location.X, location.Y, this.ActualWidth, this.ActualHeight);
 
-            dialog.ShowDialog();
+            var result = dialog.ShowDialog();
+            if (result == true)
+                HotkeyChanged();
         }
 
         private void changeBackFields(StackPanel parent, int index)

@@ -360,6 +360,7 @@ namespace DicsordBot
             if (objType == typeof(ButtonUI))
             {
                 ((ButtonUI)embed).InstantButtonClicked += btn_InstantButton_Clicked;
+                ((ButtonUI)embed).HotkeyChanged += Hotkey_Changed;
             }
             else if (objType == typeof(SearchMode))
             {
@@ -409,6 +410,13 @@ namespace DicsordBot
                     setLoopStatus(LoopState.LoopReset);
                 }
             };
+        }
+
+        private void Hotkey_Changed()
+        {
+            //re register all hotkeys
+            terminateHotkeys();
+            initHotkeys();
         }
 
         private void Hotkey_Pressed(IntPtr lParam)

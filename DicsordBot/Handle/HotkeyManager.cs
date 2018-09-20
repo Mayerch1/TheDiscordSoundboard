@@ -136,23 +136,23 @@ namespace DicsordBot
         /// <param name="isWin">isWin attribute</param>
         /// <param name="isAlt">isAlt attribute</param>
         /// <returns>modCode for combined modifiers</returns>
-        public static uint getCodeFromBool(bool isShift, bool isCtrl, bool isWin, bool isAlt)
+        public static uint getCodeFromBool(bool? isShift, bool? isCtrl, bool? isWin, bool? isAlt)
         {
             uint result = 0;
 
-            if (isAlt)
+            if (isAlt == true)
             {
                 result = result | 0x1;
             }
-            if (isCtrl)
+            if (isCtrl == true)
             {
                 result = result | 0x2;
             }
-            if (isShift)
+            if (isShift == true)
             {
                 result = result | 0x4;
             }
-            if (isWin)
+            if (isWin == true)
             {
                 result = result | 0x8;
             }
