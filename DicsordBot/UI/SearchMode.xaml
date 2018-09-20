@@ -57,7 +57,7 @@
         </Grid>
 
         <Grid Grid.Row="2" Margin="0,0,0,0">
-            <ListBox x:Name="list_All" ItemsSource="{Binding FilteredFiles}" SelectionMode="Extended">
+            <ListBox x:Name="list_All" ItemsSource="{Binding FilteredFiles}" SelectionMode="Extended" SelectionChanged="list_All_SelectionChanged">
                 <ListBox.ItemTemplate>
                     <DataTemplate>
 

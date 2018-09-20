@@ -261,6 +261,17 @@ namespace DicsordBot.UI
             //add playlist items to context menu
             context.Items.Add(playlistItem);
         }
+
+        private void list_All_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            var list = (ListBox)sender;
+            if (list.SelectedItems.Count >= 2)
+            {
+                Console.WriteLine("Open bar");
+            }
+            else
+                Console.WriteLine("Close bar");
+        }
     }
 
 #pragma warning restore CS1591
