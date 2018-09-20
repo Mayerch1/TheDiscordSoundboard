@@ -40,17 +40,13 @@
                         </StackPanel>
                     </Button>
 
-                    <Button Click="btn_addMultipleToPlaylist_Click" Background="{StaticResource PrimaryForegroundBrush}" BorderBrush="{StaticResource PrimaryAccentBrush}" ContextMenuOpening="context_Multiple_ContextMenuOpening">
+                    <Button x:Name="btn_addMultipleToPlaylist" Click="btn_addMultipleToPlaylist_Click" Background="{StaticResource PrimaryForegroundBrush}" BorderBrush="{StaticResource PrimaryAccentBrush}" ContextMenuOpening="context_Multiple_ContextMenuOpening">
                         <StackPanel Orientation="Horizontal">
                             <materialDesign:PackIcon Kind="PlaylistPlus" Height="20" Width="20" VerticalAlignment="Center" Margin="0,0,0,0" Foreground="Gray" />
                             <TextBlock Text="Add selection to playlist..." />
                         </StackPanel>
                         <Button.ContextMenu>
                             <ContextMenu>
-                                <MenuItem Header="Test">
-                                    <MenuItem Header="Test2" />
-                                    <MenuItem Header="Test3" />
-                                </MenuItem>
                             </ContextMenu>
                         </Button.ContextMenu>
                     </Button>

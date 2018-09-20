@@ -20,6 +20,7 @@ namespace DicsordBot.UI
 {
 #pragma warning disable CS1591
 
+    //TODO: rework everything
     /// <summary>
     /// This class is a shame for anyone who wants to produce clean code
     /// </summary>
@@ -146,7 +147,6 @@ namespace DicsordBot.UI
 
         private void btn_addMultipleToQueue_Clicked(object sender, RoutedEventArgs e)
         {
-            //TODO: implement
             foreach (Data.FileData selected in list_All.SelectedItems)
             {
                 ListItemPlay(selected.Id, false);
