@@ -9,6 +9,16 @@
              d:DesignHeight="450" d:DesignWidth="800">
 
     <UserControl.Resources>
+        <Style TargetType="ListBoxItem" BasedOn="{StaticResource {x:Type ListBoxItem}}">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type ListBoxItem}">
+                        <ContentPresenter />
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
         <Storyboard x:Key="OpenTopSelectionBar">
             <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(FrameworkElement.Height)" Storyboard.TargetName="grd_TopSelectionBar">
                 <EasingDoubleKeyFrame KeyTime="0" Value="30" />
@@ -31,7 +41,6 @@
         <Grid Grid.Row="0">
 
             <StackPanel>
-
                 <materialDesign:ColorZone Background="#eaeaea" Height="30" VerticalAlignment="Center" materialDesign:ShadowAssist.ShadowDepth="Depth1">
                     <DockPanel LastChildFill="True">
                         <materialDesign:PackIcon Kind="Magnify" Height="20" Width="20" VerticalAlignment="Center" Margin="10,0,10,0" Foreground="Gray" />
@@ -71,26 +80,19 @@
         </Grid>
 
         <Grid Grid.Row="2" Margin="0,0,0,0">
-            <ListBox x:Name="list_All" ItemsSource="{Binding FilteredFiles}" SelectionMode="Extended" SelectionChanged="list_All_SelectionChanged" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch">
+            <ListBox x:Name="list_All" ItemsSource="{Binding FilteredFiles}" SelectionMode="Extended" SelectionChanged="list_All_SelectionChanged" HorizontalContentAlignment="Stretch">
 
                 <ListBox.ItemTemplate>
                     <DataTemplate>
 
-                        <Grid Tag="{Binding Id}" MouseLeftButtonDown="stack_list_MouseLeftButtonDown" ContextMenuOpening="context_addSingle_ContextMenuOpening" Name="Grid_Title">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="*" />
-                                <ColumnDefinition Width="*" />
-                                <ColumnDefinition Width="*" />
-                                <ColumnDefinition Width="*" />
-                            </Grid.ColumnDefinitions>
+                        <StackPanel Orientation="Horizontal" Tag="{Binding Id}" MouseLeftButtonDown="stack_list_MouseLeftButtonDown" ContextMenuOpening="context_addSingle_ContextMenuOpening" Name="Grid_Title">
 
-                            <Grid.ContextMenu>
+                            <StackPanel.ContextMenu>
                                 <ContextMenu>
                                 </ContextMenu>
-                            </Grid.ContextMenu>
+                            </StackPanel.ContextMenu>
 
-                            <Grid Grid.Column="0">
-                                <Button
+                            <Button
                                         Tag="{Binding Id}"
                                         Height="Auto" Width="Auto"
                                         Click="btn_playItem_Click"
@@ -98,45 +100,49 @@
                                         Foreground="#FF707070"
                                         HorizontalAlignment="Right"
                                         VerticalAlignment="Top">
-                                    <materialDesign:PackIcon
+                                <materialDesign:PackIcon
                                             Kind="Play"
                                             Width="25"
                                             Height="25" />
-                                    <Button.Style>
-                                        <Style TargetType="{x:Type Button}" BasedOn="{StaticResource MaterialDesignFloatingActionMiniLightButton}">
+                                <Button.Style>
+                                    <Style TargetType="{x:Type Button}" BasedOn="{StaticResource MaterialDesignFlatButton}">
 
-                                            <Setter Property="Visibility" Value="Hidden" />
+                                        <Setter Property="Visibility" Value="Hidden" />
 
-                                            <Style.Triggers>
-                                                <DataTrigger Binding="{Binding IsMouseOver, ElementName=Grid_Title}" Value="True">
-                                                    <Setter Property="Visibility" Value="Visible" />
-                                                </DataTrigger>
-                                            </Style.Triggers>
-                                        </Style>
-                                    </Button.Style>
-                                </Button>
-                            </Grid>
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding IsMouseOver, ElementName=Grid_Title}" Value="True">
+                                                <Setter Property="Visibility" Value="Visible" />
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </Button.Style>
+                            </Button>
 
-                            <Grid Grid.Column="1">
-                                <Label Content="{Binding Name}" />
-                            </Grid>
+                            <Label Content="{Binding Name}" />
 
-                            <Grid Grid.Column="2">
-                                <Label Content="{Binding Author}" />
-                            </Grid>
+                            <Label Content="{Binding Author}" />
 
-                            <Grid Grid.Column="3">
-                                <Label Content="{Binding LengthString}" />
-                            </Grid>
+                            <Label Content="{Binding LengthString}" />
 
-                            <Grid Grid.Column="4">
-                                <MenuItem Click="btn_addSingle_Click" Tag="{Binding Id}">
-                                    <MenuItem.Icon>
-                                        <materialDesign:PackIcon Kind="DotsHorizontal" />
-                                    </MenuItem.Icon>
-                                </MenuItem>
-                            </Grid>
-                        </Grid>
+                            <Button Click="btn_addSingle_Click" Tag="{Binding Id}" Foreground="#FF707070">
+
+                                <materialDesign:PackIcon Kind="DotsHorizontal"
+                                                         Width="25"
+                                                         Height="25" />
+                                <Button.Style>
+                                    <Style TargetType="{x:Type Button}" BasedOn="{StaticResource MaterialDesignFlatButton}">
+
+                                        <Setter Property="Visibility" Value="Hidden" />
+
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding IsMouseOver, ElementName=Grid_Title}" Value="True">
+                                                <Setter Property="Visibility" Value="Visible" />
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </Button.Style>
+                            </Button>
+                        </StackPanel>
                     </DataTemplate>
                 </ListBox.ItemTemplate>
             </ListBox>
