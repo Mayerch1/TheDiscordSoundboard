@@ -76,23 +76,21 @@
                 <ListBox.ItemTemplate>
                     <DataTemplate>
 
-                        <Border Background="Blue" BorderThickness="0">
+                        <Grid Tag="{Binding Id}" MouseLeftButtonDown="stack_list_MouseLeftButtonDown" ContextMenuOpening="context_addSingle_ContextMenuOpening" Name="Grid_Title">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
 
-                            <Grid Tag="{Binding Id}" MouseLeftButtonDown="stack_list_MouseLeftButtonDown" ContextMenuOpening="context_ContextMenuOpening" Name="Grid_Title">
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="*" />
-                                    <ColumnDefinition Width="*" />
-                                    <ColumnDefinition Width="*" />
-                                    <ColumnDefinition Width="*" />
-                                </Grid.ColumnDefinitions>
+                            <Grid.ContextMenu>
+                                <ContextMenu>
+                                </ContextMenu>
+                            </Grid.ContextMenu>
 
-                                <Grid.ContextMenu>
-                                    <ContextMenu>
-                                    </ContextMenu>
-                                </Grid.ContextMenu>
-
-                                <Grid Grid.Column="0">
-                                    <Button
+                            <Grid Grid.Column="0">
+                                <Button
                                         Tag="{Binding Id}"
                                         Height="Auto" Width="Auto"
                                         Click="btn_playItem_Click"
@@ -100,38 +98,45 @@
                                         Foreground="#FF707070"
                                         HorizontalAlignment="Right"
                                         VerticalAlignment="Top">
-                                        <materialDesign:PackIcon
+                                    <materialDesign:PackIcon
                                             Kind="Play"
                                             Width="25"
                                             Height="25" />
-                                        <Button.Style>
-                                            <Style TargetType="{x:Type Button}" BasedOn="{StaticResource MaterialDesignFloatingActionMiniLightButton}">
+                                    <Button.Style>
+                                        <Style TargetType="{x:Type Button}" BasedOn="{StaticResource MaterialDesignFloatingActionMiniLightButton}">
 
-                                                <Setter Property="Visibility" Value="Hidden" />
+                                            <Setter Property="Visibility" Value="Hidden" />
 
-                                                <Style.Triggers>
-                                                    <DataTrigger Binding="{Binding IsMouseOver, ElementName=Grid_Title}" Value="True">
-                                                        <Setter Property="Visibility" Value="Visible" />
-                                                    </DataTrigger>
-                                                </Style.Triggers>
-                                            </Style>
-                                        </Button.Style>
-                                    </Button>
-                                </Grid>
-
-                                <Grid Grid.Column="1">
-                                    <Label Content="{Binding Name}" />
-                                </Grid>
-
-                                <Grid Grid.Column="2">
-                                    <Label Content="{Binding Author}" />
-                                </Grid>
-
-                                <Grid Grid.Column="3">
-                                    <Label Content="{Binding LengthString}" />
-                                </Grid>
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding IsMouseOver, ElementName=Grid_Title}" Value="True">
+                                                    <Setter Property="Visibility" Value="Visible" />
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </Button.Style>
+                                </Button>
                             </Grid>
-                        </Border>
+
+                            <Grid Grid.Column="1">
+                                <Label Content="{Binding Name}" />
+                            </Grid>
+
+                            <Grid Grid.Column="2">
+                                <Label Content="{Binding Author}" />
+                            </Grid>
+
+                            <Grid Grid.Column="3">
+                                <Label Content="{Binding LengthString}" />
+                            </Grid>
+
+                            <Grid Grid.Column="4">
+                                <MenuItem Click="btn_addSingle_Click" Tag="{Binding Id}">
+                                    <MenuItem.Icon>
+                                        <materialDesign:PackIcon Kind="DotsHorizontal" />
+                                    </MenuItem.Icon>
+                                </MenuItem>
+                            </Grid>
+                        </Grid>
                     </DataTemplate>
                 </ListBox.ItemTemplate>
             </ListBox>
