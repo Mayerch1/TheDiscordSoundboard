@@ -12,6 +12,7 @@ using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
+using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
@@ -20,12 +21,13 @@ namespace DicsordBot.UI
 {
 #pragma warning disable CS1591
 
-    //TODO: rework everything
     /// <summary>
     /// This class is a shame for anyone who wants to produce clean code
     /// </summary>
     public partial class SearchMode : UserControl, INotifyPropertyChanged
     {
+        private bool isTopSelectionBarOpen = true;
+
         private ObservableCollection<Data.FileData> filteredFiles;
         public ObservableCollection<Data.FileData> FilteredFiles { get { return filteredFiles; } set { filteredFiles = value; OnPropertyChanged("FilteredFiles"); } }
         public ObservableCollection<Data.Playlist> Playlists { get { return Handle.Data.Playlists; } set { Handle.Data.Playlists = value; OnPropertyChanged("Playlists"); } }
@@ -79,122 +81,30 @@ namespace DicsordBot.UI
             }
         }
 
-        #region event
+        #region edit playlists
 
-        private void box_Search_TextChanged(object sender, TextChangedEventArgs e)
+        private void addSingleTitleToList(uint listId, uint fileId)
         {
-            filterListBox(((TextBox)sender).Text);
-        }
-
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        private void OnPropertyChanged(string info)
-        {
-            if (PropertyChanged != null)
+            //find list from listId
+            Data.Playlist toAddList = null;
+            foreach (var list in Handle.Data.Playlists)
             {
-                PropertyChanged(this, new PropertyChangedEventArgs(info));
+                if (list.Id == listId)
+                    toAddList = list;
             }
-        }
 
-        #endregion event
-
-        private void stack_list_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
-        {
-            //only on double click
-            if (e.ChangedButton == MouseButton.Left && e.ClickCount == 2)
+            //search for fileTag in list
+            foreach (var title in Handle.Data.Files)
             {
-                uint tag = (uint)((FrameworkElement)sender).Tag;
-
-                ListItemPlay(tag, true);
-            }
-        }
-
-        private void btn_playItem_Click(object sender, RoutedEventArgs e)
-        {
-            uint tag = (uint)((FrameworkElement)sender).Tag;
-
-            ListItemPlay(tag, true);
-        }
-
-        private void menu_openContext_Click(object sender, RoutedEventArgs e)
-        {
-            //that's ugly, but it gets the 'grandParent' to open the context
-            //#prettyCodeAward2018
-            var listElement = sender as FrameworkElement;
-            if (listElement != null)
-            {
-                //parent is the Grid containing this button
-                var parent = listElement.Parent as FrameworkElement;
-                if (parent != null)
+                if (title.Id == fileId)
                 {
-                    //grandParent is the outer Grid
-                    var grandParent = parent.Parent as FrameworkElement;
-                    if (grandParent != null)
-                    {
-                        context_ContextMenuOpening(grandParent, null);
-                        grandParent.ContextMenu.IsOpen = true;
-                    }
+                    toAddList.Tracks.Add(title);
+                    break;
                 }
             }
         }
 
-        private void context_addToQueue_Clicked(object sender, RoutedEventArgs e)
-        {
-            //play the clicked file
-            uint tag = (uint)((FrameworkElement)sender).Tag;
-            ListItemPlay(tag, false);
-        }
-
-        private void btn_addMultipleToQueue_Clicked(object sender, RoutedEventArgs e)
-        {
-            foreach (Data.FileData selected in list_All.SelectedItems)
-            {
-                ListItemPlay(selected.Id, false);
-            }
-        }
-
-        private void btn_addMultipleToPlaylist_Click(object sender, RoutedEventArgs e)
-        {
-            var btn = ((FrameworkElement)sender);
-
-            btn.ContextMenu.IsOpen = true;
-        }
-
-        private void context_createAndAddPlaylist_Click(object sender, RoutedEventArgs e)
-        {
-            //create menu, to create new playlsit
-            var location = this.PointToScreen(new Point(0, 0));
-            var dialog = new PlaylistAddDialog(location.X, location.Y, this.ActualWidth, this.ActualHeight);
-
-            var result = dialog.ShowDialog();
-            if (result == true)
-            {
-                //create new playlist from dialog result
-                Handle.Data.Playlists.Add(new Data.Playlist(dialog.PlaylistName));
-            }
-            else
-                return;
-
-            //id from last index, because it's last added from step above
-            uint listId = Handle.Data.Playlists[(int)(Handle.Data.Playlists.Count - 1)].Id;
-
-            addTitleToList(listId, list_All.SelectedItems);
-        }
-
-        private void context_AddPlaylist_Click(object sender, RoutedEventArgs e)
-        {
-            //tag of sender is id of playlsit
-            uint listId = (uint)((FrameworkElement)sender).Tag;
-            //get tag of parent
-            //uint fileTag = (uint)((FrameworkElement)((FrameworkElement)sender).Parent).Tag;
-            addTitleToList(listId, list_All.SelectedItems);
-        }
-
-        private void context_Multiple_ContextMenuOpening(object sender, ContextMenuEventArgs e)
-        {
-        }
-
-        private void addTitleToList(uint listId, IList selectedFiles)
+        private void addMultipleTitlesToList(uint listId, IList selectedFiles)
         {
             //find list from listId
             Data.Playlist toAddList = null;
@@ -217,61 +127,279 @@ namespace DicsordBot.UI
             }
         }
 
-        private void context_ContextMenuOpening(object sender, ContextMenuEventArgs e)
+        #endregion edit playlists
+
+        #region add_item_to events
+
+        #region single add
+
+        private void context_createAndAddSingleToPlaylist_Click(object sender, RoutedEventArgs e)
         {
-            //create context menu
+            //create menu, to create new playlsit
+            var location = this.PointToScreen(new Point(0, 0));
+            var dialog = new PlaylistAddDialog(location.X, location.Y, this.ActualWidth, this.ActualHeight);
+
+            var result = dialog.ShowDialog();
+            if (result == true)
+            {
+                //create new playlist from dialog result
+                Handle.Data.Playlists.Add(new Data.Playlist(dialog.PlaylistName));
+            }
+            else
+                return;
+
+            //id from last index, because it's last added from step above
+            uint listId = Handle.Data.Playlists[(int)(Handle.Data.Playlists.Count - 1)].Id;
+
+            uint fileTag = (uint)((FrameworkElement)((FrameworkElement)sender).Parent).Tag;
+            addSingleTitleToList(listId, fileTag);
+        }
+
+        private void context_AddSingleToPlaylist_Click(object sender, RoutedEventArgs e)
+        {
+            //tag of sender is id of playlsit
+            uint listId = (uint)((FrameworkElement)sender).Tag;
+            //get tag of parent
+            uint fileTag = (uint)((FrameworkElement)((FrameworkElement)sender).Parent).Tag;
+
+            addSingleTitleToList(listId, fileTag);
+        }
+
+        private void context_addSingleToQueue_Clicked(object sender, RoutedEventArgs e)
+        {
+            //play the clicked file
             uint tag = (uint)((FrameworkElement)sender).Tag;
-            var context = ((FrameworkElement)sender).ContextMenu;
+            ListItemPlay(tag, false);
+        }
 
-            context.Items.Clear();
+        #endregion single add
 
-            //add to queue menu
+        #region multiple add
+
+        private void context_createAndAddMultipleToPlaylist_Click(object sender, RoutedEventArgs e)
+        {
+            //create menu, to create new playlsit
+            var location = this.PointToScreen(new Point(0, 0));
+            var dialog = new PlaylistAddDialog(location.X, location.Y, this.ActualWidth, this.ActualHeight);
+
+            var result = dialog.ShowDialog();
+            if (result == true)
+            {
+                //create new playlist from dialog result
+                Handle.Data.Playlists.Add(new Data.Playlist(dialog.PlaylistName));
+            }
+            else
+                return;
+
+            //id from last index, because it's last added from step above
+            uint listId = Handle.Data.Playlists[(int)(Handle.Data.Playlists.Count - 1)].Id;
+
+            addMultipleTitlesToList(listId, list_All.SelectedItems);
+        }
+
+        private void context_AddMultipleToPlaylist_Click(object sender, RoutedEventArgs e)
+        {
+            //tag of sender is id of playlsit
+            uint listId = (uint)((FrameworkElement)sender).Tag;
+            //get tag of parent
+
+            addMultipleTitlesToList(listId, list_All.SelectedItems);
+        }
+
+        private void btn_addMultipleToQueue_Clicked(object sender, RoutedEventArgs e)
+        {
+            foreach (Data.FileData selected in list_All.SelectedItems)
+            {
+                ListItemPlay(selected.Id, false);
+            }
+        }
+
+        #endregion multiple add
+
+        #endregion add_item_to events
+
+        #region manage context
+
+        private MenuItem getQueueItem(RoutedEventHandler clicked, uint fileTag)
+        {
+            //'add to queue' menu
             var queueItem = new MenuItem();
             queueItem.Header = "Add to queue";
-            queueItem.Tag = tag;
-            queueItem.Click += context_addToQueue_Clicked;
+            queueItem.Tag = fileTag;
+            queueItem.Click += clicked;
 
-            //add to context queue
-            context.Items.Add(queueItem);
+            return queueItem;
+        }
 
-            //add to playlist menu
-            var playlistItem = new MenuItem();
-            playlistItem.Header = "Add to playlist...";
-            playlistItem.Tag = tag;
+        private List<MenuItem> getPlaylistItems(RoutedEventHandler newPlaylistHandler, RoutedEventHandler existingPlaylistHandler, uint fileTag = 0)
+        {
+            //'add to playlist...' menu
+            List<MenuItem> playListItems = new List<MenuItem>();
 
-            //new playlist item
+            //new playlist item as submenu
             var newListItem = new MenuItem();
             newListItem.Header = "New Playlist...";
-            newListItem.Tag = tag;
-            newListItem.Click += context_createAndAddPlaylist_Click;
+            newListItem.Tag = fileTag;
+            newListItem.Click += newPlaylistHandler;
+            playListItems.Add(newListItem);
 
-            //add new playlist to playlistItem
-            playlistItem.Items.Add(newListItem);
-
-            //any existing playlist item
+            //any existing playlist item as submenu
             foreach (var list in Handle.Data.Playlists)
             {
                 var playlist = new MenuItem();
                 playlist.Header = list.Name;
                 playlist.Tag = list.Id;
-                playlist.Click += context_AddPlaylist_Click;
+                playlist.Click += existingPlaylistHandler;
                 //add each list to playlist items
-                playlistItem.Items.Add(playlist);
+                playListItems.Add(playlist);
+            }
+
+            return playListItems;
+        }
+
+        private void populate_AddSingle_Context(ContextMenu context, uint fileTag)
+        {
+            //context for adding one single item
+            context.Items.Clear();
+
+            //add to context queue
+            context.Items.Add(getQueueItem(context_addSingleToQueue_Clicked, fileTag));
+
+            //add to playlist outer-menu
+            var playlistItem = new MenuItem();
+            playlistItem.Header = "Add to playlist...";
+            playlistItem.Tag = fileTag;
+
+            foreach (var menu in getPlaylistItems(context_createAndAddSingleToPlaylist_Click, context_AddSingleToPlaylist_Click, fileTag))
+            {
+                playlistItem.Items.Add(menu);
             }
             //add playlist items to context menu
             context.Items.Add(playlistItem);
         }
 
+        private void populate_AddMultiple_Context(ContextMenu context)
+        {
+            //context for adding multiple items
+            context.Items.Clear();
+
+            foreach (var menu in getPlaylistItems(context_createAndAddMultipleToPlaylist_Click, context_AddMultipleToPlaylist_Click))
+            {
+                context.Items.Add(menu);
+            }
+        }
+
+        #endregion manage context
+
+        #region events
+
+        private void stack_list_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            //only on double click
+            if (e.ChangedButton == MouseButton.Left && e.ClickCount == 2)
+            {
+                uint tag = (uint)((FrameworkElement)sender).Tag;
+
+                ListItemPlay(tag, true);
+            }
+        }
+
+        private void btn_playItem_Click(object sender, RoutedEventArgs e)
+        {
+            uint tag = (uint)((FrameworkElement)sender).Tag;
+
+            ListItemPlay(tag, true);
+        }
+
+        private void context_addMultiple_ContextMenuOpening(object sender, ContextMenuEventArgs e)
+        {
+            //create context menu, for multiple add
+
+            var context = ((FrameworkElement)sender).ContextMenu;
+            populate_AddMultiple_Context(context);
+        }
+
+        private void btn_addMultiple_Click(object sender, RoutedEventArgs e)
+        {
+            //add context menu to button
+            var context = ((FrameworkElement)sender).ContextMenu;
+
+            populate_AddMultiple_Context(context);
+
+            ((FrameworkElement)sender).ContextMenu.IsOpen = true;
+        }
+
+        private void context_addSingle_ContextMenuOpening(object sender, ContextMenuEventArgs e)
+        {
+            //create context menu, for single add
+            uint tag = (uint)((FrameworkElement)sender).Tag;
+            var context = ((FrameworkElement)sender).ContextMenu;
+
+            populate_AddSingle_Context(context, tag);
+        }
+
+        private void btn_addSingle_Click(object sender, RoutedEventArgs e)
+        {
+            //that's ugly, but it gets the 'grandParent' to open the context
+            //#prettyCodeAward2018
+            var listElement = sender as FrameworkElement;
+            if (listElement != null)
+            {
+                //parent is the Grid containing this button
+                var parent = listElement.Parent as FrameworkElement;
+                if (parent != null)
+                {
+                    //grandParent is the outer Grid
+                    var grandParent = parent.Parent as FrameworkElement;
+                    if (grandParent != null)
+                    {
+                        var context = grandParent.ContextMenu;
+                        uint fileTag = (uint)grandParent.Tag;
+
+                        populate_AddSingle_Context(context, fileTag);
+                        grandParent.ContextMenu.IsOpen = true;
+                    }
+                }
+            }
+        }
+
         private void list_All_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             var list = (ListBox)sender;
-            if (list.SelectedItems.Count >= 2)
+            if (list.SelectedItems.Count >= 2 && !isTopSelectionBarOpen)
             {
-                Console.WriteLine("Open bar");
+                Storyboard sb;
+                sb = FindResource("OpenTopSelectionBar") as Storyboard;
+                sb.Begin();
+                isTopSelectionBarOpen = true;
+                Console.WriteLine("Top bar opening...");
             }
-            else
-                Console.WriteLine("Close bar");
+            else if (list.SelectedItems.Count <= 1 && isTopSelectionBarOpen)
+            {
+                Storyboard sb;
+                sb = FindResource("CloseTopSelectionBar") as Storyboard;
+                sb.Begin();
+                isTopSelectionBarOpen = false;
+                Console.WriteLine("Top bar closing...");
+            }
         }
+
+        private void box_Search_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            filterListBox(((TextBox)sender).Text);
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        private void OnPropertyChanged(string info)
+        {
+            if (PropertyChanged != null)
+            {
+                PropertyChanged(this, new PropertyChangedEventArgs(info));
+            }
+        }
+
+        #endregion events
     }
 
 #pragma warning restore CS1591
