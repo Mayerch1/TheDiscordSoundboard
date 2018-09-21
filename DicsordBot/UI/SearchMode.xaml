@@ -7,10 +7,24 @@
              xmlns:local="clr-namespace:DicsordBot.UI"
              mc:Ignorable="d"
              d:DesignHeight="450" d:DesignWidth="800">
+
+    <UserControl.Resources>
+        <Storyboard x:Key="OpenTopSelectionBar">
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(FrameworkElement.Height)" Storyboard.TargetName="grd_TopSelectionBar">
+                <EasingDoubleKeyFrame KeyTime="0" Value="30" />
+            </DoubleAnimationUsingKeyFrames>
+        </Storyboard>
+        <Storyboard x:Key="CloseTopSelectionBar">
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(FrameworkElement.Height)" Storyboard.TargetName="grd_TopSelectionBar">
+                <EasingDoubleKeyFrame KeyTime="0" Value="0" />
+            </DoubleAnimationUsingKeyFrames>
+        </Storyboard>
+    </UserControl.Resources>
+
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="*" />
-            <RowDefinition Height="1*" />
+            <RowDefinition Height="30" />
             <RowDefinition Height="12*" />
         </Grid.RowDefinitions>
 
@@ -29,7 +43,7 @@
             </StackPanel>
         </Grid>
 
-        <Grid Grid.Row="1">
+        <Grid Grid.Row="1" x:Name="grd_TopSelectionBar">
             <materialDesign:ColorZone Background="#eaeaea" Height="30" VerticalAlignment="Center" materialDesign:ShadowAssist.ShadowDepth="Depth1">
                 <DockPanel LastChildFill="True">
 
@@ -40,7 +54,7 @@
                         </StackPanel>
                     </Button>
 
-                    <Button x:Name="btn_addMultipleToPlaylist" Click="btn_addMultipleToPlaylist_Click" Background="{StaticResource PrimaryForegroundBrush}" BorderBrush="{StaticResource PrimaryAccentBrush}" ContextMenuOpening="context_Multiple_ContextMenuOpening">
+                    <Button x:Name="btn_addMultipleToPlaylist" Click="btn_addMultiple_Click" Background="{StaticResource PrimaryForegroundBrush}" BorderBrush="{StaticResource PrimaryAccentBrush}" ContextMenuOpening="context_addMultiple_ContextMenuOpening">
                         <StackPanel Orientation="Horizontal">
                             <materialDesign:PackIcon Kind="PlaylistPlus" Height="20" Width="20" VerticalAlignment="Center" Margin="0,0,0,0" Foreground="Gray" />
                             <TextBlock Text="Add selection to playlist..." />
@@ -51,7 +65,7 @@
                         </Button.ContextMenu>
                     </Button>
 
-                    <TextBlock Text="I don't know, something like thaaaat, TODO: collapse when no selection (Non functional yet)" />
+                    <TextBlock Text="This is almost working (the empty space is not opening/moving, maybe use something else than grid)" />
                 </DockPanel>
             </materialDesign:ColorZone>
         </Grid>
@@ -61,7 +75,7 @@
                 <ListBox.ItemTemplate>
                     <DataTemplate>
 
-                        <Grid Tag="{Binding Id}" MouseLeftButtonDown="stack_list_MouseLeftButtonDown" ContextMenuOpening="context_ContextMenuOpening">
+                        <Grid Tag="{Binding Id}" MouseLeftButtonDown="stack_list_MouseLeftButtonDown" ContextMenuOpening="context_addSingle_ContextMenuOpening">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="*" />
                                 <ColumnDefinition Width="*" />
@@ -95,7 +109,7 @@
                             </Grid>
 
                             <Grid Grid.Column="4">
-                                <MenuItem Click="menu_openContext_Click" Tag="{Binding Id}">
+                                <MenuItem Click="btn_addSingle_Click" Tag="{Binding Id}">
                                     <MenuItem.Icon>
                                         <materialDesign:PackIcon Kind="DotsHorizontal" />
                                     </MenuItem.Icon>

@@ -23,12 +23,9 @@ This brings the advantage of an guaranteed availability of the service, combined
 
 ---
 
-##### Planned Features (long term):
+###### Planned Features (long term):
 
-1. Search mode, wich is providing titles via search on your disk for temporary use
-2. Something similiar to a playlist mode
-3. Hotkeys to trigger sounds
-3. Directly streaming from web plattforms (only if compatible with the law)
+See the ['Long Term Features' - Project](https://github.com/Mayerch1/TheDiscordSoundboard/projects/2)
 
 ---
 
@@ -38,10 +35,10 @@ This brings the advantage of an guaranteed availability of the service, combined
 ##### What you need:
 <br/>
 
-1. A confirmed Discord Account (one time)
-2. Rights to invite a bot to your server (one time)
+1. A confirmed Discord Account (only for setup)
+2. Rights to invite a bot to your server (only for setup)
 3. Internet Connection (obviously)
-4. Administrator rights (only if using installer, one time)
+4. Administrator rights (only if using installer, for setup)
 4. Some soundfiles to stream
 
 <br/>
@@ -50,7 +47,7 @@ This brings the advantage of an guaranteed availability of the service, combined
 
 1. Rights to join a channel (permanent)
 2. Rights to transmit audio into that channel (permanent)
-3. Rights to view all channels (provides more features)
+3. Rights to view all channels (for auto-connect)
 </br>
 
 ---
@@ -73,8 +70,6 @@ If you compile the project by yourself, the opus and libsodium dll's won't get g
 ---
 
 #### How to use the Bot
-
->##### In the future, there's maybe coming an introduction sequence, which explains all important steps on the first programm startup.
 <br>
 
 To see, how to set up the application on it's first startup, have a look at [this](https://github.com/Mayerch1/TheDiscordSoundboard/wiki/First-Startup) wiki page ([wiki/First-Startup](https://github.com/Mayerch1/TheDiscordSoundboard/wiki/First-Startup)).
