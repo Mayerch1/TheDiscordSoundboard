@@ -8,51 +8,65 @@
              mc:Ignorable="d"
              d:DesignHeight="300" d:DesignWidth="300" Drop="UserControl_Drop" AllowDrop="True">
     <Grid>
-        <ListBox x:Name="list_All" ItemsSource="{Binding PlaylistFiles}" SelectionMode="Extended" KeyDown="stack_list_KeyDown">
-            <ListBox.ItemTemplate>
-                <DataTemplate>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="12*" />
+        </Grid.RowDefinitions>
 
-                    <!-- TODO: use something different?-->
-                    <Grid Tag="{Binding Id}" MouseLeftButtonDown="stack_list_MouseLeftButtonDown">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*" />
-                            <ColumnDefinition Width="*" />
-                            <ColumnDefinition Width="*" />
-                            <ColumnDefinition Width="*" />
-                        </Grid.ColumnDefinitions>
+        <Grid Grid.Row="0">
+            <materialDesign:ColorZone Background="#eaeaea" Height="30" VerticalAlignment="Center" materialDesign:ShadowAssist.ShadowDepth="Depth1">
+                <StackPanel>
+                    <Button Content="Edit List" Click="btn_editList_Click" />
+                </StackPanel>
+            </materialDesign:ColorZone>
+        </Grid>
+        <Grid Grid.Row="1">
+            <ListBox x:Name="list_All" ItemsSource="{Binding FilteredFiles}" SelectionMode="Extended" KeyDown="stack_list_KeyDown">
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
 
-                        <Grid.ContextMenu>
-                            <ContextMenu>
-                                <MenuItem Header="Add to Queue"
+                        <!-- TODO: use something different?-->
+                        <Grid Tag="{Binding Id}" MouseLeftButtonDown="stack_list_MouseLeftButtonDown">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+
+                            <Grid.ContextMenu>
+                                <ContextMenu>
+                                    <MenuItem Header="Add to Queue"
                                               Tag="{Binding Id}"
                                                   Click="menu_addToQueue_Clicked" />
-                            </ContextMenu>
-                        </Grid.ContextMenu>
+                                </ContextMenu>
+                            </Grid.ContextMenu>
 
-                        <!-- TODO: spacer, left, middle and right aligned-->
+                            <!-- TODO: spacer, left, middle and right aligned-->
 
-                        <Grid Grid.Column="0">
-                            <Label Content="{Binding Name}" />
-                        </Grid>
+                            <Grid Grid.Column="0">
+                                <Label Content="{Binding Name}" />
+                            </Grid>
 
-                        <Grid Grid.Column="1">
-                            <Label Content="{Binding Author}" />
-                        </Grid>
+                            <Grid Grid.Column="1">
+                                <Label Content="{Binding Author}" />
+                            </Grid>
 
-                        <Grid Grid.Column="2">
-                            <Label Content="{Binding LengthString}" />
+                            <Grid Grid.Column="2">
+                                <Label Content="{Binding LengthString}" />
+                            </Grid>
+                            <!--TODO: button dropdown  -->
+                            <Grid Grid.Column="3">
+                                <MenuItem Click="menu_openContext_Click" Tag="{Binding Id}">
+                                    <MenuItem.Icon>
+                                        <materialDesign:PackIcon Kind="DotsHorizontal" />
+                                    </MenuItem.Icon>
+                                </MenuItem>
+                            </Grid>
                         </Grid>
-                        <!--TODO: button dropdown  -->
-                        <Grid Grid.Column="3">
-                            <MenuItem Click="menu_openContext_Click" Tag="{Binding Id}">
-                                <MenuItem.Icon>
-                                    <materialDesign:PackIcon Kind="DotsHorizontal" />
-                                </MenuItem.Icon>
-                            </MenuItem>
-                        </Grid>
-                    </Grid>
-                </DataTemplate>
-            </ListBox.ItemTemplate>
-        </ListBox>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+        </Grid>
     </Grid>
 </UserControl>

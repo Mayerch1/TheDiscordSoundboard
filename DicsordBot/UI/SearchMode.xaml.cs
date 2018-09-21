@@ -45,20 +45,6 @@ namespace DicsordBot.UI
             this.DataContext = this;
         }
 
-        private bool checkContainLowerCase(Data.FileData file, string filter)
-        {
-            string filterLow = filter.ToLower();
-
-            //filter for all known attributes (ignore case)
-            if (file.Name.ToLower().Contains(filterLow) || file.Author.ToLower().Contains(filterLow)
-                || file.Album.ToLower().Contains(filterLow) || file.Genre.ToLower().Contains(filterLow))
-            {
-                return true;
-            }
-            else
-                return false;
-        }
-
         private void filterListBox(string filter)
         {
             //clear list and apply filter
@@ -69,7 +55,7 @@ namespace DicsordBot.UI
                 foreach (var file in Handle.Data.Files)
                 {
                     //add all files matching
-                    if (checkContainLowerCase(file, filter))
+                    if (FileWatcher.checkForLowerMatch(file, filter))
                         FilteredFiles.Add(file);
                 }
             }
@@ -349,6 +335,7 @@ namespace DicsordBot.UI
                 var parent = listElement.Parent as FrameworkElement;
                 if (parent != null)
                 {
+                    //TODO: if stackpanel, then parent is containing context menu
                     //grandParent is the outer Grid
                     var grandParent = parent.Parent as FrameworkElement;
                     if (grandParent != null)

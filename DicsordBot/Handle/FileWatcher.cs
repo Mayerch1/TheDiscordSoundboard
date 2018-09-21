@@ -35,6 +35,26 @@ namespace DicsordBot
         }
 
         /// <summary>
+        /// applies a filter to all properties of file (except path)
+        /// </summary>
+        /// <param name="file">File to search for a hit in</param>
+        /// <param name="filter">Filter</param>
+        /// <returns>true, if the filter got a hit in any property</returns>
+        public static bool checkForLowerMatch(Data.FileData file, string filter)
+        {
+            string filterLow = filter.ToLower();
+
+            //filter for all known attributes (ignore case)
+            if (file.Name.ToLower().Contains(filterLow) || file.Author.ToLower().Contains(filterLow)
+                || file.Album.ToLower().Contains(filterLow) || file.Genre.ToLower().Contains(filterLow))
+            {
+                return true;
+            }
+            else
+                return false;
+        }
+
+        /// <summary>
         /// get all important information from a given file
         /// </summary>
         /// <param name="FullPath">Path to file</param>

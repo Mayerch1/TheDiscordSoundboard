@@ -600,16 +600,14 @@ namespace DicsordBot
 
         private void btn_Previous_Click(object sender, RoutedEventArgs e)
         {
-            //FUTURE: playlist: if time is below 2 seconds skip, else move to 0
-            //TODO: test future implementation
-
             //skip prev title in playlist, when in playlist-mode and <2s
             if (Handle.Data.IsPlaylistPlaying && Handle.Bot.CurrentTime.TotalSeconds < 2)
             {
                 if (Handle.Data.PlaylistFileIndex > 0)
                 {
+                    //TODO: error in moving the fileindex
                     //move playlist reader, skip
-                    Handle.Data.PlaylistFileIndex -= 2;
+                    Handle.Data.PlaylistFileIndex -= 1;
                     Handle.Bot.skipTrack();
                 }
             }

@@ -37,11 +37,14 @@ namespace DicsordBot.UI
             index = _index;
             InitializeComponent();
             this.DataContext = this;
+            FilteredFiles = new ObservableCollection<Data.FileData>(PlaylistFiles);
         }
 
         private uint index = 0;
+        private ObservableCollection<Data.FileData> filteredFiles;
         public Data.Playlist Playlist { get { return Handle.Data.Playlists[(int)index]; } set { Handle.Data.Playlists[(int)index] = value; } }
         public ObservableCollection<Data.FileData> PlaylistFiles { get { return Playlist.Tracks; } set { Playlist.Tracks = value; OnPropertyChanged("PlaylistFiles"); } }
+        public ObservableCollection<Data.FileData> FilteredFiles { get { return filteredFiles; } set { filteredFiles = value; OnPropertyChanged("FilteredFiles"); } }
 
         private void stack_list_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
@@ -147,6 +150,44 @@ namespace DicsordBot.UI
                         }
                     }
                 }
+            }
+        }
+
+        private void btn_editList_Click(object sender, RoutedEventArgs e)
+        {
+            Point location = this.PointToScreen(new Point(0, 0));
+            var dialog = new UI.PlaylistAddDialog(Playlist.Name, location.X, location.Y, this.ActualWidth, this.ActualHeight);
+
+            var result = dialog.ShowDialog();
+
+            if (result == true)
+                Playlist.Name = dialog.PlaylistName;
+        }
+
+        private void box_Search_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            filterListBox(((TextBox)sender).Text);
+        }
+
+        private void filterListBox(string filter)
+        {
+            //clear list and apply filter
+            if (!string.IsNullOrEmpty(filter))
+            {
+                FilteredFiles.Clear();
+
+                foreach (var file in Handle.Data.Files)
+                {
+                    //add all files matching
+                    if (FileWatcher.checkForLowerMatch(file, filter))
+                        FilteredFiles.Add(file);
+                }
+            }
+            else
+            {
+                //reset filter if empty
+                //make deep copy
+                FilteredFiles = new ObservableCollection<Data.FileData>(Handle.Data.Files);
             }
         }
     }

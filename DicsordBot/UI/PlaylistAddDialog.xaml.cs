@@ -26,6 +26,18 @@ namespace DicsordBot.UI
         public PlaylistAddDialog(double x, double y, double pWidth, double pHeight)
         {
             InitializeComponent();
+            initPosition(x, y, pWidth, pHeight);
+        }
+
+        public PlaylistAddDialog(string currentName, double x, double y, double pWidth, double pHeight)
+        {
+            InitializeComponent();
+            PlaylistName = currentName;
+            initPosition(x, y, pWidth, pHeight);
+        }
+
+        private void initPosition(double x, double y, double pWidth, double pHeight)
+        {
             double finalX = (x + pWidth / 2) - (this.Width / 2);
             double finalY = (y + pHeight / 2) - (this.Height / 2);
             this.Left = finalX;

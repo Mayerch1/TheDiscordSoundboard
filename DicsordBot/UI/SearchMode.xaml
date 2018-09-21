@@ -92,7 +92,7 @@
                                 </ContextMenu>
                             </StackPanel.ContextMenu>
 
-                            <Button
+                            <MenuItem
                                         Tag="{Binding Id}"
                                         Height="Auto" Width="Auto"
                                         Click="btn_playItem_Click"
@@ -104,8 +104,8 @@
                                             Kind="Play"
                                             Width="25"
                                             Height="25" />
-                                <Button.Style>
-                                    <Style TargetType="{x:Type Button}" BasedOn="{StaticResource MaterialDesignFlatButton}">
+                                <MenuItem.Style>
+                                    <Style TargetType="{x:Type MenuItem}" BasedOn="{StaticResource {x:Type MenuItem}}">
 
                                         <Setter Property="Visibility" Value="Hidden" />
 
@@ -115,8 +115,8 @@
                                             </DataTrigger>
                                         </Style.Triggers>
                                     </Style>
-                                </Button.Style>
-                            </Button>
+                                </MenuItem.Style>
+                            </MenuItem>
 
                             <Label Content="{Binding Name}" />
 
@@ -124,13 +124,13 @@
 
                             <Label Content="{Binding LengthString}" />
 
-                            <Button Click="btn_addSingle_Click" Tag="{Binding Id}" Foreground="#FF707070">
+                            <MenuItem Click="btn_addSingle_Click" Tag="{Binding Id}" Foreground="#FF707070">
 
                                 <materialDesign:PackIcon Kind="DotsHorizontal"
                                                          Width="25"
                                                          Height="25" />
-                                <Button.Style>
-                                    <Style TargetType="{x:Type Button}" BasedOn="{StaticResource MaterialDesignFlatButton}">
+                                <MenuItem.Style>
+                                    <Style TargetType="{x:Type MenuItem}" BasedOn="{StaticResource {x:Type MenuItem}}">
 
                                         <Setter Property="Visibility" Value="Hidden" />
 
@@ -140,8 +140,8 @@
                                             </DataTrigger>
                                         </Style.Triggers>
                                     </Style>
-                                </Button.Style>
-                            </Button>
+                                </MenuItem.Style>
+                            </MenuItem>
                         </StackPanel>
                     </DataTemplate>
                 </ListBox.ItemTemplate>
