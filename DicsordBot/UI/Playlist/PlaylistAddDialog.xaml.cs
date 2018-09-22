@@ -43,10 +43,10 @@ namespace DicsordBot.UI.Playlist
 
         private void initPosition(double x, double y, double pWidth, double pHeight)
         {
-            double finalX = (x + pWidth / 2) - (this.Width / 2);
-            double finalY = (y + pHeight / 2) - (this.Height / 2);
-            this.Left = finalX;
-            this.Top = finalY;
+            this.Left = x;
+            this.Top = y;
+            this.Width = pWidth;
+            this.Height = pHeight;
         }
 
         private void btn_Accept_Click(object sender, RoutedEventArgs e)
@@ -68,6 +68,16 @@ namespace DicsordBot.UI.Playlist
         private void Window_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.Key == Key.Escape)
+            {
+                DialogResult = false;
+                IsToDelete = false;
+                this.Close();
+            }
+        }
+
+        private void Window_PreviewMouseDown(object sender, MouseButtonEventArgs e)
+        {
+            if (!brd_Dialog.IsMouseOver)
             {
                 DialogResult = false;
                 IsToDelete = false;

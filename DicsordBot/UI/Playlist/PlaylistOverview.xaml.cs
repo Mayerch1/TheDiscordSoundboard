@@ -33,10 +33,12 @@ namespace DicsordBot.UI.Playlist
 
         private void btn_playlistAdd_Click(object sender, RoutedEventArgs e)
         {
-            var location = this.PointToScreen(new Point(0, 0));
-            var dialog = new UI.Playlist.PlaylistAddDialog(location.X, location.Y, this.ActualWidth, this.ActualHeight);
+            var location = new Point(Application.Current.MainWindow.Left, Application.Current.MainWindow.Top);
+
+            var dialog = new UI.Playlist.PlaylistAddDialog(location.X, location.Y, Application.Current.MainWindow.ActualWidth, Application.Current.MainWindow.ActualHeight);
 
             var result = dialog.ShowDialog();
+
             if (result == true)
             {
                 Handle.Data.Playlists.Add(new Data.Playlist(dialog.PlaylistName));

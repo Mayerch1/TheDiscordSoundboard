@@ -87,8 +87,8 @@ namespace DicsordBot.UI
         {
             int tag = (int)((FrameworkElement)sender).Tag;
 
-            var location = this.PointToScreen(new Point(0, 0));
-            var dialog = new UI.ButtonHotkeyWindow(tag, location.X, location.Y, this.ActualWidth, this.ActualHeight);
+            var location = new Point(Application.Current.MainWindow.Left, Application.Current.MainWindow.Top);
+            var dialog = new UI.ButtonHotkeyWindow(tag, location.X, location.Y, Application.Current.MainWindow.ActualWidth, Application.Current.MainWindow.ActualHeight);
 
             //disable hotkeys, while editing them
             ToggleHotkey(false);

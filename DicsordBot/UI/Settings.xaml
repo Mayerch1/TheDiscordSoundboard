@@ -63,6 +63,7 @@
                             <TextBox
                                 Style="{StaticResource MaterialDesignTextFieldBoxTextBox}"
                                 Text="{Binding ClientName}"
+                                TextChanged="box_userName_TextChanged"
                                 materialDesign:HintAssist.Hint="UserName#1234"
                                 HorizontalAlignment="Left"
                                 Margin="0,20,0,0"

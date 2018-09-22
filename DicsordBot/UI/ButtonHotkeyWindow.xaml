@@ -6,9 +6,14 @@
         xmlns:local="clr-namespace:DicsordBot.UI"
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         mc:Ignorable="d"
-        Title="ButtonHotkeyWindow" Height="250" Width="450" ResizeMode="NoResize" WindowStyle="None" KeyDown="Window_KeyDown">
+        AllowsTransparency="True"
+        Title="ButtonHotkeyWindow" Height="250" Width="450" ResizeMode="NoResize" WindowStyle="None" KeyDown="Window_KeyDown" PreviewMouseDown="Window_PreviewMouseDown">
 
-    <Border BorderThickness="1" BorderBrush="#C4C4C4">
+    <Window.Background>
+        <SolidColorBrush Opacity="0.2" Color="Black" />
+    </Window.Background>
+
+    <Border x:Name="brd_All" BorderThickness="1" BorderBrush="#C4C4C4" Height="250" Width="450">
         <Grid Background="#FCFCFC">
             <Grid.RowDefinitions>
                 <RowDefinition Height="6*" />
@@ -63,10 +68,10 @@
                 <Grid Grid.Column="1">
                     <StackPanel Orientation="Horizontal">
                         <Button Click="btn_abort" Background="{StaticResource PrimaryAccentBrush}">
-                            <materialDesign:PackIcon Kind="Close"/>
+                            <materialDesign:PackIcon Kind="Close" />
                         </Button>
-                        <Button  Click="btn_Accept_Click" Background="{StaticResource PrimaryAccentBrush}" >
-                            <materialDesign:PackIcon Kind="Check"/>
+                        <Button  Click="btn_Accept_Click" Background="{StaticResource PrimaryAccentBrush}">
+                            <materialDesign:PackIcon Kind="Check" />
                         </Button>
                     </StackPanel>
                 </Grid>

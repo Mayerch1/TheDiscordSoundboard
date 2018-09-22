@@ -335,13 +335,22 @@ namespace DicsordBot.UI
                 var parent = listElement.Parent as FrameworkElement;
                 if (parent != null)
                 {
-                    //TODO: if stackpanel, then parent is containing context menu
                     //grandParent is the outer Grid
                     var grandParent = parent.Parent as FrameworkElement;
                     if (grandParent != null)
                     {
                         var context = grandParent.ContextMenu;
                         uint fileTag = (uint)grandParent.Tag;
+
+                        //select the currently pressed listBoxItem
+                        for (int i = 0; i < list_All.Items.Count; i++)
+                        {
+                            if (((Data.FileData)list_All.Items[i]).Id == fileTag)
+                            {
+                                list_All.SelectedIndex = i;
+                                break;
+                            }
+                        }
 
                         populate_AddSingle_Context(context, fileTag);
                         grandParent.ContextMenu.IsOpen = true;
@@ -359,7 +368,6 @@ namespace DicsordBot.UI
                 sb = FindResource("OpenTopSelectionBar") as Storyboard;
                 sb.Begin();
                 isTopSelectionBarOpen = true;
-                Console.WriteLine("Top bar opening...");
             }
             else if (list.SelectedItems.Count <= 1 && isTopSelectionBarOpen)
             {
@@ -367,7 +375,6 @@ namespace DicsordBot.UI
                 sb = FindResource("CloseTopSelectionBar") as Storyboard;
                 sb.Begin();
                 isTopSelectionBarOpen = false;
-                Console.WriteLine("Top bar closing...");
             }
         }
 

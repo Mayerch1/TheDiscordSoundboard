@@ -520,7 +520,7 @@ namespace DicsordBot
                         triggerBotInstantReplay(new Data.ButtonData(playlist.Tracks[(int)fileIndex].Name, playlist.Tracks[(int)fileIndex].Path));
                         //set playlist properties
                         Handle.Data.PlaylistIndex = listId;
-                        Handle.Data.PlaylistFileIndex = fileIndex;
+                        Handle.Data.PlaylistFileIndex = (int)fileIndex;
                         Handle.Data.IsPlaylistPlaying = true;
                     }
                 }
@@ -570,7 +570,7 @@ namespace DicsordBot
                             if (++Handle.Data.PlaylistFileIndex < playlist.Tracks.Count)
                             {
                                 //play next track
-                                int index = (int)Handle.Data.PlaylistFileIndex;
+                                int index = Handle.Data.PlaylistFileIndex;
                                 triggerBotQueueReplay(new Data.ButtonData(playlist.Tracks[index].Name, playlist.Tracks[index].Path));
                                 if (!Handle.Bot.IsStreaming)
                                     await Handle.Bot.resumeStream();
@@ -608,11 +608,15 @@ namespace DicsordBot
             //skip prev title in playlist, when in playlist-mode and <2s
             if (Handle.Data.IsPlaylistPlaying && Handle.Bot.CurrentTime.TotalSeconds < 2)
             {
-                if (Handle.Data.PlaylistFileIndex > 0)
+                //TODO: maybe fix
+                if (1 == 2)
+                //if (Handle.Data.PlaylistFileIndex > 0)
                 {
                     //TODO: error in moving the fileindex
                     //move playlist reader, skip
-                    Handle.Data.PlaylistFileIndex -= 1;
+
+                    Handle.Data.PlaylistFileIndex -= 2;
+
                     Handle.Bot.skipTrack();
                 }
             }

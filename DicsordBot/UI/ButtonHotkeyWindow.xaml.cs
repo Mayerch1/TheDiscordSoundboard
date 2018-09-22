@@ -70,10 +70,11 @@ namespace DicsordBot.UI
             //--------- set window -------------------------
             InitializeComponent();
             Keyboard.Focus(box_Hotkey);
-            double finalX = (x + pWidth / 2) - (this.Width / 2);
-            double finalY = (y + pHeight / 2) - (this.Height / 2);
-            this.Left = finalX;
-            this.Top = finalY;
+
+            this.Left = x;
+            this.Top = y;
+            this.Width = pWidth;
+            this.Height = pHeight;
 
             //------------set boxes and textboxes --------------------------
 
@@ -243,6 +244,15 @@ namespace DicsordBot.UI
         {
             DialogResult = false;
             this.Close();
+        }
+
+        private void Window_PreviewMouseDown(object sender, MouseButtonEventArgs e)
+        {
+            if (!brd_All.IsMouseOver)
+            {
+                DialogResult = false;
+                this.Close();
+            }
         }
     }
 
