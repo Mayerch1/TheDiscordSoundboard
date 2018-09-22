@@ -361,17 +361,17 @@ namespace DicsordBot
             if (objType == typeof(UI.ButtonUI))
             {
                 ((UI.ButtonUI)embed).InstantButtonClicked += btn_InstantButton_Clicked;
-                ((UI.ButtonUI)embed).HotkeyChanged += Hotkey_Changed;
+                ((UI.ButtonUI)embed).ToggleHotkey += ToggleHotkey;
             }
             else if (objType == typeof(UI.SearchMode))
             {
                 ((UI.SearchMode)embed).ListItemPlay += List_Item_Play;
             }
-            else if (objType == typeof(UI.PlaylistMode))
+            else if (objType == typeof(UI.Playlist.PlaylistMode))
             {
-                ((UI.PlaylistMode)embed).PlaylistStartPlay += Playlist_Play;
+                ((UI.Playlist.PlaylistMode)embed).PlaylistStartPlay += Playlist_Play;
 
-                ((UI.PlaylistMode)embed).PlaylistItemEnqueued += Playlist_SingleFile_Play;
+                ((UI.Playlist.PlaylistMode)embed).PlaylistItemEnqueued += Playlist_SingleFile_Play;
             }
         }
 
@@ -413,11 +413,15 @@ namespace DicsordBot
             };
         }
 
-        private void Hotkey_Changed()
+        private void ToggleHotkey(bool isEnabled)
         {
-            //re register all hotkeys
-            terminateHotkeys();
-            initHotkeys();
+            //enable/disable hotkeys
+            if (isEnabled)
+            {
+                initHotkeys();
+            }
+            else
+                terminateHotkeys();
         }
 
         private void Hotkey_Pressed(IntPtr lParam)
@@ -658,7 +662,7 @@ namespace DicsordBot
         private void btn_Playlist_Click(object sender, RoutedEventArgs e)
         {
             MainGrid.Child = null;
-            UI.PlaylistMode playUI = new UI.PlaylistMode();
+            UI.Playlist.PlaylistMode playUI = new UI.Playlist.PlaylistMode();
             registerEmbedEvents(playUI);
             MainGrid.Child = playUI;
         }

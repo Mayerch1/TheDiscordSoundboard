@@ -123,7 +123,7 @@ namespace DicsordBot.UI
         {
             //create menu, to create new playlsit
             var location = this.PointToScreen(new Point(0, 0));
-            var dialog = new PlaylistAddDialog(location.X, location.Y, this.ActualWidth, this.ActualHeight);
+            var dialog = new Playlist.PlaylistAddDialog(location.X, location.Y, this.ActualWidth, this.ActualHeight);
 
             var result = dialog.ShowDialog();
             if (result == true)
@@ -166,7 +166,7 @@ namespace DicsordBot.UI
         {
             //create menu, to create new playlsit
             var location = this.PointToScreen(new Point(0, 0));
-            var dialog = new PlaylistAddDialog(location.X, location.Y, this.ActualWidth, this.ActualHeight);
+            var dialog = new Playlist.PlaylistAddDialog(location.X, location.Y, this.ActualWidth, this.ActualHeight);
 
             var result = dialog.ShowDialog();
             if (result == true)

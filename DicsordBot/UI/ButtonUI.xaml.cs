@@ -30,9 +30,9 @@ namespace DicsordBot.UI
 
         public InstantButtonClickedHandler InstantButtonClicked;
 
-        public delegate void HotkeyChangedHandler();
+        public delegate void ToggleHotkeyHandler(bool isEnabled);
 
-        public HotkeyChangedHandler HotkeyChanged;
+        public ToggleHotkeyHandler ToggleHotkey;
 
         public ButtonUI()
         {
@@ -90,9 +90,10 @@ namespace DicsordBot.UI
             var location = this.PointToScreen(new Point(0, 0));
             var dialog = new UI.ButtonHotkeyWindow(tag, location.X, location.Y, this.ActualWidth, this.ActualHeight);
 
+            //disable hotkeys, while editing them
+            ToggleHotkey(false);
             var result = dialog.ShowDialog();
-            if (result == true)
-                HotkeyChanged();
+            ToggleHotkey(true);
         }
 
         private void changeBackFields(StackPanel parent, int index)

@@ -209,13 +209,16 @@
       <DependentUpon>Hint.xaml</DependentUpon>
     </Compile>
     <Compile Include="Handle\HotkeyManager.cs" />
-    <Compile Include="UI\PlaylistAddDialog.xaml.cs">
+    <Compile Include="UI\Playlist\PlaylistAddDialog.xaml.cs">
       <DependentUpon>PlaylistAddDialog.xaml</DependentUpon>
     </Compile>
-    <Compile Include="UI\PlaylistMode.xaml.cs">
+    <Compile Include="UI\Playlist\PlaylistMode.xaml.cs">
       <DependentUpon>PlaylistMode.xaml</DependentUpon>
     </Compile>
-    <Compile Include="UI\PlaylistSingleView.xaml.cs">
+    <Compile Include="UI\Playlist\PlaylistOverview.xaml.cs">
+      <DependentUpon>PlaylistOverview.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\Playlist\PlaylistSingleView.xaml.cs">
       <DependentUpon>PlaylistSingleView.xaml</DependentUpon>
     </Compile>
     <Compile Include="UI\SearchMode.xaml.cs">
@@ -261,15 +264,19 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Page Include="UI\PlaylistAddDialog.xaml">
+    <Page Include="UI\Playlist\PlaylistAddDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="UI\PlaylistMode.xaml">
+    <Page Include="UI\Playlist\PlaylistMode.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="UI\PlaylistSingleView.xaml">
+    <Page Include="UI\Playlist\PlaylistOverview.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\Playlist\PlaylistSingleView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

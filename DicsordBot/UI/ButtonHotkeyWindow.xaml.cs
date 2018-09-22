@@ -80,6 +80,9 @@ namespace DicsordBot.UI
             box_ButtonInfo.Text = "\"" + Btn.Name + "\" (Nr. " + Btn.ID + ")";
 
             box_Hotkey.Text = KeyInterop.KeyFromVirtualKey((int)vk_code).ToString();
+
+            box_Hotkey.Focus();
+
             //set modiifier checkbox
             setModifierCheckBoxes(mod_code);
 
@@ -225,6 +228,21 @@ namespace DicsordBot.UI
             mod_code = 0;
             setModifierCheckBoxes(mod_code);
             box_Hotkey.Text = "None";
+        }
+
+        private void Window_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Escape)
+            {
+                DialogResult = false;
+                this.Close();
+            }
+        }
+
+        private void btn_abort(object sender, RoutedEventArgs e)
+        {
+            DialogResult = false;
+            this.Close();
         }
     }
 

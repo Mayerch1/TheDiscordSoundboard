@@ -15,7 +15,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace DicsordBot.UI
+namespace DicsordBot.UI.Playlist
 {
 #pragma warning disable CS1591
 
@@ -31,6 +31,10 @@ namespace DicsordBot.UI
         public delegate void SinglePlaylistStartPlayHandler(uint listIndex, uint fileTag);
 
         public SinglePlaylistStartPlayHandler SinglePlaylistStartPlay;
+
+        public delegate void LeaveSingleViewHandler();
+
+        public LeaveSingleViewHandler LeaveSingleView;
 
         public PlaylistSingleView(uint _index)
         {
@@ -156,12 +160,17 @@ namespace DicsordBot.UI
         private void btn_editList_Click(object sender, RoutedEventArgs e)
         {
             Point location = this.PointToScreen(new Point(0, 0));
-            var dialog = new UI.PlaylistAddDialog(Playlist.Name, location.X, location.Y, this.ActualWidth, this.ActualHeight);
+            var dialog = new PlaylistAddDialog(Playlist.Name, location.X, location.Y, this.ActualWidth, this.ActualHeight);
 
             var result = dialog.ShowDialog();
 
             if (result == true)
                 Playlist.Name = dialog.PlaylistName;
+            else if (result == false && dialog.IsToDelete == true)
+            {
+                Handle.Data.Playlists.RemoveAt((int)index);
+                LeaveSingleView();
+            }
         }
 
         private void box_Search_TextChanged(object sender, TextChangedEventArgs e)

@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:DicsordBot.UI"
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         mc:Ignorable="d"
-        Title="ButtonHotkeyWindow" Height="250" Width="450" ResizeMode="NoResize" WindowStyle="None">
+        Title="ButtonHotkeyWindow" Height="250" Width="450" ResizeMode="NoResize" WindowStyle="None" KeyDown="Window_KeyDown">
 
     <Border BorderThickness="1" BorderBrush="#C4C4C4">
         <Grid Background="#FCFCFC">
@@ -61,7 +61,14 @@
                 </Grid>
 
                 <Grid Grid.Column="1">
-                    <Button Content="Save" Click="btn_Accept_Click" Background="{StaticResource PrimaryAccentBrush}" />
+                    <StackPanel Orientation="Horizontal">
+                        <Button Click="btn_abort" Background="{StaticResource PrimaryAccentBrush}">
+                            <materialDesign:PackIcon Kind="Close"/>
+                        </Button>
+                        <Button  Click="btn_Accept_Click" Background="{StaticResource PrimaryAccentBrush}" >
+                            <materialDesign:PackIcon Kind="Check"/>
+                        </Button>
+                    </StackPanel>
                 </Grid>
             </Grid>
         </Grid>

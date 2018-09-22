@@ -13,7 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace DicsordBot.UI
+namespace DicsordBot.UI.Playlist
 {
 #pragma warning disable CS1591
 
@@ -26,6 +26,7 @@ namespace DicsordBot.UI
         {
             InitializeComponent();
             this.DataContext = Handle.Data;
+            PlaylistOverview.OpenPlaylist += openPlaylist;
         }
 
         public delegate void PlaylistItemEnqueuedHandler(Data.FileData file);
@@ -36,31 +37,26 @@ namespace DicsordBot.UI
 
         public PlaylistStartPlayHandler PlaylistStartPlay;
 
-        private void btn_playlistAdd_Click(object sender, RoutedEventArgs e)
+        private void openPlaylist(uint listIndex)
         {
-            var location = this.PointToScreen(new Point(0, 0));
-            var dialog = new UI.PlaylistAddDialog(location.X, location.Y, this.ActualWidth, this.ActualHeight);
-
-            var result = dialog.ShowDialog();
-            if (result == true)
-            {
-                Handle.Data.Playlists.Add(new Data.Playlist(dialog.PlaylistName));
-            }
-        }
-
-        private void btn_playlistOpen_Click(object sender, RoutedEventArgs e)
-        {
-            //opens new playlist as single view
-            uint index = (uint)((FrameworkElement)sender).Tag;
-
             //change embeds for maingrit
             PlaylistGrid.Children.RemoveAt(0);
-            var playList = new UI.PlaylistSingleView(index);
+            var playList = new PlaylistSingleView(listIndex);
 
             playList.SinglePlaylistStartPlay += InnerPlaylistPlay;
             playList.SinglePlaylistItemEnqueued += PlaylistItemQueued;
+            playList.LeaveSingleView += LeaveSinglePlaylistView;
 
             PlaylistGrid.Children.Add(playList);
+        }
+
+        private void LeaveSinglePlaylistView()
+        {
+            PlaylistGrid.Children.RemoveAt(0);
+            var overview = new PlaylistOverview();
+            overview.OpenPlaylist += openPlaylist;
+
+            PlaylistGrid.Children.Add(overview);
         }
 
         private void PlaylistItemQueued(Data.FileData file)
