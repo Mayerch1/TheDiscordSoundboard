@@ -78,7 +78,7 @@
                 <ListBox.ItemTemplate>
                     <DataTemplate>
 
-                        <StackPanel Orientation="Horizontal" Tag="{Binding Id}" MouseLeftButtonDown="stack_list_MouseLeftButtonDown" ContextMenuOpening="context_addSingle_ContextMenuOpening" Name="Grid_Title">
+                        <StackPanel Orientation="Horizontal" Tag="{Binding Id}" MouseLeftButtonDown="stack_list_MouseLeftButtonDown" ContextMenuOpening="context_addSingle_ContextMenuOpening" Name="Grid_Title" HorizontalAlignment="Stretch">
 
                             <StackPanel.ContextMenu>
                                 <ContextMenu>
@@ -87,16 +87,14 @@
 
                             <MenuItem
                                         Tag="{Binding Id}"
-                                        Height="Auto" Width="Auto"
                                         Click="btn_playItem_Click"
+                                        Foreground="#FF707070">
 
-                                        Foreground="#FF707070"
-                                        HorizontalAlignment="Right"
-                                        VerticalAlignment="Top">
-                                <materialDesign:PackIcon
-                                            Kind="Play"
-                                            Width="25"
-                                            Height="25" />
+                                <MenuItem.Icon>
+                                    <materialDesign:PackIcon
+                                            Kind="Play" />
+                                </MenuItem.Icon>
+
                                 <MenuItem.Style>
                                     <Style TargetType="{x:Type MenuItem}" BasedOn="{StaticResource {x:Type MenuItem}}">
 
@@ -117,16 +115,19 @@
 
                             <Label Content="{Binding LengthString}" />
 
-                            <MenuItem Click="btn_addSingle_Click" Tag="{Binding Id}" Foreground="#FF707070">
+                            <MenuItem
 
-                                <materialDesign:PackIcon Kind="DotsHorizontal"
-                                                         Width="25"
-                                                         Height="25" />
+                                Tag="{Binding Id}"
+                                Click="btn_addSingle_Click"
+                                Foreground="#FF707070">
+
+                                <MenuItem.Icon>
+                                    <materialDesign:PackIcon Kind="DotsHorizontal" />
+                                </MenuItem.Icon>
+
                                 <MenuItem.Style>
                                     <Style TargetType="{x:Type MenuItem}" BasedOn="{StaticResource {x:Type MenuItem}}">
-
                                         <Setter Property="Visibility" Value="Hidden" />
-
                                         <Style.Triggers>
                                             <DataTrigger Binding="{Binding IsMouseOver, ElementName=Grid_Title}" Value="True">
                                                 <Setter Property="Visibility" Value="Visible" />
