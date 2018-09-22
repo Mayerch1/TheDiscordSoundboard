@@ -78,65 +78,98 @@
                 <ListBox.ItemTemplate>
                     <DataTemplate>
 
-                        <StackPanel Orientation="Horizontal" Tag="{Binding Id}" MouseLeftButtonDown="stack_list_MouseLeftButtonDown" ContextMenuOpening="context_addSingle_ContextMenuOpening" Name="Grid_Title" HorizontalAlignment="Stretch">
+                        <materialDesign:ColorZone Background="{x:Null}" Name="Grid_Title">
 
-                            <StackPanel.ContextMenu>
-                                <ContextMenu>
-                                </ContextMenu>
-                            </StackPanel.ContextMenu>
+                            <Grid Tag="{Binding Id}"
+                                  MouseLeftButtonDown="stack_list_MouseLeftButtonDown"
+                                  ContextMenuOpening="context_addSingle_ContextMenuOpening"
+                                  Margin="10,0,10,0" 
+                                  Height="50"
+                                    >
 
-                            <MenuItem
+                                <Grid.ColumnDefinitions>
+
+                                    <ColumnDefinition Width="60" />
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="60" />
+                                    <ColumnDefinition Width="40" />
+                                </Grid.ColumnDefinitions>
+
+                                <Grid.ContextMenu>
+                                    <ContextMenu>
+                                    </ContextMenu>
+                                </Grid.ContextMenu>
+
+                                <Grid Grid.Column="0">
+
+                                    <Button
                                         Tag="{Binding Id}"
                                         Click="btn_playItem_Click"
-                                        Foreground="#FF707070">
+                                        Foreground="White"
+                                        VerticalAlignment="Center"
+                                        materialDesign:ShadowAssist.ShadowDepth="Depth0" 
+                                        Background="Black"
+                                        BorderBrush="{x:Null}"
+                                        Height="35"
+                                        Width="35">
 
-                                <MenuItem.Icon>
-                                    <materialDesign:PackIcon
-                                            Kind="Play" />
-                                </MenuItem.Icon>
+                                        <materialDesign:PackIcon
+                                            Kind="Play"
+                                            HorizontalAlignment="Center" />
 
-                                <MenuItem.Style>
-                                    <Style TargetType="{x:Type MenuItem}" BasedOn="{StaticResource {x:Type MenuItem}}">
+                                        <Button.Style>
+                                            <Style TargetType="{x:Type Button}" BasedOn="{StaticResource MaterialDesignFloatingActionMiniDarkButton}">
 
-                                        <Setter Property="Visibility" Value="Hidden" />
+                                                <Setter Property="Visibility" Value="Hidden" />
 
-                                        <Style.Triggers>
-                                            <DataTrigger Binding="{Binding IsMouseOver, ElementName=Grid_Title}" Value="True">
-                                                <Setter Property="Visibility" Value="Visible" />
-                                            </DataTrigger>
-                                        </Style.Triggers>
-                                    </Style>
-                                </MenuItem.Style>
-                            </MenuItem>
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding IsMouseOver, ElementName=Grid_Title}" Value="True">
+                                                        <Setter Property="Visibility" Value="Visible" />
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </Button.Style>
+                                    </Button>
+                                </Grid>
 
-                            <Label Content="{Binding Name}" />
+                                <Grid Grid.Column="1" VerticalAlignment="Center">
+                                    <Label Content="{Binding Name}" />
+                                </Grid>
 
-                            <Label Content="{Binding Author}" />
+                                <Grid Grid.Column="2" VerticalAlignment="Center">
+                                    <Label Content="{Binding Author}" />
+                                </Grid>
 
-                            <Label Content="{Binding LengthString}" />
+                                <Grid Grid.Column="3" VerticalAlignment="Center">
+                                    <Button
+                                    Tag="{Binding Id}"
+                                    Click="btn_addSingle_Click"
+                                    Foreground="#FF707070"
+                                    VerticalAlignment="Center"
+                                        Background="{x:Null}"
+                                        BorderBrush="{x:Null}">
 
-                            <MenuItem
+                                        <materialDesign:PackIcon Kind="DotsHorizontal" />
 
-                                Tag="{Binding Id}"
-                                Click="btn_addSingle_Click"
-                                Foreground="#FF707070">
+                                        <Button.Style>
+                                            <Style TargetType="{x:Type Button}" BasedOn= "{StaticResource {x:Type Button}}">
+                                                <Setter Property="Visibility" Value="Hidden" />
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding IsMouseOver, ElementName=Grid_Title}" Value="True">
+                                                        <Setter Property="Visibility" Value="Visible" />
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </Button.Style>
+                                    </Button>
+                                </Grid>
 
-                                <MenuItem.Icon>
-                                    <materialDesign:PackIcon Kind="DotsHorizontal" />
-                                </MenuItem.Icon>
-
-                                <MenuItem.Style>
-                                    <Style TargetType="{x:Type MenuItem}" BasedOn="{StaticResource {x:Type MenuItem}}">
-                                        <Setter Property="Visibility" Value="Hidden" />
-                                        <Style.Triggers>
-                                            <DataTrigger Binding="{Binding IsMouseOver, ElementName=Grid_Title}" Value="True">
-                                                <Setter Property="Visibility" Value="Visible" />
-                                            </DataTrigger>
-                                        </Style.Triggers>
-                                    </Style>
-                                </MenuItem.Style>
-                            </MenuItem>
-                        </StackPanel>
+                                <Grid Grid.Column="4" VerticalAlignment="Center">
+                                    <Label Content="{Binding LengthString}" DockPanel.Dock="Right" />
+                                </Grid>
+                            </Grid>
+                        </materialDesign:ColorZone>
                     </DataTemplate>
                 </ListBox.ItemTemplate>
             </ListBox>
