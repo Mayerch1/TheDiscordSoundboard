@@ -46,6 +46,7 @@ namespace DicsordBot.UI.Playlist
 
         private uint index = 0;
         private ObservableCollection<Data.FileData> filteredFiles;
+        private string Filter { get; set; }
         public Data.Playlist Playlist { get { return Handle.Data.Playlists[(int)index]; } set { Handle.Data.Playlists[(int)index] = value; } }
         public ObservableCollection<Data.FileData> PlaylistFiles { get { return Playlist.Tracks; } set { Playlist.Tracks = value; OnPropertyChanged("PlaylistFiles"); } }
         public ObservableCollection<Data.FileData> FilteredFiles { get { return filteredFiles; } set { filteredFiles = value; OnPropertyChanged("FilteredFiles"); } }
@@ -150,6 +151,7 @@ namespace DicsordBot.UI.Playlist
                         if ((Data.FileData)item == PlaylistFiles[i])
                         {
                             PlaylistFiles.RemoveAt(i);
+                            filterListBox(Filter);
                             break;
                         }
                     }
@@ -176,6 +178,7 @@ namespace DicsordBot.UI.Playlist
         private void box_Search_TextChanged(object sender, TextChangedEventArgs e)
         {
             filterListBox(((TextBox)sender).Text);
+            Filter = ((TextBox)sender).Text;
         }
 
         private void filterListBox(string filter)
@@ -185,7 +188,7 @@ namespace DicsordBot.UI.Playlist
             {
                 FilteredFiles.Clear();
 
-                foreach (var file in Handle.Data.Files)
+                foreach (var file in PlaylistFiles)
                 {
                     //add all files matching
                     if (FileWatcher.checkForLowerMatch(file, filter))
@@ -196,7 +199,7 @@ namespace DicsordBot.UI.Playlist
             {
                 //reset filter if empty
                 //make deep copy
-                FilteredFiles = new ObservableCollection<Data.FileData>(Handle.Data.Files);
+                FilteredFiles = new ObservableCollection<Data.FileData>(PlaylistFiles);
             }
         }
     }

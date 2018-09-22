@@ -32,7 +32,7 @@ namespace DicsordBot.Data
         private ObservableCollection<FileData> files = new ObservableCollection<FileData>();
         private ObservableCollection<Playlist> playlists = new ObservableCollection<Playlist>();
         private uint playlistIndex = 0;
-        private uint playlistFileIndex = 0;
+        private int playlistFileIndex = 0;
         private bool isPlaylistPlaying = false;
 
         #endregion fields
@@ -62,7 +62,7 @@ namespace DicsordBot.Data
         /// <summary>
         /// file index of position in playlist
         /// </summary>
-        public uint PlaylistFileIndex { get { return playlistFileIndex; } set { playlistFileIndex = value; OnPropertyChanged("PlaylistFileIndex"); } }
+        public int PlaylistFileIndex { get { return playlistFileIndex; } set { playlistFileIndex = value; OnPropertyChanged("PlaylistFileIndex"); } }
 
         /// <summary>
         /// IsPlaylistPlaying property
