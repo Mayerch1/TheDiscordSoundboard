@@ -11,6 +11,7 @@
     <UserControl.Resources>
         <Style TargetType="ListBoxItem" BasedOn="{StaticResource {x:Type ListBoxItem}}">
             <Setter Property="Padding" Value="0" />
+            <Setter Property="FontSize" Value="15" />
         </Style>
 
         <Storyboard x:Key="OpenTopSelectionBar">
@@ -27,8 +28,7 @@
 
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="15*" />
-
+            <RowDefinition Height="Auto" />
             <RowDefinition Height="120*" />
         </Grid.RowDefinitions>
 
@@ -72,7 +72,7 @@
             </DockPanel>
         </Grid>
 
-        <Grid Grid.Row="1" Margin="0,0,0,0">
+        <Grid Grid.Row="1" Margin="0,0,0,0" MaxWidth="2000" MinWidth="600">
             <ListBox x:Name="list_All" ItemsSource="{Binding FilteredFiles}" SelectionMode="Extended" SelectionChanged="list_All_SelectionChanged" HorizontalContentAlignment="Stretch">
 
                 <ListBox.ItemTemplate>
@@ -83,17 +83,15 @@
                             <Grid Tag="{Binding Id}"
                                   MouseLeftButtonDown="stack_list_MouseLeftButtonDown"
                                   ContextMenuOpening="context_addSingle_ContextMenuOpening"
-                                  Margin="10,0,10,0" 
-                                  Height="50"
-                                    >
+                                  Margin="10,0,10,0"
+                                  Height="50">
 
                                 <Grid.ColumnDefinitions>
-
                                     <ColumnDefinition Width="60" />
-                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="3*" />
                                     <ColumnDefinition Width="*" />
                                     <ColumnDefinition Width="60" />
-                                    <ColumnDefinition Width="40" />
+                                    <ColumnDefinition Width="45" />
                                 </Grid.ColumnDefinitions>
 
                                 <Grid.ContextMenu>
@@ -108,11 +106,11 @@
                                         Click="btn_playItem_Click"
                                         Foreground="White"
                                         VerticalAlignment="Center"
-                                        materialDesign:ShadowAssist.ShadowDepth="Depth0" 
+                                        materialDesign:ShadowAssist.ShadowDepth="Depth0"
                                         Background="Black"
                                         BorderBrush="{x:Null}"
-                                        Height="35"
-                                        Width="35">
+                                        Height="30"
+                                        Width="30">
 
                                         <materialDesign:PackIcon
                                             Kind="Play"
@@ -148,9 +146,12 @@
                                     Foreground="#FF707070"
                                     VerticalAlignment="Center"
                                         Background="{x:Null}"
-                                        BorderBrush="{x:Null}">
+                                        BorderBrush="{x:Null}"
+                                        Height="Auto"
+                                        Width="Auto">
 
-                                        <materialDesign:PackIcon Kind="DotsHorizontal" />
+                                        <materialDesign:PackIcon Kind="DotsHorizontal" Height="20"
+                                        Width="20" />
 
                                         <Button.Style>
                                             <Style TargetType="{x:Type Button}" BasedOn= "{StaticResource {x:Type Button}}">
