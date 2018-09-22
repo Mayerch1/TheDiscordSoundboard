@@ -14,12 +14,12 @@
         </Style>
 
         <Storyboard x:Key="OpenTopSelectionBar">
-            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(FrameworkElement.Height)" Storyboard.TargetName="grd_TopSelectionBar">
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(FrameworkElement.Height)" Storyboard.TargetName="col_TopSelectionBar">
                 <EasingDoubleKeyFrame KeyTime="0" Value="30" />
             </DoubleAnimationUsingKeyFrames>
         </Storyboard>
         <Storyboard x:Key="CloseTopSelectionBar">
-            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(FrameworkElement.Height)" Storyboard.TargetName="grd_TopSelectionBar">
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(FrameworkElement.Height)" Storyboard.TargetName="col_TopSelectionBar">
                 <EasingDoubleKeyFrame KeyTime="0" Value="0" />
             </DoubleAnimationUsingKeyFrames>
         </Storyboard>
@@ -27,53 +27,52 @@
 
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="*" />
-            <RowDefinition Height="30" />
-            <RowDefinition Height="12*" />
+            <RowDefinition Height="15*" />
+
+            <RowDefinition Height="120*" />
         </Grid.RowDefinitions>
 
         <Grid Grid.Row="0">
+            <DockPanel>
+                <StackPanel DockPanel.Dock="Top" VerticalAlignment="Stretch">
+                    <materialDesign:ColorZone Background="#eaeaea" VerticalAlignment="Stretch" materialDesign:ShadowAssist.ShadowDepth="Depth1">
+                        <DockPanel LastChildFill="True" VerticalAlignment="Stretch">
+                            <materialDesign:PackIcon Kind="Magnify" Height="20" Width="20" VerticalAlignment="Center" Margin="10,0,10,0" Foreground="Gray" />
+                            <TextBox TextChanged="box_Search_TextChanged"  materialDesign:HintAssist.Hint="Search" materialDesign:TextFieldAssist.DecorationVisibility="Hidden" BorderThickness="0" VerticalAlignment="Center" />
+                        </DockPanel>
+                    </materialDesign:ColorZone>
+                </StackPanel>
 
-            <StackPanel>
-                <materialDesign:ColorZone Background="#eaeaea" Height="30" VerticalAlignment="Center" materialDesign:ShadowAssist.ShadowDepth="Depth1">
+                <materialDesign:ColorZone x:Name="col_TopSelectionBar"  Background="#eaeaea" Height="0" VerticalAlignment="Center" materialDesign:ShadowAssist.ShadowDepth="Depth1">
                     <DockPanel LastChildFill="True">
-                        <materialDesign:PackIcon Kind="Magnify" Height="20" Width="20" VerticalAlignment="Center" Margin="10,0,10,0" Foreground="Gray" />
-                        <TextBox TextChanged="box_Search_TextChanged"  materialDesign:HintAssist.Hint="Search" materialDesign:TextFieldAssist.DecorationVisibility="Hidden" BorderThickness="0" VerticalAlignment="Center" />
+
+                        <Button  Click="btn_addMultipleToQueue_Clicked" Background="{StaticResource PrimaryForegroundBrush}" BorderBrush="{StaticResource PrimaryAccentBrush}">
+                            <StackPanel Orientation="Horizontal">
+                                <materialDesign:PackIcon Kind="Plus" Height="20" Width="20" VerticalAlignment="Center" Margin="0,0,0,0" Foreground="Gray" />
+                                <TextBlock Text="Add selection to queue" />
+                            </StackPanel>
+                        </Button>
+
+                        <Button x:Name="btn_addMultipleToPlaylist" Click="btn_addMultiple_Click" Background="{StaticResource PrimaryForegroundBrush}" BorderBrush="{StaticResource PrimaryAccentBrush}" ContextMenuOpening="context_addMultiple_ContextMenuOpening">
+                            <StackPanel Orientation="Horizontal">
+                                <materialDesign:PackIcon Kind="PlaylistPlus" Height="20" Width="20" VerticalAlignment="Center" Margin="0,0,0,0" Foreground="Gray" />
+                                <TextBlock Text="Add selection to playlist..." />
+                            </StackPanel>
+                            <Button.ContextMenu>
+                                <ContextMenu>
+                                </ContextMenu>
+                            </Button.ContextMenu>
+                        </Button>
+
+                        <TextBlock Text="This is almost working (the empty space is not opening/moving, maybe use something else than grid)" />
                     </DockPanel>
                 </materialDesign:ColorZone>
 
                 <materialDesign:ColorZone Background="{StaticResource PrimaryBackgroundBrush}" materialDesign:ShadowAssist.ShadowDepth="Depth2" materialDesign:ShadowAssist.ShadowEdges="All"  Height="Auto" />
-            </StackPanel>
+            </DockPanel>
         </Grid>
 
-        <Grid Grid.Row="1" x:Name="grd_TopSelectionBar">
-            <materialDesign:ColorZone Background="#eaeaea" Height="30" VerticalAlignment="Center" materialDesign:ShadowAssist.ShadowDepth="Depth1">
-                <DockPanel LastChildFill="True">
-
-                    <Button  Click="btn_addMultipleToQueue_Clicked" Background="{StaticResource PrimaryForegroundBrush}" BorderBrush="{StaticResource PrimaryAccentBrush}">
-                        <StackPanel Orientation="Horizontal">
-                            <materialDesign:PackIcon Kind="Plus" Height="20" Width="20" VerticalAlignment="Center" Margin="0,0,0,0" Foreground="Gray" />
-                            <TextBlock Text="Add selection to queue" />
-                        </StackPanel>
-                    </Button>
-
-                    <Button x:Name="btn_addMultipleToPlaylist" Click="btn_addMultiple_Click" Background="{StaticResource PrimaryForegroundBrush}" BorderBrush="{StaticResource PrimaryAccentBrush}" ContextMenuOpening="context_addMultiple_ContextMenuOpening">
-                        <StackPanel Orientation="Horizontal">
-                            <materialDesign:PackIcon Kind="PlaylistPlus" Height="20" Width="20" VerticalAlignment="Center" Margin="0,0,0,0" Foreground="Gray" />
-                            <TextBlock Text="Add selection to playlist..." />
-                        </StackPanel>
-                        <Button.ContextMenu>
-                            <ContextMenu>
-                            </ContextMenu>
-                        </Button.ContextMenu>
-                    </Button>
-
-                    <TextBlock Text="This is almost working (the empty space is not opening/moving, maybe use something else than grid)" />
-                </DockPanel>
-            </materialDesign:ColorZone>
-        </Grid>
-
-        <Grid Grid.Row="2" Margin="0,0,0,0">
+        <Grid Grid.Row="1" Margin="0,0,0,0">
             <ListBox x:Name="list_All" ItemsSource="{Binding FilteredFiles}" SelectionMode="Extended" SelectionChanged="list_All_SelectionChanged" HorizontalContentAlignment="Stretch">
 
                 <ListBox.ItemTemplate>
