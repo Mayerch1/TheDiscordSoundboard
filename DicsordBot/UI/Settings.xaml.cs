@@ -70,5 +70,16 @@ namespace DicsordBot.UI
                 }
             }
         }
+
+        private void box_userName_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            var box = (TextBox)sender;
+
+            //replace all blancs
+            box.Text = box.Text.Replace(" ", String.Empty);
+
+            box.SelectionStart = box.Text.Length;
+            box.SelectionLength = 0;
+        }
     }
 }
