@@ -54,7 +54,18 @@ namespace DicsordBot.UI
             System.Diagnostics.Process.Start(Data.PersistentData.urlToGitRepo + "wiki/" + page);
         }
 
-        private void btn_DirChooser_Click(object sender, RoutedEventArgs e)
+        private void box_userName_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            var box = (TextBox)sender;
+
+            //replace all blancs
+            box.Text = box.Text.Replace(" ", String.Empty);
+
+            box.SelectionStart = box.Text.Length;
+            box.SelectionLength = 0;
+        }
+
+        private void btn_addMediaSource_Click(object sender, RoutedEventArgs e)
         {
             using (var dialog = new System.Windows.Forms.FolderBrowserDialog())
             {
@@ -67,19 +78,32 @@ namespace DicsordBot.UI
                     //add selected source to list
                     if (!Handle.Data.Persistent.MediaSources.Contains(dialog.SelectedPath))
                         Handle.Data.Persistent.MediaSources.Add(dialog.SelectedPath);
+
+                    var scanCollection = new System.Collections.ObjectModel.ObservableCollection<string>();
+                    scanCollection.Add(dialog.SelectedPath);
+
+                    //rescan added files
+                    FileWatcher.indexFiles(scanCollection, false);
                 }
             }
         }
 
-        private void box_userName_TextChanged(object sender, TextChangedEventArgs e)
+        private void btn_deleteMediaSource_Click(object sender, RoutedEventArgs e)
         {
-            var box = (TextBox)sender;
+            if (list_MediaSources.SelectedItems.Count > 0)
+            {
+                string sPath = list_MediaSources.SelectedItem.ToString();
 
-            //replace all blancs
-            box.Text = box.Text.Replace(" ", String.Empty);
+                int index = Handle.Data.Persistent.MediaSources.IndexOf(sPath);
 
-            box.SelectionStart = box.Text.Length;
-            box.SelectionLength = 0;
+                if (index >= 0)
+                {
+                    Handle.Data.Persistent.MediaSources.RemoveAt(index);
+
+                    //delete/recsan all files
+                    FileWatcher.indexCleanFiles(Handle.Data.Persistent.MediaSources);
+                }
+            }
         }
     }
 }

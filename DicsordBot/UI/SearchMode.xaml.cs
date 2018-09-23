@@ -51,12 +51,18 @@ namespace DicsordBot.UI
             if (!string.IsNullOrEmpty(filter))
             {
                 FilteredFiles.Clear();
-
-                foreach (var file in Handle.Data.Files)
+                try
                 {
-                    //add all files matching
-                    if (FileWatcher.checkForLowerMatch(file, filter))
-                        FilteredFiles.Add(file);
+                    foreach (var file in Handle.Data.Files)
+                    {
+                        //add all files matching
+                        if (FileWatcher.checkForLowerMatch(file, filter))
+                            FilteredFiles.Add(file);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    UnhandledException.initWindow(ex, "whilest trying to rescan your files (debug)");
                 }
             }
             else

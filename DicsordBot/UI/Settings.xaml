@@ -127,16 +127,19 @@
 
                             <Separator Margin="0,5,0,0" />
 
-                            <TextBox
-                                Style="{StaticResource MaterialDesignTextFieldBoxTextBox}"
-                                Text="TestBox"
-                                materialDesign:HintAssist.Hint="Whatever"
-                                HorizontalAlignment="Left"
-                                Margin="0,20,0,0"
-                                VerticalAlignment="Top"
-                                AcceptsReturn="False"
-                                TextWrapping="NoWrap"
-                                Width="450" />
+                            <StackPanel Orientation="Horizontal">
+                                <ListBox x:Name="list_MediaSources" ItemsSource="{Binding MediaSources}" MinWidth="300">
+                                </ListBox>
+
+                                <StackPanel Orientation="Vertical">
+                                    <Button Click="btn_addMediaSource_Click" Foreground="{StaticResource PrimaryForegroundBrush}">
+                                        <materialDesign:PackIcon Kind="Plus" />
+                                    </Button>
+                                    <Button Click="btn_deleteMediaSource_Click" Foreground="{StaticResource PrimaryForegroundBrush}">
+                                        <materialDesign:PackIcon Kind="Minus" />
+                                    </Button>
+                                </StackPanel>
+                            </StackPanel>
                         </StackPanel>
                     </Grid>
                 </materialDesign:ColorZone>
