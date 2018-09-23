@@ -3,19 +3,10 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
 using System.Windows.Media.Animation;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace DicsordBot.UI
 {
@@ -129,7 +120,7 @@ namespace DicsordBot.UI
         {
             //create menu, to create new playlsit
             var location = this.PointToScreen(new Point(0, 0));
-            var dialog = new Playlist.PlaylistAddDialog(location.X, location.Y, this.ActualWidth, this.ActualHeight);
+            var dialog = new Playlist.PlaylistAddDialog(Application.Current.MainWindow);
 
             var result = dialog.ShowDialog();
             if (result == true)
@@ -172,7 +163,7 @@ namespace DicsordBot.UI
         {
             //create menu, to create new playlsit
             var location = this.PointToScreen(new Point(0, 0));
-            var dialog = new Playlist.PlaylistAddDialog(location.X, location.Y, this.ActualWidth, this.ActualHeight);
+            var dialog = new Playlist.PlaylistAddDialog(Application.Current.MainWindow);
 
             var result = dialog.ShowDialog();
             if (result == true)

@@ -162,7 +162,7 @@ namespace DicsordBot.UI.Playlist
         private void btn_editList_Click(object sender, RoutedEventArgs e)
         {
             Point location = this.PointToScreen(new Point(0, 0));
-            var dialog = new PlaylistAddDialog(Playlist.Name, location.X, location.Y, this.ActualWidth, this.ActualHeight);
+            var dialog = new PlaylistAddDialog(Playlist.Name, Application.Current.MainWindow);
 
             var result = dialog.ShowDialog();
 

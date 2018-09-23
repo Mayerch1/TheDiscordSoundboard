@@ -1,16 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
+﻿using System.Windows;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 
 namespace DicsordBot.UI
 {
@@ -32,7 +21,7 @@ namespace DicsordBot.UI
         private uint vk_code = 0;
         private uint mod_code = 0;
 
-        public ButtonHotkeyWindow(int btnId, double x, double y, double pWidth, double pHeight)
+        public ButtonHotkeyWindow(int btnId, Window window)
         {
             BtnId = btnId;
             //get btnIndex
@@ -71,10 +60,12 @@ namespace DicsordBot.UI
             InitializeComponent();
             Keyboard.Focus(box_Hotkey);
 
-            this.Left = x;
-            this.Top = y;
-            this.Width = pWidth;
-            this.Height = pHeight;
+            Point p = window.GetAbsolutePosition();
+
+            this.Left = p.X;
+            this.Top = p.Y;
+            this.Width = window.ActualWidth;
+            this.Height = window.ActualHeight;
 
             //------------set boxes and textboxes --------------------------
 

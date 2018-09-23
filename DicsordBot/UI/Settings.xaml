@@ -132,10 +132,10 @@
                                 </ListBox>
 
                                 <StackPanel Orientation="Vertical">
-                                    <Button Click="btn_addMediaSource_Click" Foreground="{StaticResource PrimaryForegroundBrush}">
+                                    <Button Click="btn_addMediaSource_Click" Background="{StaticResource PrimaryForegroundBrush}" BorderBrush="{x:Null}">
                                         <materialDesign:PackIcon Kind="Plus" />
                                     </Button>
-                                    <Button Click="btn_deleteMediaSource_Click" Foreground="{StaticResource PrimaryForegroundBrush}">
+                                    <Button Click="btn_deleteMediaSource_Click" Background="{StaticResource PrimaryForegroundBrush}" BorderBrush="{x:Null}">
                                         <materialDesign:PackIcon Kind="Minus" />
                                     </Button>
                                 </StackPanel>

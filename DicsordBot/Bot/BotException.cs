@@ -1,15 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace DicsordBot.Bot
+﻿namespace DicsordBot.Bot
 {
     /// <summary>
     /// Class for custom bot exception
     /// </summary>
-    internal class BotException : Exception
+    internal class BotException : System.Exception
     {
         /// <summary>
         /// type enum

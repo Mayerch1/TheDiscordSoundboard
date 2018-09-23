@@ -1,16 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
+﻿using System.Windows;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 
 namespace DicsordBot.UI.Playlist
 {
@@ -24,29 +13,31 @@ namespace DicsordBot.UI.Playlist
         public string PlaylistName { get { return box_Name.Text; } set { box_Name.Text = value; } }
         public bool IsToDelete { get; set; } = false;
 
-        public PlaylistAddDialog(double x, double y, double pWidth, double pHeight)
+        public PlaylistAddDialog(Window window)
         {
             InitializeComponent();
-            initPosition(x, y, pWidth, pHeight);
+            initPosition(window);
             box_Name.SelectAll();
             box_Name.Focus();
         }
 
-        public PlaylistAddDialog(string currentName, double x, double y, double pWidth, double pHeight)
+        public PlaylistAddDialog(string currentName, Window window)
         {
             InitializeComponent();
             PlaylistName = currentName;
-            initPosition(x, y, pWidth, pHeight);
+            initPosition(window);
             box_Name.SelectAll();
             box_Name.Focus();
         }
 
-        private void initPosition(double x, double y, double pWidth, double pHeight)
+        private void initPosition(Window window)
         {
-            this.Left = x;
-            this.Top = y;
-            this.Width = pWidth;
-            this.Height = pHeight;
+            Point p = window.GetAbsolutePosition();
+
+            this.Left = p.X;
+            this.Top = p.Y;
+            this.Width = window.ActualWidth;
+            this.Height = window.ActualHeight;
         }
 
         private void btn_Accept_Click(object sender, RoutedEventArgs e)

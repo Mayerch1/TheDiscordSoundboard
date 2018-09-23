@@ -1,17 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace DicsordBot.UI.Playlist
 {
@@ -35,7 +23,9 @@ namespace DicsordBot.UI.Playlist
         {
             var location = new Point(Application.Current.MainWindow.Left, Application.Current.MainWindow.Top);
 
-            var dialog = new UI.Playlist.PlaylistAddDialog(location.X, location.Y, Application.Current.MainWindow.ActualWidth, Application.Current.MainWindow.ActualHeight);
+            var t = Application.Current.MainWindow;
+
+            var dialog = new UI.Playlist.PlaylistAddDialog(Application.Current.MainWindow);
 
             var result = dialog.ShowDialog();
 
