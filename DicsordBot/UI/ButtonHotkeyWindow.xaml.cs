@@ -62,10 +62,11 @@ namespace DicsordBot.UI
 
             Point p = window.GetAbsolutePosition();
 
-            this.Left = p.X;
-            this.Top = p.Y;
-            this.Width = window.ActualWidth;
-            this.Height = window.ActualHeight;
+            //this.Left = p.X;
+            //this.Top = p.Y;
+
+            this.Left = (p.X + window.ActualWidth / 2) - (this.Width / 2);
+            this.Top = (p.Y + window.ActualHeight / 2) - (this.Height / 2);
 
             //------------set boxes and textboxes --------------------------
 

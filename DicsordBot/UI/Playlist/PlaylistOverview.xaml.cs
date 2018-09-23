@@ -21,13 +21,13 @@ namespace DicsordBot.UI.Playlist
 
         private void btn_playlistAdd_Click(object sender, RoutedEventArgs e)
         {
-            var location = new Point(Application.Current.MainWindow.Left, Application.Current.MainWindow.Top);
-
-            var t = Application.Current.MainWindow;
-
             var dialog = new UI.Playlist.PlaylistAddDialog(Application.Current.MainWindow);
 
+            BlurEffectManager.ToggleBlurEffect(true);
+
             var result = dialog.ShowDialog();
+
+            BlurEffectManager.ToggleBlurEffect(false);
 
             if (result == true)
             {

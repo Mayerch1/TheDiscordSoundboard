@@ -75,12 +75,19 @@ namespace DicsordBot.UI
         {
             int tag = (int)((FrameworkElement)sender).Tag;
 
-            var location = new Point(Application.Current.MainWindow.Left, Application.Current.MainWindow.Top);
             var dialog = new ButtonHotkeyWindow(tag, Application.Current.MainWindow);
+            dialog.Owner = Application.Current.MainWindow;
+            dialog.Topmost = true;
 
             //disable hotkeys, while editing them
             ToggleHotkey(false);
-            var result = dialog.ShowDialog();
+            //trigger blur effect
+            BlurEffectManager.ToggleBlurEffect(true);
+
+            dialog.ShowDialog();
+
+            BlurEffectManager.ToggleBlurEffect(false);
+
             ToggleHotkey(true);
         }
 

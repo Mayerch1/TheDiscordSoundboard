@@ -119,8 +119,10 @@ namespace DicsordBot.UI
         private void context_createAndAddSingleToPlaylist_Click(object sender, RoutedEventArgs e)
         {
             //create menu, to create new playlsit
-            var location = this.PointToScreen(new Point(0, 0));
+
+            BlurEffectManager.ToggleBlurEffect(true);
             var dialog = new Playlist.PlaylistAddDialog(Application.Current.MainWindow);
+            BlurEffectManager.ToggleBlurEffect(false);
 
             var result = dialog.ShowDialog();
             if (result == true)
@@ -162,8 +164,9 @@ namespace DicsordBot.UI
         private void context_createAndAddMultipleToPlaylist_Click(object sender, RoutedEventArgs e)
         {
             //create menu, to create new playlsit
-            var location = this.PointToScreen(new Point(0, 0));
+            BlurEffectManager.ToggleBlurEffect(true);
             var dialog = new Playlist.PlaylistAddDialog(Application.Current.MainWindow);
+            BlurEffectManager.ToggleBlurEffect(false);
 
             var result = dialog.ShowDialog();
             if (result == true)
