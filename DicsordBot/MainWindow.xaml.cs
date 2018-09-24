@@ -121,7 +121,7 @@ namespace DicsordBot
             registerEmbedEvents(ButtonUI);
 
             //file watcher
-            FileWatcher.StartMonitor(Handle.Data.Persistent.MediaSources);
+            IO.FileWatcher.StartMonitor(Handle.Data.Persistent.MediaSources);
 
             initTimer();
 
@@ -150,7 +150,7 @@ namespace DicsordBot
                 initDelayedAsync();
             }
 
-            FileWatcher.indexFiles(Handle.Data.Persistent.MediaSources);
+            IO.FileWatcher.indexFiles(Handle.Data.Persistent.MediaSources);
         }
 
         private void MainWindow_Closing(object sender, CancelEventArgs e)
@@ -164,15 +164,15 @@ namespace DicsordBot
 
         private void initHotkeys()
         {
-            HotkeyManager.initHotkeys(this);
+            IO.HotkeyManager.initHotkeys(this);
             //register all saved hotkeys
             foreach (var hotkey in Handle.Data.Persistent.HotkeyList)
-                HotkeyManager.RegisterHotKey(this, hotkey.mod_code, hotkey.vk_code);
+                IO.HotkeyManager.RegisterHotKey(this, hotkey.mod_code, hotkey.vk_code);
         }
 
         private void terminateHotkeys()
         {
-            HotkeyManager.terminateHotkeys(this);
+            IO.HotkeyManager.terminateHotkeys(this);
         }
 
         #endregion hotkeys
@@ -380,7 +380,7 @@ namespace DicsordBot
             Handle.Bot.SnackbarWarning += SnackBarWarning_Show;
 
             //hotkey stuff
-            HotkeyManager.RegisteredHotkeyPressed += Hotkey_Pressed;
+            IO.HotkeyManager.RegisteredHotkeyPressed += Hotkey_Pressed;
 
             AddHandler(TreeViewItem.ExpandedEvent, new RoutedEventHandler(tree_channelList_ItemExpanded));
 
@@ -408,9 +408,9 @@ namespace DicsordBot
             };
 
             //fancy stuff
-            BlurEffectManager.ToggleBlurEffect += delegate (bool isEnabled)
+            IO.BlurEffectManager.ToggleBlurEffect += delegate (bool isEnabled)
             {
-                BlurEffectManager.ApplyBlurEffect(isEnabled, this);
+                IO.BlurEffectManager.ApplyBlurEffect(isEnabled, this);
             };
         }
 

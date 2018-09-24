@@ -152,11 +152,11 @@ namespace DicsordBot.UI.Playlist
             Point location = this.PointToScreen(new Point(0, 0));
             var dialog = new PlaylistAddDialog(Playlist.Name, Application.Current.MainWindow);
 
-            BlurEffectManager.ToggleBlurEffect(true);
+            IO.BlurEffectManager.ToggleBlurEffect(true);
 
             dialog.Closing += delegate (object dSender, CancelEventArgs dE)
             {
-                BlurEffectManager.ToggleBlurEffect(false);
+                IO.BlurEffectManager.ToggleBlurEffect(false);
                 ProcessDialogResult(dialog.Result, dialog.IsToDelete, dialog.PlaylistName);
             };
 
@@ -173,34 +173,6 @@ namespace DicsordBot.UI.Playlist
                 LeaveSingleView();
             }
         }
-
-        //private void box_Search_TextChanged(object sender, TextChangedEventArgs e)
-        //{
-        //    filterListBox(((TextBox)sender).Text);
-        //    Filter = ((TextBox)sender).Text;
-        //}
-
-        //private void filterListBox(string filter)
-        //{
-        //    //clear list and apply filter
-        //    if (!string.IsNullOrEmpty(filter))
-        //    {
-        //        FilteredFiles.Clear();
-
-        //        foreach (var file in PlaylistFiles)
-        //        {
-        //            //add all files matching
-        //            if (FileWatcher.checkForLowerMatch(file, filter))
-        //                FilteredFiles.Add(file);
-        //        }
-        //    }
-        //    else
-        //    {
-        //        //reset filter if empty
-        //        //make deep copy
-        //        FilteredFiles = new ObservableCollection<Data.FileData>(PlaylistFiles);
-        //    }
-        //}
 
         #region drag and drop
 
@@ -240,9 +212,9 @@ namespace DicsordBot.UI.Playlist
                     string[] files = (string[])obj.GetData(DataFormats.FileDrop);
                     foreach (var track in files)
                     {
-                        if (FileWatcher.checkForValidFile(track))
+                        if (IO.FileWatcher.checkForValidFile(track))
                         {
-                            dropItem(dropInfo.InsertIndex, FileWatcher.getAllFileInfo(track));
+                            dropItem(dropInfo.InsertIndex, IO.FileWatcher.getAllFileInfo(track));
                         }
                     }
                 }

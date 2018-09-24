@@ -85,12 +85,12 @@ namespace DicsordBot.UI
 
         private uint getModifierCheckBoxes()
         {
-            return HotkeyManager.getCodeFromBool((bool)box_shift.IsChecked, (bool)box_ctrl.IsChecked, (bool)box_win.IsChecked, (bool)box_alt.IsChecked);
+            return IO.HotkeyManager.getCodeFromBool((bool)box_shift.IsChecked, (bool)box_ctrl.IsChecked, (bool)box_win.IsChecked, (bool)box_alt.IsChecked);
         }
 
         private void setModifierCheckBoxes(uint mod)
         {
-            var modifiers = HotkeyManager.getBoolFromCode(mod);
+            var modifiers = IO.HotkeyManager.getBoolFromCode(mod);
 
             box_shift.IsChecked = modifiers.Item1;
             box_ctrl.IsChecked = modifiers.Item2;
@@ -132,13 +132,6 @@ namespace DicsordBot.UI
             Btn.Hotkey_VK = vk_code;
         }
 
-        private void btn_Accept_Click(object sender, RoutedEventArgs e)
-        {
-            saveHotkey();
-
-            this.Close();
-        }
-
         private void box_Hotkey_KeyDown(object sender, KeyEventArgs e)
         {
             var keyCode = (uint)KeyInterop.VirtualKeyFromKey(e.Key);
@@ -157,7 +150,7 @@ namespace DicsordBot.UI
                 //set modifier checkboxes
                 setModifierCheckBoxes(e.KeyboardDevice.Modifiers);
 
-                mod_code = HotkeyManager.getCodeFromBool(box_shift.IsChecked, box_ctrl.IsChecked, box_win.IsChecked, box_alt.IsChecked);
+                mod_code = IO.HotkeyManager.getCodeFromBool(box_shift.IsChecked, box_ctrl.IsChecked, box_win.IsChecked, box_alt.IsChecked);
 
                 //set warning for double hotkey
                 checkForDoubleHotkey(vk_code, mod_code);
@@ -213,7 +206,7 @@ namespace DicsordBot.UI
 
         private void box_Checked(object sender, RoutedEventArgs e)
         {
-            mod_code = HotkeyManager.getCodeFromBool(box_shift.IsChecked, box_ctrl.IsChecked, box_win.IsChecked, box_alt.IsChecked);
+            mod_code = IO.HotkeyManager.getCodeFromBool(box_shift.IsChecked, box_ctrl.IsChecked, box_win.IsChecked, box_alt.IsChecked);
 
             checkForDoubleHotkey(vk_code, mod_code);
         }
@@ -230,25 +223,51 @@ namespace DicsordBot.UI
         {
             if (e.Key == Key.Escape)
             {
-                this.Close();
+                declineChangesClose();
             }
         }
 
         private void btn_abort(object sender, RoutedEventArgs e)
         {
-            this.Close();
+            declineChangesClose();
         }
 
         private void Window_Deactivated(object sender, EventArgs e)
         {
             try
             {
-                this.Close();
+                declineChangesClose();
             }
             catch
             {
                 Console.WriteLine("Window is already closing");
             }
+        }
+
+        private void btn_Accept_Click(object sender, RoutedEventArgs e)
+        {
+            acceptChangesClose();
+        }
+
+        private void acceptChangesClose()
+        {
+            saveHotkey();
+
+            if (vk_code == 0 && mod_code == 0)
+            {
+                Handle.Data.Persistent.HotkeyList.RemoveAt(hotkeyIndex);
+            }
+
+            this.Close();
+        }
+
+        private void declineChangesClose()
+        {
+            if (vk_code == 0 && mod_code == 0)
+            {
+                Handle.Data.Persistent.HotkeyList.RemoveAt(hotkeyIndex);
+            }
+            this.Close();
         }
     }
 
