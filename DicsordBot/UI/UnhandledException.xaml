@@ -103,8 +103,7 @@
                                     materialDesign:ShadowAssist.ShadowDepth="Depth0"
                                     Background="{StaticResource PrimaryBackgroundBrush}"
                                     BorderBrush="{StaticResource PrimaryBackgroundBrush}"
-                                    Style="{DynamicResource MaterialDesignFloatingActionMiniLightButton}"
-                                    ToolTip="MaterialDesignFloatingActionMiniLightButton">
+                                    Style="{DynamicResource MaterialDesignFloatingActionMiniLightButton}">
 
                                 <materialDesign:PackIcon
 
@@ -112,7 +111,7 @@
                                           Height="24"
                                           Width="24" />
                             </Button>
-                            <Button HorizontalAlignment="Left" Margin="5" Click="btn_report_Click" Style="{StaticResource MaterialDesignRaisedButton}" Foreground="{StaticResource PrimaryBackgroundBrush}">
+                            <Button HorizontalAlignment="Left" Margin="5" Click="btn_report_Click" Style="{StaticResource MaterialDesignRaisedButton}" Background="{StaticResource PrimaryForegroundBrush}">
                                 Github
                             </Button>
                         </StackPanel>

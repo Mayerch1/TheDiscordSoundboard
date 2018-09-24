@@ -94,7 +94,8 @@
                             <Button Click="btn_abort" Background="{StaticResource PrimaryAccentBrush}"
                                 BorderBrush="{x:Null}"
                                     Margin="0,0,10,0">
-                                <materialDesign:PackIcon Kind="Close"
+                                <materialDesign:PackIcon Kind="Close"
+
  />
                             </Button>
                             <Button  Click="btn_Accept_Click" Background="{StaticResource PrimaryAccentBrush}"

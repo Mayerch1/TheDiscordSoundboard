@@ -164,27 +164,10 @@ namespace DicsordBot.Bot
                 else
                     base.enqueueAsync(btn);
             }
-            catch (System.IO.DirectoryNotFoundException)
-            {
-                SnackbarWarning("Directory of Button " + btn.ID + " could not be found.");
-            }
-            catch (System.IO.FileNotFoundException)
-            {
-                SnackbarWarning("File of Button number " + btn.ID + " could not be found.");
-            }
-            catch (System.IO.InvalidDataException)
-            {
-                SnackbarWarning("File of Button number " + btn.ID + " is damaged.");
-            }
-            catch (System.Runtime.InteropServices.COMException)
-            {
-                SnackbarWarning("File type of Button number " + btn.ID + " is not supported.");
-            }
             catch (Exception ex)
             {
                 await disconnectFromChannelAsync();
-                UI.UnhandledException.initWindow(ex, "Trying to add a new file to the queue. (Button Nr: " + btn.ID + ", Name: \"" + btn.Name + "\").");
-                Console.WriteLine("EnqueueAsync unhandled");
+                handleReplayException(ex, "Trying to add a new file to the queue. (Button Nr: " + btn.ID + ", Name: \"" + btn.Name + "\").", btn.ID);
             }
         }
 
@@ -214,7 +197,7 @@ namespace DicsordBot.Bot
             catch (Exception ex)
             {
                 await disconnectFromChannelAsync();
-                UI.UnhandledException.initWindow(ex, "Trying to start/resume the stream");
+                handleReplayException(ex, "Trying to start / resume the stream");
             }
         }
 
@@ -358,6 +341,54 @@ namespace DicsordBot.Bot
         }
 
         #endregion start stuff
+
+        #region handle exception
+
+        private void handleReplayException(Exception ex, string msg, int btnId = -1)
+        {
+            string btnStr;
+            if (btnId >= 0)
+
+                btnStr = "File of Button number " + btnId;
+            else
+                btnStr = "The file ";
+
+            Dictionary<Type, int> typeMap = new Dictionary<Type, int>();
+            typeMap.Add(typeof(System.IO.DirectoryNotFoundException), 0);
+            typeMap.Add(typeof(System.IO.FileNotFoundException), 1);
+            typeMap.Add(typeof(System.IO.InvalidDataException), 2);
+            typeMap.Add(typeof(System.Runtime.InteropServices.COMException), 3);
+            typeMap.Add(typeof(Exception), 4);
+
+            switch (typeMap[ex.GetType()])
+            {
+                case 0:
+                    SnackbarWarning(btnStr + " could not be found.");
+                    break;
+
+                case 1:
+                    SnackbarWarning(btnStr + " could not be found.");
+                    break;
+
+                case 2:
+                    SnackbarWarning(btnStr + " is damaged.");
+                    break;
+
+                case 3:
+                    SnackbarWarning(btnStr + " is not supported.");
+                    break;
+
+                case 4:
+                    UI.UnhandledException.initWindow(ex, msg);
+                    break;
+
+                default:
+                    Console.WriteLine("Failed to handle error (BotHandler.cs)");
+                    break;
+            }
+        }
+
+        #endregion handle exception
 
         #region get data
 
