@@ -68,7 +68,9 @@ namespace DicsordBot.UI
 
             //------------set boxes and textboxes --------------------------
 
-            box_ButtonInfo.Text = "\"" + Btn.Name + "\" (Nr. " + Btn.ID + ")";
+            box_ButtonInfo.Text = Btn.Name;
+
+            box_ButtonID.Text = " - (Id: " + Btn.ID + ")";
 
             box_Hotkey.Text = KeyInterop.KeyFromVirtualKey((int)vk_code).ToString();
 

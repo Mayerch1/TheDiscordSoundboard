@@ -6,83 +6,105 @@
         xmlns:local="clr-namespace:DicsordBot.UI"
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         mc:Ignorable="d"
-        Title="ButtonHotkeyWindow" Height="500" Width="800" ResizeMode="NoResize" WindowStyle="None"
+        Title="ButtonHotkeyWindow" Height="280" Width="440" ResizeMode="NoResize" WindowStyle="None"
         KeyDown="Window_KeyDown"
         Deactivated="Window_Deactivated">
 
-    <Border x:Name="brd_All" BorderThickness="1" BorderBrush="#C4C4C4" Height="500" Width="800">
+    <Border x:Name="brd_All" BorderThickness="1" BorderBrush="{x:Null}" Margin="20,20,20,20">
         <Grid Background="{StaticResource PrimaryBackgroundBrush}">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="6*" />
-                <RowDefinition Height="*" />
-            </Grid.RowDefinitions>
+            <StackPanel Orientation="Vertical" VerticalAlignment="Top" Margin="10,10,10,0">
 
-            <Grid Grid.Row="0">
-                <StackPanel Orientation="Vertical" VerticalAlignment="Bottom">
+                <Grid  HorizontalAlignment="Center">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
 
-                    <StackPanel Margin="10,0,10,85" Orientation="Horizontal">
-                        <TextBlock Text="Editing Hotkey of " />
-                        <TextBlock x:Name="box_ButtonInfo" Text="xyz (Nr. x)" />
-                    </StackPanel>
+                    <Grid.Resources>
+                        <Style TargetType="TextBlock" BasedOn="{StaticResource {x:Type TextBlock}}">
+                            <Setter Property="FontSize" Value="13" />
+                        </Style>
+                    </Grid.Resources>
 
-                    <StackPanel Orientation="Vertical">
+                    <Grid Grid.Column="0">
+                        <TextBlock Text= "Editing Hotkey of - " />
+                    </Grid>
 
-                        <CheckBox x:Name="box_shift" Content="Shift" Checked="box_Checked" Unchecked="box_Checked" />
-                        <CheckBox x:Name="box_ctrl" Content="Ctrl" Checked="box_Checked"  Unchecked="box_Checked" />
-                        <CheckBox x:Name="box_win" Content="Win" Checked="box_Checked"  Unchecked="box_Checked" />
-                        <CheckBox x:Name="box_alt" Content="Alt" Checked="box_Checked"  Unchecked="box_Checked" />
-                    </StackPanel>
+                    <Grid Grid.Column="1">
+                        <TextBlock x:Name="box_ButtonInfo" Text="xyz" />
+                    </Grid>
 
-                    <StackPanel Orientation="Horizontal">
-                        <TextBox x:Name="box_Hotkey" Text="" Width="125" KeyDown="box_Hotkey_KeyDown" TextWrapping="Wrap" />
+                    <Grid Grid.Column="2">
+                        <TextBlock x:Name="box_ButtonID" Text="(Nr.x)" />
+                    </Grid>
+                </Grid>
 
-                        <Button
+                <Separator Margin="0,10,0,0" />
+
+                <StackPanel Orientation="Vertical" Margin="0,10,0,0">
+                    <CheckBox x:Name="box_shift" Content="Shift" Checked="box_Checked" Unchecked="box_Checked" />
+                    <CheckBox x:Name="box_ctrl" Content="Ctrl" Checked="box_Checked"  Unchecked="box_Checked" />
+                    <CheckBox x:Name="box_win" Content="Win" Checked="box_Checked"  Unchecked="box_Checked" />
+                    <CheckBox x:Name="box_alt" Content="Alt" Checked="box_Checked"  Unchecked="box_Checked" />
+                </StackPanel>
+
+                <StackPanel Orientation="Horizontal" VerticalAlignment="Bottom" Margin="0,10,0,15">
+                    <TextBox x:Name="box_Hotkey" Text="" KeyDown="box_Hotkey_KeyDown" TextWrapping="Wrap"
+                                 Style="{StaticResource MaterialDesignTextFieldBoxTextBox}"
+                                 materialDesign:HintAssist.Hint="Hotkey"
+                                 Height="57"
+                                 Width="299"
+                                 FontSize="10" />
+                    <Button
                             Click="btn_clearHotkey_Click"
                             Style="{StaticResource MaterialDesignFloatingActionMiniLightButton}"
-                             ToolTip="MaterialDesignFloatingActionMiniLightButton"
-                               Height="21"
-                                Width="13"
+                            ToolTip="MaterialDesignFloatingActionMiniLightButton"
+                            Height="21"
+                            Width="13"
                             Background="{x:Null}"
                             BorderBrush="{x:Null}"
                             materialDesign:ShadowAssist.ShadowDepth="Depth0"
                             BorderThickness="0"
                             Padding="0">
-                            <materialDesign:PackIcon
+                        <materialDesign:PackIcon
                                 Kind="Close"
                                 Height="15"
                                 Width="15" />
-                        </Button>
-                    </StackPanel>
+                    </Button>
                 </StackPanel>
-            </Grid>
-            <Grid Grid.Row="1">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="3*" />
-                    <ColumnDefinition Width="*" />
-                </Grid.ColumnDefinitions>
 
-                <Separator VerticalAlignment="Top" />
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="2*" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
 
-                <Grid Grid.Column="0">
-                    <StackPanel x:Name="stack_warning" VerticalAlignment="Center" Orientation="Horizontal" Visibility="Hidden">
-                        <materialDesign:PackIcon Kind="AlertOctagon" />
-                        <TextBlock Text="Conflict with existing hotkey for button nr: " />
-                        <TextBlock x:Name="stack_warning_btnId" />
-                        <TextBlock Text=" detected" />
-                    </StackPanel>
+                    <Grid Grid.Column="0">
+                        <StackPanel x:Name="stack_warning" VerticalAlignment="Center" Orientation="Horizontal" Visibility="Hidden">
+                            <materialDesign:PackIcon Kind="AlertOctagon" />
+                            <TextBlock Text="Conflict with existing hotkey for button Nr. " />
+                            <TextBlock x:Name="stack_warning_btnId" />
+                            <TextBlock Text=" detected" />
+                        </StackPanel>
+                    </Grid>
+
+                    <Grid Grid.Column="1" Margin="10,0,0,0">
+                        <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="0,0,5,0">
+                            <Button Click="btn_abort" Background="{StaticResource PrimaryAccentBrush}"
+                                BorderBrush="{x:Null}"
+                                    Margin="0,0,10,0">
+                                <materialDesign:PackIcon Kind="Close"
+ />
+                            </Button>
+                            <Button  Click="btn_Accept_Click" Background="{StaticResource PrimaryAccentBrush}"
+                                 BorderBrush="{x:Null}">
+                                <materialDesign:PackIcon Kind="Check" />
+                            </Button>
+                        </StackPanel>
+                    </Grid>
                 </Grid>
-
-                <Grid Grid.Column="1">
-                    <StackPanel Orientation="Horizontal">
-                        <Button Click="btn_abort" Background="{StaticResource PrimaryAccentBrush}">
-                            <materialDesign:PackIcon Kind="Close" />
-                        </Button>
-                        <Button  Click="btn_Accept_Click" Background="{StaticResource PrimaryAccentBrush}">
-                            <materialDesign:PackIcon Kind="Check" />
-                        </Button>
-                    </StackPanel>
-                </Grid>
-            </Grid>
+            </StackPanel>
         </Grid>
     </Border>
 </Window>
