@@ -13,8 +13,8 @@
         <SolidColorBrush Opacity="0.2" Color="Black" />
     </Window.Background>
 
-    <Border x:Name="brd_All" BorderThickness="1" BorderBrush="#C4C4C4" Height="250" Width="450">
-        <Grid Background="#FCFCFC">
+    <Border x:Name="brd_All" BorderThickness="1" BorderBrush="#C4C4C4" Height="500" Width="800">
+        <Grid Background="{StaticResource PrimaryBackgroundBrush}">
             <Grid.RowDefinitions>
                 <RowDefinition Height="6*" />
                 <RowDefinition Height="*" />
@@ -37,13 +37,23 @@
                     </StackPanel>
 
                     <StackPanel Orientation="Horizontal">
-                        <TextBox x:Name="box_Hotkey" Text="" Width="125" KeyDown="box_Hotkey_KeyDown" />
-                        <Button Click="btn_clearHotkey_Click"
-                                VerticalAlignment="Bottom"
-                                Background="{StaticResource PrimaryBackgroundBrush}"
-                                BorderBrush="{StaticResource PrimaryBackgroundBrush}"
-                                Foreground="{StaticResource PrimaryForegroundBrush}">
-                            <materialDesign:PackIcon Kind="Close" />
+                        <TextBox x:Name="box_Hotkey" Text="" Width="125" KeyDown="box_Hotkey_KeyDown" TextWrapping="Wrap" />
+
+                        <Button
+                            Click="btn_clearHotkey_Click"
+                            Style="{StaticResource MaterialDesignFloatingActionMiniLightButton}"
+                             ToolTip="MaterialDesignFloatingActionMiniLightButton"
+                               Height="21"
+                                Width="13"
+                            Background="{x:Null}"
+                            BorderBrush="{x:Null}"
+                            materialDesign:ShadowAssist.ShadowDepth="Depth0"
+                            BorderThickness="0"
+                            Padding="0">
+                            <materialDesign:PackIcon
+                                Kind="Close"
+                                Height="15"
+                                Width="15" />
                         </Button>
                     </StackPanel>
                 </StackPanel>
