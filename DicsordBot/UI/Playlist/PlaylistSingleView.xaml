@@ -5,8 +5,9 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:local="clr-namespace:DicsordBot.UI.Playlist"
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:dd="urn:gong-wpf-dragdrop"
              mc:Ignorable="d"
-             d:DesignHeight="300" d:DesignWidth="300" Drop="UserControl_Drop" AllowDrop="True">
+             d:DesignHeight="300" d:DesignWidth="300" AllowDrop="True">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="*" />
@@ -21,7 +22,10 @@
             </materialDesign:ColorZone>
         </Grid>
         <Grid Grid.Row="1">
-            <ListBox x:Name="list_All" ItemsSource="{Binding FilteredFiles}" SelectionMode="Extended" KeyDown="stack_list_KeyDown">
+            <ListBox x:Name="list_All" ItemsSource="{Binding PlaylistFiles}" SelectionMode="Extended" KeyDown="stack_list_KeyDown"
+                     dd:DragDrop.IsDragSource="True"
+                     dd:DragDrop.IsDropTarget="True"
+                     dd:DragDrop.DropHandler="{Binding}">
                 <ListBox.ItemTemplate>
                     <DataTemplate>
 

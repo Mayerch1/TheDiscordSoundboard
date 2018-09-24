@@ -43,6 +43,7 @@ namespace DicsordBot.UI.Playlist
         private void btn_Accept_Click(object sender, RoutedEventArgs e)
         {
             Result = true;
+            IsToDelete = false;
             this.Close();
         }
 
@@ -70,7 +71,14 @@ namespace DicsordBot.UI.Playlist
         {
             Result = false;
             IsToDelete = false;
-            this.Close();
+            try
+            {
+                this.Close();
+            }
+            catch
+            {
+                Console.WriteLine("Windows is already closing");
+            }
         }
     }
 
