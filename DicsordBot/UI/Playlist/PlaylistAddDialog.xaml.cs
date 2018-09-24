@@ -14,6 +14,7 @@ namespace DicsordBot.UI.Playlist
         public string PlaylistName { get { return box_Name.Text; } set { box_Name.Text = value; } }
         public bool IsToDelete { get; set; } = false;
         public bool Result { get; set; } = false;
+        private bool IsDialogOpen { get; set; } = false;
 
         public PlaylistAddDialog(Window window)
         {
@@ -49,8 +50,10 @@ namespace DicsordBot.UI.Playlist
 
         private void btn_Delete_Click(object sender, RoutedEventArgs e)
         {
+            IsDialogOpen = true;
             if (MessageBox.Show("Are you shure to delete this Playlist?", "Warning", MessageBoxButton.OKCancel) == MessageBoxResult.OK)
             {
+                IsDialogOpen = false;
                 Result = false;
                 IsToDelete = true;
                 this.Close();
@@ -69,15 +72,18 @@ namespace DicsordBot.UI.Playlist
 
         private void Window_Deactivated(object sender, EventArgs e)
         {
-            Result = false;
-            IsToDelete = false;
-            try
+            if (!IsDialogOpen)
             {
-                this.Close();
-            }
-            catch
-            {
-                Console.WriteLine("Windows is already closing");
+                Result = false;
+                IsToDelete = false;
+                try
+                {
+                    this.Close();
+                }
+                catch
+                {
+                    Console.WriteLine("Windows is already closing");
+                }
             }
         }
     }

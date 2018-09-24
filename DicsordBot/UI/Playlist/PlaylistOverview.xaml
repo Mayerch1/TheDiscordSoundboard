@@ -8,9 +8,10 @@
              mc:Ignorable="d"
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid>
-        <StackPanel Margin="0,0,0,0" Orientation="Horizontal">
+        <ScrollViewer>
+            <WrapPanel>
 
-            <Button Content="New"
+                <Button Content="New Playlist"
                     Click="btn_playlistAdd_Click"
                     Width="220" Height="200"
                     BorderThickness="0"
@@ -18,23 +19,30 @@
                     materialDesign:ShadowAssist.ShadowDepth="Depth2"
                     Margin="15"
                     VerticalAlignment="Top">
-                <Button.Background>
-                    <ImageBrush ImageSource="/res/kitties.jpg" Stretch="UniformToFill" TileMode="None" />
-                </Button.Background>
-            </Button>
+                    <Button.Background>
+                        <ImageBrush ImageSource="/res/kitties.jpg" Stretch="UniformToFill" TileMode="None" />
+                    </Button.Background>
+                </Button>
 
-            <ItemsControl ItemsSource="{Binding Playlists}">
-                <ItemsControl.ItemTemplate>
-                    <DataTemplate>
-                        <Button Width="220" Height="200" BorderThickness="0" BorderBrush="{x:Null}" materialDesign:ShadowAssist.ShadowDepth="Depth2" Margin="15">
-                            <Button.Background>
-                                <ImageBrush ImageSource="/res/kitties.jpg" Stretch="UniformToFill" TileMode="None" />
-                            </Button.Background>
-                            <Button Content="Text" />
-                        </Button>
-                    </DataTemplate>
-                </ItemsControl.ItemTemplate>
-            </ItemsControl>
-        </StackPanel>
+                <ItemsControl ItemsSource="{Binding Playlists}">
+                    <ItemsControl.ItemTemplate>
+
+                        <DataTemplate>
+                            <Button Width="220" Height="200" BorderThickness="0" Tag="{Binding Id}" BorderBrush="{x:Null}" materialDesign:ShadowAssist.ShadowDepth="Depth2" Margin="15" Click="btn_playlistOpen_Click">
+                                <Button.Background>
+                                    <ImageBrush ImageSource="/res/kitties.jpg" Stretch="UniformToFill" TileMode="None" />
+                                </Button.Background>
+                                <Button Content="{Binding Name}" />
+                            </Button>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <WrapPanel />
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                </ItemsControl>
+            </WrapPanel>
+        </ScrollViewer>
     </Grid>
 </UserControl>

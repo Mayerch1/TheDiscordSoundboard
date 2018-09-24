@@ -37,9 +37,15 @@ namespace DicsordBot.UI.Playlist
 
         public LeaveSingleViewHandler LeaveSingleView;
 
-        public PlaylistSingleView(uint _index)
+        public PlaylistSingleView(uint _listId)
         {
-            index = _index;
+            //get index of playlist
+            for (int i = 0; i < Handle.Data.Playlists.Count; i++)
+            {
+                if (Handle.Data.Playlists[i].Id == _listId)
+                    index = (uint)i;
+            }
+
             InitializeComponent();
             this.DataContext = this;
             //FilteredFiles = new ObservableCollection<Data.FileData>(PlaylistFiles);
@@ -170,6 +176,9 @@ namespace DicsordBot.UI.Playlist
             else if (result == false && isToDelete == true)
             {
                 Handle.Data.Playlists.RemoveAt((int)index);
+
+                //refresh all id's
+
                 LeaveSingleView();
             }
         }

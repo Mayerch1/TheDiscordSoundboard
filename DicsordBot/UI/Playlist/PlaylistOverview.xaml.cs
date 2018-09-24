@@ -39,8 +39,8 @@ namespace DicsordBot.UI.Playlist
 
         private void btn_playlistOpen_Click(object sender, RoutedEventArgs e)
         {
-            uint index = (uint)((FrameworkElement)sender).Tag;
-            OpenPlaylist(index);
+            uint listId = (uint)((FrameworkElement)sender).Tag;
+            OpenPlaylist(listId);
         }
     }
 
