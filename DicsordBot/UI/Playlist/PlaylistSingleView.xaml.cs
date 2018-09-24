@@ -1,4 +1,5 @@
-﻿using System;
+﻿using GongSolutions.Wpf.DragDrop;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
@@ -22,7 +23,7 @@ namespace DicsordBot.UI.Playlist
     /// <summary>
     /// Interaction logic for PlaylistSingleView.xaml
     /// </summary>
-    public partial class PlaylistSingleView : UserControl, INotifyPropertyChanged
+    public partial class PlaylistSingleView : UserControl, INotifyPropertyChanged, IDropTarget
     {
         public delegate void SinglePlaylistItemEnqueuedHandler(Data.FileData file);
 
@@ -41,15 +42,17 @@ namespace DicsordBot.UI.Playlist
             index = _index;
             InitializeComponent();
             this.DataContext = this;
-            FilteredFiles = new ObservableCollection<Data.FileData>(PlaylistFiles);
+            //FilteredFiles = new ObservableCollection<Data.FileData>(PlaylistFiles);
         }
 
         private uint index = 0;
-        private ObservableCollection<Data.FileData> filteredFiles;
+
+        //private ObservableCollection<Data.FileData> filteredFiles;
         private string Filter { get; set; }
+
         public Data.Playlist Playlist { get { return Handle.Data.Playlists[(int)index]; } set { Handle.Data.Playlists[(int)index] = value; } }
         public ObservableCollection<Data.FileData> PlaylistFiles { get { return Playlist.Tracks; } set { Playlist.Tracks = value; OnPropertyChanged("PlaylistFiles"); } }
-        public ObservableCollection<Data.FileData> FilteredFiles { get { return filteredFiles; } set { filteredFiles = value; OnPropertyChanged("FilteredFiles"); } }
+        //public ObservableCollection<Data.FileData> FilteredFiles { get { return filteredFiles; } set { filteredFiles = value; OnPropertyChanged("FilteredFiles"); } }
 
         private void stack_list_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
@@ -107,22 +110,6 @@ namespace DicsordBot.UI.Playlist
             //ListItemPlay(tag, false);
         }
 
-        private void UserControl_Drop(object sender, DragEventArgs e)
-        {
-            if (e.Data != null && e.Data.GetDataPresent(DataFormats.FileDrop))
-            {
-                string[] files = (string[])e.Data.GetData(DataFormats.FileDrop);
-                foreach (var track in files)
-                {
-                    if (FileWatcher.checkForValidFile(track))
-                    {
-                        Data.FileData fileData = FileWatcher.getAllFileInfo(track);
-                        Handle.Data.Playlists[(int)index].Tracks.Add(fileData);
-                    }
-                }
-            }
-        }
-
         #region events
 
         public event PropertyChangedEventHandler PropertyChanged;
@@ -151,7 +138,7 @@ namespace DicsordBot.UI.Playlist
                         if ((Data.FileData)item == PlaylistFiles[i])
                         {
                             PlaylistFiles.RemoveAt(i);
-                            filterListBox(Filter);
+                            //filterListBox(Filter);
                             break;
                         }
                     }
@@ -161,6 +148,7 @@ namespace DicsordBot.UI.Playlist
 
         private void btn_editList_Click(object sender, RoutedEventArgs e)
         {
+            //show edit window, to rename/delete list
             Point location = this.PointToScreen(new Point(0, 0));
             var dialog = new PlaylistAddDialog(Playlist.Name, Application.Current.MainWindow);
 
@@ -186,33 +174,91 @@ namespace DicsordBot.UI.Playlist
             }
         }
 
-        private void box_Search_TextChanged(object sender, TextChangedEventArgs e)
+        //private void box_Search_TextChanged(object sender, TextChangedEventArgs e)
+        //{
+        //    filterListBox(((TextBox)sender).Text);
+        //    Filter = ((TextBox)sender).Text;
+        //}
+
+        //private void filterListBox(string filter)
+        //{
+        //    //clear list and apply filter
+        //    if (!string.IsNullOrEmpty(filter))
+        //    {
+        //        FilteredFiles.Clear();
+
+        //        foreach (var file in PlaylistFiles)
+        //        {
+        //            //add all files matching
+        //            if (FileWatcher.checkForLowerMatch(file, filter))
+        //                FilteredFiles.Add(file);
+        //        }
+        //    }
+        //    else
+        //    {
+        //        //reset filter if empty
+        //        //make deep copy
+        //        FilteredFiles = new ObservableCollection<Data.FileData>(PlaylistFiles);
+        //    }
+        //}
+
+        #region drag and drop
+
+        void IDropTarget.DragOver(IDropInfo dropInfo)
         {
-            filterListBox(((TextBox)sender).Text);
-            Filter = ((TextBox)sender).Text;
+            dropInfo.DropTargetAdorner = DropTargetAdorners.Insert;
+
+            var sourceItem = dropInfo.Data as Data.FileData;
+
+            if (sourceItem != null)
+                dropInfo.Effects = DragDropEffects.Move;
+            else
+                dropInfo.Effects = DragDropEffects.Link;
         }
 
-        private void filterListBox(string filter)
+        void IDropTarget.Drop(IDropInfo dropInfo)
         {
-            //clear list and apply filter
-            if (!string.IsNullOrEmpty(filter))
+            Data.FileData sourceItem = dropInfo.Data as Data.FileData;
+            //move item from list to another position
+            if (sourceItem != null)
             {
-                FilteredFiles.Clear();
+                Data.FileData targetItem = dropInfo.TargetItem as Data.FileData;
+                //insert sourceItem to new place
+                int oldIndex = PlaylistFiles.IndexOf(sourceItem);
+                PlaylistFiles.RemoveAt(oldIndex);
 
-                foreach (var file in PlaylistFiles)
-                {
-                    //add all files matching
-                    if (FileWatcher.checkForLowerMatch(file, filter))
-                        FilteredFiles.Add(file);
-                }
+                dropItem(dropInfo.InsertIndex, sourceItem);
             }
+            //insert new item
             else
             {
-                //reset filter if empty
-                //make deep copy
-                FilteredFiles = new ObservableCollection<Data.FileData>(PlaylistFiles);
+                //convert item into Data.FileData
+
+                IDataObject obj = dropInfo.Data as IDataObject;
+                if (obj != null & obj.GetDataPresent(DataFormats.FileDrop))
+                {
+                    string[] files = (string[])obj.GetData(DataFormats.FileDrop);
+                    foreach (var track in files)
+                    {
+                        if (FileWatcher.checkForValidFile(track))
+                        {
+                            dropItem(dropInfo.InsertIndex, FileWatcher.getAllFileInfo(track));
+                        }
+                    }
+                }
             }
         }
+
+        private void dropItem(int index, Data.FileData file)
+        {
+            //drop on new position
+            if (index < PlaylistFiles.Count)
+                PlaylistFiles.Insert(index, file);
+            else
+                PlaylistFiles.Add(file);
+        }
+
+        #endregion drag and drop
     }
 
 #pragma warning restore CS1591
