@@ -95,7 +95,7 @@ namespace DicsordBot.UI
             box_shift.IsChecked = modifiers.Item1;
             box_ctrl.IsChecked = modifiers.Item2;
             box_win.IsChecked = modifiers.Item3;
-            box_win.IsChecked = modifiers.Item4;
+            box_alt.IsChecked = modifiers.Item4;
         }
 
         private void setModifierCheckBoxes(ModifierKeys modifiers)
