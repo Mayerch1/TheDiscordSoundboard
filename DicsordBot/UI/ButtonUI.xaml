@@ -34,10 +34,10 @@
 
                                 <Grid Name="Test">
 
-                                    <Button Height="80" Width="168" Tag="{Binding ID}" Foreground="#FF707070" FontFamily="Segoe UI" Content="{Binding Name}" Click="btn_Instant_Click" BorderBrush="{x:Null}" BorderThickness="0" Background="{x:Null}">
+                                    <Button Height="80" Width="168" Tag="{Binding ID}" Foreground="#939393" Content="{Binding Name}" Click="btn_Instant_Click" BorderBrush="{x:Null}" BorderThickness="0" Background="{x:Null}">
 
                                         <Button.Style>
-                                            <Style TargetType="{x:Type Button}" BasedOn="{StaticResource MaterialDesignRaisedLightButton}">
+                                            <Style TargetType="{x:Type Button}" BasedOn="{StaticResource MaterialDesignRaisedDarkButton}">
                                                 <Style.Triggers>
 
                                                     <DataTrigger Binding="{Binding IsMouseOver, ElementName=Test}" Value="True">

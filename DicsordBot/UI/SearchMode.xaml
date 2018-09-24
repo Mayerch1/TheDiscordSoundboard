@@ -11,7 +11,8 @@
     <UserControl.Resources>
         <Style TargetType="ListBoxItem" BasedOn="{StaticResource {x:Type ListBoxItem}}">
             <Setter Property="Padding" Value="0" />
-            <Setter Property="FontSize" Value="15" />
+            <Setter Property="FontSize" Value="13" />
+            <Setter Property="FontFamily" Value="Segoe UI" />
         </Style>
 
         <Storyboard x:Key="OpenTopSelectionBar">

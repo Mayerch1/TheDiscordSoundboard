@@ -15,24 +15,14 @@
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
                         <materialDesign:Card Width="220" Height="200" BorderThickness="0" BorderBrush="{x:Null}" materialDesign:ShadowAssist.ShadowDepth="Depth2" UniformCornerRadius="10">
-                            <Grid HorizontalAlignment="Center">
-                                <Grid.RowDefinitions>
-                                    <RowDefinition Height="*" />
-                                    <RowDefinition Height="*" />
-                                </Grid.RowDefinitions>
+                            <materialDesign:Card.Background>
+                                <ImageBrush ImageSource="/res/kitties.jpg" Stretch="UniformToFill" TileMode="None" />
+                            </materialDesign:Card.Background>
 
-                                <Grid Grid.Row="0">
-                                    <Image
-                                     Source="/res/kitties.jpg"
-                                     Height="140"
-                                     Stretch="UniformToFill"
-                                     Margin="0,0,2,0" />
-                                </Grid>
+                            
 
-                                <Grid Grid.Row="1">
-                                    <Button Margin="5" Content="{Binding Name}" Tag="{Binding Id}" Click="btn_playlistOpen_Click" />
-                                </Grid>
-                            </Grid>
+                            
+                            
                         </materialDesign:Card>
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>
