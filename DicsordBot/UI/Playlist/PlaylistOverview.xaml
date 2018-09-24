@@ -8,25 +8,33 @@
              mc:Ignorable="d"
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid>
-        <WrapPanel>
-            <Button Content="New" Click="btn_playlistAdd_Click" />
+        <StackPanel Margin="0,0,0,0" Orientation="Horizontal">
 
-            <ItemsControl Margin="15" ItemsSource="{Binding Playlists}">
+            <Button Content="New"
+                    Click="btn_playlistAdd_Click"
+                    Width="220" Height="200"
+                    BorderThickness="0"
+                    BorderBrush="{x:Null}"
+                    materialDesign:ShadowAssist.ShadowDepth="Depth2"
+                    Margin="15"
+                    VerticalAlignment="Top">
+                <Button.Background>
+                    <ImageBrush ImageSource="/res/kitties.jpg" Stretch="UniformToFill" TileMode="None" />
+                </Button.Background>
+            </Button>
+
+            <ItemsControl ItemsSource="{Binding Playlists}">
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
-                        <materialDesign:Card Width="220" Height="200" BorderThickness="0" BorderBrush="{x:Null}" materialDesign:ShadowAssist.ShadowDepth="Depth2" UniformCornerRadius="10">
-                            <materialDesign:Card.Background>
+                        <Button Width="220" Height="200" BorderThickness="0" BorderBrush="{x:Null}" materialDesign:ShadowAssist.ShadowDepth="Depth2" Margin="15">
+                            <Button.Background>
                                 <ImageBrush ImageSource="/res/kitties.jpg" Stretch="UniformToFill" TileMode="None" />
-                            </materialDesign:Card.Background>
-
-                            
-
-                            
-                            
-                        </materialDesign:Card>
+                            </Button.Background>
+                            <Button Content="Text" />
+                        </Button>
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>
             </ItemsControl>
-        </WrapPanel>
+        </StackPanel>
     </Grid>
 </UserControl>
