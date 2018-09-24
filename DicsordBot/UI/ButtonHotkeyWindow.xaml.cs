@@ -130,13 +130,6 @@ namespace DicsordBot.UI
             Btn.Hotkey_VK = vk_code;
         }
 
-        private void btn_Accept_Click(object sender, RoutedEventArgs e)
-        {
-            saveHotkey();
-
-            this.Close();
-        }
-
         private void box_Hotkey_KeyDown(object sender, KeyEventArgs e)
         {
             var keyCode = (uint)KeyInterop.VirtualKeyFromKey(e.Key);
@@ -228,25 +221,51 @@ namespace DicsordBot.UI
         {
             if (e.Key == Key.Escape)
             {
-                this.Close();
+                declineChangesClose();
             }
         }
 
         private void btn_abort(object sender, RoutedEventArgs e)
         {
-            this.Close();
+            declineChangesClose();
         }
 
         private void Window_Deactivated(object sender, EventArgs e)
         {
             try
             {
-                this.Close();
+                declineChangesClose();
             }
             catch
             {
                 Console.WriteLine("Window is already closing");
             }
+        }
+
+        private void btn_Accept_Click(object sender, RoutedEventArgs e)
+        {
+            acceptChangesClose();
+        }
+
+        private void acceptChangesClose()
+        {
+            saveHotkey();
+
+            if (vk_code == 0 && mod_code == 0)
+            {
+                Handle.Data.Persistent.HotkeyList.RemoveAt(hotkeyIndex);
+            }
+
+            this.Close();
+        }
+
+        private void declineChangesClose()
+        {
+            if (vk_code == 0 && mod_code == 0)
+            {
+                Handle.Data.Persistent.HotkeyList.RemoveAt(hotkeyIndex);
+            }
+            this.Close();
         }
     }
 
