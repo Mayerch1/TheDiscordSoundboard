@@ -63,9 +63,6 @@ namespace DicsordBot.UI
 
             Point p = window.GetAbsolutePosition();
 
-            //this.Left = p.X;
-            //this.Top = p.Y;
-
             this.Left = (p.X + window.ActualWidth / 2) - (this.Width / 2);
             this.Top = (p.Y + window.ActualHeight / 2) - (this.Height / 2);
 
@@ -84,6 +81,11 @@ namespace DicsordBot.UI
             checkForDoubleHotkey(vk_code, mod_code);
         }
 
+        private uint getModifierCheckBoxes()
+        {
+            return HotkeyManager.getCodeFromBool((bool)box_shift.IsChecked, (bool)box_ctrl.IsChecked, (bool)box_win.IsChecked, (bool)box_alt.IsChecked);
+        }
+
         private void setModifierCheckBoxes(uint mod)
         {
             var modifiers = HotkeyManager.getBoolFromCode(mod);
@@ -94,9 +96,27 @@ namespace DicsordBot.UI
             box_win.IsChecked = modifiers.Item4;
         }
 
-        private uint getModifierCheckBoxes()
+        private void setModifierCheckBoxes(ModifierKeys modifiers)
         {
-            return HotkeyManager.getCodeFromBool((bool)box_shift.IsChecked, (bool)box_ctrl.IsChecked, (bool)box_win.IsChecked, (bool)box_alt.IsChecked);
+            if ((modifiers & ModifierKeys.Alt) == ModifierKeys.Alt)
+                box_alt.IsChecked = true;
+            else
+                box_alt.IsChecked = false;
+
+            if ((modifiers & ModifierKeys.Shift) == ModifierKeys.Shift)
+                box_shift.IsChecked = true;
+            else
+                box_shift.IsChecked = false;
+
+            if ((modifiers & ModifierKeys.Control) == ModifierKeys.Control)
+                box_ctrl.IsChecked = true;
+            else
+                box_ctrl.IsChecked = false;
+
+            if ((modifiers & ModifierKeys.Windows) == ModifierKeys.Windows)
+                box_win.IsChecked = true;
+            else
+                box_win.IsChecked = false;
         }
 
         private void saveHotkey()
@@ -133,26 +153,7 @@ namespace DicsordBot.UI
                 box_Hotkey.Text = KeyInterop.KeyFromVirtualKey((int)vk_code).ToString();
 
                 //set modifier checkboxes
-                var modifiers = e.KeyboardDevice.Modifiers;
-                if ((modifiers & ModifierKeys.Alt) == ModifierKeys.Alt)
-                    box_alt.IsChecked = true;
-                else
-                    box_alt.IsChecked = false;
-
-                if ((modifiers & ModifierKeys.Shift) == ModifierKeys.Shift)
-                    box_shift.IsChecked = true;
-                else
-                    box_shift.IsChecked = false;
-
-                if ((modifiers & ModifierKeys.Control) == ModifierKeys.Control)
-                    box_ctrl.IsChecked = true;
-                else
-                    box_ctrl.IsChecked = false;
-
-                if ((modifiers & ModifierKeys.Windows) == ModifierKeys.Windows)
-                    box_win.IsChecked = true;
-                else
-                    box_win.IsChecked = false;
+                setModifierCheckBoxes(e.KeyboardDevice.Modifiers);
 
                 mod_code = HotkeyManager.getCodeFromBool(box_shift.IsChecked, box_ctrl.IsChecked, box_win.IsChecked, box_alt.IsChecked);
 
@@ -238,7 +239,14 @@ namespace DicsordBot.UI
 
         private void Window_Deactivated(object sender, EventArgs e)
         {
-            this.Close();
+            try
+            {
+                this.Close();
+            }
+            catch
+            {
+                Console.WriteLine("Window is already closing");
+            }
         }
     }
 

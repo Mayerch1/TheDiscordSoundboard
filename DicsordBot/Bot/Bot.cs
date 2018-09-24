@@ -395,7 +395,11 @@ namespace DicsordBot.Bot
                     //can't skip a track if nothing is running
                     SkipTracks = 0;
                     //wait until last packages are played
-                    await Task.Delay(1250);
+
+                    //TODO: test flushAsync
+
+                    await stream.FlushAsync();
+                    //await Task.Delay(1250);
 
                     stream.Close();
                     IsToAbort = false;
