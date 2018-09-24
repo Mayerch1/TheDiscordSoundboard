@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using System;
+using System.Windows;
 using System.Windows.Input;
 
 namespace DicsordBot.UI.Playlist
@@ -12,6 +13,7 @@ namespace DicsordBot.UI.Playlist
     {
         public string PlaylistName { get { return box_Name.Text; } set { box_Name.Text = value; } }
         public bool IsToDelete { get; set; } = false;
+        public bool Result { get; set; } = false;
 
         public PlaylistAddDialog(Window window)
         {
@@ -34,15 +36,13 @@ namespace DicsordBot.UI.Playlist
         {
             Point p = window.GetAbsolutePosition();
 
-            this.Left = p.X;
-            this.Top = p.Y;
-            this.Width = window.ActualWidth;
-            this.Height = window.ActualHeight;
+            this.Left = (p.X + window.ActualWidth / 2) - (this.Width / 2);
+            this.Top = (p.Y + window.ActualHeight / 2) - (this.Height / 2);
         }
 
         private void btn_Accept_Click(object sender, RoutedEventArgs e)
         {
-            DialogResult = true;
+            Result = true;
             this.Close();
         }
 
@@ -50,7 +50,7 @@ namespace DicsordBot.UI.Playlist
         {
             if (MessageBox.Show("Are you shure to delete this Playlist?", "Warning", MessageBoxButton.OKCancel) == MessageBoxResult.OK)
             {
-                DialogResult = false;
+                Result = false;
                 IsToDelete = true;
                 this.Close();
             }
@@ -60,20 +60,17 @@ namespace DicsordBot.UI.Playlist
         {
             if (e.Key == Key.Escape)
             {
-                DialogResult = false;
+                Result = false;
                 IsToDelete = false;
                 this.Close();
             }
         }
 
-        private void Window_PreviewMouseDown(object sender, MouseButtonEventArgs e)
+        private void Window_Deactivated(object sender, EventArgs e)
         {
-            if (!brd_Dialog.IsMouseOver)
-            {
-                DialogResult = false;
-                IsToDelete = false;
-                this.Close();
-            }
+            Result = false;
+            IsToDelete = false;
+            this.Close();
         }
     }
 

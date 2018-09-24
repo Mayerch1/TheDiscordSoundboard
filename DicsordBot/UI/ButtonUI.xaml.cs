@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 
 namespace DicsordBot.UI
 {
@@ -75,13 +76,23 @@ namespace DicsordBot.UI
         {
             int tag = (int)((FrameworkElement)sender).Tag;
 
-            var location = new Point(Application.Current.MainWindow.Left, Application.Current.MainWindow.Top);
             var dialog = new ButtonHotkeyWindow(tag, Application.Current.MainWindow);
+            dialog.Owner = Application.Current.MainWindow;
+            dialog.Topmost = true;
 
             //disable hotkeys, while editing them
             ToggleHotkey(false);
-            var result = dialog.ShowDialog();
-            ToggleHotkey(true);
+            //trigger blur effect
+            BlurEffectManager.ToggleBlurEffect(true);
+
+            //remove effects on close of dialog
+            dialog.Closing += delegate (object dSender, CancelEventArgs dE)
+            {
+                BlurEffectManager.ToggleBlurEffect(false);
+                ToggleHotkey(true);
+            };
+
+            dialog.Show();
         }
 
         private void changeBackFields(StackPanel parent, int index)

@@ -119,14 +119,30 @@ namespace DicsordBot.UI
         private void context_createAndAddSingleToPlaylist_Click(object sender, RoutedEventArgs e)
         {
             //create menu, to create new playlsit
-            var location = this.PointToScreen(new Point(0, 0));
+
             var dialog = new Playlist.PlaylistAddDialog(Application.Current.MainWindow);
 
-            var result = dialog.ShowDialog();
+            BlurEffectManager.ToggleBlurEffect(true);
+
+            dialog.Closing += delegate (object dSender, CancelEventArgs dE)
+            {
+                BlurEffectManager.ToggleBlurEffect(false);
+                //get tag
+                uint fileTag = (uint)((FrameworkElement)((FrameworkElement)sender).Parent).Tag;
+
+                //revert effectc, process (create, add) playlist
+                ProcessSingleAddDialog(dialog.Result, dialog.PlaylistName, fileTag);
+            };
+
+            dialog.Show();
+        }
+
+        private void ProcessSingleAddDialog(bool result, string playlistName, uint fileTag)
+        {
             if (result == true)
             {
                 //create new playlist from dialog result
-                Handle.Data.Playlists.Add(new Data.Playlist(dialog.PlaylistName));
+                Handle.Data.Playlists.Add(new Data.Playlist(playlistName));
             }
             else
                 return;
@@ -134,7 +150,6 @@ namespace DicsordBot.UI
             //id from last index, because it's last added from step above
             uint listId = Handle.Data.Playlists[(int)(Handle.Data.Playlists.Count - 1)].Id;
 
-            uint fileTag = (uint)((FrameworkElement)((FrameworkElement)sender).Parent).Tag;
             addSingleTitleToList(listId, fileTag);
         }
 
@@ -162,19 +177,31 @@ namespace DicsordBot.UI
         private void context_createAndAddMultipleToPlaylist_Click(object sender, RoutedEventArgs e)
         {
             //create menu, to create new playlsit
-            var location = this.PointToScreen(new Point(0, 0));
+
             var dialog = new Playlist.PlaylistAddDialog(Application.Current.MainWindow);
 
-            var result = dialog.ShowDialog();
+            BlurEffectManager.ToggleBlurEffect(true);
+
+            dialog.Closing += delegate (object dSender, CancelEventArgs dE)
+            {
+                BlurEffectManager.ToggleBlurEffect(false);
+                ProcessMultipleAddDialog(dialog.Result, dialog.PlaylistName);
+            };
+
+            dialog.Show();
+        }
+
+        private void ProcessMultipleAddDialog(bool result, string playlistName)
+        {
             if (result == true)
             {
                 //create new playlist from dialog result
-                Handle.Data.Playlists.Add(new Data.Playlist(dialog.PlaylistName));
+                Handle.Data.Playlists.Add(new Data.Playlist(playlistName));
             }
             else
                 return;
 
-            //id from last index, because it's last added from step above
+            //new playlist is on last index
             uint listId = Handle.Data.Playlists[(int)(Handle.Data.Playlists.Count - 1)].Id;
 
             addMultipleTitlesToList(listId, list_All.SelectedItems);

@@ -7,6 +7,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media.Animation;
+using System.Windows.Media.Effects;
 
 namespace DicsordBot
 {
@@ -370,11 +371,15 @@ namespace DicsordBot
         {
             //event to resolve new clientName into clientId
             Handle.Data.Persistent.ClientNameChanged += Handle.ClientName_Changed;
+
+            //all warnings
             Handle.Bot.ChannelWarning += Handle.ChannelWarning_Show;
             Handle.Bot.TokenWarning += Handle.TokenWarning_Show;
             Handle.Bot.FileWarning += Handle.FileWarning_Show;
             Handle.Bot.ClientWarning += Handle.ClientWarning_Show;
             Handle.Bot.SnackbarWarning += SnackBarWarning_Show;
+
+            //hotkey stuff
             HotkeyManager.RegisteredHotkeyPressed += Hotkey_Pressed;
 
             AddHandler(TreeViewItem.ExpandedEvent, new RoutedEventHandler(tree_channelList_ItemExpanded));
@@ -401,6 +406,16 @@ namespace DicsordBot
                     setLoopStatus(LoopState.LoopReset);
                 }
             };
+
+            //fancy stuff
+            BlurEffectManager.ToggleBlurEffect += delegate (bool isEnabled)
+            {
+                BlurEffectManager.ApplyBlurEffect(isEnabled, this);
+            };
+        }
+
+        private void PassBlurEffectDelegate(bool isEnabled)
+        {
         }
 
         private void ToggleHotkey(bool isEnabled)

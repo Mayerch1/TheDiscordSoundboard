@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using System;
+using System.Windows;
 using System.Windows.Input;
 
 namespace DicsordBot.UI
@@ -62,10 +63,11 @@ namespace DicsordBot.UI
 
             Point p = window.GetAbsolutePosition();
 
-            this.Left = p.X;
-            this.Top = p.Y;
-            this.Width = window.ActualWidth;
-            this.Height = window.ActualHeight;
+            //this.Left = p.X;
+            //this.Top = p.Y;
+
+            this.Left = (p.X + window.ActualWidth / 2) - (this.Width / 2);
+            this.Top = (p.Y + window.ActualHeight / 2) - (this.Height / 2);
 
             //------------set boxes and textboxes --------------------------
 
@@ -111,7 +113,6 @@ namespace DicsordBot.UI
         private void btn_Accept_Click(object sender, RoutedEventArgs e)
         {
             saveHotkey();
-            DialogResult = true;
 
             this.Close();
         }
@@ -226,24 +227,18 @@ namespace DicsordBot.UI
         {
             if (e.Key == Key.Escape)
             {
-                DialogResult = false;
                 this.Close();
             }
         }
 
         private void btn_abort(object sender, RoutedEventArgs e)
         {
-            DialogResult = false;
             this.Close();
         }
 
-        private void Window_PreviewMouseDown(object sender, MouseButtonEventArgs e)
+        private void Window_Deactivated(object sender, EventArgs e)
         {
-            if (!brd_All.IsMouseOver)
-            {
-                DialogResult = false;
-                this.Close();
-            }
+            this.Close();
         }
     }
 
