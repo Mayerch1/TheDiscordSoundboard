@@ -74,8 +74,104 @@
         </Grid>
 
         <Grid Grid.Row="1" Margin="0,0,0,0" MaxWidth="2000" MinWidth="600">
-            <ListBox x:Name="list_All" ItemsSource="{Binding FilteredFiles}" SelectionMode="Extended" SelectionChanged="list_All_SelectionChanged" HorizontalContentAlignment="Stretch">
+            <!--
+            <ListView x:Name="list_All" ItemsSource="{Binding FilteredFiles}" SelectionMode="Extended" SelectionChanged="list_All_SelectionChanged" HorizontalContentAlignment="Stretch">
+                <ListView.View>
+                    <GridView>
 
+                        <GridViewColumn Header="">
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <Button
+                                        Tag="{Binding Id}"
+                                        Click="btn_playItem_Click"
+                                        Foreground="White"
+                                        VerticalAlignment="Center"
+                                        materialDesign:ShadowAssist.ShadowDepth="Depth0"
+                                        Background="Black"
+                                        BorderBrush="{x:Null}"
+                                        Height="30"
+                                        Width="30">
+
+                                        <materialDesign:PackIcon
+                                            Kind="Play"
+                                            HorizontalAlignment="Center" />
+
+                                        <Button.Style>
+                                            <Style TargetType="{x:Type Button}" BasedOn="{StaticResource MaterialDesignFloatingActionMiniDarkButton}">
+
+                                                <Setter Property="Visibility" Value="Hidden" />
+
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding IsMouseOver, ElementName=Grid_Title}" Value="True">
+                                                        <Setter Property="Visibility" Value="Visible" />
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </Button.Style>
+                                    </Button>
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
+                        <GridViewColumn Header="Name">
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+
+                                    <Label Content="{Binding Name}" />
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
+                        <GridViewColumn Header="Author">
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <Label Content="{Binding Author}" />
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
+                        <GridViewColumn Header="">
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <Button
+                                    Tag="{Binding Id}"
+                                    Click="btn_addSingle_Click"
+                                    Foreground="#FF707070"
+                                    VerticalAlignment="Center"
+                                        Background="{x:Null}"
+                                        BorderBrush="{x:Null}"
+                                        Height="Auto"
+                                        Width="Auto">
+
+                                        <materialDesign:PackIcon Kind="DotsHorizontal" Height="20"
+                                        Width="20" />
+
+                                        <Button.Style>
+                                            <Style TargetType="{x:Type Button}" BasedOn= "{StaticResource {x:Type Button}}">
+                                                <Setter Property="Visibility" Value="Hidden" />
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding IsMouseOver, ElementName=Grid_Title}" Value="True">
+                                                        <Setter Property="Visibility" Value="Visible" />
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </Button.Style>
+                                    </Button>
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
+
+                        <GridViewColumn Header="Duration">
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <Label Content="{Binding LengthString}" HorizontalAlignment="Right" />
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
+                    </GridView>
+                </ListView.View>
+            </ListView>
+            -->
+
+            <ListBox x:Name="list_All" ItemsSource="{Binding FilteredFiles}" SelectionMode="Extended" SelectionChanged="list_All_SelectionChanged" HorizontalContentAlignment="Stretch">
                 <ListBox.ItemTemplate>
                     <DataTemplate>
 

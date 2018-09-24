@@ -383,6 +383,16 @@ namespace DicsordBot.UI
             }
         }
 
+        private void ListViewItem_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            Console.WriteLine("Left button down");
+        }
+
+        private void ListViewItem_PreviewMouseRightButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            Console.WriteLine("Right Button Down");
+        }
+
         private void list_All_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             var list = (ListBox)sender;
