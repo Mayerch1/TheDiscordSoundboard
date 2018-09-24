@@ -1,16 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 
 namespace DicsordBot.UI
 {
@@ -32,7 +22,7 @@ namespace DicsordBot.UI
         private uint vk_code = 0;
         private uint mod_code = 0;
 
-        public ButtonHotkeyWindow(int btnId, double x, double y, double pWidth, double pHeight)
+        public ButtonHotkeyWindow(int btnId, Window window)
         {
             BtnId = btnId;
             //get btnIndex
@@ -71,10 +61,13 @@ namespace DicsordBot.UI
             InitializeComponent();
             Keyboard.Focus(box_Hotkey);
 
-            this.Left = x;
-            this.Top = y;
-            this.Width = pWidth;
-            this.Height = pHeight;
+            Point p = window.GetAbsolutePosition();
+
+            //this.Left = p.X;
+            //this.Top = p.Y;
+
+            this.Left = (p.X + window.ActualWidth / 2) - (this.Width / 2);
+            this.Top = (p.Y + window.ActualHeight / 2) - (this.Height / 2);
 
             //------------set boxes and textboxes --------------------------
 
@@ -120,7 +113,6 @@ namespace DicsordBot.UI
         private void btn_Accept_Click(object sender, RoutedEventArgs e)
         {
             saveHotkey();
-            DialogResult = true;
 
             this.Close();
         }
@@ -235,24 +227,18 @@ namespace DicsordBot.UI
         {
             if (e.Key == Key.Escape)
             {
-                DialogResult = false;
                 this.Close();
             }
         }
 
         private void btn_abort(object sender, RoutedEventArgs e)
         {
-            DialogResult = false;
             this.Close();
         }
 
-        private void Window_PreviewMouseDown(object sender, MouseButtonEventArgs e)
+        private void Window_Deactivated(object sender, EventArgs e)
         {
-            if (!brd_All.IsMouseOver)
-            {
-                DialogResult = false;
-                this.Close();
-            }
+            this.Close();
         }
     }
 

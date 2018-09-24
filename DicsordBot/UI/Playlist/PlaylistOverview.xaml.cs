@@ -1,17 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.ComponentModel;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace DicsordBot.UI.Playlist
 {
@@ -33,16 +22,19 @@ namespace DicsordBot.UI.Playlist
 
         private void btn_playlistAdd_Click(object sender, RoutedEventArgs e)
         {
-            var location = new Point(Application.Current.MainWindow.Left, Application.Current.MainWindow.Top);
+            var dialog = new UI.Playlist.PlaylistAddDialog(Application.Current.MainWindow);
 
-            var dialog = new UI.Playlist.PlaylistAddDialog(location.X, location.Y, Application.Current.MainWindow.ActualWidth, Application.Current.MainWindow.ActualHeight);
+            BlurEffectManager.ToggleBlurEffect(true);
 
-            var result = dialog.ShowDialog();
-
-            if (result == true)
+            dialog.Closing += delegate (object dSender, CancelEventArgs dE)
             {
-                Handle.Data.Playlists.Add(new Data.Playlist(dialog.PlaylistName));
-            }
+                BlurEffectManager.ToggleBlurEffect(false);
+
+                if (dialog.Result == true)
+                    Handle.Data.Playlists.Add(new Data.Playlist(dialog.PlaylistName));
+            };
+
+            dialog.Show();
         }
 
         private void btn_playlistOpen_Click(object sender, RoutedEventArgs e)

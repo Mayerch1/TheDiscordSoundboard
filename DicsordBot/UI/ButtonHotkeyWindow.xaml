@@ -6,12 +6,9 @@
         xmlns:local="clr-namespace:DicsordBot.UI"
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         mc:Ignorable="d"
-        AllowsTransparency="True"
-        Title="ButtonHotkeyWindow" Height="250" Width="450" ResizeMode="NoResize" WindowStyle="None" KeyDown="Window_KeyDown" PreviewMouseDown="Window_PreviewMouseDown">
-
-    <Window.Background>
-        <SolidColorBrush Opacity="0.2" Color="Black" />
-    </Window.Background>
+        Title="ButtonHotkeyWindow" Height="250" Width="450" ResizeMode="NoResize" WindowStyle="None"
+        KeyDown="Window_KeyDown"
+        Deactivated="Window_Deactivated">
 
     <Border x:Name="brd_All" BorderThickness="1" BorderBrush="#C4C4C4" Height="500" Width="800">
         <Grid Background="{StaticResource PrimaryBackgroundBrush}">
