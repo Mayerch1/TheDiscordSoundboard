@@ -83,12 +83,12 @@ namespace DicsordBot.UI
             //disable hotkeys, while editing them
             ToggleHotkey(false);
             //trigger blur effect
-            BlurEffectManager.ToggleBlurEffect(true);
+            IO.BlurEffectManager.ToggleBlurEffect(true);
 
             //remove effects on close of dialog
             dialog.Closing += delegate (object dSender, CancelEventArgs dE)
             {
-                BlurEffectManager.ToggleBlurEffect(false);
+                IO.BlurEffectManager.ToggleBlurEffect(false);
                 ToggleHotkey(true);
             };
 

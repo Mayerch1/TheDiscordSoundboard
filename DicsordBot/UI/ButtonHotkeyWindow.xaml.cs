@@ -83,12 +83,12 @@ namespace DicsordBot.UI
 
         private uint getModifierCheckBoxes()
         {
-            return HotkeyManager.getCodeFromBool((bool)box_shift.IsChecked, (bool)box_ctrl.IsChecked, (bool)box_win.IsChecked, (bool)box_alt.IsChecked);
+            return IO.HotkeyManager.getCodeFromBool((bool)box_shift.IsChecked, (bool)box_ctrl.IsChecked, (bool)box_win.IsChecked, (bool)box_alt.IsChecked);
         }
 
         private void setModifierCheckBoxes(uint mod)
         {
-            var modifiers = HotkeyManager.getBoolFromCode(mod);
+            var modifiers = IO.HotkeyManager.getBoolFromCode(mod);
 
             box_shift.IsChecked = modifiers.Item1;
             box_ctrl.IsChecked = modifiers.Item2;
@@ -155,7 +155,7 @@ namespace DicsordBot.UI
                 //set modifier checkboxes
                 setModifierCheckBoxes(e.KeyboardDevice.Modifiers);
 
-                mod_code = HotkeyManager.getCodeFromBool(box_shift.IsChecked, box_ctrl.IsChecked, box_win.IsChecked, box_alt.IsChecked);
+                mod_code = IO.HotkeyManager.getCodeFromBool(box_shift.IsChecked, box_ctrl.IsChecked, box_win.IsChecked, box_alt.IsChecked);
 
                 //set warning for double hotkey
                 checkForDoubleHotkey(vk_code, mod_code);
@@ -211,7 +211,7 @@ namespace DicsordBot.UI
 
         private void box_Checked(object sender, RoutedEventArgs e)
         {
-            mod_code = HotkeyManager.getCodeFromBool(box_shift.IsChecked, box_ctrl.IsChecked, box_win.IsChecked, box_alt.IsChecked);
+            mod_code = IO.HotkeyManager.getCodeFromBool(box_shift.IsChecked, box_ctrl.IsChecked, box_win.IsChecked, box_alt.IsChecked);
 
             checkForDoubleHotkey(vk_code, mod_code);
         }

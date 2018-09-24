@@ -24,11 +24,11 @@ namespace DicsordBot.UI.Playlist
         {
             var dialog = new UI.Playlist.PlaylistAddDialog(Application.Current.MainWindow);
 
-            BlurEffectManager.ToggleBlurEffect(true);
+            IO.BlurEffectManager.ToggleBlurEffect(true);
 
             dialog.Closing += delegate (object dSender, CancelEventArgs dE)
             {
-                BlurEffectManager.ToggleBlurEffect(false);
+                IO.BlurEffectManager.ToggleBlurEffect(false);
 
                 if (dialog.Result == true)
                     Handle.Data.Playlists.Add(new Data.Playlist(dialog.PlaylistName));

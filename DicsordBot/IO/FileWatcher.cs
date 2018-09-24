@@ -4,7 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Threading;
 
-namespace DicsordBot
+namespace DicsordBot.IO
 {
     /// <summary>
     /// static class for monitoring files on disk

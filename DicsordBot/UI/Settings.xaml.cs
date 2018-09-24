@@ -72,7 +72,7 @@ namespace DicsordBot.UI
                     scanCollection.Add(dialog.SelectedPath);
 
                     //rescan added files
-                    FileWatcher.indexFiles(scanCollection, false);
+                    IO.FileWatcher.indexFiles(scanCollection, false);
                 }
             }
         }
@@ -90,7 +90,7 @@ namespace DicsordBot.UI
                     Handle.Data.Persistent.MediaSources.RemoveAt(index);
 
                     //delete/recsan all files
-                    FileWatcher.indexCleanFiles(Handle.Data.Persistent.MediaSources);
+                    IO.FileWatcher.indexCleanFiles(Handle.Data.Persistent.MediaSources);
                 }
             }
         }

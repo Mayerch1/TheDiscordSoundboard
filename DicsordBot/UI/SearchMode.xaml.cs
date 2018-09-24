@@ -47,7 +47,7 @@ namespace DicsordBot.UI
                     foreach (var file in Handle.Data.Files)
                     {
                         //add all files matching
-                        if (FileWatcher.checkForLowerMatch(file, filter))
+                        if (IO.FileWatcher.checkForLowerMatch(file, filter))
                             FilteredFiles.Add(file);
                     }
                 }
@@ -122,11 +122,11 @@ namespace DicsordBot.UI
 
             var dialog = new Playlist.PlaylistAddDialog(Application.Current.MainWindow);
 
-            BlurEffectManager.ToggleBlurEffect(true);
+            IO.BlurEffectManager.ToggleBlurEffect(true);
 
             dialog.Closing += delegate (object dSender, CancelEventArgs dE)
             {
-                BlurEffectManager.ToggleBlurEffect(false);
+                IO.BlurEffectManager.ToggleBlurEffect(false);
                 //get tag
                 uint fileTag = (uint)((FrameworkElement)((FrameworkElement)sender).Parent).Tag;
 
@@ -180,11 +180,11 @@ namespace DicsordBot.UI
 
             var dialog = new Playlist.PlaylistAddDialog(Application.Current.MainWindow);
 
-            BlurEffectManager.ToggleBlurEffect(true);
+            IO.BlurEffectManager.ToggleBlurEffect(true);
 
             dialog.Closing += delegate (object dSender, CancelEventArgs dE)
             {
-                BlurEffectManager.ToggleBlurEffect(false);
+                IO.BlurEffectManager.ToggleBlurEffect(false);
                 ProcessMultipleAddDialog(dialog.Result, dialog.PlaylistName);
             };
 
