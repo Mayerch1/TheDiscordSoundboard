@@ -164,11 +164,22 @@ namespace DicsordBot.UI.Playlist
             Point location = this.PointToScreen(new Point(0, 0));
             var dialog = new PlaylistAddDialog(Playlist.Name, Application.Current.MainWindow);
 
-            var result = dialog.ShowDialog();
+            BlurEffectManager.ToggleBlurEffect(true);
 
+            dialog.Closing += delegate (object dSender, CancelEventArgs dE)
+            {
+                BlurEffectManager.ToggleBlurEffect(false);
+                ProcessDialogResult(dialog.Result, dialog.IsToDelete, dialog.PlaylistName);
+            };
+
+            dialog.Show();
+        }
+
+        private void ProcessDialogResult(bool result, bool isToDelete, string playlistName)
+        {
             if (result == true)
-                Playlist.Name = dialog.PlaylistName;
-            else if (result == false && dialog.IsToDelete == true)
+                Playlist.Name = playlistName;
+            else if (result == false && isToDelete == true)
             {
                 Handle.Data.Playlists.RemoveAt((int)index);
                 LeaveSingleView();

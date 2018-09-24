@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using System.ComponentModel;
+using System.Windows;
 using System.Windows.Controls;
 
 namespace DicsordBot.UI.Playlist
@@ -25,14 +26,15 @@ namespace DicsordBot.UI.Playlist
 
             BlurEffectManager.ToggleBlurEffect(true);
 
-            var result = dialog.ShowDialog();
-
-            BlurEffectManager.ToggleBlurEffect(false);
-
-            if (result == true)
+            dialog.Closing += delegate (object dSender, CancelEventArgs dE)
             {
-                Handle.Data.Playlists.Add(new Data.Playlist(dialog.PlaylistName));
-            }
+                BlurEffectManager.ToggleBlurEffect(false);
+
+                if (dialog.Result == true)
+                    Handle.Data.Playlists.Add(new Data.Playlist(dialog.PlaylistName));
+            };
+
+            dialog.Show();
         }
 
         private void btn_playlistOpen_Click(object sender, RoutedEventArgs e)

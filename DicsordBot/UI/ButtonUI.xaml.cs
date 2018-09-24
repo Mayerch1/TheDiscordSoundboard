@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 
 namespace DicsordBot.UI
 {
@@ -84,11 +85,14 @@ namespace DicsordBot.UI
             //trigger blur effect
             BlurEffectManager.ToggleBlurEffect(true);
 
-            dialog.ShowDialog();
+            //remove effects on close of dialog
+            dialog.Closing += delegate (object dSender, CancelEventArgs dE)
+            {
+                BlurEffectManager.ToggleBlurEffect(false);
+                ToggleHotkey(true);
+            };
 
-            BlurEffectManager.ToggleBlurEffect(false);
-
-            ToggleHotkey(true);
+            dialog.Show();
         }
 
         private void changeBackFields(StackPanel parent, int index)
