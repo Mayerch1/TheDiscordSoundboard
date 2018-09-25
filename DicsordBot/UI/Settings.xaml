@@ -128,8 +128,10 @@
                             <Separator Margin="0,5,0,0" />
 
                             <StackPanel Orientation="Horizontal">
-                                <ListBox x:Name="list_MediaSources" ItemsSource="{Binding MediaSources}" MinWidth="300">
-                                </ListBox>
+                                <ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Hidden">
+                                    <ListBox x:Name="list_MediaSources" ItemsSource="{Binding MediaSources}" MinWidth="300">
+                                    </ListBox>
+                                </ScrollViewer>
 
                                 <StackPanel Orientation="Vertical">
                                     <Button Click="btn_addMediaSource_Click" Background="{StaticResource PrimaryForegroundBrush}" BorderBrush="{x:Null}">

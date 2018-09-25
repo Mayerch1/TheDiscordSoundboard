@@ -120,21 +120,20 @@ namespace DicsordBot.UI
         {
             //create menu, to create new playlsit
 
-            var dialog = new Playlist.PlaylistAddDialog(Application.Current.MainWindow);
-
             IO.BlurEffectManager.ToggleBlurEffect(true);
 
-            dialog.Closing += delegate (object dSender, CancelEventArgs dE)
+            var popup = new Playlist.PlaylistAddPopup(Application.Current.MainWindow);
+            popup.IsOpen = true;
+
+            popup.Closed += delegate (object dSender, EventArgs dE)
             {
                 IO.BlurEffectManager.ToggleBlurEffect(false);
                 //get tag
                 uint fileTag = (uint)((FrameworkElement)((FrameworkElement)sender).Parent).Tag;
 
                 //revert effectc, process (create, add) playlist
-                ProcessSingleAddDialog(dialog.Result, dialog.PlaylistName, fileTag);
+                ProcessSingleAddDialog(popup.Result, popup.PlaylistName, fileTag);
             };
-
-            dialog.Show();
         }
 
         private void ProcessSingleAddDialog(bool result, string playlistName, uint fileTag)
@@ -178,17 +177,16 @@ namespace DicsordBot.UI
         {
             //create menu, to create new playlsit
 
-            var dialog = new Playlist.PlaylistAddDialog(Application.Current.MainWindow);
-
             IO.BlurEffectManager.ToggleBlurEffect(true);
 
-            dialog.Closing += delegate (object dSender, CancelEventArgs dE)
+            var popup = new Playlist.PlaylistAddPopup(Application.Current.MainWindow);
+            popup.IsOpen = true;
+
+            popup.Closed += delegate (object dSender, EventArgs dE)
             {
                 IO.BlurEffectManager.ToggleBlurEffect(false);
-                ProcessMultipleAddDialog(dialog.Result, dialog.PlaylistName);
+                ProcessMultipleAddDialog(popup.Result, popup.PlaylistName);
             };
-
-            dialog.Show();
         }
 
         private void ProcessMultipleAddDialog(bool result, string playlistName)

@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Threading;
@@ -11,6 +13,8 @@ namespace DicsordBot.IO
     /// </summary>
     public static class FileWatcher
     {
+        private static bool isIndexing = false;
+
         /// <summary>
         /// checks wether the filetype is on the whitelist
         /// </summary>
@@ -113,16 +117,41 @@ namespace DicsordBot.IO
         /// updates list of files, keeps old list, runs in background thread
         /// </summary>
         /// <param name="sources">all directories to search</param>
-        /// <param name="allowDuplicatos">if true, doesn't test if file is already in list</param>
-        public static void indexFiles(ObservableCollection<string> sources, bool allowDuplicatos = false)
+        /// <param name="allowDuplicates">if true, doesn't test if file is already in list</param>
+        public static void indexFiles(ObservableCollection<string> sources, bool allowDuplicates = false)
         {
-            Thread worker = new Thread(() => indexFilesThread(sources, allowDuplicatos));
+            BackgroundWorker bw = new BackgroundWorker();
+            bw.DoWork += new DoWorkEventHandler(indexFilesWorker);
+            bw.RunWorkerCompleted += new RunWorkerCompletedEventHandler(bw_Complete);
 
-            worker.IsBackground = true;
-            worker.Start();
+            var bwTuple = Tuple.Create(sources, allowDuplicates);
+            bw.RunWorkerAsync(bwTuple);
         }
 
-        private static void indexFilesThread(ObservableCollection<string> sources, bool allowDuplicates = false)
+        private static void indexFilesWorker(object sender, DoWorkEventArgs e)
+        {
+            //retry every 100ms
+            while (isIndexing)
+            {
+                //await System.Threading.Tasks.Task.Delay(100);
+                System.Threading.Thread.Sleep(100);
+                Console.WriteLine("Another index in progress, waiting...");
+            }
+
+            var workingTuple = e.Argument as Tuple<ObservableCollection<string>, bool>;
+            if (workingTuple != null)
+            {
+                isIndexing = true;
+                indexFilesThread(new List<string>(workingTuple.Item1), workingTuple.Item2);
+            }
+        }
+
+        private static void bw_Complete(object sender, RunWorkerCompletedEventArgs e)
+        {
+            isIndexing = false;
+        }
+
+        private static void indexFilesThread(List<string> sources, bool allowDuplicates = false)
         {
             foreach (var dir in sources)
             {

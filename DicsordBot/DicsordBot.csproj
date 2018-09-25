@@ -207,6 +207,9 @@
     <Compile Include="Bot\BotHandler.cs" />
     <Compile Include="Data\Persistent.cs" />
     <Compile Include="Data\RuntimeData.cs" />
+    <Compile Include="UI\ButtonHotkeyPopup.xaml.cs">
+      <DependentUpon>ButtonHotkeyPopup.xaml</DependentUpon>
+    </Compile>
     <Compile Include="UI\ButtonHotkeyWindow.xaml.cs">
       <DependentUpon>ButtonHotkeyWindow.xaml</DependentUpon>
     </Compile>
@@ -216,6 +219,9 @@
     <Compile Include="IO\HotkeyManager.cs" />
     <Compile Include="UI\Playlist\PlaylistAddDialog.xaml.cs">
       <DependentUpon>PlaylistAddDialog.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\Playlist\PlaylistAddPopup.xaml.cs">
+      <DependentUpon>PlaylistAddPopup.xaml</DependentUpon>
     </Compile>
     <Compile Include="UI\Playlist\PlaylistMode.xaml.cs">
       <DependentUpon>PlaylistMode.xaml</DependentUpon>
@@ -237,6 +243,10 @@
     </Compile>
     <Compile Include="Mics\UpdateChecker.cs" />
     <Page Include="UI\About.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\ButtonHotkeyPopup.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -270,6 +280,10 @@
       <SubType>Code</SubType>
     </Compile>
     <Page Include="UI\Playlist\PlaylistAddDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\Playlist\PlaylistAddPopup.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
