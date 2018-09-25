@@ -1,31 +1,45 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
+using System.Windows.Data;
+using System.Windows.Documents;
 using System.Windows.Input;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
+using System.Windows.Navigation;
+using System.Windows.Shapes;
 
 namespace DicsordBot.UI.Playlist
 {
 #pragma warning disable CS1591
 
     /// <summary>
-    /// Interaction logic for PlaylistAddDialog.xaml
+    /// Interaction logic for PlaylistAddPopup.xaml
     /// </summary>
-    public partial class PlaylistAddDialog : Window
+    public partial class PlaylistAddPopup : Popup
     {
         public string PlaylistName { get { return box_Name.Text; } set { box_Name.Text = value; } }
         public bool IsToDelete { get; set; } = false;
         public bool Result { get; set; } = false;
         private bool IsDialogOpen { get; set; } = false;
 
-        public PlaylistAddDialog(Window window)
+        public PlaylistAddPopup(Window window)
         {
+            this.StaysOpen = false;
             InitializeComponent();
             initPosition(window);
             box_Name.SelectAll();
             box_Name.Focus();
         }
 
-        public PlaylistAddDialog(string currentName, Window window)
+        public PlaylistAddPopup(string currentName, Window window)
         {
+            this.StaysOpen = false;
             InitializeComponent();
             PlaylistName = currentName;
             initPosition(window);
@@ -37,15 +51,15 @@ namespace DicsordBot.UI.Playlist
         {
             Point p = window.GetAbsolutePosition();
 
-            this.Left = (p.X + window.ActualWidth / 2) - (this.Width / 2);
-            this.Top = (p.Y + window.ActualHeight / 2) - (this.Height / 2);
+            this.PlacementTarget = window;
+            this.Placement = PlacementMode.Center;
         }
 
         private void btn_Accept_Click(object sender, RoutedEventArgs e)
         {
             Result = true;
             IsToDelete = false;
-            this.Close();
+            this.IsOpen = false;
         }
 
         private void btn_Delete_Click(object sender, RoutedEventArgs e)
@@ -56,7 +70,7 @@ namespace DicsordBot.UI.Playlist
                 IsDialogOpen = false;
                 Result = false;
                 IsToDelete = true;
-                this.Close();
+                this.IsOpen = false;
             }
         }
 
@@ -66,27 +80,10 @@ namespace DicsordBot.UI.Playlist
             {
                 Result = false;
                 IsToDelete = false;
-                this.Close();
-            }
-        }
-
-        private void Window_Deactivated(object sender, EventArgs e)
-        {
-            if (!IsDialogOpen)
-            {
-                Result = false;
-                IsToDelete = false;
-                try
-                {
-                    this.Close();
-                }
-                catch
-                {
-                    Console.WriteLine("Windows is already closing");
-                }
+                this.IsOpen = false;
             }
         }
     }
 
-#pragma warning restore CS1591
+#pragma warning disable CS1591
 }

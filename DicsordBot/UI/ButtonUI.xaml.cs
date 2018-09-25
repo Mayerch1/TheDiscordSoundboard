@@ -76,23 +76,19 @@ namespace DicsordBot.UI
         {
             int tag = (int)((FrameworkElement)sender).Tag;
 
-            var dialog = new ButtonHotkeyWindow(tag, Application.Current.MainWindow);
-            dialog.Owner = Application.Current.MainWindow;
-            dialog.Topmost = true;
-
             //disable hotkeys, while editing them
             ToggleHotkey(false);
             //trigger blur effect
             IO.BlurEffectManager.ToggleBlurEffect(true);
 
-            //remove effects on close of dialog
-            dialog.Closing += delegate (object dSender, CancelEventArgs dE)
+            var popup = new ButtonHotkeyPopup(tag, Application.Current.MainWindow);
+            popup.IsOpen = true;
+
+            popup.Closed += delegate (object pSender, EventArgs pE)
             {
                 IO.BlurEffectManager.ToggleBlurEffect(false);
                 ToggleHotkey(true);
             };
-
-            dialog.Show();
         }
 
         private void changeBackFields(StackPanel parent, int index)

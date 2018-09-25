@@ -1,16 +1,27 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
+using System.Windows.Data;
+using System.Windows.Documents;
 using System.Windows.Input;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
+using System.Windows.Navigation;
+using System.Windows.Shapes;
 
 namespace DicsordBot.UI
 {
 #pragma warning disable CS1591
 
     /// <summary>
-    /// Interaction logic for ButtonHotkeyWindow.xaml
+    /// Interaction logic for ButtonHotkeyPopup.xaml
     /// </summary>
-    ///
-    public partial class ButtonHotkeyWindow : Window
+    public partial class ButtonHotkeyPopup : Popup
     {
         private Data.ButtonData Btn { get { return Handle.Data.Persistent.BtnList[btnIndex]; } set { Handle.Data.Persistent.BtnList[btnIndex] = value; } }
         private int btnIndex = 0;
@@ -22,7 +33,7 @@ namespace DicsordBot.UI
         private uint vk_code = 0;
         private uint mod_code = 0;
 
-        public ButtonHotkeyWindow(int btnId, Window window)
+        public ButtonHotkeyPopup(int btnId, Window window)
         {
             BtnId = btnId;
             //get btnIndex
@@ -57,14 +68,13 @@ namespace DicsordBot.UI
             vk_code = Hotkey.vk_code;
             mod_code = Hotkey.mod_code;
 
+            //-------- set location ------------------
+            this.PlacementTarget = window;
+            this.Placement = PlacementMode.Center;
+            this.StaysOpen = false;
             //--------- set window -------------------------
             InitializeComponent();
             Keyboard.Focus(box_Hotkey);
-
-            Point p = window.GetAbsolutePosition();
-
-            this.Left = (p.X + window.ActualWidth / 2) - (this.Width / 2);
-            this.Top = (p.Y + window.ActualHeight / 2) - (this.Height / 2);
 
             //------------set boxes and textboxes --------------------------
 
@@ -232,18 +242,6 @@ namespace DicsordBot.UI
             declineChangesClose();
         }
 
-        private void Window_Deactivated(object sender, EventArgs e)
-        {
-            try
-            {
-                declineChangesClose();
-            }
-            catch
-            {
-                Console.WriteLine("Window is already closing");
-            }
-        }
-
         private void btn_Accept_Click(object sender, RoutedEventArgs e)
         {
             acceptChangesClose();
@@ -258,7 +256,7 @@ namespace DicsordBot.UI
                 Handle.Data.Persistent.HotkeyList.RemoveAt(hotkeyIndex);
             }
 
-            this.Close();
+            this.IsOpen = false;
         }
 
         private void declineChangesClose()
@@ -267,7 +265,7 @@ namespace DicsordBot.UI
             {
                 Handle.Data.Persistent.HotkeyList.RemoveAt(hotkeyIndex);
             }
-            this.Close();
+            this.IsOpen = false;
         }
     }
 

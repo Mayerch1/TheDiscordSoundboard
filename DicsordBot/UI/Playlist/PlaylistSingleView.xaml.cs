@@ -154,19 +154,17 @@ namespace DicsordBot.UI.Playlist
 
         private void btn_editList_Click(object sender, RoutedEventArgs e)
         {
-            //show edit window, to rename/delete list
-            Point location = this.PointToScreen(new Point(0, 0));
-            var dialog = new PlaylistAddDialog(Playlist.Name, Application.Current.MainWindow);
-
+            //show edit window
             IO.BlurEffectManager.ToggleBlurEffect(true);
 
-            dialog.Closing += delegate (object dSender, CancelEventArgs dE)
+            var popup = new PlaylistAddPopup(Playlist.Name, Application.Current.MainWindow);
+            popup.IsOpen = true;
+
+            popup.Closed += delegate (object dSender, EventArgs dE)
             {
                 IO.BlurEffectManager.ToggleBlurEffect(false);
-                ProcessDialogResult(dialog.Result, dialog.IsToDelete, dialog.PlaylistName);
+                ProcessDialogResult(popup.Result, popup.IsToDelete, popup.PlaylistName);
             };
-
-            dialog.Show();
         }
 
         private void ProcessDialogResult(bool result, bool isToDelete, string playlistName)

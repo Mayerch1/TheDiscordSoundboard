@@ -22,19 +22,18 @@ namespace DicsordBot.UI.Playlist
 
         private void btn_playlistAdd_Click(object sender, RoutedEventArgs e)
         {
-            var dialog = new UI.Playlist.PlaylistAddDialog(Application.Current.MainWindow);
-
             IO.BlurEffectManager.ToggleBlurEffect(true);
 
-            dialog.Closing += delegate (object dSender, CancelEventArgs dE)
+            var popup = new PlaylistAddPopup(Application.Current.MainWindow);
+            popup.IsOpen = true;
+
+            popup.Closed += delegate (object dSender, System.EventArgs pE)
             {
                 IO.BlurEffectManager.ToggleBlurEffect(false);
 
-                if (dialog.Result == true)
-                    Handle.Data.Playlists.Add(new Data.Playlist(dialog.PlaylistName));
+                if (popup.Result == true)
+                    Handle.Data.Playlists.Add(new Data.Playlist(popup.PlaylistName));
             };
-
-            dialog.Show();
         }
 
         private void btn_playlistOpen_Click(object sender, RoutedEventArgs e)
