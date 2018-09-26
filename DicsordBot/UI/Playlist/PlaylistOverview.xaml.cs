@@ -32,7 +32,7 @@ namespace DicsordBot.UI.Playlist
                 IO.BlurEffectManager.ToggleBlurEffect(false);
 
                 if (popup.Result == true)
-                    Handle.Data.Playlists.Add(new Data.Playlist(popup.PlaylistName));
+                    Handle.Data.Playlists.Add(new Data.Playlist(popup.PlaylistName, popup.ImagePath));
             };
         }
 

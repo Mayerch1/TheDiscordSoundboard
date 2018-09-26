@@ -132,16 +132,16 @@ namespace DicsordBot.UI
                 uint fileTag = (uint)((FrameworkElement)((FrameworkElement)sender).Parent).Tag;
 
                 //revert effectc, process (create, add) playlist
-                ProcessSingleAddDialog(popup.Result, popup.PlaylistName, fileTag);
+                ProcessSingleAddDialog(popup.Result, popup.PlaylistName, popup.ImagePath, fileTag);
             };
         }
 
-        private void ProcessSingleAddDialog(bool result, string playlistName, uint fileTag)
+        private void ProcessSingleAddDialog(bool result, string playlistName, string imagePath, uint fileTag)
         {
             if (result == true)
             {
                 //create new playlist from dialog result
-                Handle.Data.Playlists.Add(new Data.Playlist(playlistName));
+                Handle.Data.Playlists.Add(new Data.Playlist(playlistName, imagePath));
             }
             else
                 return;
@@ -185,16 +185,16 @@ namespace DicsordBot.UI
             popup.Closed += delegate (object dSender, EventArgs dE)
             {
                 IO.BlurEffectManager.ToggleBlurEffect(false);
-                ProcessMultipleAddDialog(popup.Result, popup.PlaylistName);
+                ProcessMultipleAddDialog(popup.Result, popup.PlaylistName, popup.ImagePath);
             };
         }
 
-        private void ProcessMultipleAddDialog(bool result, string playlistName)
+        private void ProcessMultipleAddDialog(bool result, string playlistName, string imagePath)
         {
             if (result == true)
             {
                 //create new playlist from dialog result
-                Handle.Data.Playlists.Add(new Data.Playlist(playlistName));
+                Handle.Data.Playlists.Add(new Data.Playlist(playlistName, imagePath));
             }
             else
                 return;

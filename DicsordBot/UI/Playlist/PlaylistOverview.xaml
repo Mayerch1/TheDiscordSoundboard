@@ -30,7 +30,7 @@
                         <DataTemplate>
                             <Button Width="220" Height="200" BorderThickness="0" Tag="{Binding Id}" BorderBrush="{x:Null}" materialDesign:ShadowAssist.ShadowDepth="Depth2" Margin="15" Click="btn_playlistOpen_Click">
                                 <Button.Background>
-                                    <ImageBrush ImageSource="/res/kitties.jpg" Stretch="UniformToFill" TileMode="None" />
+                                    <ImageBrush ImageSource="{Binding ImagePath}" Stretch="UniformToFill" TileMode="None" />
                                 </Button.Background>
                                 <Button Content="{Binding Name}" />
                             </Button>

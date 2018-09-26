@@ -28,12 +28,25 @@ namespace DicsordBot.Data
             name = _name;
         }
 
+        /// <summary>
+        /// constructor setting the name and image property
+        /// </summary>
+        /// <param name="_name"></param>
+        /// <param name="_path"></param>
+        public Playlist(string _name, string _path)
+        {
+            id = sId++;
+            Name = _name;
+            ImagePath = _path;
+        }
+
         #region fileds
 
         private static uint sId = 0;
 
         private ObservableCollection<FileData> tracks = new ObservableCollection<FileData>();
         private string name = "";
+        private string imagePath = "/res/list-256.png";
         private readonly uint id;
 
         #endregion fileds
@@ -49,6 +62,11 @@ namespace DicsordBot.Data
         /// Name property
         /// </summary>
         public string Name { get { return name; } set { name = value; OnPropertyChanged("Name"); } }
+
+        /// <summary>
+        /// ImagePath property
+        /// </summary>
+        public string ImagePath { get { return imagePath; } set { imagePath = value; OnPropertyChanged("ImagePath"); } }
 
         /// <summary>
         /// unique id

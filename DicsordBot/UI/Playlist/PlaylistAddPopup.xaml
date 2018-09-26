@@ -4,28 +4,26 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:local="clr-namespace:DicsordBot.UI.Playlist"
-       xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
-       mc:Ignorable="d"
-             d:DesignHeight="450" d:DesignWidth="800">
-    <Border x:Name="brd_Dialog" BorderThickness="1" BorderBrush="#C4C4C4" Height="75" Width="600" KeyDown="Window_KeyDown">
-        <Grid Background="#FCFCFC">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="6*" />
-                <ColumnDefinition Width="*" />
-                <ColumnDefinition Width="2*" />
-            </Grid.ColumnDefinitions>
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             mc:Ignorable="d"
+             d:DesignHeight="450" d:DesignWidth="1000" KeyDown="Window_KeyDown">
 
-            <Grid Grid.Column="0">
-                <TextBox x:Name="box_Name" Text="" VerticalAlignment="Center" />
-            </Grid>
-            <Grid Grid.Column="1">
+    <StackPanel Orientation="Horizontal" Background="{StaticResource PrimaryBackgroundBrush}">
+        <Button Width="220" Height="200" BorderThickness="0" BorderBrush="{x:Null}" materialDesign:ShadowAssist.ShadowDepth="Depth2" Margin="15" Click="btn_ListImage_Click">
+            <Button.Background>
+                <ImageBrush x:Name="imageBrush" ImageSource="{Binding Path=ImagePath, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" Stretch="UniformToFill" TileMode="None" />
+            </Button.Background>
+        </Button>
+
+        <StackPanel Orientation="Vertical">
+            <TextBox x:Name="box_Name" Text="" VerticalAlignment="Center" />
+
+            <StackPanel Orientation="Horizontal">
                 <Button Click="btn_Delete_Click" Foreground="Gray" Background="{StaticResource PrimaryBackgroundBrush}" BorderBrush="{StaticResource PrimaryBackgroundBrush}">
                     <materialDesign:PackIcon Kind="Bitbucket" />
                 </Button>
-            </Grid>
-            <Grid Grid.Column="2">
                 <Button Content="Accept" Click="btn_Accept_Click" IsDefault="True" Background="{StaticResource PrimaryForegroundBrush}" />
-            </Grid>
-        </Grid>
-    </Border>
+            </StackPanel>
+        </StackPanel>
+    </StackPanel>
 </Popup>
