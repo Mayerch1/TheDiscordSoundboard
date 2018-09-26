@@ -179,6 +179,8 @@ namespace DicsordBot
         {
             Handle.Data.saveAll();
 
+            IO.ImageManager.clearImageCache(Handle.Data.Playlists);
+
             await Handle.Bot.disconnectFromServerAsync();
         }
 

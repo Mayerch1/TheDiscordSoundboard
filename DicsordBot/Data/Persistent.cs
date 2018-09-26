@@ -28,6 +28,16 @@ namespace DicsordBot.Data
         public const string urlToGitRepo = "https://github.com/mayerch1/TheDiscordSoundboard/";
 
         /// <summary>
+        /// default folder to create, e.g. in Appdata
+        /// </summary>
+        public const string defaultFolderName = "TheDicsordSoundboard (TDS)";
+
+        /// <summary>
+        /// folder to cache images in
+        /// </summary>
+        public const string imageCacheFolder = "Images";
+
+        /// <summary>
         /// version of this build, refers to the github release number
         /// </summary>
         public const string version = "2.0.0";

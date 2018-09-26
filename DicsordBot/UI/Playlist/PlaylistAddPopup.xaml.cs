@@ -77,6 +77,14 @@ namespace DicsordBot.UI.Playlist
         private void btn_Accept_Click(object sender, RoutedEventArgs e)
         {
             Result = true;
+
+            //cache image, only if operation succesfull
+            string newPath = IO.ImageManager.cacheImage(ImagePath);
+            if (newPath != null)
+            {
+                ImagePath = newPath;
+            }
+
             IsToDelete = false;
             this.IsOpen = false;
         }
