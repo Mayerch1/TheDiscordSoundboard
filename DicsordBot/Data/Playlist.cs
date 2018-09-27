@@ -37,7 +37,8 @@ namespace DicsordBot.Data
         {
             id = sId++;
             Name = _name;
-            ImagePath = _path;
+            if (_path != null)
+                ImagePath = _path;
         }
 
         #region fileds

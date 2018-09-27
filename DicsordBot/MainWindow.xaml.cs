@@ -613,7 +613,7 @@ namespace DicsordBot
             //skip prev title in playlist, when in playlist-mode and <2s
             if (Handle.Data.IsPlaylistPlaying && Handle.Bot.CurrentTime.TotalSeconds < 2)
             {
-                //TODO: maybe fix
+                //TODO: maybe fix, maybe not
                 if (1 == 2)
                 //if (Handle.Data.PlaylistFileIndex > 0)
                 {

@@ -139,10 +139,8 @@ namespace DicsordBot.UI
         private void ProcessSingleAddDialog(bool result, string playlistName, string imagePath, uint fileTag)
         {
             if (result == true)
-            {
                 //create new playlist from dialog result
                 Handle.Data.Playlists.Add(new Data.Playlist(playlistName, imagePath));
-            }
             else
                 return;
 
@@ -192,10 +190,8 @@ namespace DicsordBot.UI
         private void ProcessMultipleAddDialog(bool result, string playlistName, string imagePath)
         {
             if (result == true)
-            {
                 //create new playlist from dialog result
                 Handle.Data.Playlists.Add(new Data.Playlist(playlistName, imagePath));
-            }
             else
                 return;
 
