@@ -10,7 +10,7 @@ namespace DicsordBot.UI.Playlist
     /// </summary>
     public partial class PlaylistOverview : UserControl
     {
-        public delegate void OpenPlaylistHandler(uint listIndex);
+        public delegate void OpenPlaylistHandler(uint listId);
 
         public OpenPlaylistHandler OpenPlaylist;
 

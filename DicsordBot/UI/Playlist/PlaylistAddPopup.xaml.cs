@@ -15,7 +15,7 @@ namespace DicsordBot.UI.Playlist
     /// </summary>
     public partial class PlaylistAddPopup : Popup, INotifyPropertyChanged
     {
-        private string imagePath = "/res/list-256.png";
+        private string imagePath = Data.Playlist.defaultImage;
 
         public string PlaylistName { get { return box_Name.Text; } set { box_Name.Text = value; } }
 
@@ -67,9 +67,7 @@ namespace DicsordBot.UI.Playlist
         {
             Result = true;
 
-            //TODO: parameterise default name of image
-
-            if (ImagePath != "/res/list-256.png")
+            if (ImagePath != Data.Playlist.defaultImage)
             {
                 //cache image, only if operation succesfull
                 ImagePath = IO.ImageManager.cacheImage(ImagePath);

@@ -523,9 +523,10 @@ namespace DicsordBot
                     {
                         //add first button
                         triggerBotInstantReplay(new Data.ButtonData(playlist.Tracks[(int)fileIndex].Name, playlist.Tracks[(int)fileIndex].Path));
-                        //set playlist properties
+                        //set playlist properties, after song changed -> first title will not be skipped
                         Handle.Data.PlaylistIndex = listId;
-                        Handle.Data.PlaylistFileIndex = (int)fileIndex;
+                        //TODO: check if first song is not already being skipped
+                        Handle.Data.PlaylistFileIndex = (int)fileIndex + 1;
                         Handle.Data.IsPlaylistPlaying = true;
                     }
                 }
@@ -564,9 +565,11 @@ namespace DicsordBot
             {
                 btn_Play.Content = FindResource("IconPlay");
 
+                //TODO: check condition IsBufferEmpty
                 //take next title in playlist
-                if (Handle.Data.IsPlaylistPlaying)
+                if (Handle.Data.IsPlaylistPlaying && Handle.Bot.IsBufferEmpty)
                 {
+                    //find playlist
                     foreach (var playlist in Handle.Data.Playlists)
                     {
                         if (playlist.Id == Handle.Data.PlaylistIndex)

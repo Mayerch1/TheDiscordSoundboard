@@ -10,6 +10,15 @@ namespace DicsordBot.Data
     [Serializable()]
     public class Playlist : INotifyPropertyChanged
     {
+        #region consts
+
+        /// <summary>
+        /// default thumbnail, to use if nothing else is set
+        /// </summary>
+        public const string defaultImage = "/res/list-256.png";
+
+        #endregion consts
+
         /// <summary>
         /// default constructor
         /// </summary>
@@ -47,7 +56,7 @@ namespace DicsordBot.Data
 
         private ObservableCollection<FileData> tracks = new ObservableCollection<FileData>();
         private string name = "";
-        private string imagePath = "/res/list-256.png";
+        private string imagePath = defaultImage;
         private readonly uint id;
 
         #endregion fileds

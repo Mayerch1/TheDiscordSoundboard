@@ -30,14 +30,21 @@ namespace DicsordBot.IO
                 Directory.CreateDirectory(folder);
             }
 
-            var scaledImage = ResizeImage(new Bitmap(imagePath), 256, 256);
+            var scaledImage = ResizeImage(new Bitmap(imagePath), 256);
 
             var location = folder + @"\" + System.IO.Path.GetFileName(imagePath);
             try
             {
                 scaledImage.Save(location);
             }
-            catch { return null; }
+            catch
+            {
+                //return location as it would succedd, if it is already existing
+                if (!File.Exists(location))
+                {
+                    return null;
+                }
+            }
 
             return location;
         }
@@ -46,11 +53,12 @@ namespace DicsordBot.IO
         /// Resize the image to the specified width and height.
         /// </summary>
         /// <param name="image">The image to resize.</param>
-        /// <param name="width">The width to resize to.</param>
-        /// <param name="height">The height to resize to.</param>
+        /// <param name="width">The width to resize to = The height to resize to.</param>
         /// <returns>The resized image.</returns>
-        public static Bitmap ResizeImage(Image image, int width, int height)
+        public static Bitmap ResizeImage(Image image, int width)
         {
+            int height = width;
+            //target dimension
             var destRec = new System.Drawing.Rectangle(0, 0, width, height);
             var destImage = new Bitmap(width, height);
 
@@ -58,17 +66,25 @@ namespace DicsordBot.IO
 
             using (var graphics = Graphics.FromImage(destImage))
             {
+                //quality settings
                 graphics.CompositingMode = System.Drawing.Drawing2D.CompositingMode.SourceCopy;
                 graphics.CompositingQuality = System.Drawing.Drawing2D.CompositingQuality.HighQuality;
                 graphics.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.HighQualityBicubic;
                 graphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.HighQuality;
                 graphics.PixelOffsetMode = System.Drawing.Drawing2D.PixelOffsetMode.HighQuality;
 
+                //crop image to square
+                int t = 0, l = 0;
+                if (image.Height > image.Width)
+                    t = (image.Height - image.Width) / 2;
+                else
+                    l = (image.Width - image.Height) / 2;
+
                 using (var wrapMode = new ImageAttributes())
                 {
-                    //TODO: cut of, if not squared
                     wrapMode.SetWrapMode(System.Drawing.Drawing2D.WrapMode.Clamp);
-                    graphics.DrawImage(image, destRec, 0, 0, image.Width, image.Height, GraphicsUnit.Pixel, wrapMode);
+                    //apply settings for offest to achieve square-crop
+                    graphics.DrawImage(image, destRec, l, t, image.Width - l * 2, image.Height - t * 2, GraphicsUnit.Pixel, wrapMode);
                 }
             }
             return destImage;
