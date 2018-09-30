@@ -9,7 +9,7 @@
              d:DesignHeight="450" d:DesignWidth="800" KeyDown="Window_KeyDown">
 
     <Grid Background="{StaticResource PrimaryBackgroundBrush}">
-        <StackPanel Orientation="Vertical" VerticalAlignment="Top" Margin="10,10,10,0">
+        <StackPanel Orientation="Vertical" VerticalAlignment="Top" Margin="20">
 
             <Grid  HorizontalAlignment="Center">
                 <Grid.ColumnDefinitions>
@@ -50,8 +50,8 @@
                 <TextBox x:Name="box_Hotkey" Text="" KeyDown="box_Hotkey_KeyDown" TextWrapping="Wrap"
                                  Style="{StaticResource MaterialDesignTextFieldBoxTextBox}"
                                  materialDesign:HintAssist.Hint="Hotkey"
-                                 Height="57"
-                                 Width="299"
+                                 Height="60"
+                                 Width="300"
                                  FontSize="10" />
                 <Button
                             Click="btn_clearHotkey_Click"

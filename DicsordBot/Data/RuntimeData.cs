@@ -155,7 +155,14 @@ namespace DicsordBot.Data
         /// </summary>
         public void loadAll()
         {
-            Persistent.SettingsPath = Properties.Settings.Default.Path;
+            try
+            {
+                Persistent.SettingsPath = Properties.Settings.Default.Path;
+            }
+            catch
+            {
+                Persistent.SettingsPath = null;
+            }
 
             if (String.IsNullOrWhiteSpace(Persistent.SettingsPath))
             {
@@ -205,7 +212,7 @@ namespace DicsordBot.Data
                     file.Close();
                     return target;
                 }
-                catch
+                catch (Exception ex)
                 {
                     return null;
                 }
@@ -248,7 +255,12 @@ namespace DicsordBot.Data
         /// </summary>
         public void saveAll()
         {
-            Properties.Settings.Default.Path = Persistent.SettingsPath;
+            try
+            {
+                Properties.Settings.Default.Path = Persistent.SettingsPath;
+            }
+            catch{/* do nothing */}
+
             Properties.Settings.Default.Save();
 
             cleanBtnList();

@@ -105,7 +105,7 @@ namespace DicsordBot
         #endregion propertys
 
         public MainWindow()
-        {
+        {         
             //test comment
             //need this, so other tasks will wait
             Handle.Data.loadAll();
