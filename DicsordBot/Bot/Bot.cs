@@ -112,7 +112,7 @@ namespace DicsordBot.Bot
         public TimeSpan TitleLenght { get { if (Reader != null) return Reader.TotalTime; else return TimeSpan.Zero; } }
 
         /// <summary>
-        /// IsBufferEmpy property
+        /// IsBufferEmpty property
         /// </summary>
         public bool IsBufferEmpty { get; set; }
 

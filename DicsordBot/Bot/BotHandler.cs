@@ -182,6 +182,8 @@ namespace DicsordBot.Bot
         {
             if (!await connectToServerAsync())
                 return;
+            else if (IsStreaming)
+                return;
 
             //if channel id has changed, reconnect to new channel
             if (!IsChannelConnected || ChannelId != CurrentChannelId)

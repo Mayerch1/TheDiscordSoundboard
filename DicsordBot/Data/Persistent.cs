@@ -126,12 +126,13 @@ namespace DicsordBot.Data
         /// <summary>
         /// IsDarkTheme property
         /// </summary>
-        public bool IsDarkTheme { get { return isDarkTheme; } set { isDarkTheme = value; OnPropertyChanged("IsLightTheme"); } }
+        public bool IsDarkTheme { get { return isDarkTheme; } set { isDarkTheme = value; OnPropertyChanged("IsDarkTheme"); } }
 
+        //raise ClientNameChanged to check for client names, if old Token was not able to do so
         /// <summary>
         /// Token property
         /// </summary>
-        public string Token { get { return token; } set { token = value; OnPropertyChanged("Token"); } }
+        public string Token { get { return token; } set { token = value; OnPropertyChanged("Token"); if (ClientNameChanged != null) ClientNameChanged(value); } }
 
         /// <summary>
         /// SelectedServerIndex

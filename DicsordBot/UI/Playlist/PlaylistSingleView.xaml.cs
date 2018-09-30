@@ -19,7 +19,7 @@ namespace DicsordBot.UI.Playlist
 
         public SinglePlaylistItemEnqueuedHandler SinglePlaylistItemEnqueued;
 
-        public delegate void SinglePlaylistStartPlayHandler(uint listIndex, uint fileTag);
+        public delegate void SinglePlaylistStartPlayHandler(uint listIndex, uint fileIndex);
 
         public SinglePlaylistStartPlayHandler SinglePlaylistStartPlay;
 
@@ -33,7 +33,7 @@ namespace DicsordBot.UI.Playlist
             for (int i = 0; i < Handle.Data.Playlists.Count; i++)
             {
                 if (Handle.Data.Playlists[i].Id == _listId)
-                    index = (uint)i;
+                    listIndex = (uint)i;
             }
 
             InitializeComponent();
@@ -41,12 +41,12 @@ namespace DicsordBot.UI.Playlist
             //FilteredFiles = new ObservableCollection<Data.FileData>(PlaylistFiles);
         }
 
-        private uint index = 0;
+        private uint listIndex = 0;
 
         //private ObservableCollection<Data.FileData> filteredFiles;
         private string Filter { get; set; }
 
-        public Data.Playlist Playlist { get { return Handle.Data.Playlists[(int)index]; } set { Handle.Data.Playlists[(int)index] = value; } }
+        public Data.Playlist Playlist { get { return Handle.Data.Playlists[(int)listIndex]; } set { Handle.Data.Playlists[(int)listIndex] = value; } }
         public ObservableCollection<Data.FileData> PlaylistFiles { get { return Playlist.Tracks; } set { Playlist.Tracks = value; OnPropertyChanged("PlaylistFiles"); } }
         //public ObservableCollection<Data.FileData> FilteredFiles { get { return filteredFiles; } set { filteredFiles = value; OnPropertyChanged("FilteredFiles"); } }
 
@@ -56,14 +56,14 @@ namespace DicsordBot.UI.Playlist
             if (e.ChangedButton == MouseButton.Left && e.ClickCount == 2)
             {
                 //start to replay the complete list
-                uint tag = (uint)((FrameworkElement)sender).Tag;
+                uint fileId = (uint)((FrameworkElement)sender).Tag;
 
                 //get the index of the tagged file
                 for (int i = 0; i < PlaylistFiles.Count; i++)
                 {
-                    if (PlaylistFiles[i].Id == tag)
+                    if (PlaylistFiles[i].Id == fileId)
                     {
-                        SinglePlaylistStartPlay(index, (uint)i);
+                        SinglePlaylistStartPlay(listIndex, (uint)i);
                         break;
                     }
                 }
@@ -144,15 +144,15 @@ namespace DicsordBot.UI.Playlist
 
         private void btn_editList_Click(object sender, RoutedEventArgs e)
         {
-            openDialog(Playlist.Name, Playlist.ImagePath, Application.Current.MainWindow);
+            openDialog(Playlist.Name, Application.Current.MainWindow, Playlist.ImagePath);
         }
 
-        private void openDialog(string name, string imagePath, Window window)
+        private void openDialog(string name, Window window, string imagePath)
         {
             //show edit window
             IO.BlurEffectManager.ToggleBlurEffect(true);
 
-            var popup = new PlaylistAddPopup(Playlist.Name, Application.Current.MainWindow, Playlist.ImagePath);
+            var popup = new PlaylistAddPopup(name, window, imagePath);
             popup.IsOpen = true;
 
             popup.Closed += delegate (object dSender, EventArgs dE)
@@ -172,7 +172,7 @@ namespace DicsordBot.UI.Playlist
             }
             else if (result == false && isToDelete == true)
             {
-                Handle.Data.Playlists.RemoveAt((int)index);
+                Handle.Data.Playlists.RemoveAt((int)listIndex);
 
                 //refresh all id's
 

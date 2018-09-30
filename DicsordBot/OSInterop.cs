@@ -5,6 +5,9 @@ using System.Runtime.InteropServices;
 
 namespace DicsordBot
 {
+    /// <summary>
+    /// extension for Window class, to get absolute position on screen
+    /// </summary>
     internal static class OSInterop
     {
         [DllImport("user32.dll")]
@@ -48,6 +51,11 @@ namespace DicsordBot
 
     internal static class WPFExtensionMethods
     {
+        /// <summary>
+        /// Get the absolut position of an window on the screen
+        /// </summary>
+        /// <param name="w">window, wich should get targeted</param>
+        /// <returns></returns>
         public static Point GetAbsolutePosition(this Window w)
         {
             if (w.WindowState != WindowState.Maximized)
