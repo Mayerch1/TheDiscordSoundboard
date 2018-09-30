@@ -9,9 +9,9 @@
              d:DesignHeight="450" d:DesignWidth="1000" KeyDown="Window_KeyDown">
 
     <StackPanel Orientation="Horizontal" Background="{StaticResource PrimaryBackgroundBrush}">
-        <Button Width="220" Height="200" BorderThickness="0" BorderBrush="{x:Null}" materialDesign:ShadowAssist.ShadowDepth="Depth2" Margin="15" Click="btn_ListImage_Click">
+        <Button x:Name="btn_Image" Width="220" Height="200" BorderThickness="0" BorderBrush="{x:Null}" materialDesign:ShadowAssist.ShadowDepth="Depth2" Margin="15" Click="btn_ListImage_Click">
             <Button.Background>
-                <ImageBrush x:Name="imageBrush" ImageSource="{Binding Path=ImagePath, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" Stretch="UniformToFill" TileMode="None" />
+                <ImageBrush ImageSource="{Binding Path=ImagePath, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" Stretch="UniformToFill" TileMode="None" />
             </Button.Background>
         </Button>
 

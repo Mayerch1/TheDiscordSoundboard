@@ -5,6 +5,7 @@ using System.Windows;
 using System.Windows.Controls.Primitives;
 using System.Windows.Input;
 using System.Windows.Interop;
+using System.Windows.Media.Imaging;
 
 namespace DicsordBot.UI.Playlist
 {
@@ -19,7 +20,7 @@ namespace DicsordBot.UI.Playlist
 
         public string PlaylistName { get { return box_Name.Text; } set { box_Name.Text = value; } }
 
-        public string ImagePath { get { return imagePath; } set { imagePath = value; OnPropertyChanged("ImagePath"); ImageChanged(value); } }
+        public string ImagePath { get { return imagePath; } set { imagePath = value; ImageChanged(value); } }
 
         public bool IsToReopen { get; set; } = false;
 
@@ -67,12 +68,6 @@ namespace DicsordBot.UI.Playlist
         {
             Result = true;
 
-            if (ImagePath != Data.Playlist.defaultImage)
-            {
-                //cache image, only if operation succesfull
-                ImagePath = IO.ImageManager.cacheImage(ImagePath);
-            }
-
             IsToDelete = false;
             this.IsOpen = false;
         }
@@ -115,8 +110,14 @@ namespace DicsordBot.UI.Playlist
 
             if (fileDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK && fileDialog.CheckFileExists)
             {
-                ImagePath = fileDialog.FileName;
+                if (fileDialog.FileName != Data.Playlist.defaultImage)
+                {
+                    //cache image
+                    ImagePath = IO.ImageManager.cacheImage(fileDialog.FileName);
+                }
             }
+
+            //TODO: double click on image will most likely close the popup
 
             this.StaysOpen = false;
         }
@@ -160,7 +161,11 @@ namespace DicsordBot.UI.Playlist
 
         private void ImageChanged(string path)
         {
-            //imageBrush.ImageSource = new BitmapImage(new Uri(path));
+            //default path is already set
+            if (path != Data.Playlist.defaultImage)
+            {
+                btn_Image.Background = new System.Windows.Media.ImageBrush(new BitmapImage(new Uri(ImagePath, UriKind.RelativeOrAbsolute)));
+            }
         }
 
         /// <summary>

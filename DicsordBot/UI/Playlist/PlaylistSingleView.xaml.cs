@@ -144,15 +144,15 @@ namespace DicsordBot.UI.Playlist
 
         private void btn_editList_Click(object sender, RoutedEventArgs e)
         {
-            openDialog(Playlist.Name, Playlist.ImagePath, Application.Current.MainWindow);
+            openDialog(Playlist.Name, Application.Current.MainWindow, Playlist.ImagePath);
         }
 
-        private void openDialog(string name, string imagePath, Window window)
+        private void openDialog(string name, Window window, string imagePath)
         {
             //show edit window
             IO.BlurEffectManager.ToggleBlurEffect(true);
 
-            var popup = new PlaylistAddPopup(Playlist.Name, Application.Current.MainWindow, Playlist.ImagePath);
+            var popup = new PlaylistAddPopup(name, window, imagePath);
             popup.IsOpen = true;
 
             popup.Closed += delegate (object dSender, EventArgs dE)

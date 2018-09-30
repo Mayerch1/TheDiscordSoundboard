@@ -98,7 +98,12 @@ namespace DicsordBot.IO
         {
             List<string> usedImages = new List<string>();
             string folder = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\" + Data.PersistentData.defaultFolderName + @"\" + Data.PersistentData.imageCacheFolder;
-            string[] files = Directory.GetFiles(folder);
+            string[] files;
+            try
+            {
+                files = Directory.GetFiles(folder);
+            }
+            catch {/* dirctory not accessible -> no operation possible */ return; }
 
             foreach (var list in playlists)
             {
