@@ -105,7 +105,7 @@ namespace DicsordBot
         #endregion propertys
 
         public MainWindow()
-        {
+        {         
             //test comment
             //need this, so other tasks will wait
             Handle.Data.loadAll();
@@ -226,7 +226,7 @@ namespace DicsordBot
             await Task.Delay(2500);
 
             //resolve user to get avatar-url
-            var client = Handle.BotData.extractClient(await Handle.Bot.getAllClients(), Handle.ClientId);
+            var client = Handle.BotData.extractClient(await Handle.Bot.getAllClients(true), Handle.ClientId);
             Handle.BotData.updateAvatar(client);
             OnPropertyChanged("ClientAvatar");
 

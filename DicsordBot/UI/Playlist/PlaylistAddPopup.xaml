@@ -6,19 +6,22 @@
              xmlns:local="clr-namespace:DicsordBot.UI.Playlist"
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              mc:Ignorable="d"
-             d:DesignHeight="450" d:DesignWidth="1000" KeyDown="Window_KeyDown">
+             Height="300" Width="600" KeyDown="Window_KeyDown">
 
-    <StackPanel Orientation="Horizontal" Background="{StaticResource PrimaryBackgroundBrush}">
-        <Button Width="220" Height="200" BorderThickness="0" BorderBrush="{x:Null}" materialDesign:ShadowAssist.ShadowDepth="Depth2" Margin="15" Click="btn_ListImage_Click">
+    <StackPanel Orientation="Horizontal" Background="{StaticResource PrimaryBackgroundBrush}" >
+        <Button Width="220" Height="200" BorderThickness="0" BorderBrush="{x:Null}" materialDesign:ShadowAssist.ShadowDepth="Depth2" Margin="15" Click="btn_ListImage_Click" VerticalAlignment="Center">
             <Button.Background>
                 <ImageBrush x:Name="imageBrush" ImageSource="{Binding Path=ImagePath, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" Stretch="UniformToFill" TileMode="None" />
             </Button.Background>
         </Button>
 
-        <StackPanel Orientation="Vertical">
-            <TextBox x:Name="box_Name" Text="" VerticalAlignment="Center" />
+        <StackPanel Orientation="Vertical" VerticalAlignment="Center" Margin="10,0,0,0">
+            <TextBox x:Name="box_Name" Text="" VerticalAlignment="Center" Height="60" Width="300"
+                     Style="{StaticResource MaterialDesignTextFieldBoxTextBox}"
+                     materialDesign:HintAssist.Hint="Playlist Name" />
 
-            <StackPanel Orientation="Horizontal">
+            
+            <StackPanel Orientation="Horizontal" Margin="0,10,0,0">
                 <Button Click="btn_Delete_Click" Foreground="Gray" Background="{StaticResource PrimaryBackgroundBrush}" BorderBrush="{StaticResource PrimaryBackgroundBrush}">
                     <materialDesign:PackIcon Kind="Bitbucket" />
                 </Button>
