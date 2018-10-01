@@ -8,66 +8,164 @@
              xmlns:dd="urn:gong-wpf-dragdrop"
              mc:Ignorable="d"
              d:DesignHeight="300" d:DesignWidth="300" AllowDrop="True">
+
+    <UserControl.Resources>
+        <Style TargetType="ListBoxItem" BasedOn="{StaticResource {x:Type ListBoxItem}}">
+            <Setter Property="Padding" Value="0" />
+            <Setter Property="FontSize" Value="13" />
+            <Setter Property="FontFamily" Value="Segoe UI" />
+        </Style>
+
+        <Storyboard x:Key="OpenTopSelectionBar">
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(FrameworkElement.Height)" Storyboard.TargetName="col_TopSelectionBar">
+                <EasingDoubleKeyFrame KeyTime="0" Value="30" />
+            </DoubleAnimationUsingKeyFrames>
+        </Storyboard>
+        <Storyboard x:Key="CloseTopSelectionBar">
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(FrameworkElement.Height)" Storyboard.TargetName="col_TopSelectionBar">
+                <EasingDoubleKeyFrame KeyTime="0" Value="0" />
+            </DoubleAnimationUsingKeyFrames>
+        </Storyboard>
+    </UserControl.Resources>
+
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
             <RowDefinition Height="12*" />
         </Grid.RowDefinitions>
 
         <Grid Grid.Row="0">
-            <materialDesign:ColorZone Background="#eaeaea" Height="30" VerticalAlignment="Center" materialDesign:ShadowAssist.ShadowDepth="Depth1">
-                <StackPanel>
-                    <Button Content="Edit List" Click="btn_editList_Click" />
+            <DockPanel>
+                <StackPanel DockPanel.Dock="Top" VerticalAlignment="Stretch">
+                    <materialDesign:ColorZone Background="#eaeaea" VerticalAlignment="Stretch" materialDesign:ShadowAssist.ShadowDepth="Depth1">
+                        <DockPanel LastChildFill="True" VerticalAlignment="Stretch">
+                            <materialDesign:PackIcon Kind="Magnify" Height="20" Width="20" VerticalAlignment="Center" Margin="10,0,10,0" Foreground="Gray" />
+                            <TextBox x:Name="box_Filter" TextChanged="box_Search_TextChanged"  materialDesign:HintAssist.Hint="Search" materialDesign:TextFieldAssist.DecorationVisibility="Hidden" BorderThickness="0" VerticalAlignment="Center" />
+                        </DockPanel>
+                    </materialDesign:ColorZone>
                 </StackPanel>
-            </materialDesign:ColorZone>
+
+                <Button DockPanel.Dock="Right"  Content="Edit List" Click="btn_editList_Click" />
+
+                <materialDesign:ColorZone x:Name="col_TopSelectionBar"  Background="#eaeaea" Height="0" VerticalAlignment="Center" materialDesign:ShadowAssist.ShadowDepth="Depth1">
+                    <DockPanel LastChildFill="True">
+
+                        <Button  Click="addMultipleToQueue_Click" Background="{StaticResource PrimaryForegroundBrush}" BorderBrush="{StaticResource PrimaryAccentBrush}">
+                            <StackPanel Orientation="Horizontal">
+                                <materialDesign:PackIcon Kind="Plus" Height="20" Width="20" VerticalAlignment="Center" Margin="0,0,0,0" Foreground="Gray" />
+                                <TextBlock Text="Add selection to queue" />
+                            </StackPanel>
+                        </Button>
+                    </DockPanel>
+                </materialDesign:ColorZone>
+
+                <materialDesign:ColorZone Background="{StaticResource PrimaryBackgroundBrush}" materialDesign:ShadowAssist.ShadowDepth="Depth2" materialDesign:ShadowAssist.ShadowEdges="All"  Height="Auto" />
+            </DockPanel>
         </Grid>
-        <Grid Grid.Row="1">
-            <ListBox x:Name="list_All" ItemsSource="{Binding PlaylistFiles}" SelectionMode="Extended" KeyDown="stack_list_KeyDown"
+        <Grid Grid.Row="1" Margin="0,0,0,0" MaxWidth="2000" MinWidth="600">
+            <ListBox x:Name="list_All" ItemsSource="{Binding FilteredFiles}" SelectionMode="Extended" KeyDown="stack_list_KeyDown" HorizontalAlignment="Stretch" SelectionChanged="list_All_SelectionChanged"
                      dd:DragDrop.IsDragSource="True"
                      dd:DragDrop.IsDropTarget="True"
                      dd:DragDrop.DropHandler="{Binding}">
                 <ListBox.ItemTemplate>
                     <DataTemplate>
 
-                        <!-- TODO: use something different?-->
-                        <Grid Tag="{Binding Id}" MouseLeftButtonDown="stack_list_MouseLeftButtonDown">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="*" />
-                                <ColumnDefinition Width="*" />
-                                <ColumnDefinition Width="*" />
-                                <ColumnDefinition Width="*" />
-                            </Grid.ColumnDefinitions>
+                        <materialDesign:ColorZone Background="{x:Null}" Name="Grid_Title">
+                            <!-- TODO: use something different?-->
+                            <Grid Tag="{Binding Id}"
+                              MouseLeftButtonDown="stack_list_MouseLeftButtonDown"
+                              Margin="10,0,10,0"
+                              Height="50">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="60" />
+                                    <ColumnDefinition Width="3*" />
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="60" />
+                                    <ColumnDefinition Width="45" />
+                                </Grid.ColumnDefinitions>
 
-                            <Grid.ContextMenu>
-                                <ContextMenu>
-                                    <MenuItem Header="Add to Queue"
+                                <Grid.ContextMenu>
+                                    <ContextMenu>
+                                        <MenuItem Header="Add to Queue"
                                               Tag="{Binding Id}"
                                                   Click="menu_addToQueue_Clicked" />
-                                </ContextMenu>
-                            </Grid.ContextMenu>
+                                    </ContextMenu>
+                                </Grid.ContextMenu>
 
-                            <!-- TODO: spacer, left, middle and right aligned-->
+                                <!-- TODO: spacer, left, middle and right aligned-->
 
-                            <Grid Grid.Column="0">
-                                <Label Content="{Binding Name}" />
-                            </Grid>
+                                <Grid Grid.Column="0">
+                                    <Button
+                                        Tag="{Binding Id}"
+                                        Click="btn_playItem_Click"
+                                        Foreground="White"
+                                        VerticalAlignment="Center"
+                                        materialDesign:ShadowAssist.ShadowDepth="Depth0"
+                                        Background="Black"
+                                        BorderBrush="{x:Null}"
+                                        Height="30"
+                                        Width="30">
 
-                            <Grid Grid.Column="1">
-                                <Label Content="{Binding Author}" />
-                            </Grid>
+                                        <materialDesign:PackIcon
+                                            Kind="Play"
+                                            HorizontalAlignment="Center" />
 
-                            <Grid Grid.Column="2">
-                                <Label Content="{Binding LengthString}" />
+                                        <Button.Style>
+                                            <Style TargetType="{x:Type Button}" BasedOn="{StaticResource MaterialDesignFloatingActionMiniDarkButton}">
+
+                                                <Setter Property="Visibility" Value="Hidden" />
+
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding IsMouseOver, ElementName=Grid_Title}" Value="True">
+                                                        <Setter Property="Visibility" Value="Visible" />
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </Button.Style>
+                                    </Button>
+                                </Grid>
+
+                                <Grid Grid.Column="1" VerticalAlignment="Center">
+                                    <Label Content="{Binding Name}" />
+                                </Grid>
+
+                                <Grid Grid.Column="2" VerticalAlignment="Center">
+                                    <Label Content="{Binding Author}" />
+                                </Grid>
+
+                                <!--TODO: button dropdown  -->
+                                <Grid Grid.Column="3">
+                                    <Button
+                                    Tag="{Binding Id}"
+                                    Click="menu_openContext_Click"
+                                    Foreground="#FF707070"
+                                    VerticalAlignment="Center"
+                                        Background="{x:Null}"
+                                        BorderBrush="{x:Null}"
+                                        Height="Auto"
+                                        Width="Auto">
+
+                                        <materialDesign:PackIcon Kind="DotsHorizontal" Height="20"
+                                        Width="20" />
+
+                                        <Button.Style>
+                                            <Style TargetType="{x:Type Button}" BasedOn= "{StaticResource {x:Type Button}}">
+                                                <Setter Property="Visibility" Value="Hidden" />
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding IsMouseOver, ElementName=Grid_Title}" Value="True">
+                                                        <Setter Property="Visibility" Value="Visible" />
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </Button.Style>
+                                    </Button>
+                                </Grid>
+
+                                <Grid Grid.Column="4" VerticalAlignment="Center">
+                                    <Label Content="{Binding LengthString}" DockPanel.Dock="Right" />
+                                </Grid>
                             </Grid>
-                            <!--TODO: button dropdown  -->
-                            <Grid Grid.Column="3">
-                                <MenuItem Click="menu_openContext_Click" Tag="{Binding Id}">
-                                    <MenuItem.Icon>
-                                        <materialDesign:PackIcon Kind="DotsHorizontal" />
-                                    </MenuItem.Icon>
-                                </MenuItem>
-                            </Grid>
-                        </Grid>
+                        </materialDesign:ColorZone>
                     </DataTemplate>
                 </ListBox.ItemTemplate>
             </ListBox>

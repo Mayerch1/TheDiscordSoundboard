@@ -17,7 +17,7 @@ namespace DicsordBot.UI
     /// </summary>
     public partial class SearchMode : UserControl, INotifyPropertyChanged
     {
-        private bool isTopSelectionBarOpen = true;
+        private bool isTopSelectionBarOpen = false;
 
         private ObservableCollection<Data.FileData> filteredFiles;
         public ObservableCollection<Data.FileData> FilteredFiles { get { return filteredFiles; } set { filteredFiles = value; OnPropertyChanged("FilteredFiles"); } }

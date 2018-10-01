@@ -105,7 +105,7 @@ namespace DicsordBot
         #endregion propertys
 
         public MainWindow()
-        {         
+        {
             //test comment
             //need this, so other tasks will wait
             Handle.Data.loadAll();
@@ -555,7 +555,6 @@ namespace DicsordBot
             await Handle.Bot.enqueueAsync(data);
 
             //only resume, if not streaming + not in pause mode
-            //HINT: removed check for empty buffer
             if (!Handle.Bot.IsStreaming)
                 await Handle.Bot.resumeStream();
         }

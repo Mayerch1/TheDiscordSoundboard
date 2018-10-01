@@ -212,7 +212,7 @@ namespace DicsordBot.Data
                     file.Close();
                     return target;
                 }
-                catch (Exception ex)
+                catch
                 {
                     return null;
                 }
@@ -259,7 +259,7 @@ namespace DicsordBot.Data
             {
                 Properties.Settings.Default.Path = Persistent.SettingsPath;
             }
-            catch{/* do nothing */}
+            catch {/* do nothing */}
 
             Properties.Settings.Default.Save();
 
