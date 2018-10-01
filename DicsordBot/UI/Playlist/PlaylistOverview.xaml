@@ -19,8 +19,6 @@
                     materialDesign:ShadowAssist.ShadowDepth="Depth2"
                     Margin="15"
                     VerticalAlignment="Top">
-                    
-
 
                     <Button.Template>
                         <ControlTemplate>
@@ -31,39 +29,27 @@
                             </Border>
                         </ControlTemplate>
                     </Button.Template>
-
-
-
-
-
-
                 </Button>
 
                 <ItemsControl ItemsSource="{Binding Playlists}">
                     <ItemsControl.ItemTemplate>
-
                         <DataTemplate>
-
                             <Button Width="220" Height="200" BorderThickness="0" Tag="{Binding Id}" BorderBrush="{x:Null}" materialDesign:ShadowAssist.ShadowDepth="Depth2" Margin="15" Click="btn_playlistOpen_Click" Content="{Binding Name}" >
-
-
-
                                 <Button.Template>
                                     <ControlTemplate>
                                         <Border CornerRadius="10" >
                                             <Border.Background>
                                                 <ImageBrush ImageSource="{Binding ImagePath}" Stretch="UniformToFill" TileMode="None" />
                                             </Border.Background>
-                                            
                                             <TextBlock Text="{Binding Name}" HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="15" FontSize="20"/>
                                         </Border>
                                     </ControlTemplate>
                                 </Button.Template>
                             </Button>
-                            
                         </DataTemplate>
-                             </ItemsControl.ItemTemplate>
-                         <ItemsControl.ItemsPanel>
+                    </ItemsControl.ItemTemplate>
+                    
+                    <ItemsControl.ItemsPanel>
                         <ItemsPanelTemplate>
                             <WrapPanel />
                         </ItemsPanelTemplate>

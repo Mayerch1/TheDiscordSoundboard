@@ -17,12 +17,12 @@
 
         <Storyboard x:Key="OpenTopSelectionBar">
             <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(FrameworkElement.Height)" Storyboard.TargetName="col_TopSelectionBar">
-                <EasingDoubleKeyFrame KeyTime="0" Value="30" />
+                <EasingDoubleKeyFrame KeyTime="00:00:00.15" Value="30" />
             </DoubleAnimationUsingKeyFrames>
         </Storyboard>
         <Storyboard x:Key="CloseTopSelectionBar">
             <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(FrameworkElement.Height)" Storyboard.TargetName="col_TopSelectionBar">
-                <EasingDoubleKeyFrame KeyTime="0" Value="0" />
+                <EasingDoubleKeyFrame KeyTime="00:00:00.15" Value="0" />
             </DoubleAnimationUsingKeyFrames>
         </Storyboard>
     </UserControl.Resources>
@@ -33,8 +33,8 @@
             <RowDefinition Height="120*" />
         </Grid.RowDefinitions>
 
-        <Grid Grid.Row="0">
-            <DockPanel>
+        <Grid Grid.Row="0" Background="Pink">
+            <DockPanel LastChildFill="True">
                 <StackPanel DockPanel.Dock="Top" VerticalAlignment="Stretch">
                     <materialDesign:ColorZone Background="#eaeaea" VerticalAlignment="Stretch" materialDesign:ShadowAssist.ShadowDepth="Depth1">
                         <DockPanel LastChildFill="True" VerticalAlignment="Stretch">
@@ -44,19 +44,19 @@
                     </materialDesign:ColorZone>
                 </StackPanel>
 
-                <materialDesign:ColorZone x:Name="col_TopSelectionBar"  Background="#eaeaea" Height="0" VerticalAlignment="Center" materialDesign:ShadowAssist.ShadowDepth="Depth1">
-                    <DockPanel LastChildFill="True">
+                <materialDesign:ColorZone x:Name="col_TopSelectionBar"  Height="0" materialDesign:ShadowAssist.ShadowDepth="Depth1" Background="Blue" MaxWidth="2000" MinWidth="600">
+                    <DockPanel LastChildFill="False">
 
-                        <Button  Click="btn_addMultipleToQueue_Clicked" Background="{StaticResource PrimaryForegroundBrush}" BorderBrush="{StaticResource PrimaryAccentBrush}">
+                        <Button Click="btn_addMultipleToQueue_Clicked" Background="{StaticResource PrimaryForegroundBrush}" BorderBrush="{StaticResource PrimaryAccentBrush}">
                             <StackPanel Orientation="Horizontal">
-                                <materialDesign:PackIcon Kind="Plus" Height="20" Width="20" VerticalAlignment="Center" Margin="0,0,0,0" Foreground="Gray" />
-                                <TextBlock Text="Add selection to queue" />
+                                <materialDesign:PackIcon Kind="Plus" Height="20" Width="20" VerticalAlignment="Center" Margin="5" Foreground="Gray" />
+                                <TextBlock Text="Add selection to queue..." />
                             </StackPanel>
                         </Button>
 
                         <Button x:Name="btn_addMultipleToPlaylist" Click="btn_addMultiple_Click" Background="{StaticResource PrimaryForegroundBrush}" BorderBrush="{StaticResource PrimaryAccentBrush}" ContextMenuOpening="context_addMultiple_ContextMenuOpening">
                             <StackPanel Orientation="Horizontal">
-                                <materialDesign:PackIcon Kind="PlaylistPlus" Height="20" Width="20" VerticalAlignment="Center" Margin="0,0,0,0" Foreground="Gray" />
+                                <materialDesign:PackIcon Kind="PlaylistPlus" Height="20" Width="20" VerticalAlignment="Center" Margin="5" Foreground="Gray" />
                                 <TextBlock Text="Add selection to playlist..." />
                             </StackPanel>
                             <Button.ContextMenu>
@@ -64,113 +64,13 @@
                                 </ContextMenu>
                             </Button.ContextMenu>
                         </Button>
-
-                        <TextBlock Text="This is almost working (the empty space is not opening/moving, maybe use something else than grid)" />
+        
                     </DockPanel>
-                </materialDesign:ColorZone>
-
-                <materialDesign:ColorZone Background="{StaticResource PrimaryBackgroundBrush}" materialDesign:ShadowAssist.ShadowDepth="Depth2" materialDesign:ShadowAssist.ShadowEdges="All"  Height="Auto" />
+                </materialDesign:ColorZone>     
             </DockPanel>
         </Grid>
 
         <Grid Grid.Row="1" Margin="0,0,0,0" MaxWidth="2000" MinWidth="600">
-            <!--
-            <ListView x:Name="list_All" ItemsSource="{Binding FilteredFiles}" SelectionMode="Extended" SelectionChanged="list_All_SelectionChanged" HorizontalContentAlignment="Stretch">
-                <ListView.View>
-                    <GridView>
-
-                        <GridViewColumn Header="">
-                            <GridViewColumn.CellTemplate>
-                                <DataTemplate>
-                                    <Button
-                                        Tag="{Binding Id}"
-                                        Click="btn_playItem_Click"
-                                        Foreground="White"
-                                        VerticalAlignment="Center"
-                                        materialDesign:ShadowAssist.ShadowDepth="Depth0"
-                                        Background="Black"
-                                        BorderBrush="{x:Null}"
-                                        Height="30"
-                                        Width="30">
-
-                                        <materialDesign:PackIcon
-                                            Kind="Play"
-                                            HorizontalAlignment="Center" />
-
-                                        <Button.Style>
-                                            <Style TargetType="{x:Type Button}" BasedOn="{StaticResource MaterialDesignFloatingActionMiniDarkButton}">
-
-                                                <Setter Property="Visibility" Value="Hidden" />
-
-                                                <Style.Triggers>
-                                                    <DataTrigger Binding="{Binding IsMouseOver, ElementName=Grid_Title}" Value="True">
-                                                        <Setter Property="Visibility" Value="Visible" />
-                                                    </DataTrigger>
-                                                </Style.Triggers>
-                                            </Style>
-                                        </Button.Style>
-                                    </Button>
-                                </DataTemplate>
-                            </GridViewColumn.CellTemplate>
-                        </GridViewColumn>
-                        <GridViewColumn Header="Name">
-                            <GridViewColumn.CellTemplate>
-                                <DataTemplate>
-
-                                    <Label Content="{Binding Name}" />
-                                </DataTemplate>
-                            </GridViewColumn.CellTemplate>
-                        </GridViewColumn>
-                        <GridViewColumn Header="Author">
-                            <GridViewColumn.CellTemplate>
-                                <DataTemplate>
-                                    <Label Content="{Binding Author}" />
-                                </DataTemplate>
-                            </GridViewColumn.CellTemplate>
-                        </GridViewColumn>
-                        <GridViewColumn Header="">
-                            <GridViewColumn.CellTemplate>
-                                <DataTemplate>
-                                    <Button
-                                    Tag="{Binding Id}"
-                                    Click="btn_addSingle_Click"
-                                    Foreground="#FF707070"
-                                    VerticalAlignment="Center"
-                                        Background="{x:Null}"
-                                        BorderBrush="{x:Null}"
-                                        Height="Auto"
-                                        Width="Auto">
-
-                                        <materialDesign:PackIcon Kind="DotsHorizontal" Height="20"
-                                        Width="20" />
-
-                                        <Button.Style>
-                                            <Style TargetType="{x:Type Button}" BasedOn= "{StaticResource {x:Type Button}}">
-                                                <Setter Property="Visibility" Value="Hidden" />
-                                                <Style.Triggers>
-                                                    <DataTrigger Binding="{Binding IsMouseOver, ElementName=Grid_Title}" Value="True">
-                                                        <Setter Property="Visibility" Value="Visible" />
-                                                    </DataTrigger>
-                                                </Style.Triggers>
-                                            </Style>
-                                        </Button.Style>
-                                    </Button>
-                                </DataTemplate>
-                            </GridViewColumn.CellTemplate>
-                        </GridViewColumn>
-
-                        <GridViewColumn Header="Duration">
-                            <GridViewColumn.CellTemplate>
-                                <DataTemplate>
-                                    <Label Content="{Binding LengthString}" HorizontalAlignment="Right" />
-                                </DataTemplate>
-                            </GridViewColumn.CellTemplate>
-                        </GridViewColumn>
-                    </GridView>
-                </ListView.View>
-            </ListView>
-            -->
-
             <ListBox x:Name="list_All" ItemsSource="{Binding FilteredFiles}" SelectionMode="Extended" SelectionChanged="list_All_SelectionChanged" HorizontalContentAlignment="Stretch">
                 <ListBox.ItemTemplate>
                     <DataTemplate>
