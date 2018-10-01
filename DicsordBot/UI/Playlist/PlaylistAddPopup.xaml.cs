@@ -22,13 +22,8 @@ namespace DicsordBot.UI.Playlist
 
         public string ImagePath { get { return imagePath; } set { imagePath = value; ImageChanged(value); } }
 
-        public bool IsToReopen { get; set; } = false;
-
-        private bool IsFileDialogOpened { get; set; } = false;
-
         public bool IsToDelete { get; set; } = false;
         public bool Result { get; set; } = false;
-        private bool IsDialogOpen { get; set; } = false;
 
         public PlaylistAddPopup(Window window)
         {
@@ -74,11 +69,9 @@ namespace DicsordBot.UI.Playlist
 
         private void btn_Delete_Click(object sender, RoutedEventArgs e)
         {
-            IsDialogOpen = true;
             this.StaysOpen = true;
             if (MessageBox.Show("Are you shure to delete this Playlist?", "Warning", MessageBoxButton.OKCancel) == MessageBoxResult.OK)
             {
-                IsDialogOpen = false;
                 Result = false;
                 IsToDelete = true;
 

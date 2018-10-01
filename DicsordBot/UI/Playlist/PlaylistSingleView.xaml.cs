@@ -5,6 +5,7 @@ using System.ComponentModel;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using System.Windows.Media.Animation;
 
 namespace DicsordBot.UI.Playlist
 {
@@ -27,6 +28,16 @@ namespace DicsordBot.UI.Playlist
 
         public LeaveSingleViewHandler LeaveSingleView;
 
+        private uint listIndex = 0;
+        private bool isTopSelectionBarOpen = false;
+
+        private ObservableCollection<Data.FileData> filteredFiles;
+        private string Filter { get; set; }
+
+        public Data.Playlist Playlist { get { return Handle.Data.Playlists[(int)listIndex]; } set { Handle.Data.Playlists[(int)listIndex] = value; } }
+        public ObservableCollection<Data.FileData> PlaylistFiles { get { return Playlist.Tracks; } set { Playlist.Tracks = value; OnPropertyChanged("PlaylistFiles"); } }
+        public ObservableCollection<Data.FileData> FilteredFiles { get { return filteredFiles; } set { filteredFiles = value; OnPropertyChanged("FilteredFiles"); } }
+
         public PlaylistSingleView(uint _listId)
         {
             //get index of playlist
@@ -35,20 +46,56 @@ namespace DicsordBot.UI.Playlist
                 if (Handle.Data.Playlists[i].Id == _listId)
                     listIndex = (uint)i;
             }
-
+            //deep copy
+            FilteredFiles = new ObservableCollection<Data.FileData>(PlaylistFiles);
             InitializeComponent();
             this.DataContext = this;
-            //FilteredFiles = new ObservableCollection<Data.FileData>(PlaylistFiles);
         }
 
-        private uint listIndex = 0;
+        private void filterListBox(string filter)
+        {
+            //clear list and apply filter
+            if (!string.IsNullOrEmpty(filter))
+            {
+                FilteredFiles.Clear();
+                try
+                {
+                    foreach (var file in PlaylistFiles)
+                    {
+                        //add all files matching
+                        if (IO.FileWatcher.checkForLowerMatch(file, filter))
+                            FilteredFiles.Add(file);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    UnhandledException.initWindow(ex, "whilest trying to rescan your files (debug)");
+                }
+            }
+            else
+            {
+                //reset filter if empty
+                //make deep copy
+                FilteredFiles = new ObservableCollection<Data.FileData>(PlaylistFiles);
+            }
+        }
 
-        //private ObservableCollection<Data.FileData> filteredFiles;
-        private string Filter { get; set; }
+        private void ProcessDialogResult(bool result, bool isToDelete, string playlistName, string imagePath)
+        {
+            if (result == true)
+            {
+                Playlist.Name = playlistName;
+                if (imagePath != null)
+                    Playlist.ImagePath = imagePath;
+            }
+            else if (result == false && isToDelete == true)
+            {
+                Handle.Data.Playlists.RemoveAt((int)listIndex);
+                LeaveSingleView();
+            }
+        }
 
-        public Data.Playlist Playlist { get { return Handle.Data.Playlists[(int)listIndex]; } set { Handle.Data.Playlists[(int)listIndex] = value; } }
-        public ObservableCollection<Data.FileData> PlaylistFiles { get { return Playlist.Tracks; } set { Playlist.Tracks = value; OnPropertyChanged("PlaylistFiles"); } }
-        //public ObservableCollection<Data.FileData> FilteredFiles { get { return filteredFiles; } set { filteredFiles = value; OnPropertyChanged("FilteredFiles"); } }
+        #region control events
 
         private void stack_list_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
@@ -68,6 +115,24 @@ namespace DicsordBot.UI.Playlist
                     }
                 }
             }
+        }
+
+        private void btn_playItem_Click(object sender, RoutedEventArgs e)
+        {
+            uint tag = (uint)((FrameworkElement)sender).Tag;
+
+            SinglePlaylistStartPlay(listIndex, tag);
+        }
+
+        private void addMultipleToQueue_Click(object sender, RoutedEventArgs e)
+        {
+            foreach (Data.FileData selected in list_All.SelectedItems)
+                SinglePlaylistItemEnqueued(selected);
+        }
+
+        private void box_Search_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            filterListBox(((TextBox)sender).Text);
         }
 
         private void menu_openContext_Click(object sender, RoutedEventArgs e)
@@ -98,28 +163,25 @@ namespace DicsordBot.UI.Playlist
             }
         }
 
-        private void context_AddPlaylist_Click(object sender, RoutedEventArgs e)
+        private void list_All_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            //This should crash
-            //uint tag = (uint)((FrameworkElement)sender).Tag;
-
-            //ListItemPlay(tag, false);
-        }
-
-        #region events
-
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        private void OnPropertyChanged(string info)
-        {
-            PropertyChangedEventHandler handler = PropertyChanged;
-            if (handler != null)
+            //open or close the top selection bar, based on selected items
+            var list = (ListBox)sender;
+            if (list.SelectedItems.Count >= 2 && !isTopSelectionBarOpen)
             {
-                handler(this, new PropertyChangedEventArgs(info));
+                Storyboard sb;
+                sb = FindResource("OpenTopSelectionBar") as Storyboard;
+                sb.Begin();
+                isTopSelectionBarOpen = true;
+            }
+            else if (list.SelectedItems.Count <= 1 && isTopSelectionBarOpen)
+            {
+                Storyboard sb;
+                sb = FindResource("CloseTopSelectionBar") as Storyboard;
+                sb.Begin();
+                isTopSelectionBarOpen = false;
             }
         }
-
-        #endregion events
 
         private void stack_list_KeyDown(object sender, KeyEventArgs e)
         {
@@ -134,7 +196,7 @@ namespace DicsordBot.UI.Playlist
                         if ((Data.FileData)item == PlaylistFiles[i])
                         {
                             PlaylistFiles.RemoveAt(i);
-                            //filterListBox(Filter);
+                            filterListBox(box_Filter.Text);
                             break;
                         }
                     }
@@ -162,23 +224,22 @@ namespace DicsordBot.UI.Playlist
             };
         }
 
-        private void ProcessDialogResult(bool result, bool isToDelete, string playlistName, string imagePath)
+        #endregion control events
+
+        #region notifyProperty
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        private void OnPropertyChanged(string info)
         {
-            if (result == true)
+            PropertyChangedEventHandler handler = PropertyChanged;
+            if (handler != null)
             {
-                Playlist.Name = playlistName;
-                if (imagePath != null)
-                    Playlist.ImagePath = imagePath;
-            }
-            else if (result == false && isToDelete == true)
-            {
-                Handle.Data.Playlists.RemoveAt((int)listIndex);
-
-                //refresh all id's
-
-                LeaveSingleView();
+                handler(this, new PropertyChangedEventArgs(info));
             }
         }
+
+        #endregion notifyProperty
 
         #region drag and drop
 
@@ -234,6 +295,8 @@ namespace DicsordBot.UI.Playlist
                 PlaylistFiles.Insert(index, file);
             else
                 PlaylistFiles.Add(file);
+
+            filterListBox(box_Filter.Text);
         }
 
         #endregion drag and drop
