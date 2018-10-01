@@ -263,7 +263,7 @@ namespace DicsordBot.Bot
             }
             catch (System.Net.Http.HttpRequestException)
             {
-                ClientWarning("Can't reach the Discord-Servers due to timeout", "Check your internet connection, also check the availability of the discord server/api.");
+                SnackbarWarning("Can't reach the Discord-Servers due to timeout", SnackBarAction.None);
                 Console.WriteLine("connection Exception (Timeout, ...)");
                 return false;
             }

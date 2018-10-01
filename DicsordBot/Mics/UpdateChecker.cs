@@ -1,4 +1,5 @@
-﻿using System.Net;
+﻿using System;
+using System.Net;
 using System.Threading.Tasks;
 
 namespace DicsordBot
@@ -15,7 +16,17 @@ namespace DicsordBot
         public static async Task<bool> CheckForUpdate()
         {
             HttpWebRequest req = (HttpWebRequest)WebRequest.Create(Data.PersistentData.urlToGitRepo + "releases/latest");
-            WebResponse wResp = await req.GetResponseAsync();
+            WebResponse wResp = null;
+            try
+            {
+                wResp = await req.GetResponseAsync();
+            }
+            catch (System.Net.WebException)
+            {
+                //if not available, assume there are no updates
+                return false;
+            }
+
             HttpWebResponse resp = (HttpWebResponse)wResp;
 
             string resolved = resp.ResponseUri.ToString();

@@ -18,12 +18,12 @@
 
         <Storyboard x:Key="OpenTopSelectionBar">
             <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(FrameworkElement.Height)" Storyboard.TargetName="col_TopSelectionBar">
-                <EasingDoubleKeyFrame KeyTime="0" Value="30" />
+                <EasingDoubleKeyFrame KeyTime="00:00:00.05" Value="30" />
             </DoubleAnimationUsingKeyFrames>
         </Storyboard>
         <Storyboard x:Key="CloseTopSelectionBar">
             <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(FrameworkElement.Height)" Storyboard.TargetName="col_TopSelectionBar">
-                <EasingDoubleKeyFrame KeyTime="0" Value="0" />
+                <EasingDoubleKeyFrame KeyTime="00:00:00.05" Value="0" />
             </DoubleAnimationUsingKeyFrames>
         </Storyboard>
     </UserControl.Resources>

@@ -70,7 +70,7 @@
                     <SolidColorBrush Color="White" Opacity="1" />
                 </materialDesign:ColorZone.Background>
 
-                <StackPanel Margin="0,5,0,0">
+                <DockPanel Margin="0,5,0,0">
                     <DockPanel DockPanel.Dock="Top" HorizontalAlignment="Stretch">
                         <TextBlock Margin="5" DockPanel.Dock="Left" Text="Permanent Selection" />
                         <CheckBox
@@ -79,19 +79,18 @@
                             HorizontalAlignment="Right"
                             x:Name="box_IsPermanentChannel"
                             Style="{StaticResource MaterialDesignSwitchDarkToggleButton}"
-                            ToolTip="Toggle this to make the bot always join this channel" />
+                            ToolTip="Toggle this, to make the bot always join this channel" />
                     </DockPanel>
 
                     <Separator Background="#eaeaea" />
 
                     <ScrollViewer
-                    PanningMode="VerticalOnly"
                     PreviewMouseWheel="scroll_channelList_PreviewMouseWheel"
                     HorizontalScrollBarVisibility="Hidden"
                     VerticalScrollBarVisibility="Hidden">
                         <TreeView x:Name="tree_channelList" SelectedItemChanged="tree_channelList_SelectedItemChanged" />
                     </ScrollViewer>
-                </StackPanel>
+                </DockPanel>
             </materialDesign:ColorZone>
         </Grid>
         <DockPanel LastChildFill="True" Grid.ZIndex="0">
