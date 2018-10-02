@@ -30,6 +30,15 @@
                     <DataTemplate>
 
                         <materialDesign:Flipper Style="{StaticResource MaterialDesignCardFlipper}">
+                            <materialDesign:Flipper.Resources>
+                                    
+                           
+                                
+                            </materialDesign:Flipper.Resources>
+
+
+                                
+                            
                             <materialDesign:Flipper.FrontContent>
 
                                 <Grid Name="Test">
