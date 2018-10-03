@@ -50,10 +50,10 @@
                 <materialDesign:ColorZone x:Name="col_TopSelectionBar"  Background="#eaeaea" Height="0" VerticalAlignment="Center" materialDesign:ShadowAssist.ShadowDepth="Depth1">
                     <DockPanel LastChildFill="True">
 
-                        <Button  Click="addMultipleToQueue_Click" Background="{StaticResource PrimaryForegroundBrush}" BorderBrush="{StaticResource PrimaryAccentBrush}">
+                        <Button  Click="addMultipleToQueue_Click" Background="Gray" BorderBrush="Gray">
                             <StackPanel Orientation="Horizontal">
-                                <materialDesign:PackIcon Kind="Plus" Height="20" Width="20" VerticalAlignment="Center" Margin="0,0,0,0" Foreground="Gray" />
-                                <TextBlock Text="Add selection to queue" />
+                                <materialDesign:PackIcon Kind="Plus" Height="20" Width="20" VerticalAlignment="Center" Margin="5" Foreground="#333333" />
+                                <TextBlock Text="Add selection to queue..." VerticalAlignment="Center" />
                             </StackPanel>
                         </Button>
                     </DockPanel>

@@ -82,7 +82,14 @@ namespace DicsordBot.UI
 
             box_ButtonInfo.Text = Btn.Name;
 
-            box_ButtonID.Text = " - (Id: " + Btn.ID + ")";
+            //set button name, if not empty
+            box_ButtonInfo.Text = "";
+            if (!String.IsNullOrWhiteSpace(Btn.Name))
+            {
+                box_ButtonInfo.Text += "-" + Btn.Name + "- ";
+            }
+            //set button number, not! the Id
+            box_ButtonInfo.Text += "(Nr. " + (Btn.ID + 1) + ")";
 
             box_Hotkey.Text = KeyInterop.KeyFromVirtualKey((int)vk_code).ToString();
 
@@ -194,7 +201,7 @@ namespace DicsordBot.UI
             if (isTaken)
             {
                 stack_warning.Visibility = Visibility.Visible;
-                stack_warning_btnId.Text = takenId.ToString();
+                stack_warning_btnId.Text = (takenId + 1).ToString();
             }
             else
                 stack_warning.Visibility = Visibility.Hidden;

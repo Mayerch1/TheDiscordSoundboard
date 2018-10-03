@@ -15,7 +15,6 @@
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*" />
                     <ColumnDefinition Width="*" />
-                    <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
 
                 <Grid.Resources>
@@ -25,15 +24,11 @@
                 </Grid.Resources>
 
                 <Grid Grid.Column="0">
-                    <TextBlock Text= "Editing Hotkey of - " />
+                    <TextBlock Text= "Editing Hotkey " />
                 </Grid>
 
                 <Grid Grid.Column="1">
                     <TextBlock x:Name="box_ButtonInfo" Text="xyz" />
-                </Grid>
-
-                <Grid Grid.Column="2">
-                    <TextBlock x:Name="box_ButtonID" Text="(Nr.x)" />
                 </Grid>
             </Grid>
 
