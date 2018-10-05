@@ -151,6 +151,20 @@ namespace DicsordBot.UI.Playlist
             }
         }
 
+        private void menu_openInExplorer_Clicked(object sender, RoutedEventArgs e)
+        {
+            string path = ((FrameworkElement)sender).Tag as string;
+
+            if (path != null)
+            {
+                if (System.IO.File.Exists(path))
+                {
+                    string arg = "/select, \"" + path + "\"";
+                    System.Diagnostics.Process.Start("explorer.exe", arg);
+                }
+            }
+        }
+
         private void menu_addToQueue_Clicked(object sender, RoutedEventArgs e)
         {
             //enque clicked file
@@ -185,12 +199,20 @@ namespace DicsordBot.UI.Playlist
 
         private void stack_list_KeyDown(object sender, KeyEventArgs e)
         {
-            if (e.Key == Key.Delete)
+            if (e.Key == Key.Enter)
             {
+                //start replay of file
+                var item = list_All.SelectedItem as Data.FileData;
+                if (item != null)
+                    SinglePlaylistStartPlay(listIndex, item.Id);
+            }
+            else if (e.Key == Key.Delete)
+            {
+                //remove file[s] from playlist
                 while (list_All.SelectedItems.Count > 0)
                 {
                     var item = list_All.SelectedItems[0];
-
+                    //find corresponding item
                     for (int i = 0; i < PlaylistFiles.Count; i++)
                     {
                         if ((Data.FileData)item == PlaylistFiles[i])

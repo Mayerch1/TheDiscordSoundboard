@@ -38,6 +38,12 @@ namespace DicsordBot.UI
 
         private void filterListBox(string filter)
         {
+            if (IO.FileWatcher.IsIndexing)
+            {
+                //TODO: show snackbar warning
+                box_Filter.Text = "";
+                return;
+            }
             //clear list and apply filter
             if (!string.IsNullOrEmpty(filter))
             {
@@ -115,6 +121,20 @@ namespace DicsordBot.UI
         #region add_item_to events
 
         #region single add
+
+        private void context_openInExplorer_Click(object sender, RoutedEventArgs e)
+        {
+            string path = ((FrameworkElement)sender).Tag as string;
+
+            if (path != null)
+            {
+                if (System.IO.File.Exists(path))
+                {
+                    string arg = "/select, \"" + path + "\"";
+                    System.Diagnostics.Process.Start("explorer.exe", arg);
+                }
+            }
+        }
 
         private void context_createAndAddSingleToPlaylist_Click(object sender, RoutedEventArgs e)
         {
@@ -235,6 +255,28 @@ namespace DicsordBot.UI
             return queueItem;
         }
 
+        private MenuItem getOpenExplorerItem(uint fileTag)
+        {
+            //get file of tag
+            string path = "";
+            foreach (var file in Handle.Data.Files)
+            {
+                if (file.Id == fileTag)
+                {
+                    path = file.Path;
+                    break;
+                }
+            }
+
+            var openExplorer = new MenuItem();
+            openExplorer.Header = "Open in Explorer";
+            //this will be opened on click
+            openExplorer.Tag = path;
+            openExplorer.Click += context_openInExplorer_Click;
+
+            return openExplorer;
+        }
+
         private List<MenuItem> getPlaylistItems(RoutedEventHandler newPlaylistHandler, RoutedEventHandler existingPlaylistHandler, uint fileTag = 0)
         {
             //'add to playlist...' menu
@@ -280,6 +322,9 @@ namespace DicsordBot.UI
             }
             //add playlist items to context menu
             context.Items.Add(playlistItem);
+
+            //add "open in Explorer" menu
+            context.Items.Add(getOpenExplorerItem(fileTag));
         }
 
         private void populate_AddMultiple_Context(ContextMenu context)
@@ -403,6 +448,17 @@ namespace DicsordBot.UI
                 sb = FindResource("CloseTopSelectionBar") as Storyboard;
                 sb.Begin();
                 isTopSelectionBarOpen = false;
+            }
+        }
+
+        private void list_All_KeyDown(object sender, KeyEventArgs e)
+        {
+            //TODO: test for function
+            if (e.Key == Key.Enter)
+            {
+                var item = list_All.SelectedItem as Data.FileData;
+                if (item != null)
+                    ListItemPlay(item.Id, true);
             }
         }
 

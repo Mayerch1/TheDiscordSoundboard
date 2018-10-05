@@ -12,7 +12,10 @@ namespace DicsordBot.IO
     /// </summary>
     public static class FileWatcher
     {
-        private static bool isIndexing = false;
+        /// <summary>
+        /// Is true when an indexing proccess is running
+        /// </summary>
+        public static bool IsIndexing { get; private set; } = false;
 
         /// <summary>
         /// checks wether the filetype is on the whitelist
@@ -130,7 +133,7 @@ namespace DicsordBot.IO
         private static void indexFilesWorker(object sender, DoWorkEventArgs e)
         {
             //retry every 100ms
-            while (isIndexing)
+            while (IsIndexing)
             {
                 //await System.Threading.Tasks.Task.Delay(100);
                 System.Threading.Thread.Sleep(100);
@@ -140,14 +143,14 @@ namespace DicsordBot.IO
             var workingTuple = e.Argument as Tuple<ObservableCollection<string>, bool>;
             if (workingTuple != null)
             {
-                isIndexing = true;
+                IsIndexing = true;
                 indexFilesThread(new List<string>(workingTuple.Item1), workingTuple.Item2);
             }
         }
 
         private static void bw_Complete(object sender, RunWorkerCompletedEventArgs e)
         {
-            isIndexing = false;
+            IsIndexing = false;
         }
 
         private static void indexFilesThread(List<string> sources, bool allowDuplicates = false)
