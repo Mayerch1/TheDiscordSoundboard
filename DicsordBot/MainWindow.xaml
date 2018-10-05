@@ -9,7 +9,8 @@
         mc:Ignorable="d"
         Title="The Discord Soundboard" Height="767" Width="1309" Closing="MainWindow_Closing"
         ResizeMode="CanResizeWithGrip"
-        PreviewMouseDown="Window_PreviewMouseDown">
+        PreviewMouseDown="Window_PreviewMouseDown"
+        SizeChanged="Window_SizeChanged">
 
     <Window.Resources>
         <Storyboard x:Key="OpenMenu">

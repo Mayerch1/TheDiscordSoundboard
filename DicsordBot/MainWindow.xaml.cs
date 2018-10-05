@@ -6,6 +6,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media.Animation;
+using System.Windows.Threading;
 
 namespace DicsordBot
 {
@@ -30,9 +31,11 @@ namespace DicsordBot
 
         private LoopState loopStatus = LoopState.LoopNone;
 
-        # endregion
+        #endregion fields
 
         #region propertys
+
+        private DispatcherTimer resizeTimer = new DispatcherTimer();
 
         private double LastVolume { get; set; }
 
@@ -204,10 +207,14 @@ namespace DicsordBot
         {
             //init timer, that fires every second to display time-slider
             //ticks 4 times a second
-            System.Windows.Threading.DispatcherTimer dispatcherTimer = new System.Windows.Threading.DispatcherTimer();
+            DispatcherTimer dispatcherTimer = new DispatcherTimer();
             dispatcherTimer.Tick += new EventHandler(dispatcherTimer_Tick);
             dispatcherTimer.Interval = new TimeSpan(0, 0, 0, 0, 250);
             dispatcherTimer.Start();
+            //-------------------
+            //timer for resizing
+            resizeTimer.Tick += new EventHandler(Window_ResizingDone);
+            resizeTimer.Interval = new TimeSpan(0, 0, 0, 0, 75);
         }
 
         private void dispatcherTimer_Tick(object sender, EventArgs e)
@@ -808,6 +815,25 @@ namespace DicsordBot
             {
                 handler(this, new PropertyChangedEventArgs(info));
             }
+        }
+
+        private void Window_SizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            resizeTimer.Stop();
+            resizeTimer.Start();
+            MainGrid.Visibility = Visibility.Hidden;
+        }
+
+        /// <summary>
+        /// gets called when a specific time after last resizing
+        /// </summary>
+        /// <param name="sender">Sender</param>
+        /// <param name="e">Event Argument</param>
+        private void Window_ResizingDone(object sender, EventArgs e)
+        {
+            resizeTimer.Stop();
+
+            MainGrid.Visibility = Visibility.Visible;
         }
 
         #endregion event stuff
