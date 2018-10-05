@@ -31,13 +31,13 @@
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
-            <RowDefinition Height="12*" />
+            <RowDefinition Height="120*" />
         </Grid.RowDefinitions>
 
         <Grid Grid.Row="0">
             <DockPanel>
                 <StackPanel DockPanel.Dock="Top" VerticalAlignment="Stretch">
-                    <materialDesign:ColorZone Background="#eaeaea" VerticalAlignment="Stretch" materialDesign:ShadowAssist.ShadowDepth="Depth1">
+                    <materialDesign:ColorZone Background="#eaeaea" VerticalAlignment="Stretch" materialDesign:ShadowAssist.ShadowDepth="Depth1" materialDesign:ShadowAssist.ShadowEdges="Bottom,Top">
                         <DockPanel LastChildFill="True" VerticalAlignment="Stretch">
                             <materialDesign:PackIcon Kind="Magnify" Height="20" Width="20" VerticalAlignment="Center" Margin="10,0,10,0" Foreground="Gray" />
                             <TextBox x:Name="box_Filter" TextChanged="box_Search_TextChanged"  materialDesign:HintAssist.Hint="Search" materialDesign:TextFieldAssist.DecorationVisibility="Hidden" BorderThickness="0" VerticalAlignment="Center" />
@@ -45,15 +45,22 @@
                     </materialDesign:ColorZone>
                 </StackPanel>
 
-                <Button DockPanel.Dock="Right"  Content="Edit List" Click="btn_editList_Click" />
+                <materialDesign:ColorZone Height="30" materialDesign:ShadowAssist.ShadowDepth="Depth1" materialDesign:ShadowAssist.ShadowEdges="Bottom"  Background="#eaeaea" MaxWidth="1000" MinWidth="40">
+                    <Button DockPanel.Dock="Left" Background="Gray" BorderBrush="Gray" Click="btn_editList_Click">
+                        <StackPanel Orientation="Horizontal">
+                            <materialDesign:PackIcon Kind="Pencil" />
+                            <TextBlock Text="Edit" VerticalAlignment="Center" />
+                        </StackPanel>
+                    </Button>
+                </materialDesign:ColorZone>
 
-                <materialDesign:ColorZone x:Name="col_TopSelectionBar"  Background="#eaeaea" Height="0" VerticalAlignment="Center" materialDesign:ShadowAssist.ShadowDepth="Depth1">
+                <materialDesign:ColorZone x:Name="col_TopSelectionBar"  Height="0" materialDesign:ShadowAssist.ShadowDepth="Depth1" materialDesign:ShadowAssist.ShadowEdges="Bottom"  Background="#eaeaea" MaxWidth="1000" MinWidth="300">
                     <DockPanel LastChildFill="True">
 
-                        <Button  Click="addMultipleToQueue_Click" Background="{StaticResource PrimaryForegroundBrush}" BorderBrush="{StaticResource PrimaryAccentBrush}">
+                        <Button  Click="addMultipleToQueue_Click" Background="Gray" BorderBrush="Gray">
                             <StackPanel Orientation="Horizontal">
-                                <materialDesign:PackIcon Kind="Plus" Height="20" Width="20" VerticalAlignment="Center" Margin="0,0,0,0" Foreground="Gray" />
-                                <TextBlock Text="Add selection to queue" />
+                                <materialDesign:PackIcon Kind="Plus" Height="20" Width="20" VerticalAlignment="Center" Margin="5" Foreground="#333333" />
+                                <TextBlock Text="Add selection to queue..." VerticalAlignment="Center" />
                             </StackPanel>
                         </Button>
                     </DockPanel>
@@ -63,7 +70,7 @@
             </DockPanel>
         </Grid>
         <Grid Grid.Row="1" Margin="0,0,0,0" MaxWidth="2000" MinWidth="600">
-            <ListBox x:Name="list_All" ItemsSource="{Binding FilteredFiles}" SelectionMode="Extended" KeyDown="stack_list_KeyDown" HorizontalAlignment="Stretch" SelectionChanged="list_All_SelectionChanged"
+            <ListBox x:Name="list_All" ItemsSource="{Binding FilteredFiles}" SelectionMode="Extended" KeyDown="stack_list_KeyDown" HorizontalContentAlignment="Stretch" SelectionChanged="list_All_SelectionChanged"
                      dd:DragDrop.IsDragSource="True"
                      dd:DragDrop.IsDropTarget="True"
                      dd:DragDrop.DropHandler="{Binding}">
@@ -89,6 +96,9 @@
                                         <MenuItem Header="Add to Queue"
                                               Tag="{Binding Id}"
                                                   Click="menu_addToQueue_Clicked" />
+                                        <MenuItem Header="Open in Explorer"
+                                                  Tag="{Binding Path}"
+                                                  Click="menu_openInExplorer_Clicked" />
                                     </ContextMenu>
                                 </Grid.ContextMenu>
 

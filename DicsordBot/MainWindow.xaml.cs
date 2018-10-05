@@ -6,6 +6,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media.Animation;
+using System.Windows.Threading;
 
 namespace DicsordBot
 {
@@ -30,9 +31,11 @@ namespace DicsordBot
 
         private LoopState loopStatus = LoopState.LoopNone;
 
-        # endregion
+        #endregion fields
 
         #region propertys
+
+        private DispatcherTimer resizeTimer = new DispatcherTimer();
 
         private double LastVolume { get; set; }
 
@@ -196,7 +199,7 @@ namespace DicsordBot
             await Handle.Bot.connectToServerAsync();
             if (await UpdateChecker.CheckForUpdate())
             {
-                SnackBarWarning_Show("A newer version is available", Bot.BotHandle.SnackBarAction.Update);
+                Handle.SnackbarWarning("A newer version is available", Handle.SnackbarAction.Update);
             }
         }
 
@@ -204,10 +207,14 @@ namespace DicsordBot
         {
             //init timer, that fires every second to display time-slider
             //ticks 4 times a second
-            System.Windows.Threading.DispatcherTimer dispatcherTimer = new System.Windows.Threading.DispatcherTimer();
+            DispatcherTimer dispatcherTimer = new DispatcherTimer();
             dispatcherTimer.Tick += new EventHandler(dispatcherTimer_Tick);
             dispatcherTimer.Interval = new TimeSpan(0, 0, 0, 0, 250);
             dispatcherTimer.Start();
+            //-------------------
+            //timer for resizing
+            resizeTimer.Tick += new EventHandler(Window_ResizingDone);
+            resizeTimer.Interval = new TimeSpan(0, 0, 0, 0, 75);
         }
 
         private void dispatcherTimer_Tick(object sender, EventArgs e)
@@ -374,12 +381,11 @@ namespace DicsordBot
             //event to resolve new clientName into clientId
             Handle.Data.Persistent.ClientNameChanged += Handle.ClientName_Changed;
 
-            //all warnings
-            Handle.Bot.ChannelWarning += Handle.ChannelWarning_Show;
-            Handle.Bot.TokenWarning += Handle.TokenWarning_Show;
-            Handle.Bot.FileWarning += Handle.FileWarning_Show;
-            Handle.Bot.ClientWarning += Handle.ClientWarning_Show;
-            Handle.Bot.SnackbarWarning += SnackBarWarning_Show;
+            //universal SnackbarWarning
+            Handle.SnackbarWarning += SnackBarWarning_Show;
+
+            //route bot warning to universal Handle.SnackbarWarning
+            Handle.Bot.SnackbarWarning += Handle.PassBotSnackbarWarning;
 
             //hotkey stuff
             IO.HotkeyManager.RegisteredHotkeyPressed += Hotkey_Pressed;
@@ -452,21 +458,21 @@ namespace DicsordBot
             //this is called, when no action is required/provided
         }
 
-        private void SnackBarWarning_Show(string msg, Bot.BotHandle.SnackBarAction action)
+        private void SnackBarWarning_Show(string msg, Handle.SnackbarAction action)
         {
             string optionMsg = action.ToString();
-            if (action == Bot.BotHandle.SnackBarAction.None)
+            if (action == Handle.SnackbarAction.None)
                 optionMsg = "Roger Dodger";
 
             Action handler;
 
             switch (action)
             {
-                case Bot.BotHandle.SnackBarAction.Settings:
+                case Handle.SnackbarAction.Settings:
                     handler = btn_Settings_Click;
                     break;
 
-                case Bot.BotHandle.SnackBarAction.Update:
+                case Handle.SnackbarAction.Update:
                     handler = UpdateChecker.OpenUpdatePage;
                     break;
 
@@ -769,7 +775,7 @@ namespace DicsordBot
                 {
                     snackMsg = "Joining to owner permanently";
                 }
-                SnackBarWarning_Show(snackMsg, Bot.BotHandle.SnackBarAction.None);
+                Handle.SnackbarWarning(snackMsg, Handle.SnackbarAction.None);
             }
             catch {/* do nothing if someting other than a channel is selected*/ }
         }
@@ -809,6 +815,26 @@ namespace DicsordBot
             {
                 handler(this, new PropertyChangedEventArgs(info));
             }
+        }
+
+        private void Window_SizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            resizeTimer.Stop();
+            resizeTimer.Start();
+            MainGrid.Width = MainGrid.ActualWidth;
+            MainGrid.Height = MainGrid.ActualHeight;
+        }
+
+        /// <summary>
+        /// gets called when a specific time after last resizing
+        /// </summary>
+        /// <param name="sender">Sender</param>
+        /// <param name="e">Event Argument</param>
+        private void Window_ResizingDone(object sender, EventArgs e)
+        {
+            resizeTimer.Stop();
+            MainGrid.Width = Double.NaN;
+            MainGrid.Height = Double.NaN;
         }
 
         #endregion event stuff

@@ -38,79 +38,56 @@ namespace DicsordBot
                 Data.Persistent.ClientId = id;
         }
 
-        /// <summary>
-        /// shows small warning window for middle-severe errors,
-        /// </summary>
-        /// <param name="title">windows title</param>
-        /// <param name="msg">Error description</param>
-        /// <param name="solution">Solution to solve the error</param>
-        /// <returns>bool for future ignoring this error</returns>
-        public static bool ShowWarning(string title, string msg, string solution)
-        {
-            Window window = new Window
-            {
-                Title = title,
-                Content = new UI.Hint(msg, solution),
-                Width = 400,
-                Height = 250,
-            };
-            window.ShowDialog();
-            return ((UI.Hint)window.Content).IgnoreWarning;
-        }
-
-        /// <summary>
-        /// show small warning windows for middle-severe file errors
-        /// </summary>
-        /// <param name="msg">Error description</param>
-        /// <param name="solution">Solution to solve the error</param>
-        public static void FileWarning_Show(string msg, string solution)
-        {
-            if (!Data.Persistent.IgnoreFileWarning)
-            {
-                Data.Persistent.IgnoreFileWarning = ShowWarning("A File-Error occurred", msg, solution);
-            }
-        }
-
-        /// <summary>
-        /// show small warning windows for middle-severe channel errors
-        /// </summary>
-        /// <param name="msg">Error description</param>
-        /// <param name="solution">Solution to solve the error</param>
-        public static void ChannelWarning_Show(string msg, string solution)
-        {
-            if (!Data.Persistent.IgnoreChannelWarning)
-            {
-                Data.Persistent.IgnoreChannelWarning = ShowWarning("A Channel-Error occurred", msg, solution);
-            }
-        }
-
-        /// <summary>
-        /// show small warning windows for middle-severe token errors
-        /// </summary>
-        /// <param name="msg">Error description</param>
-        /// <param name="solution">Solution to solve the error</param>
-        public static void TokenWarning_Show(string msg, string solution)
-        {
-            if (!Data.Persistent.IgnoreTokenWarning)
-            {
-                Data.Persistent.IgnoreTokenWarning = ShowWarning("A Token-Error occurred", msg, solution);
-            }
-        }
-
-        /// <summary>
-        /// show small warning windows for middle-severe client errors
-        /// </summary>
-        /// <param name="msg">Error description</param>
-        /// <param name="solution">Solution to solve the error</param>
-        public static void ClientWarning_Show(string msg, string solution)
-        {
-            if (!Data.Persistent.IgnoreClientWarning)
-            {
-                Data.Persistent.IgnoreClientWarning = ShowWarning("A Client-Error occurred", msg, solution);
-            }
-        }
-
         #endregion events
+
+        #region Snackbar
+
+        /// <summary>
+        /// SnackbarAction enum, passed into delegate for informing eventHandler on requested action
+        /// </summary>
+        public enum SnackbarAction
+        {
+            /// <summary>
+            /// Open the Settings menu, when clicked
+            /// </summary>
+            Settings,
+
+            /// <summary>
+            /// Open the update page, when clicked
+            /// </summary>
+            Update,
+
+            /// <summary>
+            /// Do nothing on click
+            /// </summary>
+            None
+        };
+
+        /// <summary>
+        /// SnackbarWarningHandle
+        /// </summary>
+        /// <param name="msg">Error decsription</param>
+        /// <param name="action">Enum for triggered action in shown Snackbar</param>
+        public delegate void SnackarWarningHandle(string msg, SnackbarAction action = SnackbarAction.None);
+
+        /// <summary>
+        /// SnackbarWarning instance
+        /// </summary>
+        public static SnackarWarningHandle SnackbarWarning;
+
+        /// <summary>
+        /// used to convert old Bot SnackbarWarnings to new universal warnings
+        /// </summary>
+        public static void PassBotSnackbarWarning(string msg, Bot.BotHandle.SnackbarAction action)
+        {
+            int converter = (int)action;
+
+            SnackbarAction convertAction = (SnackbarAction)converter;
+
+            SnackbarWarning(msg, convertAction);
+        }
+
+        #endregion Snackbar
 
         #region handle shared data
 
