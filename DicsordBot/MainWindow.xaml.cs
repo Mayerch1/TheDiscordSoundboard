@@ -196,7 +196,7 @@ namespace DicsordBot
             await Handle.Bot.connectToServerAsync();
             if (await UpdateChecker.CheckForUpdate())
             {
-                SnackBarWarning_Show("A newer version is available", Bot.BotHandle.SnackBarAction.Update);
+                Handle.SnackbarWarning("A newer version is available", Handle.SnackbarAction.Update);
             }
         }
 
@@ -374,12 +374,11 @@ namespace DicsordBot
             //event to resolve new clientName into clientId
             Handle.Data.Persistent.ClientNameChanged += Handle.ClientName_Changed;
 
-            //all warnings
-            Handle.Bot.ChannelWarning += Handle.ChannelWarning_Show;
-            Handle.Bot.TokenWarning += Handle.TokenWarning_Show;
-            Handle.Bot.FileWarning += Handle.FileWarning_Show;
-            Handle.Bot.ClientWarning += Handle.ClientWarning_Show;
-            Handle.Bot.SnackbarWarning += SnackBarWarning_Show;
+            //universal SnackbarWarning
+            Handle.SnackbarWarning += SnackBarWarning_Show;
+
+            //route bot warning to universal Handle.SnackbarWarning
+            Handle.Bot.SnackbarWarning += Handle.PassBotSnackbarWarning;
 
             //hotkey stuff
             IO.HotkeyManager.RegisteredHotkeyPressed += Hotkey_Pressed;
@@ -452,21 +451,21 @@ namespace DicsordBot
             //this is called, when no action is required/provided
         }
 
-        private void SnackBarWarning_Show(string msg, Bot.BotHandle.SnackBarAction action)
+        private void SnackBarWarning_Show(string msg, Handle.SnackbarAction action)
         {
             string optionMsg = action.ToString();
-            if (action == Bot.BotHandle.SnackBarAction.None)
+            if (action == Handle.SnackbarAction.None)
                 optionMsg = "Roger Dodger";
 
             Action handler;
 
             switch (action)
             {
-                case Bot.BotHandle.SnackBarAction.Settings:
+                case Handle.SnackbarAction.Settings:
                     handler = btn_Settings_Click;
                     break;
 
-                case Bot.BotHandle.SnackBarAction.Update:
+                case Handle.SnackbarAction.Update:
                     handler = UpdateChecker.OpenUpdatePage;
                     break;
 
@@ -769,7 +768,7 @@ namespace DicsordBot
                 {
                     snackMsg = "Joining to owner permanently";
                 }
-                SnackBarWarning_Show(snackMsg, Bot.BotHandle.SnackBarAction.None);
+                Handle.SnackbarWarning(snackMsg, Handle.SnackbarAction.None);
             }
             catch {/* do nothing if someting other than a channel is selected*/ }
         }

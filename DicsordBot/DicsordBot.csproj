@@ -234,9 +234,6 @@
     <Compile Include="UI\ButtonHotkeyPopup.xaml.cs">
       <DependentUpon>ButtonHotkeyPopup.xaml</DependentUpon>
     </Compile>
-    <Compile Include="UI\Hint.xaml.cs">
-      <DependentUpon>Hint.xaml</DependentUpon>
-    </Compile>
     <Compile Include="IO\HotkeyManager.cs" />
     <Compile Include="UI\Playlist\PlaylistAddPopup.xaml.cs">
       <DependentUpon>PlaylistAddPopup.xaml</DependentUpon>
@@ -269,10 +266,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="UI\ButtonUI.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="UI\Hint.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

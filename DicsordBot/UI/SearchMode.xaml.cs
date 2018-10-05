@@ -40,7 +40,7 @@ namespace DicsordBot.UI
         {
             if (IO.FileWatcher.IsIndexing)
             {
-                //TODO: show snackbar warning
+                Handle.SnackbarWarning("An indexing process is running", Handle.SnackbarAction.None);
                 box_Filter.Text = "";
                 return;
             }

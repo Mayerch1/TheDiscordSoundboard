@@ -24,60 +24,12 @@ namespace DicsordBot.Bot
 
         #region event handlers
 
-        /// <summary>
-        /// FileWarningThrown delegate
-        /// </summary>
-        /// <param name="msg">Error description</param>
-        /// <param name="solution">Solution for the error</param>
-        public delegate void FileWarningThrown(string msg, string solution);
-
-        /// <summary>
-        /// FileWarningThrown field
-        /// </summary>
-        public FileWarningThrown FileWarning;
-
-        /// <summary>
-        /// TokenWarningThrown delegate
-        /// </summary>
-        /// <param name="msg">Error description</param>
-        /// <param name="solution">Solution for the error</param>
-        public delegate void TokenWarningThrown(string msg, string solution);
-
-        /// <summary>
-        /// TokenWarningThrown field
-        /// </summary>
-        public TokenWarningThrown TokenWarning;
-
-        /// <summary>
-        /// ChannelWarningThrown delegate
-        /// </summary>
-        /// <param name="msg">Error description</param>
-        /// <param name="solution">Solution for the error</param>
-        public delegate void ChannelWarningThrown(string msg, string solution);
-
-        /// <summary>
-        /// ChannelWarningThrown field
-        /// </summary>
-        public ChannelWarningThrown ChannelWarning;
-
-        /// <summary>
-        /// ClientWarningThrown delegate
-        /// </summary>
-        /// <param name="msg">Error description</param>
-        /// <param name="solution">Solution for the error</param>
-        public delegate void ClientWarningThrown(string msg, string solution);
-
-        /// <summary>
-        /// ClientWarningThrown field
-        /// </summary>
-        public ClientWarningThrown ClientWarning;
-
 #pragma warning disable CS1591
 
         /// <summary>
         ///  SnackBarAction enum, passed into delegate for informing eventhandler on requested information
         /// </summary>
-        public enum SnackBarAction { Settings, Update, None };
+        public enum SnackbarAction { Settings, Update, None };
 
 #pragma warning restore CS1591
 
@@ -86,12 +38,12 @@ namespace DicsordBot.Bot
         /// </summary>
         /// <param name="msg">Error description</param>
         /// <param name="action">Enum for triggered action in event Handler</param>
-        public delegate void SnackBarWarningThrown(string msg, SnackBarAction action = SnackBarAction.None);
+        public delegate void SnackbarWarningThrown(string msg, SnackbarAction action = SnackbarAction.None);
 
         /// <summary>
         /// SnackBarWarningThrown field
         /// </summary>
-        public SnackBarWarningThrown SnackbarWarning;
+        public SnackbarWarningThrown SnackbarWarning;
 
         #endregion event handlers
 
@@ -255,7 +207,7 @@ namespace DicsordBot.Bot
             }
             catch (Discord.Net.HttpException)
             {
-                SnackbarWarning("Invalid Token", SnackBarAction.Settings);
+                SnackbarWarning("Invalid Token", SnackbarAction.Settings);
 
                 Console.WriteLine("connection Exception (Token)");
 
@@ -263,7 +215,7 @@ namespace DicsordBot.Bot
             }
             catch (System.Net.Http.HttpRequestException)
             {
-                SnackbarWarning("Can't reach the Discord-Servers due to timeout", SnackBarAction.None);
+                SnackbarWarning("Can't reach the Discord-Servers due to timeout", SnackbarAction.None);
                 Console.WriteLine("connection Exception (Timeout, ...)");
                 return false;
             }
@@ -301,7 +253,7 @@ namespace DicsordBot.Bot
 
                 if (client == null)
                 {
-                    SnackbarWarning("Cannot find specified owner.", SnackBarAction.None);
+                    SnackbarWarning("Cannot find specified owner.", SnackbarAction.None);
                     return false;
                 }
             }
@@ -330,7 +282,7 @@ namespace DicsordBot.Bot
             }
             catch (System.TimeoutException)
             {
-                ChannelWarning("The bot can't connect to the specified channel", "Check for sufficient permissions to join the requested channel.");
+                SnackbarWarning("Cannot join channel. Check permission", SnackbarAction.None);
                 return false;
             }
             catch (Exception ex)
@@ -349,12 +301,13 @@ namespace DicsordBot.Bot
         private void handleReplayException(Exception ex, string msg, int btnId = -1)
         {
             string btnStr;
+            //resolve button number/name
             if (btnId >= 0)
-
                 btnStr = "File of Button number " + btnId;
             else
                 btnStr = "The file ";
 
+            //switch between types, using Dictionary
             Dictionary<Type, int> typeMap = new Dictionary<Type, int>();
             typeMap.Add(typeof(System.IO.DirectoryNotFoundException), 0);
             typeMap.Add(typeof(System.IO.FileNotFoundException), 1);
@@ -362,6 +315,7 @@ namespace DicsordBot.Bot
             typeMap.Add(typeof(System.Runtime.InteropServices.COMException), 3);
             typeMap.Add(typeof(Exception), 4);
 
+            //warning based on Exception type
             switch (typeMap[ex.GetType()])
             {
                 case 0:
@@ -436,7 +390,7 @@ namespace DicsordBot.Bot
             }
             catch
             {
-                ChannelWarning("The bot can't download the client-list", "Retry later.");
+                SnackbarWarning("Cannot get clients. Retry later", SnackbarAction.None);
                 return null;
             }
 
