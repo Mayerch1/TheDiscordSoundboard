@@ -797,6 +797,16 @@ namespace DicsordBot
             e.Handled = true;
         }
 
+        private void scroll_channelList_ScrollChanged(object sender, ScrollChangedEventArgs e)
+        {
+            //prevent sideways scrolling
+            if (e.HorizontalChange > 0)
+            {
+                ScrollViewer scv = (ScrollViewer)sender;
+                scv.ScrollToHorizontalOffset(0);
+            }
+        }
+
         private void Window_PreviewMouseDown(object sender, MouseButtonEventArgs e)
         {
             //collapse channel popup

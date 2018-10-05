@@ -88,7 +88,7 @@
                     <ScrollViewer
                     PreviewMouseWheel="scroll_channelList_PreviewMouseWheel"
                     HorizontalScrollBarVisibility="Hidden"
-                    VerticalScrollBarVisibility="Hidden">
+                    VerticalScrollBarVisibility="Hidden" ScrollChanged="scroll_channelList_ScrollChanged">
                         <TreeView x:Name="tree_channelList" SelectedItemChanged="tree_channelList_SelectedItemChanged" />
                     </ScrollViewer>
                 </DockPanel>
