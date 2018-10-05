@@ -821,7 +821,8 @@ namespace DicsordBot
         {
             resizeTimer.Stop();
             resizeTimer.Start();
-            MainGrid.Visibility = Visibility.Hidden;
+            MainGrid.Width = MainGrid.ActualWidth;
+            MainGrid.Height = MainGrid.ActualHeight;
         }
 
         /// <summary>
@@ -832,8 +833,8 @@ namespace DicsordBot
         private void Window_ResizingDone(object sender, EventArgs e)
         {
             resizeTimer.Stop();
-
-            MainGrid.Visibility = Visibility.Visible;
+            MainGrid.Width = Double.NaN;
+            MainGrid.Height = Double.NaN;
         }
 
         #endregion event stuff
