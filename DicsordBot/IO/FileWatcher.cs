@@ -15,7 +15,7 @@ namespace DicsordBot.IO
         /// <summary>
         /// Is true when an indexing proccess is running
         /// </summary>
-        public static bool IsIndexing { get; private set; } = false;
+        private static bool IsIndexing { get; set; } = false;
 
         /// <summary>
         /// checks wether the filetype is on the whitelist
@@ -38,18 +38,53 @@ namespace DicsordBot.IO
         }
 
         /// <summary>
+        /// Copies all matching FileData object from source to target
+        /// </summary>
+        /// <param name="filter">filter to apply</param>
+        /// <param name="source">source of FileData objects</param>
+        /// <returns></returns>
+        public static ObservableCollection<Data.FileData> filterList(string filter, ObservableCollection<Data.FileData> source)
+        {
+            ObservableCollection<Data.FileData> target = new ObservableCollection<Data.FileData>();
+            if (IsIndexing)
+            {
+                Handle.SnackbarWarning("An indexing process is running", Handle.SnackbarAction.None);
+                return source;
+            }
+
+            if (!string.IsNullOrEmpty(filter))
+            {
+                //make it once to lower, instead for any iteration
+                filter = filter.ToLower();
+
+                foreach (Data.FileData file in source)
+                {
+                    //add all files matching
+                    if (checkForLowerMatch(file, filter))
+                        target.Add(file);
+                }
+            }
+            else
+            {
+                //reset filter if empty
+                //make deep copy
+                target = new ObservableCollection<Data.FileData>(source);
+            }
+
+            return target;
+        }
+
+        /// <summary>
         /// applies a filter to all properties of file (except path)
         /// </summary>
-        /// <param name="file">File to search for a hit in</param>
-        /// <param name="filter">Filter</param>
+        /// <param name="file">File to search for a hit in, case does not matter</param>
+        /// <param name="filterLower">Filter, must be provided in lower case</param>
         /// <returns>true, if the filter got a hit in any property</returns>
-        public static bool checkForLowerMatch(Data.FileData file, string filter)
+        private static bool checkForLowerMatch(Data.FileData file, string filterLower)
         {
-            string filterLow = filter.ToLower();
-
             //filter for all known attributes (ignore case)
-            if (file.Name.ToLower().Contains(filterLow) || file.Author.ToLower().Contains(filterLow)
-                || file.Album.ToLower().Contains(filterLow) || file.Genre.ToLower().Contains(filterLow))
+            if (file.Name.ToLower().Contains(filterLower) || file.Author.ToLower().Contains(filterLower)
+                || file.Album.ToLower().Contains(filterLower) || file.Genre.ToLower().Contains(filterLower))
             {
                 return true;
             }
@@ -69,11 +104,12 @@ namespace DicsordBot.IO
 
         private static Data.FileData getAllFileInfo(string FullPath, string Name)
         {
-            Data.FileData file = new Data.FileData();
-
-            //name is set based on file name
-            file.Name = Name.Remove(Name.LastIndexOf('.'));
-            file.Path = FullPath;
+            Data.FileData file = new Data.FileData()
+            {
+                //name is set based on file name
+                Name = Name.Remove(Name.LastIndexOf('.')),
+                Path = FullPath,
+            };
 
             TagLib.File f;
             try
@@ -140,8 +176,7 @@ namespace DicsordBot.IO
                 Console.WriteLine("Another index in progress, waiting...");
             }
 
-            var workingTuple = e.Argument as Tuple<ObservableCollection<string>, bool>;
-            if (workingTuple != null)
+            if (e.Argument is Tuple<ObservableCollection<string>, bool> workingTuple)
             {
                 IsIndexing = true;
                 indexFilesThread(new List<string>(workingTuple.Item1), workingTuple.Item2);
@@ -229,16 +264,17 @@ namespace DicsordBot.IO
 
         private static void initWatcher(string source)
         {
-            FileSystemWatcher fsW = new FileSystemWatcher();
-            fsW.Path = source;
-            fsW.IncludeSubdirectories = true;
+            FileSystemWatcher fsW = new FileSystemWatcher()
+            {
+                Path = source,
+                IncludeSubdirectories = true,
+                EnableRaisingEvents = true,
+            };
 
             fsW.Changed += FileSystemWatcher_Changed;
             fsW.Created += FileSystemWatcher_Created;
             fsW.Renamed += FileSystemWatcher_Renamed;
             fsW.Deleted += FileSystemWatcher_Deleted;
-
-            fsW.EnableRaisingEvents = true;
         }
 
         #region events

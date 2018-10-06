@@ -303,39 +303,27 @@ namespace DicsordBot.Bot
             string btnStr;
             //resolve button number/name
             if (btnId >= 0)
-                btnStr = "File of Button number " + btnId;
+                //show button Number NOT Id
+                btnStr = "File of Button number " + (btnId + 1);
             else
                 btnStr = "The file ";
 
-            //switch between types, using Dictionary
-            Dictionary<Type, int> typeMap = new Dictionary<Type, int>();
-            typeMap.Add(typeof(System.IO.DirectoryNotFoundException), 0);
-            typeMap.Add(typeof(System.IO.FileNotFoundException), 1);
-            typeMap.Add(typeof(System.IO.InvalidDataException), 2);
-            typeMap.Add(typeof(System.Runtime.InteropServices.COMException), 3);
-            typeMap.Add(typeof(Exception), 4);
-
-            //warning based on Exception type
-            switch (typeMap[ex.GetType()])
+            switch (ex)
             {
-                case 0:
+                case System.IO.DirectoryNotFoundException iEx:
                     SnackbarWarning(btnStr + " could not be found.");
                     break;
 
-                case 1:
+                case System.IO.FileNotFoundException iEx:
                     SnackbarWarning(btnStr + " could not be found.");
                     break;
 
-                case 2:
+                case System.IO.InvalidDataException iEx:
                     SnackbarWarning(btnStr + " is damaged.");
                     break;
 
-                case 3:
+                case System.Runtime.InteropServices.COMException iEx:
                     SnackbarWarning(btnStr + " is not supported.");
-                    break;
-
-                case 4:
-                    UI.UnhandledException.initWindow(ex, msg);
                     break;
 
                 default:
@@ -390,7 +378,7 @@ namespace DicsordBot.Bot
             }
             catch
             {
-                SnackbarWarning("Cannot get clients. Retry later", SnackbarAction.None);
+                SnackbarWarning("Cannot get clients. Retry later");
                 return null;
             }
 

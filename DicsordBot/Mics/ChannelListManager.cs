@@ -8,6 +8,8 @@ namespace DicsordBot
 {
     internal class ChannelListManager
     {
+        private const int maxTitleLen = 30;
+
         public List<SocketVoiceChannel> ChannelList { get; set; }
         private List<List<SocketVoiceChannel>> CompleteList { get; set; }
 
@@ -40,17 +42,38 @@ namespace DicsordBot
 
             if (CompleteList != null && CompleteList.Count > 0 && CompleteList[0].Count > 0)
             {
+                //add all servers
                 for (int i = 0; i < CompleteList.Count; i++)
                 {
                     var server = CompleteList[i];
 
                     TreeViewItem newBranch = new TreeViewItem();
-                    newBranch.Header = server[0].Guild;
+
+                    //cut of to long names
+                    string serverName;
+                    if (server[0].Guild.ToString().Length > maxTitleLen)
+                    {
+                        serverName = server[0].Guild.ToString().Substring(0, maxTitleLen) + "...";
+                    }
+                    else
+                        serverName = server[0].Guild.ToString();
+
+                    newBranch.Header = serverName;
                     newBranch.Tag = i;
 
+                    //add channels of  server
                     foreach (var channel in server)
                     {
-                        MyTreeItem newElement = new MyTreeItem(channel.Name, channel.Id);
+                        //cut of to long names
+                        string name;
+                        if (channel.Name.Length > maxTitleLen)
+                        {
+                            name = channel.Name.Substring(0, maxTitleLen) + "...";
+                        }
+                        else
+                            name = channel.Name;
+
+                        MyTreeItem newElement = new MyTreeItem(name, channel.Id);
 
                         newBranch.Items.Add(newElement);
                     }

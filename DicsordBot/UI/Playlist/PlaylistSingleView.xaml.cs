@@ -52,34 +52,6 @@ namespace DicsordBot.UI.Playlist
             this.DataContext = this;
         }
 
-        private void filterListBox(string filter)
-        {
-            //clear list and apply filter
-            if (!string.IsNullOrEmpty(filter))
-            {
-                FilteredFiles.Clear();
-                try
-                {
-                    foreach (var file in PlaylistFiles)
-                    {
-                        //add all files matching
-                        if (IO.FileWatcher.checkForLowerMatch(file, filter))
-                            FilteredFiles.Add(file);
-                    }
-                }
-                catch (Exception ex)
-                {
-                    UnhandledException.initWindow(ex, "whilest trying to rescan your files (debug)");
-                }
-            }
-            else
-            {
-                //reset filter if empty
-                //make deep copy
-                FilteredFiles = new ObservableCollection<Data.FileData>(PlaylistFiles);
-            }
-        }
-
         private void ProcessDialogResult(bool result, bool isToDelete, string playlistName, string imagePath)
         {
             if (result == true)
@@ -132,30 +104,28 @@ namespace DicsordBot.UI.Playlist
 
         private void box_Search_TextChanged(object sender, TextChangedEventArgs e)
         {
-            filterListBox(((TextBox)sender).Text);
+            var filter = ((TextBox)sender).Text;
+            FilteredFiles = IO.FileWatcher.filterList(filter, PlaylistFiles);
         }
 
         private void menu_openContext_Click(object sender, RoutedEventArgs e)
         {
             //find grandparent to open context
-            var listElement = sender as FrameworkElement;
-            if (listElement != null)
+            if (sender is FrameworkElement listElement)
             {
-                var parent = listElement.Parent as FrameworkElement;
-                if (parent != null)
+                if (listElement.Parent is FrameworkElement parent)
                 {
-                    var grandParent = parent.Parent as FrameworkElement;
-                    if (grandParent != null)
+                    if (parent.Parent is FrameworkElement grandParent)
+                    {
                         grandParent.ContextMenu.IsOpen = true;
+                    }
                 }
             }
         }
 
         private void menu_openInExplorer_Clicked(object sender, RoutedEventArgs e)
         {
-            string path = ((FrameworkElement)sender).Tag as string;
-
-            if (path != null)
+            if (((FrameworkElement)sender).Tag is string path)
             {
                 if (System.IO.File.Exists(path))
                 {
@@ -202,9 +172,10 @@ namespace DicsordBot.UI.Playlist
             if (e.Key == Key.Enter)
             {
                 //start replay of file
-                var item = list_All.SelectedItem as Data.FileData;
-                if (item != null)
+                if (list_All.SelectedItem is Data.FileData item)
+                {
                     SinglePlaylistStartPlay(listIndex, item.Id);
+                }
             }
             else if (e.Key == Key.Delete)
             {
@@ -218,7 +189,7 @@ namespace DicsordBot.UI.Playlist
                         if ((Data.FileData)item == PlaylistFiles[i])
                         {
                             PlaylistFiles.RemoveAt(i);
-                            filterListBox(box_Filter.Text);
+                            FilteredFiles = IO.FileWatcher.filterList(box_Filter.Text, PlaylistFiles);
                             break;
                         }
                     }
@@ -236,7 +207,7 @@ namespace DicsordBot.UI.Playlist
             //show edit window
             IO.BlurEffectManager.ToggleBlurEffect(true);
 
-            var popup = new PlaylistAddPopup(name, window, imagePath);
+            var popup = new PlaylistAddPopup(window, name, imagePath);
             popup.IsOpen = true;
 
             popup.Closed += delegate (object dSender, EventArgs dE)
@@ -269,9 +240,8 @@ namespace DicsordBot.UI.Playlist
         {
             dropInfo.DropTargetAdorner = DropTargetAdorners.Insert;
 
-            var sourceItem = dropInfo.Data as Data.FileData;
+            if (dropInfo.Data is Data.FileData sourceItem)
 
-            if (sourceItem != null)
                 dropInfo.Effects = DragDropEffects.Move;
             else
                 dropInfo.Effects = DragDropEffects.Link;
@@ -279,9 +249,8 @@ namespace DicsordBot.UI.Playlist
 
         void IDropTarget.Drop(IDropInfo dropInfo)
         {
-            Data.FileData sourceItem = dropInfo.Data as Data.FileData;
             //move item from list to another position
-            if (sourceItem != null)
+            if (dropInfo.Data is Data.FileData sourceItem)
             {
                 Data.FileData targetItem = dropInfo.TargetItem as Data.FileData;
                 //insert sourceItem to new place
@@ -318,7 +287,7 @@ namespace DicsordBot.UI.Playlist
             else
                 PlaylistFiles.Add(file);
 
-            filterListBox(box_Filter.Text);
+            FilteredFiles = IO.FileWatcher.filterList(box_Filter.Text, PlaylistFiles);
         }
 
         #endregion drag and drop

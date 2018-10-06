@@ -44,7 +44,7 @@ namespace DicsordBot
         public void updateAvatar(SocketGuildUser client)
         {
             if (client != null)
-                Handle.Data.Persistent.ClientAvatar = "https://cdn.discordapp.com/avatars/" + client.Id + "/" + client.AvatarId + ".png?size=256";
+                Handle.Data.Persistent.ClientAvatar = "https://cdn.discordapp.com/avatars/" + client.Id + "/" + client.AvatarId + ".png?size=64";
         }
 
         /// <summary>

@@ -60,8 +60,11 @@ namespace DicsordBot.UI
             if (hotkeyIndex == -1)
             {
                 //create new hotkey, set hotkeyIndex to new hotkey
-                var newHotkey = new Data.Hotkey();
-                newHotkey.btn_id = BtnId;
+                var newHotkey = new Data.Hotkey()
+                {
+                    btn_id = BtnId,
+                };
+
                 Handle.Data.Persistent.HotkeyList.Add(newHotkey);
                 hotkeyIndex = Handle.Data.Persistent.HotkeyList.Count - 1;
             }
@@ -151,7 +154,7 @@ namespace DicsordBot.UI
             Btn.Hotkey_VK = vk_code;
         }
 
-        private void box_Hotkey_KeyDown(object sender, KeyEventArgs e)
+        private void box_Hotkey_PreviewKeyDown(object sender, KeyEventArgs e)
         {
             var keyCode = (uint)KeyInterop.VirtualKeyFromKey(e.Key);
             //if you press f10 the method above returns 0, which is alt at the same time

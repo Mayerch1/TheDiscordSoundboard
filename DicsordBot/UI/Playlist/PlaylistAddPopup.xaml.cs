@@ -25,27 +25,18 @@ namespace DicsordBot.UI.Playlist
         public bool IsToDelete { get; set; } = false;
         public bool Result { get; set; } = false;
 
-        public PlaylistAddPopup(Window window)
-        {
-            this.StaysOpen = false;
-            InitializeComponent();
-            initPosition(window);
-            box_Name.SelectAll();
-            box_Name.Focus();
-
-            this.DataContext = this;
-        }
-
-        public PlaylistAddPopup(string currentName, Window window, string imagePath)
+        public PlaylistAddPopup(Window window, string currentName = "", string _imagePath = Data.Playlist.defaultImage)
         {
             this.StaysOpen = false;
             InitializeComponent();
 
             PlaylistName = currentName;
-            ImagePath = imagePath;
+            ImagePath = _imagePath;
 
             initPosition(window);
+
             box_Name.SelectAll();
+
             box_Name.Focus();
 
             this.DataContext = this;
@@ -53,8 +44,6 @@ namespace DicsordBot.UI.Playlist
 
         private void initPosition(Window window)
         {
-            Point p = window.GetAbsolutePosition();
-
             this.PlacementTarget = window;
             this.Placement = PlacementMode.Center;
         }
@@ -155,9 +144,9 @@ namespace DicsordBot.UI.Playlist
         private void ImageChanged(string path)
         {
             //default path is already set
-            if (path != Data.Playlist.defaultImage)
+            if (path != Data.Playlist.defaultImage && System.IO.File.Exists(path))
             {
-                btn_Image.Background = new System.Windows.Media.ImageBrush(new BitmapImage(new Uri(ImagePath, UriKind.RelativeOrAbsolute)));
+                btn_Image.Background = new System.Windows.Media.ImageBrush(new BitmapImage(new Uri(path, UriKind.RelativeOrAbsolute)));
             }
         }
 

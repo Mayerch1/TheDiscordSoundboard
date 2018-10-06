@@ -36,40 +36,6 @@ namespace DicsordBot.UI
             this.DataContext = this;
         }
 
-        private void filterListBox(string filter)
-        {
-            if (IO.FileWatcher.IsIndexing)
-            {
-                Handle.SnackbarWarning("An indexing process is running", Handle.SnackbarAction.None);
-                box_Filter.Text = "";
-                return;
-            }
-            //clear list and apply filter
-            if (!string.IsNullOrEmpty(filter))
-            {
-                FilteredFiles.Clear();
-                try
-                {
-                    foreach (var file in Handle.Data.Files)
-                    {
-                        //add all files matching
-                        if (IO.FileWatcher.checkForLowerMatch(file, filter))
-                            FilteredFiles.Add(file);
-                    }
-                }
-                catch (Exception ex)
-                {
-                    UnhandledException.initWindow(ex, "whilest trying to rescan your files (debug)");
-                }
-            }
-            else
-            {
-                //reset filter if empty
-                //make deep copy
-                FilteredFiles = new ObservableCollection<Data.FileData>(Handle.Data.Files);
-            }
-        }
-
         #region edit playlists
 
         private void addSingleTitleToList(uint listId, uint fileId)
@@ -124,9 +90,7 @@ namespace DicsordBot.UI
 
         private void context_openInExplorer_Click(object sender, RoutedEventArgs e)
         {
-            string path = ((FrameworkElement)sender).Tag as string;
-
-            if (path != null)
+            if (((FrameworkElement)sender).Tag is string path)
             {
                 if (System.IO.File.Exists(path))
                 {
@@ -247,9 +211,11 @@ namespace DicsordBot.UI
         private MenuItem getQueueItem(RoutedEventHandler clicked, uint fileTag)
         {
             //'add to queue' menu
-            var queueItem = new MenuItem();
-            queueItem.Header = "Add to queue";
-            queueItem.Tag = fileTag;
+            var queueItem = new MenuItem()
+            {
+                Header = "Add to queue",
+                Tag = fileTag,
+            };
             queueItem.Click += clicked;
 
             return queueItem;
@@ -268,10 +234,12 @@ namespace DicsordBot.UI
                 }
             }
 
-            var openExplorer = new MenuItem();
-            openExplorer.Header = "Open in Explorer";
-            //this will be opened on click
-            openExplorer.Tag = path;
+            var openExplorer = new MenuItem()
+            {
+                Header = "Open in Explorer",
+                //this will be opened on click
+                Tag = path,
+            };
             openExplorer.Click += context_openInExplorer_Click;
 
             return openExplorer;
@@ -283,18 +251,22 @@ namespace DicsordBot.UI
             List<MenuItem> playListItems = new List<MenuItem>();
 
             //new playlist item as submenu
-            var newListItem = new MenuItem();
-            newListItem.Header = "New Playlist...";
-            newListItem.Tag = fileTag;
+            var newListItem = new MenuItem()
+            {
+                Header = "New Playlist...",
+                Tag = fileTag,
+            };
             newListItem.Click += newPlaylistHandler;
             playListItems.Add(newListItem);
 
             //any existing playlist item as submenu
             foreach (var list in Handle.Data.Playlists)
             {
-                var playlist = new MenuItem();
-                playlist.Header = list.Name;
-                playlist.Tag = list.Id;
+                var playlist = new MenuItem()
+                {
+                    Header = list.Name,
+                    Tag = list.Id,
+                };
                 playlist.Click += existingPlaylistHandler;
                 //add each list to playlist items
                 playListItems.Add(playlist);
@@ -312,9 +284,11 @@ namespace DicsordBot.UI
             context.Items.Add(getQueueItem(context_addSingleToQueue_Clicked, fileTag));
 
             //add to playlist outer-menu
-            var playlistItem = new MenuItem();
-            playlistItem.Header = "Add to playlist...";
-            playlistItem.Tag = fileTag;
+            var playlistItem = new MenuItem()
+            {
+                Header = "Add to playlist...",
+                Tag = fileTag,
+            };
 
             foreach (var menu in getPlaylistItems(context_createAndAddSingleToPlaylist_Click, context_AddSingleToPlaylist_Click, fileTag))
             {
@@ -391,16 +365,13 @@ namespace DicsordBot.UI
         {
             //that's ugly, but it gets the 'grandParent' to open the context
             //#prettyCodeAward2018
-            var listElement = sender as FrameworkElement;
-            if (listElement != null)
+            if (sender is FrameworkElement listElement)
             {
                 //parent is the Grid containing this button
-                var parent = listElement.Parent as FrameworkElement;
-                if (parent != null)
+                if (listElement.Parent is FrameworkElement parent)
                 {
                     //grandParent is the outer Grid
-                    var grandParent = parent.Parent as FrameworkElement;
-                    if (grandParent != null)
+                    if (parent.Parent is FrameworkElement grandParent)
                     {
                         var context = grandParent.ContextMenu;
                         uint fileTag = (uint)grandParent.Tag;
@@ -453,18 +424,18 @@ namespace DicsordBot.UI
 
         private void list_All_KeyDown(object sender, KeyEventArgs e)
         {
-            //TODO: test for function
             if (e.Key == Key.Enter)
             {
-                var item = list_All.SelectedItem as Data.FileData;
-                if (item != null)
+                if (list_All.SelectedItem is Data.FileData item)
                     ListItemPlay(item.Id, true);
             }
         }
 
         private void box_Search_TextChanged(object sender, TextChangedEventArgs e)
         {
-            filterListBox(((TextBox)sender).Text);
+            var filter = ((TextBox)sender).Text;
+
+            FilteredFiles = IO.FileWatcher.filterList(filter, Handle.Data.Files);
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

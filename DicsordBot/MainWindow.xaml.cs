@@ -833,6 +833,8 @@ namespace DicsordBot
             resizeTimer.Start();
             MainGrid.Width = MainGrid.ActualWidth;
             MainGrid.Height = MainGrid.ActualHeight;
+            MainGrid.VerticalAlignment = VerticalAlignment.Top;
+            MainGrid.HorizontalAlignment = HorizontalAlignment.Left;
         }
 
         /// <summary>
@@ -845,6 +847,8 @@ namespace DicsordBot
             resizeTimer.Stop();
             MainGrid.Width = Double.NaN;
             MainGrid.Height = Double.NaN;
+            MainGrid.VerticalAlignment = VerticalAlignment.Stretch;
+            MainGrid.HorizontalAlignment = HorizontalAlignment.Stretch;
         }
 
         #endregion event stuff
