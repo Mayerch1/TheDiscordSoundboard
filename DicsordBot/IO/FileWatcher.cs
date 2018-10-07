@@ -45,15 +45,15 @@ namespace DicsordBot.IO
         /// <returns></returns>
         public static ObservableCollection<Data.FileData> filterList(string filter, ObservableCollection<Data.FileData> source)
         {
-            ObservableCollection<Data.FileData> target = new ObservableCollection<Data.FileData>();
             if (IsIndexing)
             {
                 Handle.SnackbarWarning("An indexing process is running", Handle.SnackbarAction.None);
-                return source;
+                return new ObservableCollection<Data.FileData>(source);
             }
 
             if (!string.IsNullOrEmpty(filter))
             {
+                ObservableCollection<Data.FileData> target = new ObservableCollection<Data.FileData>();
                 //make it once to lower, instead for any iteration
                 filter = filter.ToLower();
 
@@ -63,15 +63,14 @@ namespace DicsordBot.IO
                     if (checkForLowerMatch(file, filter))
                         target.Add(file);
                 }
+                return target;
             }
             else
             {
                 //reset filter if empty
                 //make deep copy
-                target = new ObservableCollection<Data.FileData>(source);
+                return new ObservableCollection<Data.FileData>(source);
             }
-
-            return target;
         }
 
         /// <summary>

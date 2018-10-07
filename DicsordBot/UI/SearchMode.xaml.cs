@@ -435,7 +435,9 @@ namespace DicsordBot.UI
         {
             var filter = ((TextBox)sender).Text;
 
-            FilteredFiles = IO.FileWatcher.filterList(filter, Handle.Data.Files);
+            //refresh after list is filtered, minimizes render Time
+            filteredFiles = IO.FileWatcher.filterList(filter, Handle.Data.Files);
+            OnPropertyChanged("FilteredFiles");
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

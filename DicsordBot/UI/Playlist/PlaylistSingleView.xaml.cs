@@ -105,7 +105,8 @@ namespace DicsordBot.UI.Playlist
         private void box_Search_TextChanged(object sender, TextChangedEventArgs e)
         {
             var filter = ((TextBox)sender).Text;
-            FilteredFiles = IO.FileWatcher.filterList(filter, PlaylistFiles);
+            filteredFiles = IO.FileWatcher.filterList(filter, PlaylistFiles);
+            OnPropertyChanged("FilteredFiles");
         }
 
         private void menu_openContext_Click(object sender, RoutedEventArgs e)
@@ -189,7 +190,8 @@ namespace DicsordBot.UI.Playlist
                         if ((Data.FileData)item == PlaylistFiles[i])
                         {
                             PlaylistFiles.RemoveAt(i);
-                            FilteredFiles = IO.FileWatcher.filterList(box_Filter.Text, PlaylistFiles);
+                            filteredFiles = IO.FileWatcher.filterList(box_Filter.Text, PlaylistFiles);
+                            OnPropertyChanged("FilteredFiles");
                             break;
                         }
                     }
@@ -287,7 +289,8 @@ namespace DicsordBot.UI.Playlist
             else
                 PlaylistFiles.Add(file);
 
-            FilteredFiles = IO.FileWatcher.filterList(box_Filter.Text, PlaylistFiles);
+            filteredFiles = IO.FileWatcher.filterList(box_Filter.Text, PlaylistFiles);
+            OnPropertyChanged("FilteredFiles");
         }
 
         #endregion drag and drop

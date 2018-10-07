@@ -7,7 +7,7 @@
         xmlns:UIScope="clr-namespace:DicsordBot.UI"
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         mc:Ignorable="d"
-        Title="The Discord Soundboard" Height="767" Width="1309" Closing="MainWindow_Closing"
+        Title="The Discord Soundboard" Height="767" Width="1335" Closing="MainWindow_Closing"
         ResizeMode="CanResizeWithGrip"
         PreviewMouseDown="Window_PreviewMouseDown"
         SizeChanged="Window_SizeChanged">

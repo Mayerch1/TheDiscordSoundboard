@@ -8,39 +8,39 @@
              mc:Ignorable="d"
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid>
-        <ScrollViewer>
-            <DockPanel>
 
-                <Button Content="New Playlist"
+        <DockPanel>
+
+            <Button Content="New Playlist"
                         DockPanel.Dock="Left"
                         Click="btn_playlistAdd_Click"
                         Width="220" Height="200"
                         BorderThickness="0"
                         BorderBrush="{x:Null}"
                         materialDesign:ShadowAssist.ShadowDepth="Depth2"
-                        Margin="15"
+                        Margin="14,14,0,14"
                         VerticalAlignment="Top">
 
-                    <Button.Template>
-                        <ControlTemplate>
-                            <Border CornerRadius="10">
-                                <Border.Background>
-                                    <ImageBrush ImageSource="/res/empty.png" Stretch="UniformToFill" TileMode="None" />
-                                </Border.Background>
-                                <StackPanel Orientation="Vertical" VerticalAlignment="Bottom">
-                                    <materialDesign:PackIcon Kind="PlusCircle" Height="100" Width="100" Foreground="Gray" Margin="5" HorizontalAlignment="Center" VerticalAlignment="Center" />
-                                    <TextBlock Text="Create a playlist" HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="15" FontSize="20" />
-                                </StackPanel>
-                            </Border>
-                        </ControlTemplate>
-                    </Button.Template>
-                </Button>
-
+                <Button.Template>
+                    <ControlTemplate>
+                        <Border CornerRadius="10">
+                            <Border.Background>
+                                <ImageBrush ImageSource="/res/empty.png" Stretch="UniformToFill" TileMode="None" />
+                            </Border.Background>
+                            <StackPanel Orientation="Vertical" VerticalAlignment="Bottom">
+                                <materialDesign:PackIcon Kind="PlusCircle" Height="100" Width="100" Foreground="Gray" Margin="5" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                                <TextBlock Text="Create a playlist" HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="15" FontSize="20" />
+                            </StackPanel>
+                        </Border>
+                    </ControlTemplate>
+                </Button.Template>
+            </Button>
+            <ScrollViewer>
                 <ItemsControl ItemsSource="{Binding Playlists}">
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
 
-                            <Button Width="220" Height="200" BorderThickness="0" Tag="{Binding Id}" BorderBrush="{x:Null}" materialDesign:ShadowAssist.ShadowDepth="Depth2" Margin="15" Click="btn_playlistOpen_Click" Content="{Binding Name}">
+                            <Button Width="220" Height="200" BorderThickness="0" Tag="{Binding Id}" BorderBrush="{x:Null}" materialDesign:ShadowAssist.ShadowDepth="Depth2" Margin="28,14,0,14" Click="btn_playlistOpen_Click" Content="{Binding Name}">
 
                                 <Button.Template>
                                     <ControlTemplate>
@@ -62,7 +62,7 @@
                         </ItemsPanelTemplate>
                     </ItemsControl.ItemsPanel>
                 </ItemsControl>
-            </DockPanel>
-        </ScrollViewer>
+            </ScrollViewer>
+        </DockPanel>
     </Grid>
 </UserControl>
