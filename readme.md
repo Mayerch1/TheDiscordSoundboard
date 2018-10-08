@@ -2,10 +2,10 @@
 <img src="DicsordBot/res/speaker.png" alt="drawing" style="width:100px;"/>
 
 
-# Welcome to TDS </br> 
+# Welcome to TDS <br> 
 ## **T**he **D**iscord **S**oundboard 2.X
 
-</br></br>
+<br><br>
 
 Hi, 
 this is a small Discord-Soundboard for streaming Sounds/Music into Discord - voice channels.
@@ -48,7 +48,7 @@ See the ['Long Term Features' - Project](https://github.com/Mayerch1/TheDiscordS
 1. Rights to join a channel (permanent)
 2. Rights to transmit audio into that channel (permanent)
 3. Rights to view all channels (for auto-connect)
-</br>
+<br>
 
 ---
 #### How to create the Bot:
