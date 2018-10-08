@@ -17,6 +17,7 @@ namespace DicsordBot.Data
         private const string saveFile = "\\Settings.xml";
         private const string fileFile = "\\Files.xml";
         private const string playlistFile = "\\Playlist.xml";
+        private const string historyFile = "\\History.xml";
 
         #endregion constants
 
@@ -26,7 +27,8 @@ namespace DicsordBot.Data
 
         private ObservableCollection<FileData> files = new ObservableCollection<FileData>();
         private ObservableCollection<Playlist> playlists = new ObservableCollection<Playlist>();
-        private uint playlistIndex = 0;
+        private History history = new History();
+        private int playlistIndex = 0;
         private int playlistFileIndex = 0;
         private bool isPlaylistPlaying = false;
 
@@ -50,9 +52,14 @@ namespace DicsordBot.Data
         public ObservableCollection<Playlist> Playlists { get { return playlists; } set { playlists = value; OnPropertyChanged("PlayLists"); } }
 
         /// <summary>
+        /// History of played files
+        /// </summary>
+        public History History { get { return history; } set { history = value; OnPropertyChanged("History"); } }
+
+        /// <summary>
         /// index of currently played playlist
         /// </summary>
-        public uint PlaylistIndex { get { return playlistIndex; } set { playlistIndex = value; OnPropertyChanged("PlaylistIndex"); } }
+        public int PlaylistIndex { get { return playlistIndex; } set { playlistIndex = value; OnPropertyChanged("PlaylistIndex"); } }
 
         /// <summary>
         /// file index of position in playlist
@@ -165,9 +172,7 @@ namespace DicsordBot.Data
             }
 
             if (String.IsNullOrWhiteSpace(Persistent.SettingsPath))
-            {
                 Persistent.SettingsPath = System.Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + applicationDirectory;
-            }
 
             if ((Persistent = (PersistentData)loadObject(Persistent, saveFile)) == null)
             {
@@ -181,14 +186,13 @@ namespace DicsordBot.Data
             resizeBtnList();
 
             if ((Files = (ObservableCollection<FileData>)loadObject(Files, fileFile)) == null)
-            {
                 Files = new ObservableCollection<FileData>();
-            }
 
             if ((Playlists = (ObservableCollection<Playlist>)loadObject(Playlists, playlistFile)) == null)
-            {
                 Playlists = new ObservableCollection<Playlist>();
-            }
+
+            if ((History = (History)loadObject(History, historyFile)) == null)
+                History = new History();
         }
 
         /// <summary>
@@ -267,6 +271,7 @@ namespace DicsordBot.Data
             saveObject(Persistent, saveFile);
             saveObject(Files, fileFile);
             saveObject(Playlists, playlistFile);
+            saveObject(History, historyFile);
         }
 
         /// <summary>
@@ -293,14 +298,14 @@ namespace DicsordBot.Data
             {
                 return;
             }
-            if (fileType.IsSerializable)
-            {
-                //serialize
-                System.Xml.Serialization.XmlSerializer serializer = new System.Xml.Serialization.XmlSerializer(fileType);
-                serializer.Serialize(file, target);
-                file.Flush();
-                file.Close();
-            }
+            //if (fileType.IsSerializable)
+            //{
+            //serialize
+            System.Xml.Serialization.XmlSerializer serializer = new System.Xml.Serialization.XmlSerializer(fileType);
+            serializer.Serialize(file, target);
+            file.Flush();
+            file.Close();
+            //}
         }
 
         #endregion Handle Save/Load

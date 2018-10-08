@@ -10,9 +10,9 @@
     <Grid>
 
         <DockPanel>
-
-            <Button Content="New Playlist"
-                        DockPanel.Dock="Left"
+            <ScrollViewer HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Hidden">
+                <StackPanel Orientation="Vertical">
+                    <Button DockPanel.Dock="Left"
                         Click="btn_playlistAdd_Click"
                         Width="220" Height="200"
                         BorderThickness="0"
@@ -21,21 +21,48 @@
                         Margin="14,14,0,14"
                         VerticalAlignment="Top">
 
-                <Button.Template>
-                    <ControlTemplate>
-                        <Border CornerRadius="10">
-                            <Border.Background>
-                                <ImageBrush ImageSource="/res/empty.png" Stretch="UniformToFill" TileMode="None" />
-                            </Border.Background>
-                            <StackPanel Orientation="Vertical" VerticalAlignment="Bottom">
-                                <materialDesign:PackIcon Kind="PlusCircle" Height="100" Width="100" Foreground="Gray" Margin="5" HorizontalAlignment="Center" VerticalAlignment="Center" />
-                                <TextBlock Text="Create a playlist" HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="15" FontSize="20" />
-                            </StackPanel>
-                        </Border>
-                    </ControlTemplate>
-                </Button.Template>
-            </Button>
+                        <Button.Template>
+                            <ControlTemplate>
+                                <Border CornerRadius="10">
+                                    <Border.Background>
+                                        <ImageBrush ImageSource="/res/empty.png" Stretch="UniformToFill" TileMode="None" />
+                                    </Border.Background>
+                                    <StackPanel Orientation="Vertical" VerticalAlignment="Bottom">
+                                        <materialDesign:PackIcon Kind="PlusCircle" Height="100" Width="100" Foreground="Gray" Margin="5" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                                        <TextBlock Text="Create a playlist" HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="15" FontSize="20" />
+                                    </StackPanel>
+                                </Border>
+                            </ControlTemplate>
+                        </Button.Template>
+                    </Button>
+                    <Button DockPanel.Dock="Left"
+                        Click="btn_showHistory_Click"
+                        Width="220" Height="200"
+                        BorderThickness="0"
+                        BorderBrush="{x:Null}"
+                        materialDesign:ShadowAssist.ShadowDepth="Depth2"
+                        Margin="14,14,0,14"
+                        VerticalAlignment="Top"
+                        DataContext="{Binding History}">
+
+                        <Button.Template>
+                            <ControlTemplate>
+                                <Border CornerRadius="10">
+                                    <Border.Background>
+                                        <ImageBrush ImageSource="{Binding ImagePath}" Stretch="UniformToFill" TileMode="None" />
+                                    </Border.Background>
+                                    <StackPanel Orientation="Vertical" VerticalAlignment="Bottom">
+                                        <materialDesign:PackIcon Kind="History" Height="100" Width="100" Foreground="Gray" Margin="5" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                                        <TextBlock Text="{Binding Name}" HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="15" FontSize="20" />
+                                    </StackPanel>
+                                </Border>
+                            </ControlTemplate>
+                        </Button.Template>
+                    </Button>
+                </StackPanel>
+            </ScrollViewer>
             <ScrollViewer>
+
                 <ItemsControl ItemsSource="{Binding Playlists}">
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>

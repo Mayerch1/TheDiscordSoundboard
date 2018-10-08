@@ -4,6 +4,8 @@ using System.Windows.Controls;
 
 namespace DicsordBot.UI
 {
+#pragma warning disable CS1591
+
     /// <summary>
     /// Interaction logic for Settings.xaml
     /// </summary>
@@ -95,4 +97,6 @@ namespace DicsordBot.UI
             }
         }
     }
+
+#pragma warning restore CS1591
 }

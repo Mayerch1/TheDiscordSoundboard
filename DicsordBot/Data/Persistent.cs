@@ -90,9 +90,9 @@ namespace DicsordBot.Data
         public bool IsFirstStart { get { return isFirstStart; } set { isFirstStart = value; OnPropertyChanged("IsFirstStart"); } }
 
         /// <summary>
-        ///  SettingsPath property
+        ///  SettingsPath property, automatically saved
         /// </summary>
-        public string SettingsPath { get { return settingsPath; } set { settingsPath = value; OnPropertyChanged("SettingsPath"); } }
+        public string SettingsPath { get { return settingsPath; } set { settingsPath = value; Properties.Settings.Default.Path = value; OnPropertyChanged("SettingsPath"); } }
 
         /// <summary>
         ///  HihgestButtonToSave property

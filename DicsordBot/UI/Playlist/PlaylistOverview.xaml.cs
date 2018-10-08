@@ -10,7 +10,7 @@ namespace DicsordBot.UI.Playlist
     /// </summary>
     public partial class PlaylistOverview : UserControl
     {
-        public delegate void OpenPlaylistHandler(uint listId);
+        public delegate void OpenPlaylistHandler(int listId);
 
         public OpenPlaylistHandler OpenPlaylist;
 
@@ -38,7 +38,12 @@ namespace DicsordBot.UI.Playlist
         private void btn_playlistOpen_Click(object sender, RoutedEventArgs e)
         {
             uint listId = (uint)((FrameworkElement)sender).Tag;
-            OpenPlaylist(listId);
+            OpenPlaylist((int)listId);
+        }
+
+        private void btn_showHistory_Click(object sender, RoutedEventArgs e)
+        {
+            OpenPlaylist(-1);
         }
     }
 

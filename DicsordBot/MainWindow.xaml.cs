@@ -519,28 +519,37 @@ namespace DicsordBot
 
         /// <param name="listId">unique id field of playlists</param>
         /// <param name="fileIndex">index in the array of all playList files</param>
-        private async void Playlist_Play(uint listId, uint fileIndex)
+        private async void Playlist_Play(int listId, uint fileIndex)
         {
             //stop streaming
             if (Handle.Bot.IsStreaming)
                 await Handle.Bot.stopStreamAsync();
-            //search for playlist
-            foreach (var playlist in Handle.Data.Playlists)
+
+            //get playlist for index, history if -1
+            Data.Playlist playlist = null;
+            if (listId == -1)
             {
-                if (playlist.Id == listId)
+                playlist = Handle.Data.History;
+            }
+            else
+            {
+                foreach (var list in Handle.Data.Playlists)
                 {
-                    //select file by index of list
-                    if (fileIndex < playlist.Tracks.Count)
-                    {
-                        Handle.Data.IsPlaylistPlaying = false;
-                        //add first button
-                        triggerBotInstantReplay(new Data.ButtonData(playlist.Tracks[(int)fileIndex].Name, playlist.Tracks[(int)fileIndex].Path));
-                        //set playlist properties, after song changed -> first title will not be skipped
-                        Handle.Data.PlaylistIndex = listId;
-                        Handle.Data.PlaylistFileIndex = (int)fileIndex + 1;
-                        Handle.Data.IsPlaylistPlaying = true;
-                    }
+                    if (list.Id == listId)
+                        playlist = list;
                 }
+            }
+
+            //select file by index of list
+            if (playlist != null && fileIndex < playlist.Tracks.Count)
+            {
+                Handle.Data.IsPlaylistPlaying = false;
+                //add first button
+                triggerBotInstantReplay(new Data.ButtonData(playlist.Tracks[(int)fileIndex].Name, playlist.Tracks[(int)fileIndex].Path));
+                //set playlist properties, after song changed -> first title will not be skipped
+                Handle.Data.PlaylistIndex = listId;
+                Handle.Data.PlaylistFileIndex = (int)fileIndex + 1;
+                Handle.Data.IsPlaylistPlaying = true;
             }
         }
 
@@ -548,7 +557,7 @@ namespace DicsordBot
         {
             //place song in front of queue
             await Handle.Bot.enqueuePriorityAsync(data);
-
+            addTitleToHistory(data);
             //start or skip current track
             if (!Handle.Bot.IsStreaming)
                 await Handle.Bot.resumeStream();
@@ -559,13 +568,18 @@ namespace DicsordBot
         private async void triggerBotQueueReplay(Data.ButtonData data)
         {
             await Handle.Bot.enqueueAsync(data);
-
+            addTitleToHistory(data);
             //only resume, if not streaming + not in pause mode
             if (!Handle.Bot.IsStreaming)
                 await Handle.Bot.resumeStream();
         }
 
         #endregion BotPlayDelegates
+
+        private void addTitleToHistory(Data.ButtonData title)
+        {
+            Handle.Data.History.addTitle(IO.FileWatcher.getAllFileInfo(title.File));
+        }
 
         private async void bot_streamState_Changed(bool newState)
         {
@@ -579,11 +593,16 @@ namespace DicsordBot
                 //take next title in playlist
                 if (Handle.Data.IsPlaylistPlaying)
                 {
-                    int listIndex = (int)Handle.Data.PlaylistIndex;
-                    int fileIndex = (int)Handle.Data.PlaylistFileIndex;
+                    int listIndex = Handle.Data.PlaylistIndex;
+                    int fileIndex = Handle.Data.PlaylistFileIndex;
+
+                    Data.Playlist playlist;
 
                     //playlist is saved by index
-                    var playlist = Handle.Data.Playlists[listIndex];
+                    if (listIndex == -1)
+                        playlist = Handle.Data.History;
+                    else
+                        playlist = Handle.Data.Playlists[listIndex];
 
                     //increase fileIndex, but use old value for the next title
                     if (++Handle.Data.PlaylistFileIndex <= playlist.Tracks.Count)

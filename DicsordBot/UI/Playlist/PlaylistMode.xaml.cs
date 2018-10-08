@@ -20,15 +20,20 @@ namespace DicsordBot.UI.Playlist
 
         public PlaylistItemEnqueuedHandler PlaylistItemEnqueued;
 
-        public delegate void PlaylistStartPlayHandler(uint listIndex, uint fileIndex);
+        public delegate void PlaylistStartPlayHandler(int listIndex, uint fileIndex);
 
         public PlaylistStartPlayHandler PlaylistStartPlay;
 
-        private void openPlaylist(uint listId)
+        private void openPlaylist(int listId)
         {
             //change embeds for maingrit
             PlaylistGrid.Children.RemoveAt(0);
-            var playList = new PlaylistSingleView(listId);
+
+            PlaylistSingleView playList;
+            if (listId >= 0)
+                playList = new PlaylistSingleView((uint)listId);
+            else
+                playList = new PlaylistSingleView(Handle.Data.History);
 
             playList.SinglePlaylistStartPlay += InnerPlaylistPlay;
             playList.SinglePlaylistItemEnqueued += PlaylistItemQueued;
@@ -51,7 +56,7 @@ namespace DicsordBot.UI.Playlist
             PlaylistItemEnqueued(file);
         }
 
-        private void InnerPlaylistPlay(uint listIndex, uint fileIndex)
+        private void InnerPlaylistPlay(int listIndex, uint fileIndex)
         {
             PlaylistStartPlay(listIndex, fileIndex);
         }

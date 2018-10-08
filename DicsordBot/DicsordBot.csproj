@@ -214,6 +214,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Data\History.cs" />
     <Compile Include="IO\BlurEffectManager.cs" />
     <Compile Include="IO\ImageManager.cs" />
     <Compile Include="OSInterop.cs" />

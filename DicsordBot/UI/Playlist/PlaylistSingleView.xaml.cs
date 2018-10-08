@@ -20,7 +20,7 @@ namespace DicsordBot.UI.Playlist
 
         public SinglePlaylistItemEnqueuedHandler SinglePlaylistItemEnqueued;
 
-        public delegate void SinglePlaylistStartPlayHandler(uint listIndex, uint fileIndex);
+        public delegate void SinglePlaylistStartPlayHandler(int listIndex, uint fileIndex);
 
         public SinglePlaylistStartPlayHandler SinglePlaylistStartPlay;
 
@@ -28,13 +28,32 @@ namespace DicsordBot.UI.Playlist
 
         public LeaveSingleViewHandler LeaveSingleView;
 
-        private uint listIndex = 0;
+        /// <summary>
+        /// is -1 if list was handed in by reference
+        /// </summary>
+        private int listIndex = 0;
+
+        private Data.Playlist refPlaylist;
         private bool isTopSelectionBarOpen = false;
 
         private ObservableCollection<Data.FileData> filteredFiles;
         private string Filter { get; set; }
 
-        public Data.Playlist Playlist { get { return Handle.Data.Playlists[(int)listIndex]; } set { Handle.Data.Playlists[(int)listIndex] = value; } }
+        public Data.Playlist Playlist
+        {
+            get
+            {
+                if (listIndex >= 0) return Handle.Data.Playlists[listIndex];
+                else return refPlaylist;
+            }
+            set
+            {
+                if (listIndex >= 0) { Handle.Data.Playlists[listIndex] = value; }
+                else { refPlaylist = value; }
+                OnPropertyChanged("Playlist");
+            }
+        }
+
         public ObservableCollection<Data.FileData> PlaylistFiles { get { return Playlist.Tracks; } set { Playlist.Tracks = value; OnPropertyChanged("PlaylistFiles"); } }
         public ObservableCollection<Data.FileData> FilteredFiles { get { return filteredFiles; } set { filteredFiles = value; OnPropertyChanged("FilteredFiles"); } }
 
@@ -44,8 +63,25 @@ namespace DicsordBot.UI.Playlist
             for (int i = 0; i < Handle.Data.Playlists.Count; i++)
             {
                 if (Handle.Data.Playlists[i].Id == _listId)
-                    listIndex = (uint)i;
+                {
+                    listIndex = i;
+                    break;
+                }
             }
+            //deep copy
+            FilteredFiles = new ObservableCollection<Data.FileData>(PlaylistFiles);
+            InitializeComponent();
+            this.DataContext = this;
+        }
+
+        /// <summary>
+        /// takes list as reference, no editing possible
+        /// </summary>
+        /// <param name="list"></param>
+        public PlaylistSingleView(Data.Playlist list)
+        {
+            listIndex = -1;
+            refPlaylist = list;
             //deep copy
             FilteredFiles = new ObservableCollection<Data.FileData>(PlaylistFiles);
             InitializeComponent();
@@ -62,7 +98,7 @@ namespace DicsordBot.UI.Playlist
             }
             else if (result == false && isToDelete == true)
             {
-                Handle.Data.Playlists.RemoveAt((int)listIndex);
+                Handle.Data.Playlists.RemoveAt(listIndex);
                 LeaveSingleView();
             }
         }
@@ -77,15 +113,7 @@ namespace DicsordBot.UI.Playlist
                 //start to replay the complete list
                 uint fileId = (uint)((FrameworkElement)sender).Tag;
 
-                //get the index of the tagged file
-                for (int i = 0; i < PlaylistFiles.Count; i++)
-                {
-                    if (PlaylistFiles[i].Id == fileId)
-                    {
-                        SinglePlaylistStartPlay(listIndex, (uint)i);
-                        break;
-                    }
-                }
+                listReplayFromTag(fileId);
             }
         }
 
@@ -93,7 +121,26 @@ namespace DicsordBot.UI.Playlist
         {
             uint tag = (uint)((FrameworkElement)sender).Tag;
 
-            SinglePlaylistStartPlay(listIndex, tag);
+            listReplayFromTag(tag);
+        }
+
+        private void listReplayFromTag(uint tag)
+        {
+            //get the index of the tagged file
+            for (int index = 0; index < PlaylistFiles.Count; index++)
+            {
+                if (PlaylistFiles[index].Id == tag)
+                {
+                    SinglePlaylistStartPlay(listIndex, (uint)index);
+                    //refresh if history
+                    if (listIndex == -1)
+                    {
+                        filteredFiles = IO.FileWatcher.filterList(box_Filter.Text, PlaylistFiles);
+                        OnPropertyChanged("FilteredFiles");
+                    }
+                    break;
+                }
+            }
         }
 
         private void addMultipleToQueue_Click(object sender, RoutedEventArgs e)
