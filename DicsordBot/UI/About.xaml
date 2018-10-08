@@ -5,6 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              xmlns:local="clr-namespace:DicsordBot.UI"
+             xmlns:data="clr-namespace:DicsordBot.Data"
              mc:Ignorable="d"
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid>
@@ -14,8 +15,15 @@
             <StackPanel Orientation="Vertical">
 
                 <materialDesign:ColorZone Background="{StaticResource PrimaryBackgroundBrush}" materialDesign:ShadowAssist.ShadowDepth="Depth1" materialDesign:ShadowAssist.ShadowEdges="Bottom" Height="75">
-
-                    <TextBlock VerticalAlignment="Center"  Margin="20,0,0,0" FontSize="30" materialDesign:ShadowAssist.ShadowDepth="Depth2" Text="About" FontWeight="Bold" Foreground="#262626" />
+                    <StackPanel>
+                        <TextBlock  VerticalAlignment="Center"  Margin="20,0,0,0" FontSize="30" materialDesign:ShadowAssist.ShadowDepth="Depth2" Text="About" FontWeight="Bold" Foreground="#262626" />
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Margin="20,-5,0,0" FontSize="20" Text="(v. "/>
+                            <TextBlock Margin="0,-5,0,0" FontSize="20"  Text="{x:Static data:PersistentData.version}" />
+                            <TextBlock Margin="0,-5,0,0" FontSize="20" Text=")"/>
+                        </StackPanel>
+                        
+                    </StackPanel>
                 </materialDesign:ColorZone>
 
                 <materialDesign:ColorZone Background="{StaticResource PrimaryBackgroundBrush}" materialDesign:ShadowAssist.ShadowDepth="Depth2" materialDesign:ShadowAssist.ShadowEdges="All" Margin="5,5,5,5" Height="Auto">

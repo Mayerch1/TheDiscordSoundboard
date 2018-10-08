@@ -14,6 +14,7 @@ namespace DicsordBot.UI
         public About()
         {
             InitializeComponent();
+            this.DataContext = Handle.Data.Persistent;
         }
 
         private void btn_Donate_Click(object sender, RoutedEventArgs e)

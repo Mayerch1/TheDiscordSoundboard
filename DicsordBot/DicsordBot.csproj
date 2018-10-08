@@ -25,7 +25,7 @@
     <UpdateRequired>false</UpdateRequired>
     <MapFileExtensions>true</MapFileExtensions>
     <ApplicationRevision>0</ApplicationRevision>
-    <ApplicationVersion>2.0.0.%2a</ApplicationVersion>
+    <ApplicationVersion>2.1.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <BootstrapperEnabled>true</BootstrapperEnabled>
   </PropertyGroup>
@@ -230,7 +230,7 @@
     <Compile Include="Bot\BotException.cs" />
     <Compile Include="Bot\Bot.cs" />
     <Compile Include="Bot\BotHandler.cs" />
-    <Compile Include="Data\Persistent.cs" />
+    <Compile Include="Data\PersistentData.cs" />
     <Compile Include="Data\RuntimeData.cs" />
     <Compile Include="UI\ButtonHotkeyPopup.xaml.cs">
       <DependentUpon>ButtonHotkeyPopup.xaml</DependentUpon>
