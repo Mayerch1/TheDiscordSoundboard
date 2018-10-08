@@ -1,10 +1,10 @@
-﻿using System.Threading.Tasks;
-using NAudio.Wave;
-using Discord;
-using Discord.WebSocket;
+﻿using Discord;
 using Discord.Audio;
-using System.Collections.Generic;
+using Discord.WebSocket;
+using NAudio.Wave;
 using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace DicsordBot.Bot
 {

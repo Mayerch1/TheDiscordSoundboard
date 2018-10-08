@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.ObjectModel;
-using System.IO;
-using System.Linq;
-using System.Threading;
-
-namespace DicsordBot.IO
+﻿namespace DicsordBot.IO
 {
     /// <summary>
     /// Handles blur and fade-out effect for any window
