@@ -14,7 +14,7 @@ namespace DicsordBot
     /// Interaction logic for MainWindow.xaml
     /// </summary>
     ///
-
+    //blub
     public partial class MainWindow : Window, INotifyPropertyChanged
     {
 #pragma warning disable CS1591
