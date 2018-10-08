@@ -135,6 +135,12 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_2D668A59FE08C90204534AF9A59EE423"
+        "OwnerKey" = "8:_69E0D586F6A74A4B8403831AF606AD0D"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_2FD75E81F1361512D78F192BED71AC7E"
         "OwnerKey" = "8:_69E0D586F6A74A4B8403831AF606AD0D"
         "MsmSig" = "8:_UNDEFINED"
@@ -981,6 +987,18 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_EDBE0C4DB809EFDDBC65BDBCEF824E53"
+        "OwnerKey" = "8:_69E0D586F6A74A4B8403831AF606AD0D"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_EFC7C7D2C92943081C63643DD10D4F56"
+        "OwnerKey" = "8:_69E0D586F6A74A4B8403831AF606AD0D"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_F0CFE298976EC0DD8F54578CE6195E10"
         "OwnerKey" = "8:_69E0D586F6A74A4B8403831AF606AD0D"
         "MsmSig" = "8:_UNDEFINED"
@@ -1073,6 +1091,12 @@
         {
         "MsmKey" = "8:_UNDEFINED"
         "OwnerKey" = "8:_69E0D586F6A74A4B8403831AF606AD0D"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_UNDEFINED"
+        "OwnerKey" = "8:_2D668A59FE08C90204534AF9A59EE423"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -1187,6 +1211,12 @@
         {
         "MsmKey" = "8:_UNDEFINED"
         "OwnerKey" = "8:_6691B152A8CBCAF4D1C1207AFE86AC55"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_UNDEFINED"
+        "OwnerKey" = "8:_EDBE0C4DB809EFDDBC65BDBCEF824E53"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -2096,6 +2126,37 @@
                     }
                 }
             "SourcePath" = "8:System.Diagnostics.Contracts.dll"
+            "TargetName" = "8:"
+            "Tag" = "8:"
+            "Folder" = "8:_23990D1FD70E41CA95AC03D72309F0E0"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:TRUE"
+            "IsolateTo" = "8:"
+            }
+            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_2D668A59FE08C90204534AF9A59EE423"
+            {
+            "AssemblyRegister" = "3:1"
+            "AssemblyIsInGAC" = "11:FALSE"
+            "AssemblyAsmDisplayName" = "8:taglib-sharp, Version=2.1.0.0, Culture=neutral, PublicKeyToken=db62eba44689b5b0, processorArchitecture=MSIL"
+                "ScatterAssemblies"
+                {
+                    "_2D668A59FE08C90204534AF9A59EE423"
+                    {
+                    "Name" = "8:taglib-sharp.dll"
+                    "Attributes" = "3:512"
+                    }
+                }
+            "SourcePath" = "8:taglib-sharp.dll"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_23990D1FD70E41CA95AC03D72309F0E0"
@@ -4591,6 +4652,73 @@
             "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
+            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_EDBE0C4DB809EFDDBC65BDBCEF824E53"
+            {
+            "AssemblyRegister" = "3:1"
+            "AssemblyIsInGAC" = "11:FALSE"
+            "AssemblyAsmDisplayName" = "8:GongSolutions.WPF.DragDrop, Version=1.1.0.0, Culture=neutral, processorArchitecture=MSIL"
+                "ScatterAssemblies"
+                {
+                    "_EDBE0C4DB809EFDDBC65BDBCEF824E53"
+                    {
+                    "Name" = "8:GongSolutions.Wpf.DragDrop.dll"
+                    "Attributes" = "3:512"
+                    }
+                }
+            "SourcePath" = "8:GongSolutions.Wpf.DragDrop.dll"
+            "TargetName" = "8:"
+            "Tag" = "8:"
+            "Folder" = "8:_23990D1FD70E41CA95AC03D72309F0E0"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:TRUE"
+            "IsolateTo" = "8:"
+            }
+            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_EFC7C7D2C92943081C63643DD10D4F56"
+            {
+            "AssemblyRegister" = "3:1"
+            "AssemblyIsInGAC" = "11:FALSE"
+            "AssemblyAsmDisplayName" = "8:policy.2.0.taglib-sharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=db62eba44689b5b0, processorArchitecture=MSIL"
+                "ScatterAssemblies"
+                {
+                    "_5984D79645744B2BE6147837D66A6C67"
+                    {
+                    "Name" = "8:policy.2.0.taglib-sharp.config"
+                    "Attributes" = "3:1"
+                    }
+                    "_EFC7C7D2C92943081C63643DD10D4F56"
+                    {
+                    "Name" = "8:policy.2.0.taglib-sharp.dll"
+                    "Attributes" = "3:512"
+                    }
+                }
+            "SourcePath" = "8:policy.2.0.taglib-sharp.dll"
+            "TargetName" = "8:"
+            "Tag" = "8:"
+            "Folder" = "8:_23990D1FD70E41CA95AC03D72309F0E0"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:TRUE"
+            "IsolateTo" = "8:"
+            }
             "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_F0CFE298976EC0DD8F54578CE6195E10"
             {
             "AssemblyRegister" = "3:1"
@@ -4864,15 +4992,15 @@
         {
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:The Discord Soundboard (TDS)"
-        "ProductCode" = "8:{62E737D0-4DFC-4A7F-B512-B458D22A878E}"
-        "PackageCode" = "8:{26130927-0140-4D49-9977-9E39A0FE2906}"
-        "UpgradeCode" = "8:{AB825733-B479-49CD-8798-18CB61899CF5}"
+        "ProductCode" = "8:{E7BD8130-1D20-4BEC-9F7E-1A33AA4D6DCA}"
+        "PackageCode" = "8:{B72F6CC2-E528-4580-AEF3-7FD09157DB95}"
+        "UpgradeCode" = "8:{63B1D556-FE83-4B58-B523-1E85C6D95FBB}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"
-        "RemovePreviousVersions" = "11:FALSE"
+        "RemovePreviousVersions" = "11:TRUE"
         "DetectNewerInstalledVersion" = "11:TRUE"
         "InstallAllUsers" = "11:TRUE"
-        "ProductVersion" = "8:2.0.0"
+        "ProductVersion" = "8:2.1.0"
         "Manufacturer" = "8:Mayer Software Inc."
         "ARPHELPTELEPHONE" = "8:"
         "ARPHELPLINK" = "8:https://github.com/mayerch1/TheDiscordSoundboard/issues"
@@ -4880,7 +5008,7 @@
         "Subject" = "8:"
         "ARPCONTACT" = "8:Christian Mayer"
         "Keywords" = "8:"
-        "ARPCOMMENTS" = "8:Discord Soundboard - view Source on Github"
+        "ARPCOMMENTS" = "8:Discord Soundboard"
         "ARPURLINFOABOUT" = "8:https://github.com/Mayerch1"
         "ARPPRODUCTICON" = "8:_69E0D586F6A74A4B8403831AF606AD0D"
         "ARPIconIndex" = "3:32512"

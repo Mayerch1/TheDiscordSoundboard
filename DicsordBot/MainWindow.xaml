@@ -4,11 +4,13 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:DicsordBot"
+        xmlns:UIScope="clr-namespace:DicsordBot.UI"
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         mc:Ignorable="d"
-        Title="The Discord Soundboard" Height="767" Width="1309" Closing="MainWindow_Closing"
+        Title="The Discord Soundboard" Height="767" Width="1335" Closing="MainWindow_Closing"
         ResizeMode="CanResizeWithGrip"
-        PreviewMouseDown="Window_PreviewMouseDown">
+        PreviewMouseDown="Window_PreviewMouseDown"
+        SizeChanged="Window_SizeChanged">
 
     <Window.Resources>
         <Storyboard x:Key="OpenMenu">
@@ -64,9 +66,12 @@
         <Grid x:Name="grd_ChannelList" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="0,60,20,0" Width="0" Height="0" Grid.ZIndex="1">
             <!-- channel selector-->
             <!-- is closed on startup-->
-            <materialDesign:ColorZone x:Name="col_ChannelList" materialDesign:ShadowAssist.ShadowDepth="Depth2" materialDesign:ShadowAssist.ShadowEdges="Top" Height="400" Width="250">
+            <materialDesign:ColorZone x:Name="col_ChannelList" materialDesign:ShadowAssist.ShadowDepth="Depth1" materialDesign:ShadowAssist.ShadowEdges="All" Height="400" Width="250" CornerRadius="5">
+                <materialDesign:ColorZone.Background>
+                    <SolidColorBrush Color="White" Opacity="1" />
+                </materialDesign:ColorZone.Background>
 
-                <DockPanel>
+                <DockPanel Margin="0,5,0,0">
                     <DockPanel DockPanel.Dock="Top" HorizontalAlignment="Stretch">
                         <TextBlock Margin="5" DockPanel.Dock="Left" Text="Permanent Selection" />
                         <CheckBox
@@ -75,15 +80,15 @@
                             HorizontalAlignment="Right"
                             x:Name="box_IsPermanentChannel"
                             Style="{StaticResource MaterialDesignSwitchDarkToggleButton}"
-                            ToolTip="Toggle this to make the bot always join this channel" />
+                            ToolTip="Toggle this, to make the bot always join this channel" />
                     </DockPanel>
-                    <Separator />
+
+                    <Separator Background="#eaeaea" />
 
                     <ScrollViewer
-                    PanningMode="VerticalOnly"
                     PreviewMouseWheel="scroll_channelList_PreviewMouseWheel"
                     HorizontalScrollBarVisibility="Hidden"
-                    VerticalScrollBarVisibility="Hidden">
+                    VerticalScrollBarVisibility="Hidden" ScrollChanged="scroll_channelList_ScrollChanged">
                         <TreeView x:Name="tree_channelList" SelectedItemChanged="tree_channelList_SelectedItemChanged" />
                     </ScrollViewer>
                 </DockPanel>
@@ -116,7 +121,7 @@
                                     Background="{StaticResource PrimaryBackgroundBrush}"
                                     BorderBrush="{StaticResource PrimaryBackgroundBrush}"
                                     Style="{StaticResource MaterialDesignFloatingActionMiniLightButton}"
-                                    ToolTip="MaterialDesignFloatingActionMiniLightButton"
+                                    ToolTip="Pervious"
                                     HorizontalAlignment="Left">
 
                                         <materialDesign:PackIcon
@@ -140,7 +145,7 @@
                                     Background="{StaticResource PrimaryBackgroundBrush}"
                                     BorderBrush="{StaticResource PrimaryBackgroundBrush}"
                                     Style="{DynamicResource MaterialDesignFloatingActionMiniLightButton}"
-                                    ToolTip="MaterialDesignFloatingActionMiniLightButton">
+                                            ToolTip="Next">
 
                                         <materialDesign:PackIcon
 
@@ -152,7 +157,7 @@
                                     <Button x:Name="btn_Repeat" HorizontalAlignment="Right"
                                         Click="btn_Repeat_Click"
                                       Style="{StaticResource MaterialDesignFloatingActionMiniLightButton}"
-                                      ToolTip="MaterialDesignFloatingActionMiniLightButton"
+                                      ToolTip="Repeat"
                                         Background="White"
                                         BorderBrush="White"
                                         materialDesign:ShadowAssist.ShadowDepth="Depth0">
@@ -208,7 +213,7 @@
                                     <ToggleButton x:Name="btn_Earrape" HorizontalAlignment="Left"
                                        Click="btn_Earrape_Click"
                                         Style="{StaticResource MaterialDesignFlatToggleButton}"
-                                        ToolTip="MaterialDesignFlatToggleButton">
+                                        ToolTip="Boost">
 
                                         <materialDesign:PackIcon
                                         Kind="Nuke"
@@ -222,7 +227,7 @@
                                     Background="{StaticResource PrimaryBackgroundBrush}"
                                     BorderBrush="{StaticResource PrimaryBackgroundBrush}"
                                     Style="{StaticResource MaterialDesignFloatingActionMiniLightButton}"
-                                    ToolTip="MaterialDesignFloatingActionMiniLightButton">
+                                    ToolTip="Mute">
 
                                         <materialDesign:PackIcon
                                           Margin="5,0,5,0"
@@ -264,6 +269,20 @@
                         </StackPanel>
                     </Button>
 
+                    <Button Height="75" Margin="0,0,0,0" Foreground="Black" Background="{StaticResource PrimaryForegroundBrush}" BorderBrush="{StaticResource PrimaryForegroundBrush}" materialDesign:ShadowAssist.ShadowDepth="Depth0" Click="btn_Search_Click"  HorizontalContentAlignment="Left">
+                        <StackPanel Orientation="Horizontal">
+                            <materialDesign:PackIcon Kind="Magnify" Height="35" Width="35" VerticalAlignment="Center" />
+                            <TextBlock Text="SEARCH" FontSize="20"  Margin="10,0,0,0" VerticalAlignment="Center" />
+                        </StackPanel>
+                    </Button>
+
+                    <Button Height="75" Margin="0,0,0,0" Foreground="Black" Background="{StaticResource PrimaryForegroundBrush}" BorderBrush="{StaticResource PrimaryForegroundBrush}" materialDesign:ShadowAssist.ShadowDepth="Depth0" Click="btn_Playlist_Click"  HorizontalContentAlignment="Left">
+                        <StackPanel Orientation="Horizontal">
+                            <materialDesign:PackIcon Kind="PlaylistPlay" Height="35" Width="35" VerticalAlignment="Center" />
+                            <TextBlock Text="PLAYLISTS" FontSize="20"  Margin="10,0,0,0" VerticalAlignment="Center" />
+                        </StackPanel>
+                    </Button>
+
                     <Button Height="75" Margin="0,0,0,0" Foreground="Black" Background="{StaticResource PrimaryForegroundBrush}" BorderBrush="{StaticResource PrimaryForegroundBrush}" materialDesign:ShadowAssist.ShadowDepth="Depth0" Click="btn_Settings_Click" HorizontalContentAlignment="Left">
 
                         <StackPanel Orientation="Horizontal">
@@ -302,7 +321,7 @@
                 <!--Main Grid-->
                 <Grid>
                     <Grid>
-                        <local:ButtonUI x:Name="ButtonUI" />
+                        <UIScope:ButtonUI x:Name="ButtonUI" />
                     </Grid>
                     <Grid VerticalAlignment="Bottom" HorizontalAlignment="Center" Height="50">
                         <materialDesign:Snackbar MessageQueue="{materialDesign:MessageQueue}" x:Name="snackBar_Hint" />

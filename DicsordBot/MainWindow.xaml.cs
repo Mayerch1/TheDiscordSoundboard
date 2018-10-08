@@ -1,20 +1,12 @@
 ﻿using MaterialDesignThemes.Wpf;
 using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
 using System.Windows.Media.Animation;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
+using System.Windows.Threading;
 
 namespace DicsordBot
 {
@@ -39,9 +31,11 @@ namespace DicsordBot
 
         private LoopState loopStatus = LoopState.LoopNone;
 
-        # endregion
+        #endregion fields
 
         #region propertys
+
+        private DispatcherTimer resizeTimer = new DispatcherTimer();
 
         private double LastVolume { get; set; }
 
@@ -88,7 +82,7 @@ namespace DicsordBot
             }
         }
 
-        public bool IsLoopForced { get; set; } = false;
+        public bool IsLoopForcedByBot { get; set; } = false;
 
         public double TitleTime
         {
@@ -115,20 +109,25 @@ namespace DicsordBot
 
         public MainWindow()
         {
+            //test comment
             //need this, so other tasks will wait
-            Handle.Data.loadData();
+            Handle.Data.loadAll();
 
             InitializeComponent();
 
             LastVolume = Volume;
 
+            //events
             registerEvents();
             registerEmbedEvents(ButtonUI);
 
+            //file watcher
+            IO.FileWatcher.StartMonitor(Handle.Data.Persistent.MediaSources);
+
             initTimer();
 
+            //ui
             setVolumeIcon();
-
             btn_Repeat.Content = FindResource("IconRepeatOff");
 
             DataContext = this;
@@ -137,6 +136,9 @@ namespace DicsordBot
             var msgQueue = new SnackbarMessageQueue(TimeSpan.FromMilliseconds(3500));
             snackBar_Hint.MessageQueue = (msgQueue);
 
+            initHotkeys();
+
+            //first startup sequence
             if (Handle.Data.Persistent.IsFirstStart)
             {
                 Handle.Data.Persistent.IsFirstStart = false;
@@ -148,18 +150,42 @@ namespace DicsordBot
                 initAsync();
                 initDelayedAsync();
             }
+
+            IO.FileWatcher.indexFiles(Handle.Data.Persistent.MediaSources);
         }
 
         private void MainWindow_Closing(object sender, CancelEventArgs e)
         {
             cleanUp();
+            terminateHotkeys();
             Console.WriteLine("Last user-code was executed");
         }
 
+        #region hotkeys
+
+        private void initHotkeys()
+        {
+            IO.HotkeyManager.initHotkeys(this);
+            //register all saved hotkeys
+            foreach (var hotkey in Handle.Data.Persistent.HotkeyList)
+                IO.HotkeyManager.RegisterHotKey(this, hotkey.mod_code, hotkey.vk_code);
+        }
+
+        private void terminateHotkeys()
+        {
+            IO.HotkeyManager.terminateHotkeys(this);
+        }
+
+        #endregion hotkeys
+
         private async void cleanUp()
         {
-            Handle.Data.saveData();
+            Handle.Data.saveAll();
 
+            IO.ImageManager.clearImageCache(Handle.Data.Playlists);
+
+            //this will prevent the StreamState-changed handler from enqueing the next song, when trying to dicsonnect
+            Handle.Data.IsPlaylistPlaying = false;
             await Handle.Bot.disconnectFromServerAsync();
         }
 
@@ -173,17 +199,22 @@ namespace DicsordBot
             await Handle.Bot.connectToServerAsync();
             if (await UpdateChecker.CheckForUpdate())
             {
-                SnackBarWarning_Show("A newer version is available", Bot.BotHandle.SnackBarAction.Update);
+                Handle.SnackbarWarning("A newer version is available", Handle.SnackbarAction.Update);
             }
         }
 
         private void initTimer()
         {
             //init timer, that fires every second to display time-slider
-            System.Windows.Threading.DispatcherTimer dispatcherTimer = new System.Windows.Threading.DispatcherTimer();
+            //ticks 4 times a second
+            DispatcherTimer dispatcherTimer = new DispatcherTimer();
             dispatcherTimer.Tick += new EventHandler(dispatcherTimer_Tick);
-            dispatcherTimer.Interval = new TimeSpan(0, 0, 1);
+            dispatcherTimer.Interval = new TimeSpan(0, 0, 0, 0, 250);
             dispatcherTimer.Start();
+            //-------------------
+            //timer for resizing
+            resizeTimer.Tick += new EventHandler(Window_ResizingDone);
+            resizeTimer.Interval = new TimeSpan(0, 0, 0, 0, 75);
         }
 
         private void dispatcherTimer_Tick(object sender, EventArgs e)
@@ -204,7 +235,7 @@ namespace DicsordBot
             await Task.Delay(2500);
 
             //resolve user to get avatar-url
-            var client = Handle.BotData.extractClient(await Handle.Bot.getAllClients(), Handle.ClientId);
+            var client = Handle.BotData.extractClient(await Handle.Bot.getAllClients(true), Handle.ClientId);
             Handle.BotData.updateAvatar(client);
             OnPropertyChanged("ClientAvatar");
 
@@ -246,8 +277,7 @@ namespace DicsordBot
             //nothing changes
             if (nextState == LoopStatus)
             {
-                //in case bot double forced loop
-                IsLoopForced = false;
+                //in case bot forced loop, but it's already set
                 return;
             }
 
@@ -265,15 +295,15 @@ namespace DicsordBot
                     nextState = LoopState.LoopNone;
             }
             //if loop was forced by bot, reset
-            else if (nextState == LoopState.LoopReset && IsLoopForced)
+            else if (nextState == LoopState.LoopReset && IsLoopForcedByBot)
             {
                 //reset loop mode
-
                 nextState = LoopState.LoopNone;
+                IsLoopForcedByBot = false;
             }
-            else if (nextState == LoopState.LoopReset)
+            else if (nextState == LoopState.LoopReset && !IsLoopForcedByBot)
             {
-                //nothing changes
+                //in case, user changed mode since bot override, nothing changes
                 return;
             }
             //set loop-Status to bot
@@ -290,10 +320,9 @@ namespace DicsordBot
             //set icon, based on loopstate
             if (nextState == LoopState.LoopAll)
                 btn_Repeat.Content = FindResource("IconRepeatAll");
-            else if (nextState == LoopState.LoopOne && IsLoopForced)
+            else if (nextState == LoopState.LoopOne && IsLoopForcedByBot)
             {
                 //show different icon for bot override
-                IsLoopForced = false;
                 btn_Repeat.Content = FindResource("IconRepeatOnce");
             }
             else if (nextState == LoopState.LoopOne)
@@ -325,11 +354,25 @@ namespace DicsordBot
 
         #region event stuff
 
-        private void registerEmbedEvents(ButtonUI btnUI)
+        private void registerEmbedEvents(object embed)
         {
-            //subsribe to intsant button event
+            Type objType = embed.GetType();
 
-            btnUI.InstantButtonClicked += btn_InstantButton_Clicked;
+            if (objType == typeof(UI.ButtonUI))
+            {
+                ((UI.ButtonUI)embed).InstantButtonClicked += btn_InstantButton_Clicked;
+                ((UI.ButtonUI)embed).ToggleHotkey += ToggleHotkey;
+            }
+            else if (objType == typeof(UI.SearchMode))
+            {
+                ((UI.SearchMode)embed).ListItemPlay += List_Item_Play;
+            }
+            else if (objType == typeof(UI.Playlist.PlaylistMode))
+            {
+                ((UI.Playlist.PlaylistMode)embed).PlaylistStartPlay += Playlist_Play;
+
+                ((UI.Playlist.PlaylistMode)embed).PlaylistItemEnqueued += Playlist_SingleFile_Play;
+            }
         }
 
         //call only once
@@ -337,23 +380,20 @@ namespace DicsordBot
         {
             //event to resolve new clientName into clientId
             Handle.Data.Persistent.ClientNameChanged += Handle.ClientName_Changed;
-            Handle.Bot.ChannelWarning += Handle.ChannelWarning_Show;
-            Handle.Bot.TokenWarning += Handle.TokenWarning_Show;
-            Handle.Bot.FileWarning += Handle.FileWarning_Show;
-            Handle.Bot.ClientWarning += Handle.ClientWarning_Show;
-            Handle.Bot.SnackbarWarning += SnackBarWarning_Show;
+
+            //universal SnackbarWarning
+            Handle.SnackbarWarning += SnackBarWarning_Show;
+
+            //route bot warning to universal Handle.SnackbarWarning
+            Handle.Bot.SnackbarWarning += Handle.PassBotSnackbarWarning;
+
+            //hotkey stuff
+            IO.HotkeyManager.RegisteredHotkeyPressed += Hotkey_Pressed;
 
             AddHandler(TreeViewItem.ExpandedEvent, new RoutedEventHandler(tree_channelList_ItemExpanded));
 
             //event Handler for Stream-state of bot
-            Handle.Bot.StreamStateChanged += delegate (bool newState)
-            {
-                //display pause icon, if bot is streaming
-                if (newState)
-                    btn_Play.Content = FindResource("IconPause");
-                else
-                    btn_Play.Content = FindResource("IconPlay");
-            };
+            Handle.Bot.StreamStateChanged += bot_streamState_Changed;
 
             //earrape event
             Handle.Bot.EarrapeStateChanged += delegate (bool isEarrape)
@@ -365,14 +405,52 @@ namespace DicsordBot
             {
                 if (isLoop)
                 {
-                    IsLoopForced = true;
+                    IsLoopForcedByBot = true;
                     setLoopStatus(LoopState.LoopOne);
                 }
                 else
                 {
+                    //isLoopForcedByBot is reset in the method
                     setLoopStatus(LoopState.LoopReset);
                 }
             };
+
+            //fancy stuff
+            IO.BlurEffectManager.ToggleBlurEffect += delegate (bool isEnabled)
+            {
+                IO.BlurEffectManager.ApplyBlurEffect(isEnabled, this);
+            };
+        }
+
+        private void PassBlurEffectDelegate(bool isEnabled)
+        {
+        }
+
+        private void ToggleHotkey(bool isEnabled)
+        {
+            //enable/disable hotkeys
+            if (isEnabled)
+            {
+                initHotkeys();
+            }
+            else
+                terminateHotkeys();
+        }
+
+        private void Hotkey_Pressed(IntPtr lParam)
+        {
+            Console.WriteLine("Hotkey pressed: " + lParam.ToString("x"));
+
+            //spereate keyCodes from lParam
+            uint keyCode = (((uint)lParam >> 16) & 0xFFFF);
+            uint modCode = (uint)lParam & 0x00FFFF;
+
+            //find button and trigger replay
+            foreach (var hotkey in Handle.Data.Persistent.HotkeyList)
+            {
+                if (keyCode == hotkey.vk_code && modCode == hotkey.mod_code && hotkey.btn_id >= 0)
+                    btn_InstantButton_Clicked(hotkey.btn_id);
+            }
         }
 
         private void snackBar_Click()
@@ -380,21 +458,21 @@ namespace DicsordBot
             //this is called, when no action is required/provided
         }
 
-        private void SnackBarWarning_Show(string msg, Bot.BotHandle.SnackBarAction action)
+        private void SnackBarWarning_Show(string msg, Handle.SnackbarAction action)
         {
             string optionMsg = action.ToString();
-            if (action == Bot.BotHandle.SnackBarAction.None)
+            if (action == Handle.SnackbarAction.None)
                 optionMsg = "Roger Dodger";
 
             Action handler;
 
             switch (action)
             {
-                case Bot.BotHandle.SnackBarAction.Settings:
+                case Handle.SnackbarAction.Settings:
                     handler = btn_Settings_Click;
                     break;
 
-                case Bot.BotHandle.SnackBarAction.Update:
+                case Handle.SnackbarAction.Update:
                     handler = UpdateChecker.OpenUpdatePage;
                     break;
 
@@ -406,12 +484,157 @@ namespace DicsordBot
             snackBar_Hint.MessageQueue.Enqueue(msg, optionMsg, handler);
         }
 
-        private async void btn_InstantButton_Clicked(int btnListIndex)
+        #region BotPlayDelegates
+
+        private void btn_InstantButton_Clicked(int btnListIndex)
         {
-            await Handle.Bot.enqueueAsync(Handle.Data.Persistent.BtnList[btnListIndex]);
-            //IDEA: skip when playlist, don't skip when instant buttons
+            //interrupt stream
+            triggerBotInstantReplay(Handle.Data.Persistent.BtnList[btnListIndex]);
+        }
+
+        private void List_Item_Play(uint index, bool isPriority = true)
+        {
+            //search for file with tag
+            foreach (var file in Handle.Data.Files)
+            {
+                if (file.Id == index)
+                {
+                    //create ButtonData to feed to bot
+                    Data.ButtonData data = new Data.ButtonData(file.Name, file.Path);
+
+                    if (isPriority)
+                        //interrupt current stream
+                        triggerBotInstantReplay(data);
+                    else
+
+                        triggerBotQueueReplay(data);
+                }
+            }
+        }
+
+        private void Playlist_SingleFile_Play(Data.FileData file)
+        {
+            triggerBotQueueReplay(new Data.ButtonData(file.Name, file.Path));
+        }
+
+        /// <param name="listId">unique id field of playlists</param>
+        /// <param name="fileIndex">index in the array of all playList files</param>
+        private async void Playlist_Play(int listId, uint fileIndex)
+        {
+            //stop streaming
+            if (Handle.Bot.IsStreaming)
+                await Handle.Bot.stopStreamAsync();
+
+            //get playlist for index, history if -1
+            Data.Playlist playlist = null;
+            if (listId == -1)
+            {
+                playlist = Handle.Data.History;
+            }
+            else
+            {
+                foreach (var list in Handle.Data.Playlists)
+                {
+                    if (list.Id == listId)
+                        playlist = list;
+                }
+            }
+
+            //select file by index of list
+            if (playlist != null && fileIndex < playlist.Tracks.Count)
+            {
+                Handle.Data.IsPlaylistPlaying = false;
+                //add first button
+                triggerBotInstantReplay(new Data.ButtonData(playlist.Tracks[(int)fileIndex].Name, playlist.Tracks[(int)fileIndex].Path));
+                //set playlist properties, after song changed -> first title will not be skipped
+                Handle.Data.PlaylistIndex = listId;
+                Handle.Data.PlaylistFileIndex = (int)fileIndex + 1;
+                Handle.Data.IsPlaylistPlaying = true;
+            }
+        }
+
+        private async void triggerBotInstantReplay(Data.ButtonData data)
+        {
+            //place song in front of queue
+            await Handle.Bot.enqueuePriorityAsync(data);
+            addTitleToHistory(data);
+            //start or skip current track
             if (!Handle.Bot.IsStreaming)
                 await Handle.Bot.resumeStream();
+            else
+                Handle.Bot.skipTrack();
+        }
+
+        private async void triggerBotQueueReplay(Data.ButtonData data)
+        {
+            await Handle.Bot.enqueueAsync(data);
+            addTitleToHistory(data);
+            //only resume, if not streaming + not in pause mode
+            if (!Handle.Bot.IsStreaming)
+                await Handle.Bot.resumeStream();
+        }
+
+        #endregion BotPlayDelegates
+
+        private void addTitleToHistory(Data.ButtonData title)
+        {
+            Handle.Data.History.addTitle(IO.FileWatcher.getAllFileInfo(title.File));
+        }
+
+        private async void bot_streamState_Changed(bool newState)
+        {
+            //display pause icon, if bot is streaming
+            if (newState/* is playing */)
+                btn_Play.Content = FindResource("IconPause");
+            else
+            {
+                btn_Play.Content = FindResource("IconPlay");
+
+                //take next title in playlist
+                if (Handle.Data.IsPlaylistPlaying)
+                {
+                    int listIndex = Handle.Data.PlaylistIndex;
+                    int fileIndex = Handle.Data.PlaylistFileIndex;
+
+                    Data.Playlist playlist;
+
+                    //playlist is saved by index
+                    if (listIndex == -1)
+                        playlist = Handle.Data.History;
+                    else
+                        playlist = Handle.Data.Playlists[listIndex];
+
+                    //increase fileIndex, but use old value for the next title
+                    if (++Handle.Data.PlaylistFileIndex <= playlist.Tracks.Count)
+                    {
+                        //stop the stream (and await it)
+                        if (Handle.Bot.IsStreaming)
+                            await Handle.Bot.stopStreamAsync();
+
+                        //make shure another call of this method won't skip a title
+                        Handle.Data.IsPlaylistPlaying = false;
+
+                        //play next track, method starts stream if paused or stopped
+                        triggerBotQueueReplay(new Data.ButtonData(playlist.Tracks[fileIndex].Name, playlist.Tracks[fileIndex].Path));
+
+                        //re-enable playlist-mode
+                        Handle.Data.IsPlaylistPlaying = true;
+                    }
+                    else
+                    {
+                        //restart playlist
+                        if (LoopStatus == LoopState.LoopAll)
+                        {
+                            Handle.Data.PlaylistFileIndex = 0;
+                            //call this function again, to equeue the playlist
+                            triggerBotQueueReplay(new Data.ButtonData(playlist.Tracks[0].Name, playlist.Tracks[0].Path));
+                        }
+                        else
+                            //set properties for finished playlist
+                            Handle.Data.IsPlaylistPlaying = false;
+                    }
+                }
+            }
         }
 
         private void btn_Play_Click(object sender, RoutedEventArgs e)
@@ -426,18 +649,34 @@ namespace DicsordBot
 
         private void btn_Previous_Click(object sender, RoutedEventArgs e)
         {
-            //FUTURE: playlist: if time is below 2 seconds skip, else move to 0
-            Handle.Bot.skipToTime(TimeSpan.Zero);
+            //skip prev title in playlist, when in playlist-mode and <2s
+            if (Handle.Data.IsPlaylistPlaying && Handle.Bot.CurrentTime.TotalSeconds < 2)
+            {
+                if (Handle.Data.PlaylistFileIndex > 0)
+                {
+                    //skip 2 back, because method will skip one forward, when title ends
+                    Handle.Data.PlaylistFileIndex -= 2;
+
+                    Handle.Bot.skipTrack();
+                }
+            }
+            else
+                //skip to beginning of track
+                Handle.Bot.skipToTime(TimeSpan.Zero);
         }
 
         private void btn_Repeat_Click(object sender, RoutedEventArgs e)
         {
+            IsLoopForcedByBot = false;
             setLoopStatus(LoopState.LoopNext);
         }
 
         private void btn_Earrape_Click(object sender, RoutedEventArgs e)
         {
-            IsEarrape = !IsEarrape;
+            if (((System.Windows.Controls.Primitives.ToggleButton)sender).IsChecked == true)
+                IsEarrape = true;
+            else
+                IsEarrape = false;
         }
 
         private void btn_Volume_Click(object sender, RoutedEventArgs e)
@@ -455,7 +694,7 @@ namespace DicsordBot
         private void btn_About_Click(object sender, RoutedEventArgs e)
         {
             MainGrid.Child = null;
-            MainGrid.Child = new About();
+            MainGrid.Child = new UI.About();
         }
 
         private void btn_Settings_Click(object sender, RoutedEventArgs e)
@@ -464,19 +703,36 @@ namespace DicsordBot
             btn_Settings_Click();
         }
 
+        private void btn_Playlist_Click(object sender, RoutedEventArgs e)
+        {
+            MainGrid.Child = null;
+            UI.Playlist.PlaylistMode playUI = new UI.Playlist.PlaylistMode();
+            registerEmbedEvents(playUI);
+            MainGrid.Child = playUI;
+        }
+
         private void btn_Settings_Click()
         {
             MainGrid.Child = null;
-            MainGrid.Child = new Settings();
+            MainGrid.Child = new UI.Settings();
         }
 
         private void btn_Sounds_Click(object sender, RoutedEventArgs e)
         {
-            //change embeds for maingrit
+            //change embeds for maingrid
             MainGrid.Child = null;
-            ButtonUI btnUI = new ButtonUI();
+            UI.ButtonUI btnUI = new UI.ButtonUI();
             registerEmbedEvents(btnUI);
             MainGrid.Child = btnUI;
+        }
+
+        private void btn_Search_Click(object sender, RoutedEventArgs e)
+        {
+            MainGrid.Child = null;
+            UI.SearchMode searchMode = new UI.SearchMode();
+            registerEmbedEvents(searchMode);
+
+            MainGrid.Child = searchMode;
         }
 
         private void btn_ToggleMenu_Click(object sender, RoutedEventArgs e)
@@ -503,7 +759,7 @@ namespace DicsordBot
             else
             {
                 sb = FindResource("OpenChannelList") as Storyboard;
-                //TODO: check for long delays
+
                 initChannelList();
                 IsChannelListOpened = true;
             }
@@ -538,15 +794,14 @@ namespace DicsordBot
                 {
                     snackMsg = "Joining to owner permanently";
                 }
-                SnackBarWarning_Show(snackMsg, Bot.BotHandle.SnackBarAction.None);
+                Handle.SnackbarWarning(snackMsg, Handle.SnackbarAction.None);
             }
             catch {/* do nothing if someting other than a channel is selected*/ }
-
-            //get first expanded element, to save it for restart
         }
 
         private void tree_channelList_ItemExpanded(object sender, RoutedEventArgs e)
         {
+            //get first expanded element, to save it for restart
             TreeViewItem treeItem = e.Source as TreeViewItem;
 
             if (treeItem.Tag != null)
@@ -559,6 +814,16 @@ namespace DicsordBot
             ScrollViewer scv = (ScrollViewer)sender;
             scv.ScrollToVerticalOffset(scv.VerticalOffset - e.Delta / 10);
             e.Handled = true;
+        }
+
+        private void scroll_channelList_ScrollChanged(object sender, ScrollChangedEventArgs e)
+        {
+            //prevent sideways scrolling
+            if (e.HorizontalChange > 0)
+            {
+                ScrollViewer scv = (ScrollViewer)sender;
+                scv.ScrollToHorizontalOffset(0);
+            }
         }
 
         private void Window_PreviewMouseDown(object sender, MouseButtonEventArgs e)
@@ -579,6 +844,30 @@ namespace DicsordBot
             {
                 handler(this, new PropertyChangedEventArgs(info));
             }
+        }
+
+        private void Window_SizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            resizeTimer.Stop();
+            resizeTimer.Start();
+            MainGrid.Width = MainGrid.ActualWidth;
+            MainGrid.Height = MainGrid.ActualHeight;
+            MainGrid.VerticalAlignment = VerticalAlignment.Top;
+            MainGrid.HorizontalAlignment = HorizontalAlignment.Left;
+        }
+
+        /// <summary>
+        /// gets called when a specific time after last resizing
+        /// </summary>
+        /// <param name="sender">Sender</param>
+        /// <param name="e">Event Argument</param>
+        private void Window_ResizingDone(object sender, EventArgs e)
+        {
+            resizeTimer.Stop();
+            MainGrid.Width = Double.NaN;
+            MainGrid.Height = Double.NaN;
+            MainGrid.VerticalAlignment = VerticalAlignment.Stretch;
+            MainGrid.HorizontalAlignment = HorizontalAlignment.Stretch;
         }
 
         #endregion event stuff

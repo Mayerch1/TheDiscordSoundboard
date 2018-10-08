@@ -1,8 +1,6 @@
 ﻿using Discord.WebSocket;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace DicsordBot.Bot
@@ -26,60 +24,12 @@ namespace DicsordBot.Bot
 
         #region event handlers
 
-        /// <summary>
-        /// FileWarningThrown delegate
-        /// </summary>
-        /// <param name="msg">Error description</param>
-        /// <param name="solution">Solution for the error</param>
-        public delegate void FileWarningThrown(string msg, string solution);
-
-        /// <summary>
-        /// FileWarningThrown field
-        /// </summary>
-        public FileWarningThrown FileWarning;
-
-        /// <summary>
-        /// TokenWarningThrown delegate
-        /// </summary>
-        /// <param name="msg">Error description</param>
-        /// <param name="solution">Solution for the error</param>
-        public delegate void TokenWarningThrown(string msg, string solution);
-
-        /// <summary>
-        /// TokenWarningThrown field
-        /// </summary>
-        public TokenWarningThrown TokenWarning;
-
-        /// <summary>
-        /// ChannelWarningThrown delegate
-        /// </summary>
-        /// <param name="msg">Error description</param>
-        /// <param name="solution">Solution for the error</param>
-        public delegate void ChannelWarningThrown(string msg, string solution);
-
-        /// <summary>
-        /// ChannelWarningThrown field
-        /// </summary>
-        public ChannelWarningThrown ChannelWarning;
-
-        /// <summary>
-        /// ClientWarningThrown delegate
-        /// </summary>
-        /// <param name="msg">Error description</param>
-        /// <param name="solution">Solution for the error</param>
-        public delegate void ClientWarningThrown(string msg, string solution);
-
-        /// <summary>
-        /// ClientWarningThrown field
-        /// </summary>
-        public ClientWarningThrown ClientWarning;
-
 #pragma warning disable CS1591
 
         /// <summary>
         ///  SnackBarAction enum, passed into delegate for informing eventhandler on requested information
         /// </summary>
-        public enum SnackBarAction { Settings, Update, None };
+        public enum SnackbarAction { Settings, Update, None };
 
 #pragma warning restore CS1591
 
@@ -88,12 +38,12 @@ namespace DicsordBot.Bot
         /// </summary>
         /// <param name="msg">Error description</param>
         /// <param name="action">Enum for triggered action in event Handler</param>
-        public delegate void SnackBarWarningThrown(string msg, SnackBarAction action = SnackBarAction.None);
+        public delegate void SnackbarWarningThrown(string msg, SnackbarAction action = SnackbarAction.None);
 
         /// <summary>
         /// SnackBarWarningThrown field
         /// </summary>
-        public SnackBarWarningThrown SnackbarWarning;
+        public SnackbarWarningThrown SnackbarWarning;
 
         #endregion event handlers
 
@@ -129,7 +79,7 @@ namespace DicsordBot.Bot
         #region controll stuff
 
         /// <summary>
-        /// enques a Button into the list, only the file property is relevant
+        /// enques a Button into the list, only the file property is relevant. Loop and Boost are optional
         /// </summary>
         /// <param name="btn">ButtonData object which should be streamed</param>
         /// <returns>Task</returns>
@@ -138,34 +88,38 @@ namespace DicsordBot.Bot
         /// </remarks>
         new public async Task enqueueAsync(Data.ButtonData btn)
         {
+            await enqueueRegardingPriorityAsync(btn, false);
+        }
+
+        /// <summary>
+        /// enques a Button infront of the lsit, only the file property is relevant. Loop and Boost are optional
+        /// </summary>
+        /// <param name="btn">ButtonData object which should be streamed</param>
+        /// <returns>Task</returns>
+        /// <remarks>
+        /// auto connects to Server, calls enqueAsync(ButtonData) of base
+        /// </remarks>
+        new public async Task enqueuePriorityAsync(Data.ButtonData btn)
+        {
+            await enqueueRegardingPriorityAsync(btn, true);
+        }
+
+        private async Task enqueueRegardingPriorityAsync(Data.ButtonData btn, bool isPriority)
+        {
             if (!await connectToServerAsync())
                 return;
 
             try
             {
-                base.enqueueAsync(btn);
-            }
-            catch (System.IO.DirectoryNotFoundException)
-            {
-                SnackbarWarning("Directory of Button " + btn.ID + " could not be found.");
-            }
-            catch (System.IO.FileNotFoundException)
-            {
-                SnackbarWarning("File of Button number " + btn.ID + " could not be found.");
-            }
-            catch (System.IO.InvalidDataException)
-            {
-                SnackbarWarning("File of Button number " + btn.ID + " is damaged.");
-            }
-            catch (System.Runtime.InteropServices.COMException)
-            {
-                SnackbarWarning("File type of Button number " + btn.ID + " is not supported.");
+                if (isPriority)
+                    base.enqueuePriorityAsync(btn);
+                else
+                    base.enqueueAsync(btn);
             }
             catch (Exception ex)
             {
                 await disconnectFromChannelAsync();
-                UnhandledException.initWindow(ex, "Trying to add a new file to the queue. (Button Nr: " + btn.ID + ", Name: \"" + btn.Name + "\").");
-                Console.WriteLine("EnqueueAsync unhandled");
+                handleReplayException(ex, "Trying to add a new file to the queue. (Button Nr: " + btn.ID + ", Name: \"" + btn.Name + "\").", btn.ID);
             }
         }
 
@@ -179,6 +133,8 @@ namespace DicsordBot.Bot
         new public async Task resumeStream()
         {
             if (!await connectToServerAsync())
+                return;
+            else if (IsStreaming)
                 return;
 
             //if channel id has changed, reconnect to new channel
@@ -195,9 +151,7 @@ namespace DicsordBot.Bot
             catch (Exception ex)
             {
                 await disconnectFromChannelAsync();
-                UnhandledException.initWindow(ex, "Trying to start/resume the stream");
-
-                //TODO: catch all possible ex
+                handleReplayException(ex, "Trying to start / resume the stream");
             }
         }
 
@@ -220,7 +174,7 @@ namespace DicsordBot.Bot
             }
             catch (Exception ex)
             {
-                UnhandledException.initWindow(ex, "Trying to set a GameStatus");
+                UI.UnhandledException.initWindow(ex, "Trying to set a GameStatus");
                 Console.WriteLine("GameState Exception");
                 return false;
             }
@@ -253,7 +207,7 @@ namespace DicsordBot.Bot
             }
             catch (Discord.Net.HttpException)
             {
-                SnackbarWarning("Invalid Token", SnackBarAction.Settings);
+                SnackbarWarning("Invalid Token", SnackbarAction.Settings);
 
                 Console.WriteLine("connection Exception (Token)");
 
@@ -261,13 +215,13 @@ namespace DicsordBot.Bot
             }
             catch (System.Net.Http.HttpRequestException)
             {
-                ClientWarning("Can't reach the Discord-Servers due to timeout", "Check your internet connection, also check the availability of the discord server/api.");
+                SnackbarWarning("Can't reach the Discord-Servers due to timeout", SnackbarAction.None);
                 Console.WriteLine("connection Exception (Timeout, ...)");
                 return false;
             }
             catch (Exception ex)
             {
-                UnhandledException.initWindow(ex, "Trying to connect to the Discord Servers");
+                UI.UnhandledException.initWindow(ex, "Trying to connect to the Discord Servers");
                 Console.WriteLine("general connection Exception");
                 return false;
             }
@@ -299,7 +253,7 @@ namespace DicsordBot.Bot
 
                 if (client == null)
                 {
-                    SnackbarWarning("Cannot find specified owner.", SnackBarAction.None);
+                    SnackbarWarning("Cannot find specified owner.", SnackbarAction.None);
                     return false;
                 }
             }
@@ -323,24 +277,62 @@ namespace DicsordBot.Bot
             }
             catch (System.Threading.Tasks.TaskCanceledException ex)
             {
-                UnhandledException.initWindow(ex, "Trying to connect to a voice channel (cancelled).");
+                UI.UnhandledException.initWindow(ex, "Trying to connect to a voice channel (cancelled).");
                 return false;
             }
             catch (System.TimeoutException)
             {
-                ChannelWarning("The bot can't connect to the specified channel", "Check for sufficient permissions to join the requested channel.");
+                SnackbarWarning("Cannot join channel. Check permission", SnackbarAction.None);
                 return false;
             }
             catch (Exception ex)
             {
                 Console.WriteLine("Unhandled connection Exception");
-                UnhandledException.initWindow(ex, "Trying to connect to a voice channel");
+                UI.UnhandledException.initWindow(ex, "Trying to connect to a voice channel");
                 return false;
             }
             return true;
         }
 
         #endregion start stuff
+
+        #region handle exception
+
+        private void handleReplayException(Exception ex, string msg, int btnId = -1)
+        {
+            string btnStr;
+            //resolve button number/name
+            if (btnId >= 0)
+                //show button Number NOT Id
+                btnStr = "File of Button number " + (btnId + 1);
+            else
+                btnStr = "The file ";
+
+            switch (ex)
+            {
+                case System.IO.DirectoryNotFoundException iEx:
+                    SnackbarWarning(btnStr + " could not be found.");
+                    break;
+
+                case System.IO.FileNotFoundException iEx:
+                    SnackbarWarning(btnStr + " could not be found.");
+                    break;
+
+                case System.IO.InvalidDataException iEx:
+                    SnackbarWarning(btnStr + " is damaged.");
+                    break;
+
+                case System.Runtime.InteropServices.COMException iEx:
+                    SnackbarWarning(btnStr + " is not supported.");
+                    break;
+
+                default:
+                    Console.WriteLine("Failed to handle error (BotHandler.cs)");
+                    break;
+            }
+        }
+
+        #endregion handle exception
 
         #region get data
 
@@ -386,7 +378,7 @@ namespace DicsordBot.Bot
             }
             catch
             {
-                ChannelWarning("The bot can't download the client-list", "Retry later.");
+                SnackbarWarning("Cannot get clients. Retry later");
                 return null;
             }
 

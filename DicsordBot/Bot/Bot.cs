@@ -1,16 +1,10 @@
-﻿using System.Threading.Tasks;
-
-using NAudio.Wave;
-
-using Discord;
-using Discord.WebSocket;
+﻿using Discord;
 using Discord.Audio;
-using System.IO;
-using System.Runtime.Serialization.Formatters.Binary;
-using System.Diagnostics;
-using System.Collections.Generic;
+using Discord.WebSocket;
+using NAudio.Wave;
 using System;
-using System.ComponentModel;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace DicsordBot.Bot
 {
@@ -118,7 +112,7 @@ namespace DicsordBot.Bot
         public TimeSpan TitleLenght { get { if (Reader != null) return Reader.TotalTime; else return TimeSpan.Zero; } }
 
         /// <summary>
-        /// IsBufferEmpy property
+        /// IsBufferEmpty property
         /// </summary>
         public bool IsBufferEmpty { get; set; }
 
@@ -152,7 +146,7 @@ namespace DicsordBot.Bot
         /// <remarks>
         /// Contains data representation of Buttons, to also store settings like a custom loop-state
         /// </remarks>
-        protected Queue<Data.ButtonData> Queue { get; set; }
+        private List<Data.ButtonData> Queue { get; set; }
 
         private MediaFoundationReader Reader { get; set; }
         private MediaFoundationResampler ActiveResampler { get; set; }
@@ -168,8 +162,7 @@ namespace DicsordBot.Bot
         /// </summary>
         public Bot()
         {
-            //TOOD: maybe other format, to format more information
-            Queue = new Queue<Data.ButtonData>();
+            Queue = new List<Data.ButtonData>();
             IsStreaming = false;
             IsChannelConnected = false;
             IsServerConnected = false;
@@ -184,13 +177,30 @@ namespace DicsordBot.Bot
         /// <param name="btn"></param>
         protected void enqueueAsync(Data.ButtonData btn)
         {
+            if (!IsStreaming && IsBufferEmpty)
+            {
+                getStream(btn);
+            }
+            else
+            {
+                Queue.Add(btn);
+            }
+        }
+
+        /// <summary>
+        /// enqueues a btn at the first position of the queue
+        /// </summary>
+        /// <param name="btn"></param>
+        protected void enqueuePriorityAsync(Data.ButtonData btn)
+        {
             if (!IsStreaming)
             {
                 getStream(btn);
             }
             else
             {
-                Queue.Enqueue(btn);
+                //insert on first position
+                Queue.Insert(0, btn);
             }
         }
 
@@ -372,7 +382,11 @@ namespace DicsordBot.Bot
                     if (IsLoop)
                         LoopStateChanged(false);
 
-                    getStream(Queue.Dequeue());
+                    //queue must contain at least one item
+                    var nextTitle = Queue[0];
+                    Queue.RemoveAt(0);
+                    getStream(nextTitle);
+
                     await startStreamAsync(stream);
                 }
                 //exit stream
@@ -380,8 +394,9 @@ namespace DicsordBot.Bot
                 {
                     //can't skip a track if nothing is running
                     SkipTracks = 0;
+
                     //wait until last packages are played
-                    await Task.Delay(1250);
+                    await stream.FlushAsync();
 
                     stream.Close();
                     IsToAbort = false;

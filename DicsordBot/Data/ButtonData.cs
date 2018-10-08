@@ -1,11 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Media;
-using System.Xml.Serialization;
 
 namespace DicsordBot.Data
 {
@@ -16,6 +10,37 @@ namespace DicsordBot.Data
     public class ButtonData : INotifyPropertyChanged
 
     {
+        #region constructors
+
+        /// <summary>
+        /// default constructor
+        /// </summary>
+        public ButtonData()
+        {
+        }
+
+        /// <summary>
+        /// constructor
+        /// </summary>
+        /// <param name="_file">path to file</param>
+        public ButtonData(string _file)
+        {
+            File = _file;
+        }
+
+        /// <summary>
+        /// constructor
+        /// </summary>
+        /// <param name="_name">name of file</param>
+        /// <param name="_file">path to file</param>
+        public ButtonData(string _name, string _file)
+        {
+            Name = _name;
+            File = _file;
+        }
+
+        #endregion constructors
+
         #region saved fields
 
         private string name = null;
@@ -23,6 +48,8 @@ namespace DicsordBot.Data
         private bool isEarrape = false;
         private bool isLoop = false;
         private int iD;
+        private uint hotkey_vk = 0;
+        private uint hotkey_mod = 0;
 
         #endregion saved fields
 
@@ -53,6 +80,16 @@ namespace DicsordBot.Data
         /// IsLoop property
         /// </summary>
         public bool IsLoop { get { return isLoop; } set { isLoop = value; OnPropertyChanged("IsLoop"); } }
+
+        /// <summary>
+        /// virtual keycode of assigned hotkey
+        /// </summary>
+        public uint Hotkey_VK { get { return hotkey_vk; } set { hotkey_vk = value; OnPropertyChanged("Hotkey_VK"); } }
+
+        /// <summary>
+        /// modifier code of assigned hotkey
+        /// </summary>
+        public uint Hotkey_MOD { get { return hotkey_mod; } set { hotkey_mod = value; OnPropertyChanged("Hotkey_MOD"); } }
 
         /// <summary>
         /// ID property
