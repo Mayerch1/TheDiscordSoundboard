@@ -545,7 +545,10 @@ namespace DicsordBot
             {
                 Handle.Data.IsPlaylistPlaying = false;
                 //add first button
-                triggerBotInstantReplay(new Data.ButtonData(playlist.Tracks[(int)fileIndex].Name, playlist.Tracks[(int)fileIndex].Path));
+
+                bool ignoreHistory = (listId == -1) ? true : false;
+
+                triggerBotInstantReplay(new Data.ButtonData(playlist.Tracks[(int)fileIndex].Name, playlist.Tracks[(int)fileIndex].Path), ignoreHistory);
                 //set playlist properties, after song changed -> first title will not be skipped
                 Handle.Data.PlaylistIndex = listId;
                 Handle.Data.PlaylistFileIndex = (int)fileIndex + 1;
@@ -553,11 +556,12 @@ namespace DicsordBot
             }
         }
 
-        private async void triggerBotInstantReplay(Data.ButtonData data)
+        private async void triggerBotInstantReplay(Data.ButtonData data, bool ignoreHistory = false)
         {
             //place song in front of queue
             await Handle.Bot.enqueuePriorityAsync(data);
-            addTitleToHistory(data);
+            if (!ignoreHistory)
+                addTitleToHistory(data);
             //start or skip current track
             if (!Handle.Bot.IsStreaming)
                 await Handle.Bot.resumeStream();
@@ -565,10 +569,11 @@ namespace DicsordBot
                 Handle.Bot.skipTrack();
         }
 
-        private async void triggerBotQueueReplay(Data.ButtonData data)
+        private async void triggerBotQueueReplay(Data.ButtonData data, bool ignoreHistory = false)
         {
             await Handle.Bot.enqueueAsync(data);
-            addTitleToHistory(data);
+            if (!ignoreHistory)
+                addTitleToHistory(data);
             //only resume, if not streaming + not in pause mode
             if (!Handle.Bot.IsStreaming)
                 await Handle.Bot.resumeStream();
@@ -614,8 +619,9 @@ namespace DicsordBot
                         //make shure another call of this method won't skip a title
                         Handle.Data.IsPlaylistPlaying = false;
 
+                        bool ignoreHistory = (listIndex == -1) ? true : false;
                         //play next track, method starts stream if paused or stopped
-                        triggerBotQueueReplay(new Data.ButtonData(playlist.Tracks[fileIndex].Name, playlist.Tracks[fileIndex].Path));
+                        triggerBotQueueReplay(new Data.ButtonData(playlist.Tracks[fileIndex].Name, playlist.Tracks[fileIndex].Path), ignoreHistory);
 
                         //re-enable playlist-mode
                         Handle.Data.IsPlaylistPlaying = true;
