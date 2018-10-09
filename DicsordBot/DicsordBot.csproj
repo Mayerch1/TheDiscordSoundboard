@@ -109,6 +109,9 @@
     <Reference Include="GongSolutions.Wpf.DragDrop, Version=1.1.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\gong-wpf-dragdrop.1.1.0\lib\net46\GongSolutions.Wpf.DragDrop.dll</HintPath>
     </Reference>
+    <Reference Include="libvideo, Version=2.0.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\VideoLibrary.2.0.1\lib\netstandard1.1\libvideo.dll</HintPath>
+    </Reference>
     <Reference Include="MaterialDesignColors, Version=1.1.2.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\MaterialDesignColors.1.1.2\lib\net45\MaterialDesignColors.dll</HintPath>
     </Reference>
@@ -217,6 +220,7 @@
     <Compile Include="Data\History.cs" />
     <Compile Include="IO\BlurEffectManager.cs" />
     <Compile Include="IO\ImageManager.cs" />
+    <Compile Include="IO\YTManager.cs" />
     <Compile Include="OSInterop.cs" />
     <Compile Include="UI\About.xaml.cs">
       <DependentUpon>About.xaml</DependentUpon>
@@ -253,6 +257,9 @@
     </Compile>
     <Compile Include="UI\Settings.xaml.cs">
       <DependentUpon>Settings.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\StreamMode.xaml.cs">
+      <DependentUpon>StreamMode.xaml</DependentUpon>
     </Compile>
     <Compile Include="UI\UnhandledException.xaml.cs">
       <DependentUpon>UnhandledException.xaml</DependentUpon>
@@ -308,6 +315,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="UI\Settings.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\StreamMode.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

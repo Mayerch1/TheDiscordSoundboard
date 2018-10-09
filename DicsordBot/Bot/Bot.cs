@@ -4,6 +4,7 @@ using Discord.WebSocket;
 using NAudio.Wave;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Threading.Tasks;
 
 namespace DicsordBot.Bot

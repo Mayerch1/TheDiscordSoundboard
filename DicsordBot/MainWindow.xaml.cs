@@ -183,6 +183,7 @@ namespace DicsordBot
             Handle.Data.saveAll();
 
             IO.ImageManager.clearImageCache(Handle.Data.Playlists);
+            IO.YTManager.clearVideoCache();
 
             //this will prevent the StreamState-changed handler from enqueing the next song, when trying to dicsonnect
             Handle.Data.IsPlaylistPlaying = false;
@@ -356,22 +357,25 @@ namespace DicsordBot
 
         private void registerEmbedEvents(object embed)
         {
-            Type objType = embed.GetType();
+            switch (embed)
+            {
+                case UI.ButtonUI ui:
+                    ui.InstantButtonClicked += btn_InstantButton_Clicked;
+                    ui.ToggleHotkey += ToggleHotkey;
+                    break;
 
-            if (objType == typeof(UI.ButtonUI))
-            {
-                ((UI.ButtonUI)embed).InstantButtonClicked += btn_InstantButton_Clicked;
-                ((UI.ButtonUI)embed).ToggleHotkey += ToggleHotkey;
-            }
-            else if (objType == typeof(UI.SearchMode))
-            {
-                ((UI.SearchMode)embed).ListItemPlay += List_Item_Play;
-            }
-            else if (objType == typeof(UI.Playlist.PlaylistMode))
-            {
-                ((UI.Playlist.PlaylistMode)embed).PlaylistStartPlay += Playlist_Play;
+                case UI.SearchMode ui:
+                    ui.ListItemPlay += List_Item_Play;
+                    break;
 
-                ((UI.Playlist.PlaylistMode)embed).PlaylistItemEnqueued += Playlist_SingleFile_Play;
+                case UI.Playlist.PlaylistMode ui:
+                    ui.PlaylistStartPlay += Playlist_Play;
+                    ui.PlaylistItemEnqueued += Playlist_SingleFile_Play;
+                    break;
+
+                case UI.StreamMode ui:
+                    ui.PlayVideo += Stream_Video_Play;
+                    break;
             }
         }
 
@@ -517,6 +521,11 @@ namespace DicsordBot
             triggerBotQueueReplay(new Data.ButtonData(file.Name, file.Path));
         }
 
+        private void Stream_Video_Play(Data.ButtonData data)
+        {
+            triggerBotInstantReplay(new Data.ButtonData(data.Name, data.File), true);
+        }
+
         /// <param name="listId">unique id field of playlists</param>
         /// <param name="fileIndex">index in the array of all playList files</param>
         private async void Playlist_Play(int listId, uint fileIndex)
@@ -553,11 +562,12 @@ namespace DicsordBot
             }
         }
 
-        private async void triggerBotInstantReplay(Data.ButtonData data)
+        private async void triggerBotInstantReplay(Data.ButtonData data, bool disableHistory = false)
         {
             //place song in front of queue
             await Handle.Bot.enqueuePriorityAsync(data);
-            addTitleToHistory(data);
+            if (!disableHistory)
+                addTitleToHistory(data);
             //start or skip current track
             if (!Handle.Bot.IsStreaming)
                 await Handle.Bot.resumeStream();
@@ -565,10 +575,12 @@ namespace DicsordBot
                 Handle.Bot.skipTrack();
         }
 
-        private async void triggerBotQueueReplay(Data.ButtonData data)
+        private async void triggerBotQueueReplay(Data.ButtonData data, bool disableHistory = false)
         {
             await Handle.Bot.enqueueAsync(data);
-            addTitleToHistory(data);
+
+            if (!disableHistory)
+                addTitleToHistory(data);
             //only resume, if not streaming + not in pause mode
             if (!Handle.Bot.IsStreaming)
                 await Handle.Bot.resumeStream();
@@ -709,6 +721,14 @@ namespace DicsordBot
             UI.Playlist.PlaylistMode playUI = new UI.Playlist.PlaylistMode();
             registerEmbedEvents(playUI);
             MainGrid.Child = playUI;
+        }
+
+        private void btn_Stream_Click(object sender, RoutedEventArgs e)
+        {
+            MainGrid.Child = null;
+            UI.StreamMode streamUI = new UI.StreamMode();
+            registerEmbedEvents(streamUI);
+            MainGrid.Child = streamUI;
         }
 
         private void btn_Settings_Click()

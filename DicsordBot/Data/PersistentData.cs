@@ -38,6 +38,11 @@ namespace DicsordBot.Data
         public const string imageCacheFolder = "Images";
 
         /// <summary>
+        /// folder to cache videos in
+        /// </summary>
+        public const string videoCacheFolder = "Videos";
+
+        /// <summary>
         /// version of this build, refers to the github release number
         /// </summary>
         public const string version = "2.1.0";
