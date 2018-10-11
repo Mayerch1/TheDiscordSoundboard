@@ -20,7 +20,7 @@ namespace DicsordBot
         /// <summary>
         /// Provides methods depending on Bot, but are only used to get data, not to perform actions on bot
         /// </summary>
-        public static BotData BotData { get; set; } = new BotData();
+        public static BotMisc BotMisc { get; set; } = new BotMisc();
 
         #region events
 
@@ -32,7 +32,7 @@ namespace DicsordBot
         /// </param>
         public static async void ClientName_Changed(string newName)
         {
-            var id = await BotData.resolveUserName(newName);
+            var id = await BotMisc.resolveUserName(newName);
 
             if (id > 0)
                 Data.Persistent.ClientId = id;
@@ -153,7 +153,7 @@ namespace DicsordBot
             {
                 //set clientId, by resolving userName
                 Data.Persistent.ClientName = value;
-                var uId = BotData.resolveUserName(value);
+                var uId = BotMisc.resolveUserName(value);
                 if (uId.Result > 0)
                     ClientId = uId.Result;
             }

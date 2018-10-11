@@ -10,7 +10,7 @@ namespace DicsordBot
     /// <remarks>
     /// Requires Handle class, because it accesses the Bot class inside the Handle
     /// </remarks>
-    public class BotData
+    public class BotMisc
     {
         /// <summary>
         /// get the client object from a client list of all online clients
@@ -71,6 +71,23 @@ namespace DicsordBot
             }
 
             return 0;
+        }
+
+        /// <summary>
+        /// converts ButtonData to BotData, needs to be as sub-routine bc of different namespaces
+        /// </summary>
+        /// <param name="btn">ButtonData objcet to convert</param>
+        /// <returns>BotData object</returns>
+        public Bot.BotData getBotData(Data.ButtonData btn)
+        {
+            return new Bot.BotData()
+            {
+                name = btn.Name,
+                filePath = btn.File,
+                isEarrape = btn.IsEarrape,
+                isLoop = btn.IsLoop,
+                id = btn.ID,
+            };
         }
     }
 }

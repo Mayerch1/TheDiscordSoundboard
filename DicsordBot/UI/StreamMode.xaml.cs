@@ -25,7 +25,7 @@ namespace DicsordBot.UI
     /// </summary>
     public partial class StreamMode : UserControl, INotifyPropertyChanged
     {
-        public delegate void PlayVideoHandler(Data.ButtonData data);
+        public delegate void PlayVideoHandler(Video vid);
 
         public PlayVideoHandler PlayVideo;
 
@@ -51,36 +51,28 @@ namespace DicsordBot.UI
             {
                 //cache video, thread will then start replay
                 Title = vid.Title;
-                Console.WriteLine(vid.Uri);
-                cacheAndStreamVideo(vid);
+                PlayVideo(vid);
+                //cacheAndStreamVideo(vid);
             }
         }
 
-        private void cacheAndStreamVideo(Video vid)
+        private async void cacheAndStreamVideo(Video vid)
         {
-            //save videos in background, clear cache
-            BackgroundWorker bw = new BackgroundWorker();
-            bw.DoWork += new DoWorkEventHandler(IO.YTManager.worker_cacheVideo);
-            bw.RunWorkerCompleted += new RunWorkerCompletedEventHandler(worker_Complete);
+            Console.WriteLine("Caching: " + vid.Title + "...");
 
-            bw.RunWorkerAsync(vid);
-        }
+            //var x = await vid.StreamAsync();
 
-        private void worker_Complete(object sender, RunWorkerCompletedEventArgs e)
-        {
-            lastCache = e.Result as string;
-            //start the stream
-            if (lastCache != null)
-                sendVideo(lastCache);
-            else
-                Handle.SnackbarWarning("Could not decrypt file");
+            string location = await IO.YTManager.cacheVideo(vid);
+            if (location != null)
+                return;
+            //sendVideo(location);
         }
 
         private void sendVideo(string path)
         {
             //send the  delegate to stream the file
-            if (path != null)
-                PlayVideo(new Data.ButtonData(Title, path));
+            //if (path != null)
+            //PlayVideo(new Data.ButtonData(Title, path));
         }
 
         #region events
