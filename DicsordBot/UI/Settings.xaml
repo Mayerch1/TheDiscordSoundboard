@@ -133,7 +133,7 @@
                                     </ListBox>
                                 </ScrollViewer>
 
-                                <StackPanel Orientation="Horizontal">
+                                <StackPanel Orientation="Horizontal" VerticalAlignment="Top">
                                     <Button Click="btn_addMediaSource_Click" Background="{StaticResource PrimaryForegroundBrush}" BorderBrush="{x:Null}">
                                         <materialDesign:PackIcon Kind="Plus" />
                                     </Button>
