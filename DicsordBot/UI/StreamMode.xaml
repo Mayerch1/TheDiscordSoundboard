@@ -4,12 +4,55 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:local="clr-namespace:DicsordBot.UI"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              mc:Ignorable="d"
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid>
-        <StackPanel Orientation="Horizontal">
-            <TextBox Text="{Binding Url}" KeyDown="box_url_KeyDown" MinWidth="150" />
-            <Button Click="btn_Stream_Click" />
-        </StackPanel>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="2.5*" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+
+        <Grid Grid.Column="0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+
+            <Grid Grid.Row="0">
+                <DockPanel VerticalAlignment="Top" Margin="20" LastChildFill="True">
+                    <Image  x:Name="img_thumbnail"
+                            DockPanel.Dock="Left"
+                            Width="256" Height="256" Margin="0,0,20,0"
+                            Source="{Binding ImageUri}" />
+
+                    <Label Content="{Binding Title}"
+                           DockPanel.Dock="Top"
+                           Margin="0,30,0,0"
+                           FontSize="15" />
+
+                    <Button Click="btn_Stream_Click"
+                            DockPanel.Dock="Right"
+                            Height="45" Width="80" Margin="20"
+                            Content="Stream"
+                            Background="{StaticResource PrimaryForegroundBrush}"
+                            BorderBrush="{x:Null}" />
+
+                    <TextBox Text="{Binding Url}"
+                            KeyDown="box_url_KeyDown"
+                            Height="57"
+                            Style="{StaticResource MaterialDesignTextFieldBoxTextBox}"
+                            materialDesign:HintAssist.Hint="Url to Video" />
+                </DockPanel>
+            </Grid>
+
+            <Grid Grid.Row="1">
+                <!-- history or recommended videos-->
+            </Grid>
+        </Grid>
+
+        <Grid Grid.Column="1">
+            <!-- history or recommended videos-->
+        </Grid>
     </Grid>
 </UserControl>

@@ -217,7 +217,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="Bot\BotData.cs" />
+    <Compile Include="Data\BotData.cs" />
     <Compile Include="Data\History.cs" />
     <Compile Include="IO\BlurEffectManager.cs" />
     <Compile Include="IO\ImageManager.cs" />

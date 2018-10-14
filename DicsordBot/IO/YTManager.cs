@@ -14,7 +14,7 @@ namespace DicsordBot.IO
     /// </summary>
     public static class YTManager
     {
-        private const string imageUrl = "https://img.youtube.com/vi";
+        private const string imageUrl = "https://img.youtube.com/vi/";
 
         private const string thumbnailQuality = "/sddefault.jpg";
 
@@ -59,7 +59,7 @@ namespace DicsordBot.IO
         /// <returns>direct url to thumbnail</returns>
         public static string getUrlToThumbnail(string url)
         {
-            return imageUrl + getUrlToThumbnail(getIdFromUrl(url)) + thumbnailQuality;
+            return imageUrl + getIdFromUrl(url) + thumbnailQuality;
         }
 
         /// <summary>
@@ -74,14 +74,16 @@ namespace DicsordBot.IO
             Video mpAudio;
             try
             {
-                //get video file
-                var videos = await YouTube.Default.GetAllVideosAsync(url);
+                mpAudio = await yt.GetVideoAsync(url);
 
-                //get audios, only aac
-                var audios = videos.Where(v => v.AudioFormat == AudioFormat.Aac && v.AdaptiveKind == AdaptiveKind.Audio).ToList();
+                ////get video file
+                //var videos = await YouTube.Default.GetAllVideosAsync(url);
 
-                //save audio into Video, only with audio
-                mpAudio = audios.FirstOrDefault(x => x.AudioBitrate > 0);
+                ////get audios, only aac
+                //var audios = videos.Where(v => v.AudioFormat == AudioFormat.Aac && v.AdaptiveKind == AdaptiveKind.Audio).ToList();
+
+                ////save audio into Video, only with audio
+                //mpAudio = audios.FirstOrDefault(x => x.AudioBitrate > 0);
 
                 Console.WriteLine(mpAudio.Uri);
             }
@@ -109,33 +111,23 @@ namespace DicsordBot.IO
             }
             var location = folder + @"\" + vid.FullName;
 
-            byte[] byteStream;
             try
             {
-                Console.WriteLine("Start to getBytesAsync()");
-                byteStream = await vid.GetBytesAsync();
-                Console.WriteLine("Succesfully downloaded file");
+                //make async
+                File.WriteAllBytes(location, await vid.GetBytesAsync());
+
+                Console.WriteLine("Succesfully saved file");
             }
             catch (System.Net.Http.HttpRequestException ex)
             {
                 Handle.SnackbarWarning("Could not decrypt video");
-                return null;
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine("Error in downloading file");
                 Console.WriteLine(ex.Message);
                 return null;
-            }
-            try
-            {
-                //make async
-                File.WriteAllBytes(location, byteStream);
-                Console.WriteLine("Succesfully saved file");
             }
             catch (Exception ex)
             {
                 Console.WriteLine("Error in saving file");
+
                 return null;
             }
 

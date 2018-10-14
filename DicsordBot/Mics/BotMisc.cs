@@ -78,9 +78,9 @@ namespace DicsordBot
         /// </summary>
         /// <param name="btn">ButtonData objcet to convert</param>
         /// <returns>BotData object</returns>
-        public Bot.BotData getBotData(Data.ButtonData btn)
+        public Data.BotData getBotData(Data.ButtonData btn)
         {
-            return new Bot.BotData()
+            return new Data.BotData()
             {
                 name = btn.Name,
                 filePath = btn.File,

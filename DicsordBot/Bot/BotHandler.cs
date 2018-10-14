@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace DicsordBot.Bot
+namespace DicsordBot.Data
 {
     /// <summary>
     /// BotHandle inherites from Bot, failsave frame around the bot class

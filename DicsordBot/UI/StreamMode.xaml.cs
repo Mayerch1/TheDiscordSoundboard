@@ -25,16 +25,18 @@ namespace DicsordBot.UI
     /// </summary>
     public partial class StreamMode : UserControl, INotifyPropertyChanged
     {
-        public delegate void PlayVideoHandler(Video vid);
+        public delegate void PlayVideoHandler(Data.BotData data);
 
         public PlayVideoHandler PlayVideo;
 
-        private string lastCache = null;
         private string url = "";
-        public string Url { get { return url; } set { url = value; OnPropertyChanged("Url"); } }
+        public string Url { get { return url; } set { url = value; ImageUri = IO.YTManager.getUrlToThumbnail(value); OnPropertyChanged("Url"); } }
 
         private string title = "";
         public string Title { get { return title; } set { title = value; OnPropertyChanged("Title"); } }
+
+        private string imageUri = "";
+        public string ImageUri { get { return imageUri; } set { imageUri = value; ImageChanged(value); OnPropertyChanged("ImageUri"); } }
 
         public StreamMode()
         {
@@ -42,7 +44,18 @@ namespace DicsordBot.UI
             this.DataContext = this;
         }
 
-        private async void requestStartStream()
+        private void proccessEntry()
+        {
+            if (Url.Contains("http://") || Url.Contains("https://"))
+            {
+                getAndStartStream();
+            }
+            else
+            {
+            }
+        }
+
+        private async void getAndStartStream()
         {
             //download video
             Video vid = await IO.YTManager.getVideoAsync(Url);
@@ -51,8 +64,11 @@ namespace DicsordBot.UI
             {
                 //cache video, thread will then start replay
                 Title = vid.Title;
-                PlayVideo(vid);
-                //cacheAndStreamVideo(vid);
+
+                //PlayVideo(vid);
+                cacheAndStreamVideo(vid);
+
+                vid = null;
             }
         }
 
@@ -63,32 +79,41 @@ namespace DicsordBot.UI
             //var x = await vid.StreamAsync();
 
             string location = await IO.YTManager.cacheVideo(vid);
+
             if (location != null)
-                return;
-            //sendVideo(location);
+                sendVideo(location);
         }
 
         private void sendVideo(string path)
         {
             //send the  delegate to stream the file
-            //if (path != null)
-            //PlayVideo(new Data.ButtonData(Title, path));
+            if (path != null)
+            {
+                PlayVideo(new Data.BotData(Title, path));
+            }
         }
 
         #region events
 
         private void box_url_KeyDown(object sender, KeyEventArgs e)
         {
+            Url = ((TextBox)sender).Text;
+
             if (e.Key == Key.Enter)
             {
                 Url = ((TextBox)sender).Text;
-                requestStartStream();
+                proccessEntry();
             }
+        }
+
+        private void ImageChanged(string uri)
+        {
+            img_thumbnail.Source = new BitmapImage(new Uri(ImageUri, UriKind.RelativeOrAbsolute));
         }
 
         private void btn_Stream_Click(object sender, RoutedEventArgs e)
         {
-            requestStartStream();
+            proccessEntry();
         }
 
         #endregion events

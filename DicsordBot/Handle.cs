@@ -15,7 +15,7 @@ namespace DicsordBot
         /// <summary>
         /// Bot class, handles all commands towards bot
         /// </summary>
-        public static Bot.BotHandle Bot { get; set; } = new Bot.BotHandle();
+        public static Data.BotHandle Bot { get; set; } = new Data.BotHandle();
 
         /// <summary>
         /// Provides methods depending on Bot, but are only used to get data, not to perform actions on bot
@@ -78,7 +78,7 @@ namespace DicsordBot
         /// <summary>
         /// used to convert old Bot SnackbarWarnings to new universal warnings
         /// </summary>
-        public static void PassBotSnackbarWarning(string msg, Bot.BotHandle.SnackbarAction action)
+        public static void PassBotSnackbarWarning(string msg, Data.BotHandle.SnackbarAction action)
         {
             int converter = (int)action;
 

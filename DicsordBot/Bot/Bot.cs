@@ -7,7 +7,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
 
-namespace DicsordBot.Bot
+namespace DicsordBot.Data
 {
     /// <summary>
     /// Basic Bot class, directly communicates with the api, throws for every little sh
@@ -134,6 +134,8 @@ namespace DicsordBot.Bot
         /// </summary>
         public bool IsEarrape { get; set; } = false;
 
+        private bool CanSeek { get; set; } = true;
+
         #endregion status propertys
 
         #region other vars
@@ -230,7 +232,7 @@ namespace DicsordBot.Bot
         /// <param name="enforce">enforce the skip, even if nothing is playing</param>
         public void skipToTime(TimeSpan newTime, bool enforce = false)
         {
-            if (IsStreaming || enforce)
+            if ((IsStreaming || enforce) && CanSeek)
             {
                 Reader.CurrentTime = newTime;
             }
@@ -242,7 +244,7 @@ namespace DicsordBot.Bot
         /// <param name="skipTime">timeSpan to skip over</param>
         public void skipOverTime(TimeSpan skipTime)
         {
-            if (IsStreaming)
+            if (IsStreaming && CanSeek)
             {
                 Reader.CurrentTime = Reader.CurrentTime.Add(skipTime);
             }
@@ -290,13 +292,26 @@ namespace DicsordBot.Bot
             {
                 Reader = new MediaFoundationReader(data.filePath);
                 NormalResampler = new MediaFoundationResampler(Reader, OutFormat);
+
+                //set seekable
+                CanSeek = true;
             }
             else if (data.stream != null)
             {
-                IWaveProvider provider = new RawSourceWaveStream(new MemoryStream(data.stream), OutFormat);
+                IWaveProvider provider = new RawSourceWaveStream(data.stream, OutFormat);
                 NormalResampler = new MediaFoundationResampler(provider, OutFormat);
-                //TODO: test seeking behaviour with memoryStream
-                //maybe global var, flipping between memorystream and MediaF.Reader
+
+                //set non seekable bool
+                CanSeek = data.stream.CanSeek;
+
+                //IWaveProvider provider = new RawSourceWaveStream(new MemoryStream(data.stream), OutFormat);
+                //NormalResampler = new MediaFoundationResampler(provider, OutFormat);
+
+                ////TODO: test seeking behaviour with memoryStream
+                ////maybe global var, flipping between memorystream and MediaF.Reader
+
+                ////temporarily
+                //CanSeek = false;
             }
 
             /*

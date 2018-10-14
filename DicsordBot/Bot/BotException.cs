@@ -1,4 +1,4 @@
-﻿namespace DicsordBot.Bot
+﻿namespace DicsordBot.Data
 {
     /// <summary>
     /// Class for custom bot exception

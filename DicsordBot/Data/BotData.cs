@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.IO;
 
-namespace DicsordBot.Bot
+namespace DicsordBot.Data
 {
 #pragma warning disable CS1591
 
@@ -17,15 +13,30 @@ namespace DicsordBot.Bot
         {
         }
 
+        public BotData(string _name)
+        {
+            name = _name;
+        }
+
         public BotData(string _name, string _filePath)
         {
             name = _name;
             filePath = _filePath;
         }
 
+        public BotData(ButtonData btn)
+        {
+            name = btn.Name;
+            filePath = btn.File;
+            isEarrape = btn.IsEarrape;
+            isLoop = btn.IsLoop;
+            id = btn.ID;
+            stream = null;
+        }
+
         public string name = "";
         public string filePath = null;
-        public byte[] stream = null;
+        public Stream stream = null;
         public bool isEarrape = false;
         public bool isLoop = false;
         public int id = -1;

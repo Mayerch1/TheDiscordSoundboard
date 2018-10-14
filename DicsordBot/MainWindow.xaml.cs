@@ -504,7 +504,7 @@ namespace DicsordBot
                 if (file.Id == index)
                 {
                     //create ButtonData to feed to bot
-                    Bot.BotData data = new Bot.BotData(file.Name, file.Path);
+                    Data.BotData data = new Data.BotData(file.Name, file.Path);
 
                     if (isPriority)
                         //interrupt current stream
@@ -518,16 +518,21 @@ namespace DicsordBot
 
         private void Playlist_SingleFile_Play(Data.FileData file)
         {
-            triggerBotQueueReplay(new Bot.BotData(file.Name, file.Path));
+            triggerBotQueueReplay(new Data.BotData(file.Name, file.Path));
         }
 
-        private async void Stream_Video_Play(VideoLibrary.Video vid)
+        private async void Stream_Video_Play(Data.BotData data)
         {
-            Console.WriteLine("Start to getBytesAsync()");
-            byte[] stream = await vid.GetBytesAsync();
-            Console.WriteLine("Finished download");
+            //Console.WriteLine("Start to getBytesAsync()");
+            //System.IO.Stream stream = await vid.StreamAsync();
+            //Console.WriteLine("Finished download");
 
-            //triggerBotInstantReplay(stream, vid.Title);
+            //Data.BotData data = new Data.BotData(vid.Title)
+            //{
+            //    stream = stream,
+            //};
+
+            triggerBotInstantReplay(data, true);
         }
 
         /// <param name="listId">unique id field of playlists</param>
@@ -558,7 +563,7 @@ namespace DicsordBot
             {
                 Handle.Data.IsPlaylistPlaying = false;
                 //add first button
-                triggerBotInstantReplay(new Bot.BotData(playlist.Tracks[(int)fileIndex].Name, playlist.Tracks[(int)fileIndex].Path));
+                triggerBotInstantReplay(new Data.BotData(playlist.Tracks[(int)fileIndex].Name, playlist.Tracks[(int)fileIndex].Path));
                 //set playlist properties, after song changed -> first title will not be skipped
                 Handle.Data.PlaylistIndex = listId;
                 Handle.Data.PlaylistFileIndex = (int)fileIndex + 1;
@@ -566,7 +571,7 @@ namespace DicsordBot
             }
         }
 
-        private async void triggerBotInstantReplay(Bot.BotData data, bool disableHistory = false)
+        private async void triggerBotInstantReplay(Data.BotData data, bool disableHistory = false)
         {
             //place song in front of queue
             await Handle.Bot.enqueuePriorityAsync(data);
@@ -579,7 +584,7 @@ namespace DicsordBot
                 Handle.Bot.skipTrack();
         }
 
-        private async void triggerBotQueueReplay(Bot.BotData data, bool disableHistory = false)
+        private async void triggerBotQueueReplay(Data.BotData data, bool disableHistory = false)
         {
             await Handle.Bot.enqueueAsync(data);
 
@@ -592,7 +597,7 @@ namespace DicsordBot
 
         #endregion BotPlayDelegates
 
-        private void addTitleToHistory(Bot.BotData title)
+        private void addTitleToHistory(Data.BotData title)
         {
             Handle.Data.History.addTitle(IO.FileWatcher.getAllFileInfo(title.filePath));
         }
@@ -631,7 +636,7 @@ namespace DicsordBot
                         Handle.Data.IsPlaylistPlaying = false;
 
                         //play next track, method starts stream if paused or stopped
-                        triggerBotQueueReplay(new Bot.BotData(playlist.Tracks[fileIndex].Name, playlist.Tracks[fileIndex].Path));
+                        triggerBotQueueReplay(new Data.BotData(playlist.Tracks[fileIndex].Name, playlist.Tracks[fileIndex].Path));
 
                         //re-enable playlist-mode
                         Handle.Data.IsPlaylistPlaying = true;
@@ -643,7 +648,7 @@ namespace DicsordBot
                         {
                             Handle.Data.PlaylistFileIndex = 0;
                             //call this function again, to equeue the playlist
-                            triggerBotQueueReplay(new Bot.BotData(playlist.Tracks[0].Name, playlist.Tracks[0].Path));
+                            triggerBotQueueReplay(new Data.BotData(playlist.Tracks[0].Name, playlist.Tracks[0].Path));
                         }
                         else
                             //set properties for finished playlist
