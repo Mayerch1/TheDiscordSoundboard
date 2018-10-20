@@ -1,22 +1,14 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
+using DiscordBot.Data;
 using VideoLibrary;
 
-namespace DicsordBot.UI
+namespace DiscordBot.UI
 {
 #pragma warning disable CS1591
 
@@ -25,24 +17,64 @@ namespace DicsordBot.UI
     /// </summary>
     public partial class StreamMode : UserControl, INotifyPropertyChanged
     {
+        //this is Discord typo fix
+        //this is DiscordBot typo fix
+
         public delegate void PlayVideoHandler(Data.BotData data);
 
         public PlayVideoHandler PlayVideo;
 
         private string url = "";
-        public string Url { get { return url; } set { url = value; ImageUri = IO.YTManager.getUrlToThumbnail(value); OnPropertyChanged("Url"); } }
+
+        public string Url
+        {
+            get => url;
+            set
+            {
+                url = value;
+                ImageUri = IO.YTManager.getUrlToThumbnail(value);
+                OnPropertyChanged("Url");
+            }
+        }
 
         private string title = "";
-        public string Title { get { return title; } set { title = value; OnPropertyChanged("Title"); } }
+
+        public string Title
+        {
+            get => title;
+            set
+            {
+                title = value;
+                OnPropertyChanged("Title");
+            }
+        }
 
         private string imageUri = "";
-        public string ImageUri { get { return imageUri; } set { imageUri = value; ImageChanged(value); OnPropertyChanged("ImageUri"); } }
+
+        public string ImageUri
+        {
+            get => imageUri;
+            set
+            {
+                imageUri = value;
+                ImageChanged(value);
+                OnPropertyChanged("ImageUri");
+            }
+        }
 
         public StreamMode()
         {
             InitializeComponent();
             this.DataContext = this;
         }
+
+
+        private void box_link_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            if (sender is TextBox box)
+                Url = box.Text;
+        }
+
 
         private void proccessEntry()
         {
@@ -52,56 +84,53 @@ namespace DicsordBot.UI
             }
             else
             {
+                //start a search for searchterm saved in Url
             }
         }
 
         private async void getAndStartStream()
         {
             //download video
-            Video vid = await IO.YTManager.getVideoAsync(Url);
+            Video vid = await IO.YTManager.getVideoAsync(Url);          
+            if (vid == null) return;
 
-            if (vid != null)
-            {
-                //cache video, thread will then start replay
-                Title = vid.Title;
+            Title = vid.Title;
 
-                //PlayVideo(vid);
-                cacheAndStreamVideo(vid);
-
-                vid = null;
+            //get playable stream
+            Stream stream = await IO.YTManager.getStreamAsync(vid);
+            //disable it for now 
+            if (stream != null && !Handle.Data.Persistent.AlwaysCacheVideo)
+            {              
+                //enqueue BotData item with stream as reference
+                PlayVideo(new BotData(Title)
+                {
+                    stream = stream,
+                });
             }
-        }
-
-        private async void cacheAndStreamVideo(Video vid)
-        {
-            Console.WriteLine("Caching: " + vid.Title + "...");
-
-            //var x = await vid.StreamAsync();
-
-            string location = await IO.YTManager.cacheVideo(vid);
-
-            if (location != null)
-                sendVideo(location);
-        }
-
-        private void sendVideo(string path)
-        {
-            //send the  delegate to stream the file
-            if (path != null)
+            else
             {
-                PlayVideo(new Data.BotData(Title, path));
+                //fall back to caching to disk
+                Handle.SnackbarWarning("Caching, this may take a while...");
+                //alternatively try to download the video
+                string location = await IO.YTManager.cacheVideo(vid);
+
+                if (location != null)
+                    PlayVideo(new BotData(Title, location));
             }
+
+            //TODO: test if that deletes source for stream
+            vid = null;
         }
 
         #region events
 
         private void box_url_KeyDown(object sender, KeyEventArgs e)
         {
-            Url = ((TextBox)sender).Text;
+            Url = ((TextBox) sender).Text;
 
             if (e.Key == Key.Enter)
             {
-                Url = ((TextBox)sender).Text;
+                Url = ((TextBox) sender).Text;
                 proccessEntry();
             }
         }
@@ -131,6 +160,8 @@ namespace DicsordBot.UI
         }
 
         #endregion property changed
+
+        
     }
 
 #pragma warning restore CS1591

@@ -6,8 +6,9 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
+using DiscordBot.Data;
 
-namespace DicsordBot.Data
+namespace DiscordBot.Bot
 {
     /// <summary>
     /// Basic Bot class, directly communicates with the api, throws for every little sh
@@ -149,7 +150,7 @@ namespace DicsordBot.Data
         /// <remarks>
         /// Contains data representation of Buttons, to also store settings like a custom loop-state
         /// </remarks>
-        private List<BotData> Queue { get; set; }
+        private List<Data.BotData> Queue { get; set; }
 
         private MediaFoundationReader Reader { get; set; }
         private MediaFoundationResampler ActiveResampler { get; set; }
@@ -165,7 +166,7 @@ namespace DicsordBot.Data
         /// </summary>
         public Bot()
         {
-            Queue = new List<BotData>();
+            Queue = new List<Data.BotData>();
             IsStreaming = false;
             IsChannelConnected = false;
             IsServerConnected = false;
@@ -291,28 +292,21 @@ namespace DicsordBot.Data
             if (data.filePath != null)
             {
                 Reader = new MediaFoundationReader(data.filePath);
-                NormalResampler = new MediaFoundationResampler(Reader, OutFormat);
-
+                
                 //set seekable
                 CanSeek = true;
             }
             else if (data.stream != null)
             {
-                IWaveProvider provider = new RawSourceWaveStream(data.stream, OutFormat);
-                NormalResampler = new MediaFoundationResampler(provider, OutFormat);
 
+                Reader = new StreamMediaFoundationReader(data.stream);
+
+                //TODO: test stream
+               // Reader = new StreamMediaFoundationReader(data.stream);
                 //set non seekable bool
                 CanSeek = data.stream.CanSeek;
-
-                //IWaveProvider provider = new RawSourceWaveStream(new MemoryStream(data.stream), OutFormat);
-                //NormalResampler = new MediaFoundationResampler(provider, OutFormat);
-
-                ////TODO: test seeking behaviour with memoryStream
-                ////maybe global var, flipping between memorystream and MediaF.Reader
-
-                ////temporarily
-                //CanSeek = false;
             }
+            NormalResampler = new MediaFoundationResampler(Reader, OutFormat);
 
             /*
              * Generate one normal resampler,

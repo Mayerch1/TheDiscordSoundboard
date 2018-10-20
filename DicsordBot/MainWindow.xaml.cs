@@ -1,5 +1,4 @@
-﻿using MaterialDesignThemes.Wpf;
-using System;
+﻿using System;
 using System.ComponentModel;
 using System.Threading.Tasks;
 using System.Windows;
@@ -7,13 +6,14 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media.Animation;
 using System.Windows.Threading;
+using MaterialDesignThemes.Wpf;
 
-namespace DicsordBot
+namespace DiscordBot
 {
-    /// <summary>
-    /// Interaction logic for MainWindow.xaml
-    /// </summary>
-    ///
+    /// <inheritdoc cref="T:System.Windows.Window"/>
+    ///  <summary>
+    ///  Interaction logic for MainWindow.xaml
+    ///  </summary>
     //blub
     public partial class MainWindow : Window, INotifyPropertyChanged
     {
@@ -198,7 +198,7 @@ namespace DicsordBot
             Handle.ChannelId = Handle.Data.Persistent.ChannelId;
 
             await Handle.Bot.connectToServerAsync();
-            if (await UpdateChecker.CheckForUpdate())
+            if (await Misc.UpdateChecker.CheckForUpdate())
             {
                 Handle.SnackbarWarning("A newer version is available", Handle.SnackbarAction.Update);
             }
@@ -247,7 +247,7 @@ namespace DicsordBot
         private async void initChannelList()
         {
             //receives channel list + displays it when menu is opened
-            ChannelListManager channelMgr = new ChannelListManager();
+            Misc.ChannelListManager channelMgr = new Misc.ChannelListManager();
             await channelMgr.initAsync();
 
             channelMgr.populateTree(tree_channelList);
@@ -477,7 +477,7 @@ namespace DicsordBot
                     break;
 
                 case Handle.SnackbarAction.Update:
-                    handler = UpdateChecker.OpenUpdatePage;
+                    handler = Misc.UpdateChecker.OpenUpdatePage;
                     break;
 
                 default:
@@ -521,17 +521,8 @@ namespace DicsordBot
             triggerBotQueueReplay(new Data.BotData(file.Name, file.Path));
         }
 
-        private async void Stream_Video_Play(Data.BotData data)
+        private void Stream_Video_Play(Data.BotData data)
         {
-            //Console.WriteLine("Start to getBytesAsync()");
-            //System.IO.Stream stream = await vid.StreamAsync();
-            //Console.WriteLine("Finished download");
-
-            //Data.BotData data = new Data.BotData(vid.Title)
-            //{
-            //    stream = stream,
-            //};
-
             triggerBotInstantReplay(data, true);
         }
 
@@ -801,7 +792,7 @@ namespace DicsordBot
             //get new selected tree
             try
             {
-                var channel = (MyTreeItem)e.NewValue;
+                var channel = (Misc.MyTreeItem)e.NewValue;
                 Handle.ChannelId = channel.id;
 
                 //set new channel and temp/perm parameter
@@ -869,10 +860,9 @@ namespace DicsordBot
         private void OnPropertyChanged(string info)
         {
             PropertyChangedEventHandler handler = PropertyChanged;
-            if (handler != null)
-            {
-                handler(this, new PropertyChangedEventArgs(info));
-            }
+
+            handler?.Invoke(this, new PropertyChangedEventArgs(info));
+            
         }
 
         private void Window_SizeChanged(object sender, SizeChangedEventArgs e)

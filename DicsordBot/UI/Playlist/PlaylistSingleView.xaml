@@ -1,9 +1,8 @@
-﻿<UserControl x:Class="DicsordBot.UI.Playlist.PlaylistSingleView"
+﻿<UserControl x:Class="DiscordBot.UI.Playlist.PlaylistSingleView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:local="clr-namespace:DicsordBot.UI.Playlist"
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              xmlns:dd="urn:gong-wpf-dragdrop"
              mc:Ignorable="d"
@@ -78,7 +77,6 @@
                     <DataTemplate>
 
                         <materialDesign:ColorZone Background="{x:Null}" Name="Grid_Title">
-                            <!-- TODO: use something different?-->
                             <Grid Tag="{Binding Id}"
                               MouseLeftButtonDown="stack_list_MouseLeftButtonDown"
                               Margin="10,0,10,0"
@@ -101,8 +99,6 @@
                                                   Click="menu_openInExplorer_Clicked" />
                                     </ContextMenu>
                                 </Grid.ContextMenu>
-
-                                <!-- TODO: spacer, left, middle and right aligned-->
 
                                 <Grid Grid.Column="0">
                                     <Button
@@ -143,7 +139,6 @@
                                     <Label Content="{Binding Author}" />
                                 </Grid>
 
-                                <!--TODO: button dropdown  -->
                                 <Grid Grid.Column="3">
                                     <Button
                                     Tag="{Binding Id}"

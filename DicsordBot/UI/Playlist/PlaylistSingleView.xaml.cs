@@ -1,13 +1,13 @@
-﻿using GongSolutions.Wpf.DragDrop;
-using System;
+﻿using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media.Animation;
+using GongSolutions.Wpf.DragDrop;
 
-namespace DicsordBot.UI.Playlist
+namespace DiscordBot.UI.Playlist
 {
 #pragma warning disable CS1591
 

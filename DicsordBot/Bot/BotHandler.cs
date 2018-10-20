@@ -1,9 +1,10 @@
-﻿using Discord.WebSocket;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Discord.WebSocket;
+using DiscordBot.Data;
 
-namespace DicsordBot.Data
+namespace DiscordBot.Bot
 {
     /// <summary>
     /// BotHandle inherites from Bot, failsave frame around the bot class
@@ -86,7 +87,7 @@ namespace DicsordBot.Data
         /// <remarks>
         /// auto connects to Server, calls enqueAsync(BotData) of base
         /// </remarks>
-        new public async Task enqueueAsync(BotData data)
+        public new async Task enqueueAsync(BotData data)
         {
             await enqueueRegardingPriorityAsync(data, false);
         }
@@ -99,7 +100,7 @@ namespace DicsordBot.Data
         /// <remarks>
         /// auto connects to Server, calls enqueAsync(BotData) of base
         /// </remarks>
-        new public async Task enqueuePriorityAsync(BotData data)
+        public new async Task enqueuePriorityAsync(BotData data)
         {
             await enqueueRegardingPriorityAsync(data, true);
         }
@@ -130,7 +131,7 @@ namespace DicsordBot.Data
         /// <remarks>
         /// auto connects to server and channel, calls resumeStream() of base
         /// </remarks>
-        new public async Task resumeStream()
+        public new async Task resumeStream()
         {
             if (!await connectToServerAsync())
                 return;
@@ -163,7 +164,7 @@ namespace DicsordBot.Data
         /// <param name="isStreaming">bool, if bot is streaming on twitch or not</param>
         /// <returns>shows success of setting the game state</returns>
         /// <remarks>calls setGameState() of base</remarks>
-        new public async Task<bool> setGameState(string msg, string streamUrl = "", bool isStreaming = false)
+        public new async Task<bool> setGameState(string msg, string streamUrl = "", bool isStreaming = false)
         {
             if (!await connectToServerAsync())
                 return false;
@@ -340,7 +341,7 @@ namespace DicsordBot.Data
         /// get a list of all channels of all servers
         /// </summary>
         /// <returns>list of all serves each with a list of all channels </returns>
-        new public async Task<List<List<SocketVoiceChannel>>> getAllChannels()
+        public new async Task<List<List<SocketVoiceChannel>>> getAllChannels()
         {
             if (!await connectToServerAsync())
                 return null;
@@ -365,7 +366,7 @@ namespace DicsordBot.Data
         /// </summary>
         /// <param name="acceptOffline">also show clients which are currently offline</param>
         /// <returns>list of all serves each with a list of all channels</returns>
-        new public async Task<List<List<SocketGuildUser>>> getAllClients(bool acceptOffline = false)
+        public new async Task<List<List<SocketGuildUser>>> getAllClients(bool acceptOffline = false)
         {
             if (!await connectToServerAsync())
                 return null;

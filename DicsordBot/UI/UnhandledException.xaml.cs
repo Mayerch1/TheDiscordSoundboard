@@ -5,7 +5,7 @@ using System.Diagnostics;
 using System.Windows;
 using System.Windows.Controls;
 
-namespace DicsordBot.UI
+namespace DiscordBot.UI
 {
     /// <summary>
     /// Interaction logic for UnhandledException.xaml

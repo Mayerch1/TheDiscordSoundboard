@@ -7,7 +7,7 @@ using System.Windows.Input;
 using System.Windows.Interop;
 using System.Windows.Media.Imaging;
 
-namespace DicsordBot.UI.Playlist
+namespace DiscordBot.UI.Playlist
 {
 #pragma warning disable CS1591
 
@@ -59,7 +59,7 @@ namespace DicsordBot.UI.Playlist
         private void btn_Delete_Click(object sender, RoutedEventArgs e)
         {
             this.StaysOpen = true;
-            if (MessageBox.Show("Are you shure to delete this Playlist?", "Warning", MessageBoxButton.OKCancel) == MessageBoxResult.OK)
+            if (MessageBox.Show("Are you sure to delete this Playlist?", "Warning", MessageBoxButton.OKCancel) == MessageBoxResult.OK)
             {
                 Result = false;
                 IsToDelete = true;

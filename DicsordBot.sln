@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.27703.2035
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DicsordBot", "DicsordBot\DicsordBot.csproj", "{DDC0D602-01D6-45FF-85C0-8D2E21C7C6E0}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DiscordBot", "DicsordBot\DiscordBot.csproj", "{DDC0D602-01D6-45FF-85C0-8D2E21C7C6E0}"
 EndProject
 Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "SoundBoard Wizard", "SoundBoard Wizard\SoundBoard Wizard.vdproj", "{EAD955DD-7A98-4289-ABEE-BDFC073DEE47}"
 EndProject

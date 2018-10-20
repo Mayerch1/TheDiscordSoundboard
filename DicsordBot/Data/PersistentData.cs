@@ -4,7 +4,7 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Xml.Serialization;
 
-namespace DicsordBot.Data
+namespace DiscordBot.Data
 {
     /// <summary>
     /// stores all data which are permanentaly preserved
@@ -73,6 +73,7 @@ namespace DicsordBot.Data
         private string clientAvatar;
         private string token = null;
         private int selectedServerIndex = 0;
+        private bool alwaysCacheVideo = true;
 
         private bool ignoreFileWarning = false;
         private bool ignoreTokenWarning = false;
@@ -92,12 +93,14 @@ namespace DicsordBot.Data
         /// <value>
         /// if true, introduction guides will be loaded
         /// </value>
-        public bool IsFirstStart { get { return isFirstStart; } set { isFirstStart = value; OnPropertyChanged("IsFirstStart"); } }
+        public bool IsFirstStart { get => isFirstStart;
+            set { isFirstStart = value; OnPropertyChanged("IsFirstStart"); } }
 
         /// <summary>
         ///  SettingsPath property, automatically saved
         /// </summary>
-        public string SettingsPath { get { return settingsPath; } set { settingsPath = value; Properties.Settings.Default.Path = value; OnPropertyChanged("SettingsPath"); } }
+        public string SettingsPath { get => settingsPath;
+            set { settingsPath = value; Properties.Settings.Default.Path = value; OnPropertyChanged("SettingsPath"); } }
 
         /// <summary>
         ///  HihgestButtonToSave property
@@ -105,12 +108,14 @@ namespace DicsordBot.Data
         /// <value>
         /// all buttons above this number are empty
         /// </value>
-        public int HighestButtonToSave { get { return highestButtonToSave; } set { highestButtonToSave = value; OnPropertyChanged("HighestButtonToSave"); } }
+        public int HighestButtonToSave { get => highestButtonToSave;
+            set { highestButtonToSave = value; OnPropertyChanged("HighestButtonToSave"); } }
 
         /// <summary>
         ///  ClientId property
         /// </summary>
-        public ulong ClientId { get { return clientId; } set { clientId = value; OnPropertyChanged("ClientId"); } }
+        public ulong ClientId { get => clientId;
+            set { clientId = value; OnPropertyChanged("ClientId"); } }
 
         /// <summary>
         /// ChannelId property
@@ -118,7 +123,8 @@ namespace DicsordBot.Data
         /// <value>
         /// target channel to join, set to 0 to join to owners channel
         /// </value>
-        public ulong ChannelId { get { return channelId; } set { channelId = value; OnPropertyChanged("ChannelId"); } }
+        public ulong ChannelId { get => channelId;
+            set { channelId = value; OnPropertyChanged("ChannelId"); } }
 
         /// <summary>
         ///  ClientAvatar property
@@ -126,18 +132,21 @@ namespace DicsordBot.Data
         /// <value>
         /// url to image avatar image
         /// </value>
-        public string ClientAvatar { get { return clientAvatar; } set { clientAvatar = value; OnPropertyChanged("ClientAvatar"); } }
+        public string ClientAvatar { get => clientAvatar;
+            set { clientAvatar = value; OnPropertyChanged("ClientAvatar"); } }
 
         /// <summary>
         /// IsDarkTheme property
         /// </summary>
-        public bool IsDarkTheme { get { return isDarkTheme; } set { isDarkTheme = value; OnPropertyChanged("IsDarkTheme"); } }
+        public bool IsDarkTheme { get => isDarkTheme;
+            set { isDarkTheme = value; OnPropertyChanged("IsDarkTheme"); } }
 
         //raise ClientNameChanged to check for client names, if old Token was not able to do so
         /// <summary>
         /// Token property
         /// </summary>
-        public string Token { get { return token; } set { token = value; OnPropertyChanged("Token"); if (ClientNameChanged != null) ClientNameChanged(value); } }
+        public string Token { get => token;
+            set { token = value; OnPropertyChanged("Token"); if (ClientNameChanged != null) ClientNameChanged(value); } }
 
         /// <summary>
         /// SelectedServerIndex
@@ -145,7 +154,8 @@ namespace DicsordBot.Data
         /// <value>
         /// the index of the server, which channles are displayed in the channel selector
         /// </value>
-        public int SelectedServerIndex { get { return selectedServerIndex; } set { selectedServerIndex = value; OnPropertyChanged("SelectedServerIndex"); } }
+        public int SelectedServerIndex { get => selectedServerIndex;
+            set { selectedServerIndex = value; OnPropertyChanged("SelectedServerIndex"); } }
 
         /// <summary>
         /// Volume property
@@ -153,7 +163,8 @@ namespace DicsordBot.Data
         /// <value>
         /// stores volume from 0.0 to 1.0
         /// </value>
-        public float Volume { get { return volume; } set { volume = value; OnPropertyChanged("Volume"); } }
+        public float Volume { get => volume;
+            set { volume = value; OnPropertyChanged("Volume"); } }
 
         /// <summary>
         /// VolumeCap property
@@ -161,7 +172,8 @@ namespace DicsordBot.Data
         /// <value>
         /// limits the volume from 0 to 100 percent
         /// </value>
-        public int VolumeCap { get { return volumeCap; } set { volumeCap = value; OnPropertyChanged("VolumeCap"); } }
+        public int VolumeCap { get => volumeCap;
+            set { volumeCap = value; OnPropertyChanged("VolumeCap"); } }
 
         /// <summary>
         /// ClientName property
@@ -169,27 +181,42 @@ namespace DicsordBot.Data
         /// <value>
         /// discord username in form of 'Name#1234'
         /// </value>
-        public string ClientName { get { return clientName; } set { clientName = value; OnPropertyChanged("ClientName"); if (ClientNameChanged != null) ClientNameChanged(value); } }
+        public string ClientName { get => clientName;
+            set { clientName = value; OnPropertyChanged("ClientName"); if (ClientNameChanged != null) ClientNameChanged(value); } }
 
         /// <summary>
         /// IgnoreFileWarning property
         /// </summary>
-        public bool IgnoreFileWarning { get { return ignoreFileWarning; } set { ignoreFileWarning = value; OnPropertyChanged("IgnoreFileWarning"); } }
+        public bool IgnoreFileWarning { get => ignoreFileWarning;
+            set { ignoreFileWarning = value; OnPropertyChanged("IgnoreFileWarning"); } }
 
         /// <summary>
         /// IgnoreTokenWarning property
         /// </summary>
-        public bool IgnoreTokenWarning { get { return ignoreTokenWarning; } set { ignoreTokenWarning = value; OnPropertyChanged("IgnoreTokenWarning"); } }
+        public bool IgnoreTokenWarning { get => ignoreTokenWarning;
+            set { ignoreTokenWarning = value; OnPropertyChanged("IgnoreTokenWarning"); } }
 
         /// <summary>
         /// IgnoreChannelWarning property
         /// </summary>
-        public bool IgnoreChannelWarning { get { return ignoreChannelWarning; } set { ignoreChannelWarning = value; OnPropertyChanged("IgnoreChannelWarning"); } }
+        public bool IgnoreChannelWarning { get => ignoreChannelWarning;
+            set { ignoreChannelWarning = value; OnPropertyChanged("IgnoreChannelWarning"); } }
 
         /// <summary>
         /// IgnoreClientWarning property
         /// </summary>
-        public bool IgnoreClientWarning { get { return ignoreClientWarning; } set { ignoreClientWarning = value; OnPropertyChanged("IgnoreClientWarning"); } }
+        public bool IgnoreClientWarning { get => ignoreClientWarning;
+            set { ignoreClientWarning = value; OnPropertyChanged("IgnoreClientWarning"); } }
+
+
+        /// <summary>
+        /// Do not use Videostream, instead cache each video
+        /// </summary>
+        public bool AlwaysCacheVideo
+        {
+            get => alwaysCacheVideo;
+            set { alwaysCacheVideo = value; OnPropertyChanged("AlwaysCacheVideo"); } }
+
 
         /// <summary>
         /// MediaSources property
@@ -197,17 +224,20 @@ namespace DicsordBot.Data
         /// <value>
         /// list of all locations to monitor for files
         /// </value>
-        public ObservableCollection<string> MediaSources { get { return mediaSources; } set { mediaSources = value; OnPropertyChanged("MediaSources"); } }
+        public ObservableCollection<string> MediaSources { get => mediaSources;
+            set { mediaSources = value; OnPropertyChanged("MediaSources"); } }
 
         /// <summary>
         ///name and directory of each playlist, used for loading the files
         /// </summary>
-        public ObservableCollection<FileData> PlayListIndex { get { return playListIndex; } set { playListIndex = value; OnPropertyChanged("PlaylistFiles"); } }
+        public ObservableCollection<FileData> PlayListIndex { get => playListIndex;
+            set { playListIndex = value; OnPropertyChanged("PlaylistFiles"); } }
 
         /// <summary>
         /// List of all registered hotkeys
         /// </summary>
-        public ObservableCollection<Hotkey> HotkeyList { get { return hotkeyList; } set { hotkeyList = value; OnPropertyChanged("HotkeyList"); } }
+        public ObservableCollection<Hotkey> HotkeyList { get => hotkeyList;
+            set { hotkeyList = value; OnPropertyChanged("HotkeyList"); } }
 
         /// <summary>
         /// BtnList property
@@ -215,7 +245,8 @@ namespace DicsordBot.Data
         /// <value>
         /// list of all button-data elements
         /// </value>
-        public ObservableCollection<ButtonData> BtnList { get { return btnList; } set { btnList = value; OnPropertyChanged("BtnList"); } }
+        public ObservableCollection<ButtonData> BtnList { get => btnList;
+            set { btnList = value; OnPropertyChanged("BtnList"); } }
 
         #endregion persistend properties
 

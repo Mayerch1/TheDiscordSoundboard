@@ -1,7 +1,7 @@
 ﻿using System;
 using System.ComponentModel;
 
-namespace DicsordBot.Data
+namespace DiscordBot.Data
 {
     /// <summary>
     /// Represents on Button with all its properties, implements INotifyPropertyChanged

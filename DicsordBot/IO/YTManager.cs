@@ -1,13 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
 using System.IO;
-using System.Linq;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using VideoLibrary;
 
-namespace DicsordBot.IO
+namespace DiscordBot.IO
 {
     /// <summary>
     /// Manages operations on youtube videos
@@ -72,6 +70,9 @@ namespace DicsordBot.IO
             //download video
             YouTube yt = YouTube.Default;
             Video mpAudio;
+
+            VideoClient videoClient = new VideoClient();
+
             try
             {
                 mpAudio = await yt.GetVideoAsync(url);
@@ -98,10 +99,40 @@ namespace DicsordBot.IO
         }
 
         /// <summary>
+        /// return readable string from video object
+        /// </summary>
+        /// <param name="vid">video object</param>
+        /// <returns>Readable stream</returns>
+        public static async Task<Stream> getStreamAsync(Video vid)
+        {
+            using (VideoClient cl = new VideoClient())
+            {
+                try
+                {
+                    return await cl.StreamAsync(vid);
+                }
+                catch
+                {
+                    return null;
+                }
+            }
+        }
+
+        /// <summary>
+        /// return readable string from url
+        /// </summary>
+        /// <param name="url">url to video</param>
+        /// <returns>Readable stream</returns>
+        public static async Task<Stream> getStreamAsync(string url)
+        {
+            return await getStreamAsync(await getVideoAsync(url));
+        }
+
+        /// <summary>
         /// saves a video into cache folder, this may block ui thread when disc is slow
         /// </summary>
         /// <param name="vid">video to save</param>
-        public async static Task<string> cacheVideo(Video vid)
+        public static async Task<string> cacheVideo(Video vid)
         {
             string folder = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\" + Data.PersistentData.defaultFolderName + @"\" + Data.PersistentData.videoCacheFolder;
             //save video into cache folder
@@ -109,29 +140,50 @@ namespace DicsordBot.IO
             {
                 Directory.CreateDirectory(folder);
             }
-            var location = folder + @"\" + vid.FullName;
+
+            //compute hash
+           
+
+            //hash name so it cannot be searched easily (bc of copyright)
+            var name = getHashSha256(vid.FullName) + vid.FileExtension;
+            var location = folder + "\\" + name;
 
             try
             {
                 //make async
                 File.WriteAllBytes(location, await vid.GetBytesAsync());
-
-                Console.WriteLine("Succesfully saved file");
             }
-            catch (System.Net.Http.HttpRequestException ex)
+            catch (System.Net.Http.HttpRequestException)
             {
                 Handle.SnackbarWarning("Could not decrypt video");
-                Console.WriteLine(ex.Message);
                 return null;
             }
             catch (Exception ex)
             {
-                Console.WriteLine("Error in saving file");
-
+                Handle.SnackbarWarning("Failed to cache Video");
                 return null;
             }
 
             return location;
         }
+
+
+        private static string getHashSha256(string title)
+        {
+            byte[] byteStr = Encoding.UTF8.GetBytes(title);
+
+            byte[] hash = new SHA256Managed().ComputeHash(byteStr);
+
+            string hashStr = String.Empty;
+
+
+            foreach (var b in hash)
+            {
+                hashStr += b.ToString("x2");
+            }
+  
+            return hashStr;
+        }
+
     }
 }

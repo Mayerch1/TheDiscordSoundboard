@@ -1,4 +1,4 @@
-﻿namespace DicsordBot.Data
+﻿namespace DiscordBot.Bot
 {
     /// <summary>
     /// Class for custom bot exception

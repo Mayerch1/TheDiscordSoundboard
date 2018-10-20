@@ -2,7 +2,7 @@
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 
-namespace DicsordBot.Data
+namespace DiscordBot.Data
 {
     /// <summary>
     /// represents a playlist

@@ -1,8 +1,8 @@
-﻿using Discord.WebSocket;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
+using Discord.WebSocket;
 
-namespace DicsordBot
+namespace DiscordBot.Misc
 {
     /// <summary>
     /// Gatheres Data from the Bot class (get methods only), methods uses Bot api with calls into Bot class, does not trigger bot actions

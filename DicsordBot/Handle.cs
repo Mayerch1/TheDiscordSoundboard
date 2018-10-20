@@ -1,6 +1,7 @@
-﻿using System.Windows;
+﻿using DiscordBot.Bot;
+using DiscordBot.Misc;
 
-namespace DicsordBot
+namespace DiscordBot
 {
     /// <summary>
     /// Static Handle contains Bot and Data instance, also provides synced properties and methods to show warnings/errors
@@ -15,7 +16,7 @@ namespace DicsordBot
         /// <summary>
         /// Bot class, handles all commands towards bot
         /// </summary>
-        public static Data.BotHandle Bot { get; set; } = new Data.BotHandle();
+        public static BotHandle Bot { get; set; } = new BotHandle();
 
         /// <summary>
         /// Provides methods depending on Bot, but are only used to get data, not to perform actions on bot
@@ -78,7 +79,7 @@ namespace DicsordBot
         /// <summary>
         /// used to convert old Bot SnackbarWarnings to new universal warnings
         /// </summary>
-        public static void PassBotSnackbarWarning(string msg, Data.BotHandle.SnackbarAction action)
+        public static void PassBotSnackbarWarning(string msg, BotHandle.SnackbarAction action)
         {
             int converter = (int)action;
 
