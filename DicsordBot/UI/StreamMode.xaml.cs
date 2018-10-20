@@ -27,12 +27,12 @@ namespace DiscordBot.UI
         private string url = "";
 
         public string Url
-        {
-            get => url;
+        { get => url;
             set
             {
                 url = value;
                 ImageUri = IO.YTManager.getUrlToThumbnail(value);
+                setTitleAsync(value);
                 OnPropertyChanged("Url");
             }
         }
@@ -40,8 +40,7 @@ namespace DiscordBot.UI
         private string title = "";
 
         public string Title
-        {
-            get => title;
+        { get => title;
             set
             {
                 title = value;
@@ -52,8 +51,7 @@ namespace DiscordBot.UI
         private string imageUri = "";
 
         public string ImageUri
-        {
-            get => imageUri;
+        { get => imageUri;
             set
             {
                 imageUri = value;
@@ -66,8 +64,27 @@ namespace DiscordBot.UI
         {
             InitializeComponent();
             this.DataContext = this;
+            list_History.DataContext = Handle.Data.VideoHistory;
         }
 
+        private void startStream(Data.BotData data)
+        {
+            PlayVideo(data);
+            Handle.Data.VideoHistory.addVideo(new Data.VideoData(Url, Title, ImageUri));
+        }
+
+
+        private async void setTitleAsync(string url)
+        {
+            try
+            {
+                Title =  await IO.YTManager.GetTitleTask(url);
+            }
+            catch
+            {
+                Title = "";
+            }
+        }
 
         private void box_link_TextChanged(object sender, TextChangedEventArgs e)
         {
@@ -102,7 +119,7 @@ namespace DiscordBot.UI
             if (stream != null && !Handle.Data.Persistent.AlwaysCacheVideo)
             {              
                 //enqueue BotData item with stream as reference
-                PlayVideo(new BotData(Title)
+                startStream(new BotData(Title)
                 {
                     stream = stream,
                 });
@@ -115,7 +132,7 @@ namespace DiscordBot.UI
                 string location = await IO.YTManager.cacheVideo(vid);
 
                 if (location != null)
-                    PlayVideo(new BotData(Title, location));
+                    startStream(new BotData(Title, location));
             }
 
             //TODO: test if that deletes source for stream
@@ -129,8 +146,7 @@ namespace DiscordBot.UI
             Url = ((TextBox) sender).Text;
 
             if (e.Key == Key.Enter)
-            {
-                Url = ((TextBox) sender).Text;
+            {               
                 proccessEntry();
             }
         }
@@ -144,6 +160,15 @@ namespace DiscordBot.UI
         {
             proccessEntry();
         }
+
+        private void list_History_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            if (sender is FrameworkElement fe)
+            {
+                Url = fe.Tag.ToString();
+            }
+        }
+
 
         #endregion events
 
@@ -161,7 +186,8 @@ namespace DiscordBot.UI
 
         #endregion property changed
 
-        
+
+       
     }
 
 #pragma warning restore CS1591

@@ -17,6 +17,7 @@ namespace DiscordBot.Data
         private const string fileFile = "\\Files.xml";
         private const string playlistFile = "\\Playlist.xml";
         private const string historyFile = "\\History.xml";
+        private const string videoHistoryFile = "\\VideoHistory.xml";
 
         #endregion constants
 
@@ -27,6 +28,7 @@ namespace DiscordBot.Data
         private ObservableCollection<FileData> files = new ObservableCollection<FileData>();
         private ObservableCollection<Playlist> playlists = new ObservableCollection<Playlist>();
         private History history = new History();
+        private VideoHistory videoHistory = new VideoHistory();
         private int playlistIndex = 0;
         private int playlistFileIndex = 0;
         private bool isPlaylistPlaying = false;
@@ -38,37 +40,57 @@ namespace DiscordBot.Data
         /// <summary>
         /// Persistent property (class)
         /// </summary>
-        public PersistentData Persistent { get { return persistent; } set { persistent = value; OnPropertyChanged("Persistent"); } }
+        public PersistentData Persistent { get => persistent;
+            set { persistent = value; OnPropertyChanged("Persistent"); } }
 
         /// <summary>
         /// Files property (collection of classes)
         /// </summary>
-        public ObservableCollection<FileData> Files { get { return files; } set { files = value; OnPropertyChanged("Files"); } }
+        public ObservableCollection<FileData> Files { get => files;
+            set { files = value; OnPropertyChanged("Files"); } }
 
         /// <summary>
         /// List of all playlists
         /// </summary>
-        public ObservableCollection<Playlist> Playlists { get { return playlists; } set { playlists = value; OnPropertyChanged("PlayLists"); } }
+        public ObservableCollection<Playlist> Playlists { get => playlists;
+            set { playlists = value; OnPropertyChanged("PlayLists"); } }
 
         /// <summary>
         /// History of played files
         /// </summary>
-        public History History { get { return history; } set { history = value; OnPropertyChanged("History"); } }
+        public History History { get => history;
+            set { history = value; OnPropertyChanged("History"); } }
+
+        /// <summary>
+        /// Videohistory of played videos
+        /// </summary>
+        public VideoHistory VideoHistory
+        {
+            get => videoHistory;
+            set
+            {
+                videoHistory = value;
+                OnPropertyChanged("VideoHistory");
+            }
+        }
 
         /// <summary>
         /// index of currently played playlist
         /// </summary>
-        public int PlaylistIndex { get { return playlistIndex; } set { playlistIndex = value; OnPropertyChanged("PlaylistIndex"); } }
+        public int PlaylistIndex { get => playlistIndex;
+            set { playlistIndex = value; OnPropertyChanged("PlaylistIndex"); } }
 
         /// <summary>
         /// file index of position in playlist
         /// </summary>
-        public int PlaylistFileIndex { get { return playlistFileIndex; } set { playlistFileIndex = value; OnPropertyChanged("PlaylistFileIndex"); } }
+        public int PlaylistFileIndex { get => playlistFileIndex;
+            set { playlistFileIndex = value; OnPropertyChanged("PlaylistFileIndex"); } }
 
         /// <summary>
         /// IsPlaylistPlaying property
         /// </summary>
-        public bool IsPlaylistPlaying { get { return isPlaylistPlaying; } set { isPlaylistPlaying = value; OnPropertyChanged("IsPlaylistPlaying"); } }
+        public bool IsPlaylistPlaying { get => isPlaylistPlaying;
+            set { isPlaylistPlaying = value; OnPropertyChanged("IsPlaylistPlaying"); } }
 
         #endregion properties
 
@@ -192,6 +214,10 @@ namespace DiscordBot.Data
 
             if ((History = (History)loadObject(History, historyFile)) == null)
                 History = new History();
+
+            if((VideoHistory = (VideoHistory)loadObject(VideoHistory, videoHistoryFile)) == null)
+                VideoHistory = new VideoHistory();
+            
         }
 
         /// <summary>
@@ -271,6 +297,7 @@ namespace DiscordBot.Data
             saveObject(Files, fileFile);
             saveObject(Playlists, playlistFile);
             saveObject(History, historyFile);
+            saveObject(VideoHistory, videoHistoryFile);
         }
 
         /// <summary>

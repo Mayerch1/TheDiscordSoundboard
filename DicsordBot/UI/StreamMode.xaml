@@ -47,12 +47,26 @@
             </Grid>
 
             <Grid Grid.Row="1">
-                <!-- history or recommended videos-->
+                <!-- recommended history-->
+                
             </Grid>
         </Grid>
 
         <Grid Grid.Column="1">
-            <!-- history or recommended videos-->
+            <!--history-->
+            <ListBox x:Name="list_History" ItemsSource="{Binding Videos}">
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <DockPanel Tag="{Binding Url}" MouseLeftButtonDown="list_History_MouseLeftButtonDown">
+                            <Image DockPanel.Dock="Left"
+                                   Source="{Binding ImageUrl}"
+                                   Width="64" Height="64"/>
+                            <Label DockPanel.Dock="Right"
+                                   Content="{Binding Title}"/>
+                        </DockPanel>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
         </Grid>
     </Grid>
 </UserControl>
