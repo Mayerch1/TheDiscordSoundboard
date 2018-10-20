@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.IO;
 using System.Windows;
@@ -7,6 +8,7 @@ using System.Windows.Input;
 using System.Windows.Media.Imaging;
 using DiscordBot.Data;
 using VideoLibrary;
+using YoutubeSearch;
 
 namespace DiscordBot.UI
 {
@@ -17,12 +19,25 @@ namespace DiscordBot.UI
     /// </summary>
     public partial class StreamMode : UserControl, INotifyPropertyChanged
     {
-        //this is Discord typo fix
-        //this is DiscordBot typo fix
-
         public delegate void PlayVideoHandler(Data.BotData data);
 
         public PlayVideoHandler PlayVideo;
+
+
+
+        private ObservableCollection<Data.VideoData> suggestions = new ObservableCollection<VideoData>();
+
+        public ObservableCollection<Data.VideoData> Suggestions
+        {
+            get => suggestions;
+            set
+            {
+                suggestions = value;
+                OnPropertyChanged("Suggestions");
+            }
+        }
+
+        
 
         private string url = "";
 
@@ -65,6 +80,7 @@ namespace DiscordBot.UI
             InitializeComponent();
             this.DataContext = this;
             list_History.DataContext = Handle.Data.VideoHistory;
+            list_Suggestion.DataContext = this;
         }
 
         private void startStream(Data.BotData data)
@@ -102,8 +118,23 @@ namespace DiscordBot.UI
             else
             {
                 //start a search for searchterm saved in Url
+                performSearch(Url);
             }
         }
+
+        private void performSearch(string filter)
+        {
+            Suggestions.Clear();
+
+            const int pages =1;
+            var items = new VideoSearch();
+
+            foreach (var item in items.SearchQuery(filter, pages))
+            {
+                Suggestions.Add(new Data.VideoData(item.Url, item.Title, item.Thumbnail));   
+            }
+        }
+
 
         private async void getAndStartStream()
         {

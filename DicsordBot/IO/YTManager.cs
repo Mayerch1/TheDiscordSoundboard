@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Linq;
 using System.Net;
 using System.Security.Cryptography;
 using System.Text;
@@ -105,8 +106,10 @@ namespace DiscordBot.IO
                 //var videos = await YouTube.Default.GetAllVideosAsync(url);
 
                 ////get audios, only aac
-                //var audios = videos.Where(v => v.AudioFormat == AudioFormat.Aac && v.AdaptiveKind == AdaptiveKind.Audio).ToList();
+                //var audios = videos.Where(v => v.AdaptiveKind == AdaptiveKind.Audio && v.AudioFormat == AudioFormat.Aac).ToList();
 
+                ////TODO: use YoutubeExtractor for audio
+               
                 ////save audio into Video, only with audio
                 //mpAudio = audios.FirstOrDefault(x => x.AudioBitrate > 0);
 
@@ -115,8 +118,6 @@ namespace DiscordBot.IO
             catch (Exception ex)
             {
                 UI.UnhandledException.initWindow(ex, "Error in downloading Video");
-                Console.WriteLine("Exception.!?<");
-
                 return null;
             }
             return mpAudio;
@@ -137,6 +138,7 @@ namespace DiscordBot.IO
                 }
                 catch
                 {
+                    Console.WriteLine("getStream Async failed.");
                     return null;
                 }
             }
@@ -180,11 +182,13 @@ namespace DiscordBot.IO
             catch (System.Net.Http.HttpRequestException)
             {
                 Handle.SnackbarWarning("Could not decrypt video");
+                Console.WriteLine("Failed to decrypt file");
                 return null;
             }
             catch (Exception ex)
             {
                 Handle.SnackbarWarning("Failed to cache Video");
+                Console.WriteLine("Failed to cache file");
                 return null;
             }
 

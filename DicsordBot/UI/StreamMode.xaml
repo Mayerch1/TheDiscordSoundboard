@@ -33,7 +33,7 @@
                     <Button Click="btn_Stream_Click"
                             DockPanel.Dock="Right"
                             Height="45" Width="80" Margin="20"
-                            Content="Stream"
+                            Content="Confirm"
                             Background="{StaticResource PrimaryForegroundBrush}"
                             BorderBrush="{x:Null}" />
 
@@ -48,7 +48,19 @@
 
             <Grid Grid.Row="1">
                 <!-- recommended history-->
-                
+                <ListBox x:Name="list_Suggestion" ItemsSource="{Binding Suggestions}">
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <DockPanel Tag="{Binding Url}" MouseLeftButtonDown="list_History_MouseLeftButtonDown">
+                                <Image DockPanel.Dock="Left"
+                                       Source="{Binding ImageUrl}"
+                                       Width="64" Height="64"/>
+                                <Label DockPanel.Dock="Right"
+                                       Content="{Binding Title}"/>
+                            </DockPanel>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
             </Grid>
         </Grid>
 
