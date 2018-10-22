@@ -1,5 +1,8 @@
-﻿using DiscordBot.Bot;
+﻿using System;
+using System.Windows.Threading;
+using DiscordBot.Bot;
 using DiscordBot.Misc;
+using Newtonsoft.Json.Serialization;
 
 namespace DiscordBot
 {
@@ -22,6 +25,8 @@ namespace DiscordBot
         /// Provides methods depending on Bot, but are only used to get data, not to perform actions on bot
         /// </summary>
         public static BotMisc BotMisc { get; set; } = new BotMisc();
+
+   
 
         #region events
 
@@ -87,6 +92,7 @@ namespace DiscordBot
 
             SnackbarWarning(msg, convertAction);
         }
+      
 
         #endregion Snackbar
 

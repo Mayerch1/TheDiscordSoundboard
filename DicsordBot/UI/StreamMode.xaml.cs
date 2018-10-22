@@ -7,6 +7,7 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media.Imaging;
 using DiscordBot.Data;
+using MaterialDesignThemes.Wpf;
 using VideoLibrary;
 using YoutubeSearch;
 
@@ -19,13 +20,16 @@ namespace DiscordBot.UI
     /// </summary>
     public partial class StreamMode : UserControl, INotifyPropertyChanged
     {
+   
+
+
         public delegate void PlayVideoHandler(Data.BotData data);
 
         public PlayVideoHandler PlayVideo;
 
-
-
+        
         private ObservableCollection<Data.VideoData> suggestions = new ObservableCollection<VideoData>();
+   
 
         public ObservableCollection<Data.VideoData> Suggestions
         {
@@ -78,10 +82,11 @@ namespace DiscordBot.UI
         public StreamMode()
         {
             InitializeComponent();
-            this.DataContext = this;
+
             list_History.DataContext = Handle.Data.VideoHistory;
-            list_Suggestion.DataContext = this;
+ 
         }
+
 
         private void startStream(Data.BotData data)
         {
@@ -149,7 +154,8 @@ namespace DiscordBot.UI
             //disable it for now 
             if (stream != null && !Handle.Data.Persistent.AlwaysCacheVideo)
             {              
-                //enqueue BotData item with stream as reference
+                //enqueue BotData item with stream
+                //reference
                 startStream(new BotData(Title)
                 {
                     stream = stream,
@@ -157,7 +163,7 @@ namespace DiscordBot.UI
             }
             else
             {
-                //fall back to caching to disk
+               //fall back to caching to disk
                 Handle.SnackbarWarning("Caching, this may take a while...");
                 //alternatively try to download the video
                 string location = await IO.YTManager.cacheVideo(vid);
@@ -166,9 +172,8 @@ namespace DiscordBot.UI
                     startStream(new BotData(Title, location));
             }
 
-            //TODO: test if that deletes source for stream
             vid = null;
-        }
+        }    
 
         #region events
 
@@ -197,6 +202,7 @@ namespace DiscordBot.UI
             if (sender is FrameworkElement fe)
             {
                 Url = fe.Tag.ToString();
+                
             }
         }
 

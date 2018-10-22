@@ -19,12 +19,14 @@ namespace DiscordBot.IO
 
         private const string thumbnailQuality = "/sddefault.jpg";
 
+
         /// <summary>
         /// deletes all cached videos
         /// </summary>
         public static void clearVideoCache(string whiteList = "")
         {
-            string folder = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\" + Data.PersistentData.defaultFolderName + @"\" + Data.PersistentData.videoCacheFolder;
+            string folder = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\" +
+                            Data.PersistentData.defaultFolderName + @"\" + Data.PersistentData.videoCacheFolder;
 
             if (Directory.Exists(folder))
             {
@@ -37,7 +39,9 @@ namespace DiscordBot.IO
                             File.Delete(file);
                         }
                         catch
-                        { continue; }
+                        {
+                            continue;
+                        }
                     }
                 }
             }
@@ -63,13 +67,13 @@ namespace DiscordBot.IO
             return imageUrl + getIdFromUrl(url) + thumbnailQuality;
         }
 
-       
+
         /// <summary>
         /// get the title from an url
         /// </summary>
         /// <param name="url">url to video</param>
         /// <returns>task string representing the title</returns>
-        public static  async Task<string> GetTitleTask(string url)
+        public static async Task<string> GetTitleTask(string url)
         {
             var api = $"http://youtube.com/get_video_info?video_id={GetArgs(url, "v", '?')}";
             return GetArgs(await new WebClient().DownloadStringTaskAsync(api), "title", '&');
@@ -81,7 +85,8 @@ namespace DiscordBot.IO
             return iqs == -1
                 ? string.Empty
                 : HttpUtility.ParseQueryString(iqs < args.Length - 1
-                    ? args.Substring(iqs + 1) : string.Empty)[key];
+                    ? args.Substring(iqs + 1)
+                    : string.Empty)[key];
         }
 
 
@@ -102,24 +107,28 @@ namespace DiscordBot.IO
             {
                 mpAudio = await yt.GetVideoAsync(url);
 
-                ////get video file
+                //-------------------------
+                // getting the audio from yt is very slow,
+                // it's faster to download the vid, even on 10Mbit/s
+                //--------------------------
+
+
+                //get video file
                 //var videos = await YouTube.Default.GetAllVideosAsync(url);
 
-                ////get audios, only aac
+                //get audios, only aac
                 //var audios = videos.Where(v => v.AdaptiveKind == AdaptiveKind.Audio && v.AudioFormat == AudioFormat.Aac).ToList();
+              
 
-                ////TODO: use YoutubeExtractor for audio
-               
-                ////save audio into Video, only with audio
+                //save audio into Video, only with audio
                 //mpAudio = audios.FirstOrDefault(x => x.AudioBitrate > 0);
-
-                Console.WriteLine(mpAudio.Uri);
             }
             catch (Exception ex)
             {
                 UI.UnhandledException.initWindow(ex, "Error in downloading Video");
                 return null;
             }
+
             return mpAudio;
         }
 
@@ -160,7 +169,8 @@ namespace DiscordBot.IO
         /// <param name="vid">video to save</param>
         public static async Task<string> cacheVideo(Video vid)
         {
-            string folder = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\" + Data.PersistentData.defaultFolderName + @"\" + Data.PersistentData.videoCacheFolder;
+            string folder = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\" +
+                            Data.PersistentData.defaultFolderName + @"\" + Data.PersistentData.videoCacheFolder;
             //save video into cache folder
             if (!Directory.Exists(folder))
             {
@@ -168,7 +178,7 @@ namespace DiscordBot.IO
             }
 
             //compute hash
-           
+
 
             //hash name so it cannot be searched easily (bc of copyright)
             var name = getHashSha256(vid.FullName) + vid.FileExtension;
@@ -182,13 +192,17 @@ namespace DiscordBot.IO
             catch (System.Net.Http.HttpRequestException)
             {
                 Handle.SnackbarWarning("Could not decrypt video");
-                Console.WriteLine("Failed to decrypt file");
                 return null;
             }
-            catch (Exception ex)
+            catch (System.OutOfMemoryException)
+            {
+                Handle.SnackbarWarning("File too large");
+                Console.WriteLine(@"File " + name + @" is to large to save");
+            }
+            catch (Exception)
             {
                 Handle.SnackbarWarning("Failed to cache Video");
-                Console.WriteLine("Failed to cache file");
+                Console.WriteLine(@"Failed to cache file");
                 return null;
             }
 
@@ -202,8 +216,7 @@ namespace DiscordBot.IO
 
             byte[] hash = new SHA256Managed().ComputeHash(byteStr);
 
-            return Convert.ToBase64String(hash).Replace('/', '_');        
+            return Convert.ToBase64String(hash).Replace('/', '_');
         }
-
     }
 }

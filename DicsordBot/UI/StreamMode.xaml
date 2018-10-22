@@ -4,9 +4,12 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:prefix="clr-namespace:DiscordBot"
              mc:Ignorable="d"
-             d:DesignHeight="450" d:DesignWidth="800">
+             d:DesignHeight="450" d:DesignWidth="800"
+             DataContext="{Binding RelativeSource={RelativeSource Self}}">
     <Grid>
+
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="2.5*" />
             <ColumnDefinition Width="*" />
@@ -48,7 +51,7 @@
 
             <Grid Grid.Row="1">
                 <!-- recommended history-->
-                <ListBox x:Name="list_Suggestion" ItemsSource="{Binding Suggestions}">
+                <ListBox DataContext="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}" ItemsSource="{Binding Suggestions}">
                     <ListBox.ItemTemplate>
                         <DataTemplate>
                             <DockPanel Tag="{Binding Url}" MouseLeftButtonDown="list_History_MouseLeftButtonDown">
