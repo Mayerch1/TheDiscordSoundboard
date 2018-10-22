@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel;
+using System.IO;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -8,6 +9,7 @@ using System.Windows.Media.Animation;
 using System.Windows.Threading;
 using MaterialDesignThemes.Wpf;
 
+//TODO: rename project folder after merge
 namespace DiscordBot
 {
     /// <inheritdoc cref="T:System.Windows.Window"/>
@@ -21,7 +23,14 @@ namespace DiscordBot
 
         #region enums
 
-        public enum LoopState { LoopNone, LoopOne, LoopAll, LoopNext, LoopReset };
+        public enum LoopState
+        {
+            LoopNone,
+            LoopOne,
+            LoopAll,
+            LoopNext,
+            LoopReset
+        };
 
         #endregion enums
 
@@ -30,22 +39,33 @@ namespace DiscordBot
         private bool isEarrape = false;
 
         private LoopState loopStatus = LoopState.LoopNone;
+        private SnackbarMessageQueue snackbarMessageQueue = new SnackbarMessageQueue(TimeSpan.FromMilliseconds(3500));
+        private DispatcherTimer resizeTimer = new DispatcherTimer();
 
         #endregion fields
 
         #region propertys
 
-        private DispatcherTimer resizeTimer = new DispatcherTimer();
+        public SnackbarMessageQueue SnackbarMessageQueue
+        {
+            get => snackbarMessageQueue;
+            set
+            {
+                snackbarMessageQueue = value;
+                OnPropertyChanged("SnackbarMessageQueue");
+            }
+        }
+
 
         private double LastVolume { get; set; }
 
         public double Volume
         {
-            get { return ((double)Handle.Volume * 100) * (1 / (Handle.Data.Persistent.VolumeCap / 100.0f)); }
+            get { return ((double) Handle.Volume * 100) * (1 / (Handle.Data.Persistent.VolumeCap / 100.0f)); }
             set
             {
                 LastVolume = Volume;
-                Handle.Volume = ((float)value / 100) * (Handle.Data.Persistent.VolumeCap / 100.0f);
+                Handle.Volume = ((float) value / 100) * (Handle.Data.Persistent.VolumeCap / 100.0f);
                 setVolumeIcon();
                 OnPropertyChanged("Volume");
             }
@@ -61,6 +81,7 @@ namespace DiscordBot
                 OnPropertyChanged("IsEarrape");
             }
         }
+
 
         public bool IsLoop
         {
@@ -87,7 +108,10 @@ namespace DiscordBot
         public double TitleTime
         {
             get { return Handle.Bot.CurrentTime.TotalSeconds; }
-            set { if (value < TotalTime) Handle.Bot.skipToTime(TimeSpan.FromSeconds(value)); }
+            set
+            {
+                if (value < TotalTime) Handle.Bot.skipToTime(TimeSpan.FromSeconds(value));
+            }
         }
 
         public double TotalTime
@@ -95,13 +119,21 @@ namespace DiscordBot
             get { return Handle.Bot.TitleLenght.TotalSeconds; }
         }
 
-        public string TotalTimeString { get { return TimeSpan.FromSeconds(TotalTime).ToString(@"mm\:ss"); } }
-        public string TitleTimeString { get { return TimeSpan.FromSeconds(TitleTime).ToString(@"mm\:ss"); } }
+        public string TotalTimeString
+        {
+            get { return TimeSpan.FromSeconds(TotalTime).ToString(@"mm\:ss"); }
+        }
+
+        public string TitleTimeString
+        {
+            get { return TimeSpan.FromSeconds(TitleTime).ToString(@"mm\:ss"); }
+        }
 
         public string ClientAvatar
         {
             get { return Handle.Data.Persistent.ClientAvatar; }
         }
+
 
         private bool IsChannelListOpened { get; set; } = false;
 
@@ -130,11 +162,6 @@ namespace DiscordBot
             setVolumeIcon();
             btn_Repeat.Content = FindResource("IconRepeatOff");
 
-            DataContext = this;
-
-            //init snackbar msg
-            var msgQueue = new SnackbarMessageQueue(TimeSpan.FromMilliseconds(3500));
-            snackBar_Hint.MessageQueue = (msgQueue);
 
             initHotkeys();
 
@@ -158,7 +185,6 @@ namespace DiscordBot
         {
             cleanUp();
             terminateHotkeys();
-            Console.WriteLine("Last user-code was executed");
         }
 
         #region hotkeys
@@ -307,6 +333,7 @@ namespace DiscordBot
                 //in case, user changed mode since bot override, nothing changes
                 return;
             }
+
             //set loop-Status to bot
             if (nextState == LoopState.LoopOne)
             {
@@ -386,10 +413,11 @@ namespace DiscordBot
             Handle.Data.Persistent.ClientNameChanged += Handle.ClientName_Changed;
 
             //universal SnackbarWarning
-            Handle.SnackbarWarning += SnackBarWarning_Show;
+            Handle.SnackbarWarning += SnackbarMessage_Show;
 
             //route bot warning to universal Handle.SnackbarWarning
             Handle.Bot.SnackbarWarning += Handle.PassBotSnackbarWarning;
+
 
             //hotkey stuff
             IO.HotkeyManager.RegisteredHotkeyPressed += Hotkey_Pressed;
@@ -400,12 +428,9 @@ namespace DiscordBot
             Handle.Bot.StreamStateChanged += bot_streamState_Changed;
 
             //earrape event
-            Handle.Bot.EarrapeStateChanged += delegate (bool isEarrape)
-            {
-                earrapeStatusChanged(isEarrape);
-            };
+            Handle.Bot.EarrapeStateChanged += delegate(bool isEarrape) { earrapeStatusChanged(isEarrape); };
             //loop state event
-            Handle.Bot.LoopStateChanged += delegate (bool isLoop)
+            Handle.Bot.LoopStateChanged += delegate(bool isLoop)
             {
                 if (isLoop)
                 {
@@ -420,15 +445,14 @@ namespace DiscordBot
             };
 
             //fancy stuff
-            IO.BlurEffectManager.ToggleBlurEffect += delegate (bool isEnabled)
+            IO.BlurEffectManager.ToggleBlurEffect += delegate(bool isEnabled)
             {
                 IO.BlurEffectManager.ApplyBlurEffect(isEnabled, this);
             };
         }
 
         private void PassBlurEffectDelegate(bool isEnabled)
-        {
-        }
+        { }
 
         private void ToggleHotkey(bool isEnabled)
         {
@@ -446,8 +470,8 @@ namespace DiscordBot
             Console.WriteLine("Hotkey pressed: " + lParam.ToString("x"));
 
             //spereate keyCodes from lParam
-            uint keyCode = (((uint)lParam >> 16) & 0xFFFF);
-            uint modCode = (uint)lParam & 0x00FFFF;
+            uint keyCode = (((uint) lParam >> 16) & 0xFFFF);
+            uint modCode = (uint) lParam & 0x00FFFF;
 
             //find button and trigger replay
             foreach (var hotkey in Handle.Data.Persistent.HotkeyList)
@@ -462,9 +486,10 @@ namespace DiscordBot
             //this is called, when no action is required/provided
         }
 
-        private void SnackBarWarning_Show(string msg, Handle.SnackbarAction action)
+        private void SnackbarMessage_Show(string msg, Handle.SnackbarAction action)
         {
             string optionMsg = action.ToString();
+
             if (action == Handle.SnackbarAction.None)
                 optionMsg = "Roger Dodger";
 
@@ -485,9 +510,14 @@ namespace DiscordBot
                     break;
             }
 
-            snackBar_Hint.MessageQueue.Enqueue(msg, optionMsg, handler);
-        }
+       
 
+            SnackbarMessageQueue.Enqueue(msg, optionMsg, handler);
+            //SnackbarMain.Enqueue(msg, optionMsg, handler);
+            Console.WriteLine("Snackbar fired " + ++count);
+        }
+        //TODO: remove after debug
+        private static int count = 0;
         #region BotPlayDelegates
 
         private void btn_InstantButton_Clicked(int btnListIndex)
@@ -554,10 +584,11 @@ namespace DiscordBot
             {
                 Handle.Data.IsPlaylistPlaying = false;
                 //add first button
-                triggerBotInstantReplay(new Data.BotData(playlist.Tracks[(int)fileIndex].Name, playlist.Tracks[(int)fileIndex].Path));
+                triggerBotInstantReplay(new Data.BotData(playlist.Tracks[(int) fileIndex].Name,
+                    playlist.Tracks[(int) fileIndex].Path));
                 //set playlist properties, after song changed -> first title will not be skipped
                 Handle.Data.PlaylistIndex = listId;
-                Handle.Data.PlaylistFileIndex = (int)fileIndex + 1;
+                Handle.Data.PlaylistFileIndex = (int) fileIndex + 1;
                 Handle.Data.IsPlaylistPlaying = true;
             }
         }
@@ -590,13 +621,14 @@ namespace DiscordBot
 
         private void addTitleToHistory(Data.BotData title)
         {
-            Handle.Data.History.addTitle(IO.FileWatcher.getAllFileInfo(title.filePath));
+            if(File.Exists(title.filePath))
+                Handle.Data.History.addTitle(IO.FileWatcher.getAllFileInfo(title.filePath));
         }
 
         private async void bot_streamState_Changed(bool newState)
         {
             //display pause icon, if bot is streaming
-            if (newState/* is playing */)
+            if (newState /* is playing */)
                 btn_Play.Content = FindResource("IconPause");
             else
             {
@@ -627,7 +659,8 @@ namespace DiscordBot
                         Handle.Data.IsPlaylistPlaying = false;
 
                         //play next track, method starts stream if paused or stopped
-                        triggerBotQueueReplay(new Data.BotData(playlist.Tracks[fileIndex].Name, playlist.Tracks[fileIndex].Path));
+                        triggerBotQueueReplay(new Data.BotData(playlist.Tracks[fileIndex].Name,
+                            playlist.Tracks[fileIndex].Path));
 
                         //re-enable playlist-mode
                         Handle.Data.IsPlaylistPlaying = true;
@@ -685,7 +718,7 @@ namespace DiscordBot
 
         private void btn_Earrape_Click(object sender, RoutedEventArgs e)
         {
-            if (((System.Windows.Controls.Primitives.ToggleButton)sender).IsChecked == true)
+            if (((System.Windows.Controls.Primitives.ToggleButton) sender).IsChecked == true)
                 IsEarrape = true;
             else
                 IsEarrape = false;
@@ -705,8 +738,8 @@ namespace DiscordBot
 
         private void btn_About_Click(object sender, RoutedEventArgs e)
         {
-            MainGrid.Child = null;
-            MainGrid.Child = new UI.About();
+            MainGrid.Children.Clear();
+            MainGrid.Children.Add( new UI.About());
         }
 
         private void btn_Settings_Click(object sender, RoutedEventArgs e)
@@ -717,42 +750,43 @@ namespace DiscordBot
 
         private void btn_Playlist_Click(object sender, RoutedEventArgs e)
         {
-            MainGrid.Child = null;
+            MainGrid.Children.Clear();
             UI.Playlist.PlaylistMode playUI = new UI.Playlist.PlaylistMode();
             registerEmbedEvents(playUI);
-            MainGrid.Child = playUI;
+            MainGrid.Children.Add(playUI);
         }
 
         private void btn_Stream_Click(object sender, RoutedEventArgs e)
         {
-            MainGrid.Child = null;
+            MainGrid.Children.Clear();
             UI.StreamMode streamUI = new UI.StreamMode();
             registerEmbedEvents(streamUI);
-            MainGrid.Child = streamUI;
+            MainGrid.Children.Add(streamUI);
         }
+
 
         private void btn_Settings_Click()
         {
-            MainGrid.Child = null;
-            MainGrid.Child = new UI.Settings();
+            MainGrid.Children.Clear();
+            MainGrid.Children.Add(new UI.Settings());
         }
 
         private void btn_Sounds_Click(object sender, RoutedEventArgs e)
         {
             //change embeds for maingrid
-            MainGrid.Child = null;
+            MainGrid.Children.Clear();
             UI.ButtonUI btnUI = new UI.ButtonUI();
             registerEmbedEvents(btnUI);
-            MainGrid.Child = btnUI;
+            MainGrid.Children.Add(btnUI);
         }
 
         private void btn_Search_Click(object sender, RoutedEventArgs e)
         {
-            MainGrid.Child = null;
+            MainGrid.Children.Clear();
             UI.SearchMode searchMode = new UI.SearchMode();
             registerEmbedEvents(searchMode);
 
-            MainGrid.Child = searchMode;
+            MainGrid.Children.Add(searchMode);
         }
 
         private void btn_ToggleMenu_Click(object sender, RoutedEventArgs e)
@@ -764,7 +798,7 @@ namespace DiscordBot
             else
                 sb = FindResource("CloseMenu") as Storyboard;
 
-            sb.Begin();
+            sb?.Begin();
         }
 
         private void btn_Avatar_Click(object sender, RoutedEventArgs e)
@@ -784,7 +818,7 @@ namespace DiscordBot
                 IsChannelListOpened = true;
             }
 
-            sb.Begin();
+            sb?.Begin();
         }
 
         private void tree_channelList_SelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
@@ -792,7 +826,7 @@ namespace DiscordBot
             //get new selected tree
             try
             {
-                var channel = (Misc.MyTreeItem)e.NewValue;
+                var channel = (Misc.MyTreeItem) e.NewValue;
                 Handle.ChannelId = channel.id;
 
                 //set new channel and temp/perm parameter
@@ -814,9 +848,13 @@ namespace DiscordBot
                 {
                     snackMsg = "Joining to owner permanently";
                 }
+
                 Handle.SnackbarWarning(snackMsg, Handle.SnackbarAction.None);
             }
-            catch {/* do nothing if someting other than a channel is selected*/ }
+            catch
+            {
+                /* do nothing if someting other than a channel is selected*/
+            }
         }
 
         private void tree_channelList_ItemExpanded(object sender, RoutedEventArgs e)
@@ -824,14 +862,14 @@ namespace DiscordBot
             //get first expanded element, to save it for restart
             TreeViewItem treeItem = e.Source as TreeViewItem;
 
-            if (treeItem.Tag != null)
-                Handle.Data.Persistent.SelectedServerIndex = (int)treeItem.Tag;
+            if (treeItem?.Tag != null)
+                Handle.Data.Persistent.SelectedServerIndex = (int) treeItem.Tag;
         }
 
         private void scroll_channelList_PreviewMouseWheel(object sender, MouseWheelEventArgs e)
         {
             //intercept scrollevent and make scrollviewer accept the wheel
-            ScrollViewer scv = (ScrollViewer)sender;
+            ScrollViewer scv = (ScrollViewer) sender;
             scv.ScrollToVerticalOffset(scv.VerticalOffset - e.Delta / 10);
             e.Handled = true;
         }
@@ -841,7 +879,7 @@ namespace DiscordBot
             //prevent sideways scrolling
             if (e.HorizontalChange > 0)
             {
-                ScrollViewer scv = (ScrollViewer)sender;
+                ScrollViewer scv = (ScrollViewer) sender;
                 scv.ScrollToHorizontalOffset(0);
             }
         }
@@ -862,7 +900,6 @@ namespace DiscordBot
             PropertyChangedEventHandler handler = PropertyChanged;
 
             handler?.Invoke(this, new PropertyChangedEventArgs(info));
-            
         }
 
         private void Window_SizeChanged(object sender, SizeChangedEventArgs e)

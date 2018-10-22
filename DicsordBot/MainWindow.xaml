@@ -9,7 +9,8 @@
         Title="The Discord Soundboard" Height="767" Width="1335" Closing="MainWindow_Closing"
         ResizeMode="CanResizeWithGrip"
         PreviewMouseDown="Window_PreviewMouseDown"
-        SizeChanged="Window_SizeChanged">
+        SizeChanged="Window_SizeChanged"
+        DataContext="{Binding RelativeSource={RelativeSource Self}}">
 
     <Window.Resources>
         <Storyboard x:Key="OpenMenu">
@@ -197,13 +198,12 @@
                                                 Width="Auto"
                                                 MinWidth="40"
                                                 ToolTipService.ToolTip="{Binding Path=Value, ElementName=timeBar, StringFormat='HH:mm'}">
-                                          <Slider.ToolTip>
+                                            <Slider.ToolTip>
                                                 <ToolTip Content="{Binding TitleTimeString}"/>
                                             </Slider.ToolTip>
 
                                         </Slider>
                                     </Grid>
-                                    <!-- TODO: test tooltip -->
 
                                     <Grid Grid.Column="2">
                                         <TextBlock Text="{Binding TotalTimeString}"  VerticalAlignment="Center" HorizontalAlignment="Center" />
@@ -329,14 +329,17 @@
                 </materialDesign:ColorZone>
             </Border>
 
-            <Border x:Name="MainGrid" Background="{StaticResource PrimaryBackgroundBrush}" DockPanel.Dock="Right" materialDesign:ShadowAssist.ShadowDepth="Depth2" materialDesign:ShadowAssist.ShadowEdges="Top">
+            <Border Background="{StaticResource PrimaryBackgroundBrush}" DockPanel.Dock="Right" materialDesign:ShadowAssist.ShadowDepth="Depth2" materialDesign:ShadowAssist.ShadowEdges="Top">
                 <!--Main Grid-->
                 <Grid>
-                    <Grid>
+                    <Grid x:Name="MainGrid" Grid.ZIndex="0">
                         <ui:ButtonUI x:Name="ButtonUI" />
                     </Grid>
-                    <Grid VerticalAlignment="Bottom" HorizontalAlignment="Center" Height="50">
-                        <materialDesign:Snackbar MessageQueue="{materialDesign:MessageQueue}" x:Name="snackBar_Hint" />
+
+                    <Grid VerticalAlignment="Bottom" HorizontalAlignment="Center" Height="50" Grid.ZIndex="2">
+                        <materialDesign:Snackbar DataContext="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}"  
+                                                 MessageQueue="{Binding SnackbarMessageQueue}"/>
+                        <!--<ui:Snackbar x:Name="SnackbarMain"/>-->
                     </Grid>
                 </Grid>
             </Border>

@@ -1,8 +1,11 @@
 ﻿using System;
 using System.IO;
+using System.Linq;
+using System.Net;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web;
 using VideoLibrary;
 
 namespace DiscordBot.IO
@@ -16,12 +19,14 @@ namespace DiscordBot.IO
 
         private const string thumbnailQuality = "/sddefault.jpg";
 
+
         /// <summary>
         /// deletes all cached videos
         /// </summary>
         public static void clearVideoCache(string whiteList = "")
         {
-            string folder = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\" + Data.PersistentData.defaultFolderName + @"\" + Data.PersistentData.videoCacheFolder;
+            string folder = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\" +
+                            Data.PersistentData.defaultFolderName + @"\" + Data.PersistentData.videoCacheFolder;
 
             if (Directory.Exists(folder))
             {
@@ -34,7 +39,9 @@ namespace DiscordBot.IO
                             File.Delete(file);
                         }
                         catch
-                        { continue; }
+                        {
+                            continue;
+                        }
                     }
                 }
             }
@@ -60,6 +67,28 @@ namespace DiscordBot.IO
             return imageUrl + getIdFromUrl(url) + thumbnailQuality;
         }
 
+
+        /// <summary>
+        /// get the title from an url
+        /// </summary>
+        /// <param name="url">url to video</param>
+        /// <returns>task string representing the title</returns>
+        public static async Task<string> GetTitleTask(string url)
+        {
+            var api = $"http://youtube.com/get_video_info?video_id={GetArgs(url, "v", '?')}";
+            return GetArgs(await new WebClient().DownloadStringTaskAsync(api), "title", '&');
+        }
+
+        private static string GetArgs(string args, string key, char query)
+        {
+            var iqs = args.IndexOf(query);
+            return iqs == -1
+                ? string.Empty
+                : HttpUtility.ParseQueryString(iqs < args.Length - 1
+                    ? args.Substring(iqs + 1)
+                    : string.Empty)[key];
+        }
+
         /// <summary>
         /// download video from ulr
         /// </summary>
@@ -74,27 +103,27 @@ namespace DiscordBot.IO
             VideoClient videoClient = new VideoClient();
 
             try
-            {
-                mpAudio = await yt.GetVideoAsync(url);
+            {              
+                //-------------------------
+                // getting the audio from yt is very slow,
+                // it's faster to download the vid, even on 10Mbit/s
+                //--------------------------
 
-                ////get video file
-                //var videos = await YouTube.Default.GetAllVideosAsync(url);
+                //get video file
+                var videos = await YouTube.Default.GetAllVideosAsync(url);
 
-                ////get audios, only aac
-                //var audios = videos.Where(v => v.AudioFormat == AudioFormat.Aac && v.AdaptiveKind == AdaptiveKind.Audio).ToList();
+                //get audios, only aac
+                var audios = videos.Where(v => v.AudioFormat != AudioFormat.Unknown && v.AudioFormat != AudioFormat.Vorbis).ToList();
 
-                ////save audio into Video, only with audio
-                //mpAudio = audios.FirstOrDefault(x => x.AudioBitrate > 0);
-
-                Console.WriteLine(mpAudio.Uri);
+                //save audio into Video, only with audio
+                mpAudio = audios.FirstOrDefault(x => x.AudioBitrate > 0);
             }
             catch (Exception ex)
             {
-                UI.UnhandledException.initWindow(ex, "Error in downloading Video");
-                Console.WriteLine("Exception.!?<");
-
+                UI.UnhandledException.initWindow(ex, "Error in requesting Video information");
                 return null;
             }
+
             return mpAudio;
         }
 
@@ -113,6 +142,7 @@ namespace DiscordBot.IO
                 }
                 catch
                 {
+                    Console.WriteLine("getStream Async failed.");
                     return null;
                 }
             }
@@ -134,15 +164,13 @@ namespace DiscordBot.IO
         /// <param name="vid">video to save</param>
         public static async Task<string> cacheVideo(Video vid)
         {
-            string folder = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\" + Data.PersistentData.defaultFolderName + @"\" + Data.PersistentData.videoCacheFolder;
+            string folder = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\" +
+                            Data.PersistentData.defaultFolderName + @"\" + Data.PersistentData.videoCacheFolder;
             //save video into cache folder
             if (!Directory.Exists(folder))
             {
                 Directory.CreateDirectory(folder);
             }
-
-            //compute hash
-           
 
             //hash name so it cannot be searched easily (bc of copyright)
             var name = getHashSha256(vid.FullName) + vid.FileExtension;
@@ -158,15 +186,20 @@ namespace DiscordBot.IO
                 Handle.SnackbarWarning("Could not decrypt video");
                 return null;
             }
-            catch (Exception ex)
+            catch (System.OutOfMemoryException)
+            {
+                Handle.SnackbarWarning("File too large");
+                Console.WriteLine(@"File " + name + @" is to large to save");
+            }
+            catch (Exception)
             {
                 Handle.SnackbarWarning("Failed to cache Video");
+                Console.WriteLine(@"Failed to cache file");
                 return null;
             }
 
             return location;
         }
-
 
         private static string getHashSha256(string title)
         {
@@ -174,16 +207,7 @@ namespace DiscordBot.IO
 
             byte[] hash = new SHA256Managed().ComputeHash(byteStr);
 
-            string hashStr = String.Empty;
-
-
-            foreach (var b in hash)
-            {
-                hashStr += b.ToString("x2");
-            }
-  
-            return hashStr;
+            return Convert.ToBase64String(hash).Replace('/', '_');
         }
-
     }
 }
