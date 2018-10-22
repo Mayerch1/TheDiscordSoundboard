@@ -20,9 +20,6 @@ namespace DiscordBot.UI
     /// </summary>
     public partial class StreamMode : UserControl, INotifyPropertyChanged
     {
-   
-
-
         public delegate void PlayVideoHandler(Data.BotData data);
 
         public PlayVideoHandler PlayVideo;
@@ -165,8 +162,13 @@ namespace DiscordBot.UI
             {
                //fall back to caching to disk
                 Handle.SnackbarWarning("Caching, this may take a while...");
+
                 //alternatively try to download the video
+                loadProgress.Visibility = Visibility.Visible;
+
                 string location = await IO.YTManager.cacheVideo(vid);
+
+                loadProgress.Visibility = Visibility.Collapsed;
 
                 if (location != null)
                     startStream(new BotData(Title, location));
@@ -206,7 +208,6 @@ namespace DiscordBot.UI
             }
         }
 
-
         #endregion events
 
         #region property changed
@@ -214,17 +215,11 @@ namespace DiscordBot.UI
         public event PropertyChangedEventHandler PropertyChanged;
 
         private void OnPropertyChanged(string info)
-        {
-            if (PropertyChanged != null)
-            {
-                PropertyChanged(this, new PropertyChangedEventArgs(info));
-            }
+        {          
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(info));           
         }
 
-        #endregion property changed
-
-
-       
+        #endregion property changed     
     }
 
 #pragma warning restore CS1591

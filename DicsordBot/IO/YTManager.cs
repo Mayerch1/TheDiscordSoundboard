@@ -89,7 +89,6 @@ namespace DiscordBot.IO
                     : string.Empty)[key];
         }
 
-
         /// <summary>
         /// download video from ulr
         /// </summary>
@@ -104,28 +103,24 @@ namespace DiscordBot.IO
             VideoClient videoClient = new VideoClient();
 
             try
-            {
-                mpAudio = await yt.GetVideoAsync(url);
-
+            {              
                 //-------------------------
                 // getting the audio from yt is very slow,
                 // it's faster to download the vid, even on 10Mbit/s
                 //--------------------------
 
-
                 //get video file
-                //var videos = await YouTube.Default.GetAllVideosAsync(url);
+                var videos = await YouTube.Default.GetAllVideosAsync(url);
 
                 //get audios, only aac
-                //var audios = videos.Where(v => v.AdaptiveKind == AdaptiveKind.Audio && v.AudioFormat == AudioFormat.Aac).ToList();
-              
+                var audios = videos.Where(v => v.AudioFormat != AudioFormat.Unknown && v.AudioFormat != AudioFormat.Vorbis).ToList();
 
                 //save audio into Video, only with audio
-                //mpAudio = audios.FirstOrDefault(x => x.AudioBitrate > 0);
+                mpAudio = audios.FirstOrDefault(x => x.AudioBitrate > 0);
             }
             catch (Exception ex)
             {
-                UI.UnhandledException.initWindow(ex, "Error in downloading Video");
+                UI.UnhandledException.initWindow(ex, "Error in requesting Video information");
                 return null;
             }
 
@@ -177,9 +172,6 @@ namespace DiscordBot.IO
                 Directory.CreateDirectory(folder);
             }
 
-            //compute hash
-
-
             //hash name so it cannot be searched easily (bc of copyright)
             var name = getHashSha256(vid.FullName) + vid.FileExtension;
             var location = folder + "\\" + name;
@@ -208,7 +200,6 @@ namespace DiscordBot.IO
 
             return location;
         }
-
 
         private static string getHashSha256(string title)
         {

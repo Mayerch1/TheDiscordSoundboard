@@ -10,10 +10,25 @@
              DataContext="{Binding RelativeSource={RelativeSource Self}}">
     <Grid>
 
-        <Grid.ColumnDefinitions>
+        <Grid>
+            <materialDesign:Card x:Name="loadProgress" 
+                                 UniformCornerRadius="14" Visibility="Collapsed"  
+                                 Height="30" Width="30"
+                                 Padding="4">
+                <ProgressBar Style="{StaticResource MaterialDesignCircularProgressBar}"
+                     Value ="0" IsIndeterminate="True"
+                     HorizontalAlignment="Center" VerticalAlignment="Top"/>
+            </materialDesign:Card>
+        </Grid>
+
+        <Grid>
+            <Grid.ColumnDefinitions>
             <ColumnDefinition Width="2.5*" />
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
+
+        
+
 
         <Grid Grid.Column="0">
             <Grid.RowDefinitions>
@@ -84,4 +99,5 @@
             </ListBox>
         </Grid>
     </Grid>
+        </Grid>
 </UserControl>
