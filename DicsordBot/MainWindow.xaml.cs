@@ -17,6 +17,8 @@ namespace DiscordBot
     ///  Interaction logic for MainWindow.xaml
     ///  </summary>
     //blub
+
+    
     public partial class MainWindow : Window, INotifyPropertyChanged
     {
 #pragma warning disable CS1591
@@ -37,6 +39,7 @@ namespace DiscordBot
         #region fields
 
         private bool isEarrape = false;
+
 
         private LoopState loopStatus = LoopState.LoopNone;
         private SnackbarMessageQueue snackbarMessageQueue = new SnackbarMessageQueue(TimeSpan.FromMilliseconds(3500));
@@ -61,7 +64,7 @@ namespace DiscordBot
 
         public double Volume
         {
-            get { return ((double) Handle.Volume * 100) * (1 / (Handle.Data.Persistent.VolumeCap / 100.0f)); }
+            get => ((double) Handle.Volume * 100) * (1 / (Handle.Data.Persistent.VolumeCap / 100.0f));
             set
             {
                 LastVolume = Volume;
@@ -73,7 +76,7 @@ namespace DiscordBot
 
         public bool IsEarrape
         {
-            get { return isEarrape; }
+            get => isEarrape;
             set
             {
                 isEarrape = value;
@@ -85,7 +88,7 @@ namespace DiscordBot
 
         public bool IsLoop
         {
-            get { return Handle.Bot.IsLoop; }
+            get => Handle.Bot.IsLoop;
             set
             {
                 Handle.Bot.IsLoop = value;
@@ -95,7 +98,7 @@ namespace DiscordBot
 
         public LoopState LoopStatus
         {
-            get { return loopStatus; }
+            get => loopStatus;
             set
             {
                 loopStatus = value;
@@ -107,32 +110,20 @@ namespace DiscordBot
 
         public double TitleTime
         {
-            get { return Handle.Bot.CurrentTime.TotalSeconds; }
+            get => Handle.Bot.CurrentTime.TotalSeconds;
             set
             {
                 if (value < TotalTime) Handle.Bot.skipToTime(TimeSpan.FromSeconds(value));
             }
         }
 
-        public double TotalTime
-        {
-            get { return Handle.Bot.TitleLenght.TotalSeconds; }
-        }
+        public double TotalTime => Handle.Bot.TitleLenght.TotalSeconds;
 
-        public string TotalTimeString
-        {
-            get { return TimeSpan.FromSeconds(TotalTime).ToString(@"mm\:ss"); }
-        }
+        public string TotalTimeString => TimeSpan.FromSeconds(TotalTime).ToString(@"mm\:ss");
 
-        public string TitleTimeString
-        {
-            get { return TimeSpan.FromSeconds(TitleTime).ToString(@"mm\:ss"); }
-        }
+        public string TitleTimeString => TimeSpan.FromSeconds(TitleTime).ToString(@"mm\:ss");
 
-        public string ClientAvatar
-        {
-            get { return Handle.Data.Persistent.ClientAvatar; }
-        }
+        public string ClientAvatar => Handle.Data.Persistent.ClientAvatar;
 
 
         private bool IsChannelListOpened { get; set; } = false;
@@ -211,7 +202,7 @@ namespace DiscordBot
             IO.ImageManager.clearImageCache(Handle.Data.Playlists);
             IO.YTManager.clearVideoCache();
 
-            //this will prevent the StreamState-changed handler from enqueing the next song, when trying to dicsonnect
+            //this will prevent the StreamState-changed handler from queueing the next song, when trying to disconnect
             Handle.Data.IsPlaylistPlaying = false;
             await Handle.Bot.disconnectFromServerAsync();
         }
@@ -367,6 +358,7 @@ namespace DiscordBot
 
             if (Handle.Bot.IsStreaming)
             {
+                Handle.Bot.IsPause = true;
                 await Handle.Bot.stopStreamAsync();
             }
             else if (!Handle.Bot.IsBufferEmpty)
@@ -510,14 +502,10 @@ namespace DiscordBot
                     break;
             }
 
-       
 
             SnackbarMessageQueue.Enqueue(msg, optionMsg, handler);
-            //SnackbarMain.Enqueue(msg, optionMsg, handler);
-            Console.WriteLine("Snackbar fired " + ++count);
         }
-        //TODO: remove after debug
-        private static int count = 0;
+
         #region BotPlayDelegates
 
         private void btn_InstantButton_Clicked(int btnListIndex)
@@ -556,39 +544,25 @@ namespace DiscordBot
             triggerBotInstantReplay(data, true);
         }
 
-        /// <param name="listId">unique id field of playlists</param>
+        /// <param name="listIndex">unique id field of playlist</param>
         /// <param name="fileIndex">index in the array of all playList files</param>
-        private async void Playlist_Play(int listId, uint fileIndex)
+        private async void Playlist_Play(int listIndex, uint fileIndex)
         {
             //stop streaming
             if (Handle.Bot.IsStreaming)
-                await Handle.Bot.stopStreamAsync();
-
-            //get playlist for index, history if -1
-            Data.Playlist playlist = null;
-            if (listId == -1)
-            {
-                playlist = Handle.Data.History;
-            }
-            else
-            {
-                foreach (var list in Handle.Data.Playlists)
-                {
-                    if (list.Id == listId)
-                        playlist = list;
-                }
-            }
-
-            //select file by index of list
-            if (playlist != null && fileIndex < playlist.Tracks.Count)
             {
                 Handle.Data.IsPlaylistPlaying = false;
-                //add first button
-                triggerBotInstantReplay(new Data.BotData(playlist.Tracks[(int) fileIndex].Name,
-                    playlist.Tracks[(int) fileIndex].Path));
-                //set playlist properties, after song changed -> first title will not be skipped
-                Handle.Data.PlaylistIndex = listId;
-                Handle.Data.PlaylistFileIndex = (int) fileIndex + 1;
+                await Handle.Bot.stopStreamAsync();
+            }
+
+            //init playlist Mgr
+            Data.FileData nextFile = Misc.PlaylistManager.InitList(listIndex, (int) fileIndex);
+
+
+            if (nextFile != null)
+            {
+                triggerBotInstantReplay(new Data.BotData(nextFile.Name,
+                    nextFile.Path));
                 Handle.Data.IsPlaylistPlaying = true;
             }
         }
@@ -621,7 +595,7 @@ namespace DiscordBot
 
         private void addTitleToHistory(Data.BotData title)
         {
-            if(File.Exists(title.filePath))
+            if (File.Exists(title.filePath))
                 Handle.Data.History.addTitle(IO.FileWatcher.getAllFileInfo(title.filePath));
         }
 
@@ -634,50 +608,35 @@ namespace DiscordBot
             {
                 btn_Play.Content = FindResource("IconPlay");
 
+
+                //TODO: test pause while playlist playing not possible
+
                 //take next title in playlist
-                if (Handle.Data.IsPlaylistPlaying)
+                if (Handle.Data.IsPlaylistPlaying && !Handle.Bot.IsPause)
                 {
-                    int listIndex = Handle.Data.PlaylistIndex;
-                    int fileIndex = Handle.Data.PlaylistFileIndex;
+                    //disable playlistmode to prevent multiple skips
+                    Handle.Data.IsPlaylistPlaying = false;
 
-                    Data.Playlist playlist;
+                    if (Handle.Bot.IsStreaming)
+                        await Handle.Bot.stopStreamAsync();
 
-                    //playlist is saved by index
-                    if (listIndex == -1)
-                        playlist = Handle.Data.History;
-                    else
-                        playlist = Handle.Data.Playlists[listIndex];
 
-                    //increase fileIndex, but use old value for the next title
-                    if (++Handle.Data.PlaylistFileIndex <= playlist.Tracks.Count)
+                    //set loop-status of playlist
+                    bool isLoop = LoopStatus == LoopState.LoopAll;
+                    Misc.PlaylistManager.SetLoopState(isLoop);
+
+
+                    var nextFile = Misc.PlaylistManager.GetNextTrack();
+
+                    if (nextFile != null)
                     {
-                        //stop the stream (and await it)
-                        if (Handle.Bot.IsStreaming)
-                            await Handle.Bot.stopStreamAsync();
+                        //enqueue next file
+                        triggerBotQueueReplay(new Data.BotData(nextFile.Name, nextFile.Path));
 
-                        //make shure another call of this method won't skip a title
-                        Handle.Data.IsPlaylistPlaying = false;
-
-                        //play next track, method starts stream if paused or stopped
-                        triggerBotQueueReplay(new Data.BotData(playlist.Tracks[fileIndex].Name,
-                            playlist.Tracks[fileIndex].Path));
-
-                        //re-enable playlist-mode
                         Handle.Data.IsPlaylistPlaying = true;
                     }
-                    else
-                    {
-                        //restart playlist
-                        if (LoopStatus == LoopState.LoopAll)
-                        {
-                            Handle.Data.PlaylistFileIndex = 0;
-                            //call this function again, to equeue the playlist
-                            triggerBotQueueReplay(new Data.BotData(playlist.Tracks[0].Name, playlist.Tracks[0].Path));
-                        }
-                        else
-                            //set properties for finished playlist
-                            Handle.Data.IsPlaylistPlaying = false;
-                    }
+
+                    //playlist stays on off, if null is returned
                 }
             }
         }
@@ -697,13 +656,10 @@ namespace DiscordBot
             //skip prev title in playlist, when in playlist-mode and <2s
             if (Handle.Data.IsPlaylistPlaying && Handle.Bot.CurrentTime.TotalSeconds < 2)
             {
-                if (Handle.Data.PlaylistFileIndex > 0)
-                {
-                    //skip 2 back, because method will skip one forward, when title ends
-                    Handle.Data.PlaylistFileIndex -= 2;
-
-                    Handle.Bot.skipTrack();
-                }
+                //move to back, than skip one forward, 
+                //this will skip the current track and start at t-1
+                Misc.PlaylistManager.SkipBackwards();
+                Handle.Bot.skipTrack();               
             }
             else
                 //skip to beginning of track
@@ -739,7 +695,7 @@ namespace DiscordBot
         private void btn_About_Click(object sender, RoutedEventArgs e)
         {
             MainGrid.Children.Clear();
-            MainGrid.Children.Add( new UI.About());
+            MainGrid.Children.Add(new UI.About());
         }
 
         private void btn_Settings_Click(object sender, RoutedEventArgs e)

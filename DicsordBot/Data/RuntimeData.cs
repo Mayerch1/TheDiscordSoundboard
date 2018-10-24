@@ -29,8 +29,6 @@ namespace DiscordBot.Data
         private ObservableCollection<Playlist> playlists = new ObservableCollection<Playlist>();
         private History history = new History();
         private VideoHistory videoHistory = new VideoHistory();
-        private int playlistIndex = 0;
-        private int playlistFileIndex = 0;
         private bool isPlaylistPlaying = false;
 
         #endregion fields
@@ -72,19 +70,7 @@ namespace DiscordBot.Data
                 videoHistory = value;
                 OnPropertyChanged("VideoHistory");
             }
-        }
-
-        /// <summary>
-        /// index of currently played playlist
-        /// </summary>
-        public int PlaylistIndex { get => playlistIndex;
-            set { playlistIndex = value; OnPropertyChanged("PlaylistIndex"); } }
-
-        /// <summary>
-        /// file index of position in playlist
-        /// </summary>
-        public int PlaylistFileIndex { get => playlistFileIndex;
-            set { playlistFileIndex = value; OnPropertyChanged("PlaylistFileIndex"); } }
+        }     
 
         /// <summary>
         /// IsPlaylistPlaying property

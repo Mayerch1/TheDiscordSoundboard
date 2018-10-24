@@ -199,7 +199,7 @@ namespace DiscordBot.Bot
             if (IsServerConnected)
                 return true;
 
-            if (Token == null || Token == "")
+            if (String.IsNullOrEmpty(Token))
                 return false;
 
             try
@@ -210,20 +210,16 @@ namespace DiscordBot.Bot
             {
                 SnackbarWarning("Invalid Token", SnackbarAction.Settings);
 
-                Console.WriteLine("connection Exception (Token)");
-
                 return false;
             }
             catch (System.Net.Http.HttpRequestException)
             {
-                SnackbarWarning("Can't reach the Discord-Servers due to timeout", SnackbarAction.None);
-                Console.WriteLine("connection Exception (Timeout, ...)");
+                SnackbarWarning("Can't reach the Discord-Servers", SnackbarAction.None);
                 return false;
             }
             catch (Exception ex)
             {
                 UI.UnhandledException.initWindow(ex, "Trying to connect to the Discord Servers");
-                Console.WriteLine("general connection Exception");
                 return false;
             }
 

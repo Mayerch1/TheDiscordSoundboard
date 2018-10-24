@@ -228,6 +228,7 @@
     <Compile Include="IO\BlurEffectManager.cs" />
     <Compile Include="IO\ImageManager.cs" />
     <Compile Include="IO\YTManager.cs" />
+    <Compile Include="Misc\PlaylistManager.cs" />
     <Compile Include="OSInterop.cs" />
     <Compile Include="UI\About.xaml.cs">
       <DependentUpon>About.xaml</DependentUpon>

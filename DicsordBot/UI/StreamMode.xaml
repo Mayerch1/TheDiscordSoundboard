@@ -38,10 +38,16 @@
 
             <Grid Grid.Row="0">
                 <DockPanel VerticalAlignment="Top" Margin="20" LastChildFill="True">
-                    <Image  x:Name="img_thumbnail"
-                            DockPanel.Dock="Left"
-                            Width="256" Height="256" Margin="0,0,20,0"
-                            Source="{Binding ImageUri}" />
+                       
+                            <Image  x:Name="img_thumbnail"
+                                    DockPanel.Dock="Left"
+                                    Width="256" Height="256" Margin="0,0,20,0"
+                                    Source="{Binding ImageUri}" />
+
+                            <!--<Label Content="{Binding Duration}"
+                                   VerticalAlignment="Bottom" HorizontalAlignment="Right"/>-->
+                       
+                   
 
                     <Label Content="{Binding Title}"
                            DockPanel.Dock="Top"
@@ -70,12 +76,18 @@
                     <ListBox.ItemTemplate>
                         <DataTemplate>
                             <DockPanel Tag="{Binding Url}" MouseLeftButtonDown="list_History_MouseLeftButtonDown">
-                                <Image DockPanel.Dock="Left"
+                                    <Grid>
+                                        <Image DockPanel.Dock="Left"
                                        Source="{Binding ImageUrl}"
                                        Width="64" Height="64"/>
-                                <Label DockPanel.Dock="Right"
-                                       Content="{Binding Title}"/>
-                            </DockPanel>
+                                        <Label Content="{Binding Duration}"
+                                               VerticalAlignment="Bottom"
+                                               HorizontalAlignment="Right"/>
+                                    </Grid>
+
+                                    <Label DockPanel.Dock="Right"
+                                               Content="{Binding Title}"/>
+                                </DockPanel>
                         </DataTemplate>
                     </ListBox.ItemTemplate>
                 </ListBox>

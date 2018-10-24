@@ -124,6 +124,12 @@ namespace DiscordBot.Bot
         public bool IsLoop { get; set; } = false;
 
         /// <summary>
+        /// is set if the bot is paused
+        /// </summary>
+        /// <remarks>unlocks it self, but must be set from outside</remarks>
+        public bool IsPause { get; set; } = false;
+
+        /// <summary>
         /// IsToAbort property
         /// </summary>
         private bool IsToAbort { get; set; } = false;
@@ -299,12 +305,12 @@ namespace DiscordBot.Bot
             else if (data.stream != null)
             {
 
-                Reader = new StreamMediaFoundationReader(data.stream);
+                return;
 
-                //TODO: test stream
+                //Reader = new StreamMediaFoundationReader(data.stream);
                // Reader = new StreamMediaFoundationReader(data.stream);
                 //set non seekable bool
-                CanSeek = data.stream.CanSeek;
+                //CanSeek = data.stream.CanSeek;
             }
             NormalResampler = new MediaFoundationResampler(Reader, OutFormat);
 
@@ -362,6 +368,7 @@ namespace DiscordBot.Bot
                 int byteCount;
 
                 IsStreaming = true;
+                IsPause = false;
 
                 //repeat, read new block into buffer -> stream buffer
                 while ((byteCount = ActiveResampler.Read(buffer, 0, blockSize)) > 0)

@@ -1,4 +1,6 @@
-﻿using System;
+﻿using DiscordBot.Data;
+using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.IO;
@@ -6,8 +8,6 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media.Imaging;
-using DiscordBot.Data;
-using MaterialDesignThemes.Wpf;
 using VideoLibrary;
 using YoutubeSearch;
 
@@ -25,56 +25,61 @@ namespace DiscordBot.UI
         public PlayVideoHandler PlayVideo;
 
         
-        private ObservableCollection<Data.VideoData> suggestions = new ObservableCollection<VideoData>();
-   
+        private ObservableCollection<Data.VideoData> _suggestions = new ObservableCollection<VideoData>();
+        private string _url = "";
+        private string _title = "";
+        private string _imageUri = "";
+        private string _duration = "0:00";
 
         public ObservableCollection<Data.VideoData> Suggestions
         {
-            get => suggestions;
+            get => _suggestions;
             set
             {
-                suggestions = value;
+                _suggestions = value;
                 OnPropertyChanged("Suggestions");
             }
         }
-
-        
-
-        private string url = "";
-
+     
         public string Url
-        { get => url;
+        { get => _url;
             set
             {
-                url = value;
-                ImageUri = IO.YTManager.getUrlToThumbnail(value);
-                setTitleAsync(value);
+                _url = value;                              
+                SetMetaDataAsync(value);
                 OnPropertyChanged("Url");
             }
         }
-
-        private string title = "";
-
+     
         public string Title
-        { get => title;
+        { get => _title;
             set
             {
-                title = value;
+                _title = value;
                 OnPropertyChanged("Title");
             }
         }
-
-        private string imageUri = "";
-
+     
         public string ImageUri
-        { get => imageUri;
+        { get => _imageUri;
             set
             {
-                imageUri = value;
+                _imageUri = value;
                 ImageChanged(value);
                 OnPropertyChanged("ImageUri");
             }
         }
+
+        public string Duration
+        {
+            get => _duration;
+            set
+            {
+                _duration = value;
+                OnPropertyChanged("Duration");
+            }
+        }
+
 
         public StreamMode()
         {
@@ -85,24 +90,43 @@ namespace DiscordBot.UI
         }
 
 
-        private void startStream(Data.BotData data)
+        private void StartStream(Data.BotData data)
         {
             PlayVideo(data);
             Handle.Data.VideoHistory.addVideo(new Data.VideoData(Url, Title, ImageUri));
         }
 
 
-        private async void setTitleAsync(string url)
+        private async void SetMetaDataAsync(string url)
         {
+            string id = IO.YTManager.getIdFromUrl(url);
+
+            if (String.IsNullOrWhiteSpace(id))
+                return;
+
+
+            List<VideoInformation> infos;
             try
             {
-                Title =  await IO.YTManager.GetTitleTask(url);
+                infos = await IO.YTManager.SearchQueryTaskAsync(id, 1);
             }
-            catch
+            catch(Exception ex)
             {
-                Title = "";
+                //fallback, if rate limit blocks api call
+                ImageUri = IO.YTManager.getUrlToThumbnail(url);
+                Title = await IO.YTManager.GetTitleTask(url);
+                return;
             }
-        }
+
+            if (infos.Count > 0)
+            {
+                var videoInfo = infos[0];
+
+                ImageUri = videoInfo.Thumbnail;
+                Title = videoInfo.Title;
+                Duration = videoInfo.Duration;
+            }          
+        }    
 
         private void box_link_TextChanged(object sender, TextChangedEventArgs e)
         {
@@ -110,36 +134,50 @@ namespace DiscordBot.UI
                 Url = box.Text;
         }
 
-
-        private void proccessEntry()
+        
+        private void ProcessEntry()
         {
             if (Url.Contains("http://") || Url.Contains("https://"))
             {
-                getAndStartStream();
+                GetAndStartStream();
             }
             else
             {
-                //start a search for searchterm saved in Url
-                performSearch(Url);
+                //start a search for search term saved in Url
+                PerformSearch(Url);
             }
         }
 
-        private void performSearch(string filter)
+        private async void PerformSearch(string filter)
         {
             Suggestions.Clear();
 
             const int pages =1;
-            var items = new VideoSearch();
 
-            foreach (var item in items.SearchQuery(filter, pages))
+            List<VideoInformation> result;
+
+            try
             {
-                Suggestions.Add(new Data.VideoData(item.Url, item.Title, item.Thumbnail));   
+                result = await IO.YTManager.SearchQueryTaskAsync(filter, pages);
+            }
+            catch
+            {
+                return;
+            }
+    
+            foreach (var item in result)
+            {  
+                Suggestions.Add(new Data.VideoData(item));   
             }
         }
 
+       
 
-        private async void getAndStartStream()
+
+        private async void GetAndStartStream()
         {
+            loadProgress.Visibility = Visibility.Visible;
+
             //download video
             Video vid = await IO.YTManager.getVideoAsync(Url);          
             if (vid == null) return;
@@ -148,12 +186,15 @@ namespace DiscordBot.UI
 
             //get playable stream
             Stream stream = await IO.YTManager.getStreamAsync(vid);
+
             //disable it for now 
             if (stream != null && !Handle.Data.Persistent.AlwaysCacheVideo)
-            {              
+            {
+                loadProgress.Visibility = Visibility.Collapsed;
+
                 //enqueue BotData item with stream
                 //reference
-                startStream(new BotData(Title)
+                StartStream(new BotData(Title)
                 {
                     stream = stream,
                 });
@@ -164,14 +205,14 @@ namespace DiscordBot.UI
                 Handle.SnackbarWarning("Caching, this may take a while...");
 
                 //alternatively try to download the video
-                loadProgress.Visibility = Visibility.Visible;
+               
 
                 string location = await IO.YTManager.cacheVideo(vid);
 
                 loadProgress.Visibility = Visibility.Collapsed;
 
                 if (location != null)
-                    startStream(new BotData(Title, location));
+                    StartStream(new BotData(Title, location));
             }
 
             vid = null;
@@ -185,7 +226,7 @@ namespace DiscordBot.UI
 
             if (e.Key == Key.Enter)
             {               
-                proccessEntry();
+                ProcessEntry();
             }
         }
 
@@ -196,7 +237,7 @@ namespace DiscordBot.UI
 
         private void btn_Stream_Click(object sender, RoutedEventArgs e)
         {
-            proccessEntry();
+            ProcessEntry();
         }
 
         private void list_History_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)

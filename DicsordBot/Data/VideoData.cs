@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using YoutubeSearch;
 
 namespace DiscordBot.Data
 {
@@ -26,26 +27,46 @@ namespace DiscordBot.Data
         /// <param name="url">url to video</param>
         /// <param name="title">title of video </param>
         /// <param name="imageUrl">url to thumbnail</param>
-        public VideoData(string url, string title, string imageUrl)
+        /// <param name="duration">duration of the video</param>
+        /// <param name="description">video description</param>
+        public VideoData(string url, string title, string imageUrl, string duration = "", string description="")
         {
             Title = title;
             Url = url;
             ImageUrl = imageUrl;
+            Duration = duration;
+            Description = description;
         }
 
-        private string title = "";
-        private string url = "";
-        private string imageUrl = "";
+        /// <summary>
+        /// sets all properties given from input
+        /// </summary>
+        /// <param name="info">VideoInformation object, usually gathered from YT Query-search</param>
+        public VideoData(VideoInformation info)
+        {
+            Title = info.Title;
+            Url = info.Url;
+            ImageUrl = info.Thumbnail;
+            Duration = info.Duration;
+            Description = info.Description;
+
+        }
+
+        private string _title = "";
+        private string _url = "";
+        private string _imageUrl = "";
+        private string _description = "";
+        private string _duration;
 
          /// <summary>
          /// Title of video
          /// </summary>
         public string Title
         {
-            get => title;
+            get => _title;
             set
             {
-                title = value;
+                _title = value;
                 OnPropertyChanged("Title");
             }
         }
@@ -55,10 +76,10 @@ namespace DiscordBot.Data
         /// </summary>
         public string Url
         {
-            get => url;
+            get => _url;
             set
             {
-                url = value;
+                _url = value;
                 OnPropertyChanged("Url");
             }
         }
@@ -67,15 +88,40 @@ namespace DiscordBot.Data
         /// </summary>
         public string ImageUrl
         {
-            get => imageUrl;
+            get => _imageUrl;
             set
             {
-                imageUrl = value;
+                _imageUrl = value;
                 OnPropertyChanged("ImageUrl");
             }
         }
 
-        
+        /// <summary>
+        /// Duration string property
+        /// </summary>
+        public string Duration
+        {
+            get => _duration;
+            set
+            {
+                _duration = value;
+                OnPropertyChanged("Duration");
+            }
+        }
+
+
+        /// <summary>
+        /// Video Description Property
+        /// </summary>
+        public string Description
+        {
+            get => _description;
+            set
+            {
+                _description = value;
+                OnPropertyChanged("Description");
+            }
+        }
 
         #region events
         /// <summary>
