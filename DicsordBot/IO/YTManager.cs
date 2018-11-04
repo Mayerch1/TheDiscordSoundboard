@@ -55,7 +55,7 @@ namespace DiscordBot.IO
         /// </summary>
         /// <param name="url">full url to youtube video</param>
         /// <remarks>fallback for SearchQueryTaskAsync</remarks>
-        /// <seealso cref="SearchQueryTaskAsync"/>
+        /// <seealso cref="VideoSearch.SearchQueryTaskAsync"/>
         /// <returns>null if no url was entered</returns>
         public static string getIdFromUrl(string url)
         {
@@ -83,7 +83,7 @@ namespace DiscordBot.IO
         /// </summary>
         /// <param name="url">url to video</param>
         /// <remarks>fallback for SearchQueryTaskAsync</remarks>
-        /// <seealso cref="SearchQueryTaskAsync"/>
+        /// <seealso cref="VideoSearch.SearchQueryTaskAsync"/>
         /// <returns>task string representing the title</returns>
         public static async Task<string> GetTitleTask(string url)
         {
@@ -100,50 +100,6 @@ namespace DiscordBot.IO
                     ? args.Substring(iqs + 1)
                     : string.Empty)[key];
         }
-
-
-        /// <summary>
-        /// get information for searchquery or id
-        /// </summary>
-        /// <param name="querystring">search string or video id</param>
-        /// <param name="querypages">amount of pages to search</param>
-        /// <returns></returns>
-        public static async Task<List<VideoInformation>> SearchQueryTaskAsync(string querystring, int querypages)
-        { 
-            var items = new List<VideoInformation>();
-            var webClient = new WebClient();
-            for (int index1 = 1; index1 <= querypages; ++index1)
-            {
-                MatchCollection matchCollection = Regex.Matches(await webClient.DownloadStringTaskAsync("https://www.youtube.com/results?search_query=" + querystring + "&page=" + (object)index1), "<div class=\"yt-lockup-content\">.*?title=\"(?<NAME>.*?)\".*?</div></div></div></li>", RegexOptions.Singleline);
-                for (int index2 = 0; index2 <= matchCollection.Count - 1; ++index2)
-                {
-                    var title = matchCollection[index2].Groups[1].Value;
-                    var author = VideoItemHelper.cull(matchCollection[index2].Value, "/user/", "class").Replace('"', ' ').TrimStart().TrimEnd();
-                    var description = VideoItemHelper.cull(matchCollection[index2].Value, "dir=\"ltr\" class=\"yt-uix-redirect-link\">", "</div>");
-                    var duration = VideoItemHelper.cull(VideoItemHelper.cull(matchCollection[index2].Value, "id=\"description-id-", "span"), ": ", "<").Replace(".", "");
-                    var url = "http://www.youtube.com/watch?v=" + VideoItemHelper.cull(matchCollection[index2].Value, "watch?v=", "\"");
-                    var thumbnail = "https://i.ytimg.com/vi/" + VideoItemHelper.cull(matchCollection[index2].Value, "watch?v=", "\"") + "/mqdefault.jpg";
-                    if (title != "__title__" && duration != "")
-                        items.Add(new VideoInformation()
-                        {
-                            Title = title,
-                            Author = author,
-                            Description = description,
-                            Duration = duration,
-                            Url = url,
-                            Thumbnail = thumbnail
-                        });
-                }
-            }
-            return items;
-        }
-
-
-
-
-
-
-
 
         /// <summary>
         /// download video from ulr

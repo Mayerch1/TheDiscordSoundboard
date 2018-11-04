@@ -42,7 +42,7 @@
                             <Image  x:Name="img_thumbnail"
                                     DockPanel.Dock="Left"
                                     Width="256" Height="256" Margin="0,0,20,0"
-                                    Source="{Binding ImageUri}" />
+                                    Source="/res/thumbnail_default.png" />
 
                             <!--<Label Content="{Binding Duration}"
                                    VerticalAlignment="Bottom" HorizontalAlignment="Right"/>-->

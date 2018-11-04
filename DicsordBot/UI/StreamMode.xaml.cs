@@ -8,6 +8,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media.Imaging;
+using MaterialDesignThemes.Wpf;
 using VideoLibrary;
 using YoutubeSearch;
 
@@ -24,10 +25,18 @@ namespace DiscordBot.UI
 
         public PlayVideoHandler PlayVideo;
 
+        public delegate void QueueVideoHandler(Data.BotData data);
+
+        public QueueVideoHandler QueueVideo;
+
+        public delegate void EulaRejectHandler();
+
+        public EulaRejectHandler EulaRejected;
+
         
         private ObservableCollection<Data.VideoData> _suggestions = new ObservableCollection<VideoData>();
         private string _url = "";
-        private string _title = "";
+        private string _title = "Video Title";
         private string _imageUri = "";
         private string _duration = "0:00";
 
@@ -83,10 +92,33 @@ namespace DiscordBot.UI
 
         public StreamMode()
         {
+            //-------------------
             InitializeComponent();
-
             list_History.DataContext = Handle.Data.VideoHistory;
- 
+
+            //--------------------
+            //show legal warning
+            //-------------------
+            if (!Handle.Data.Persistent.IsEulaAccepted)
+            {
+                IO.BlurEffectManager.ToggleBlurEffect(true);
+
+
+                var popup = new UI.StreamWarningPopup(Application.Current.MainWindow);
+
+                popup.Closed += delegate(object pSender, EventArgs pArgs)
+                {
+                    IO.BlurEffectManager.ToggleBlurEffect(false);
+
+                    Handle.Data.Persistent.IsEulaAccepted = popup.eula;
+
+                    //return, if eula was rejected
+                    if(!popup.eula)
+                        EulaRejected();
+                };
+
+                popup.IsOpen = true;
+            }
         }
 
 
@@ -94,6 +126,12 @@ namespace DiscordBot.UI
         {
             PlayVideo(data);
             Handle.Data.VideoHistory.addVideo(new Data.VideoData(Url, Title, ImageUri));
+        }
+
+        private void QueueStream(Data.BotData data)
+        {
+            QueueVideo(data);
+            Handle.Data.VideoHistory.addVideo(new VideoData(Url, Title, ImageUri));
         }
 
 
@@ -104,13 +142,12 @@ namespace DiscordBot.UI
             if (String.IsNullOrWhiteSpace(id))
                 return;
 
-
             List<VideoInformation> infos;
             try
             {
-                infos = await IO.YTManager.SearchQueryTaskAsync(id, 1);
+                infos = await new VideoSearch().SearchQueryTaskAsync(id, 1);
             }
-            catch(Exception ex)
+            catch
             {
                 //fallback, if rate limit blocks api call
                 ImageUri = IO.YTManager.getUrlToThumbnail(url);
@@ -158,7 +195,7 @@ namespace DiscordBot.UI
 
             try
             {
-                result = await IO.YTManager.SearchQueryTaskAsync(filter, pages);
+                result = await new VideoSearch().SearchQueryTaskAsync(filter, pages);
             }
             catch
             {
@@ -170,17 +207,20 @@ namespace DiscordBot.UI
                 Suggestions.Add(new Data.VideoData(item));   
             }
         }
-
-       
-
+      
 
         private async void GetAndStartStream()
         {
             loadProgress.Visibility = Visibility.Visible;
 
             //download video
-            Video vid = await IO.YTManager.getVideoAsync(Url);          
-            if (vid == null) return;
+            Video vid = await IO.YTManager.getVideoAsync(Url);
+            if (vid == null)
+            {
+                Handle.SnackbarWarning("Cannot request video.");
+                loadProgress.Visibility = Visibility.Collapsed;
+                return;
+            }
 
             Title = vid.Title;
 

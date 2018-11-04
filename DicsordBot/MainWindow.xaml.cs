@@ -394,6 +394,8 @@ namespace DiscordBot
 
                 case UI.StreamMode ui:
                     ui.PlayVideo += Stream_Video_Play;
+                    ui.QueueVideo += Stream_Video_Queue;
+                    ui.EulaRejected += Stream_Eula_Rejected;
                     break;
             }
         }
@@ -544,6 +546,17 @@ namespace DiscordBot
             triggerBotInstantReplay(data, true);
         }
 
+        private void Stream_Video_Queue(Data.BotData data)
+        {
+            triggerBotQueueReplay(data, true);
+        }
+
+        private void Stream_Eula_Rejected()
+        {
+            //return to button ui
+            btn_Sounds_Click(null, null);
+        }
+
         /// <param name="listIndex">unique id field of playlist</param>
         /// <param name="fileIndex">index in the array of all playList files</param>
         private async void Playlist_Play(int listIndex, uint fileIndex)
@@ -608,8 +621,6 @@ namespace DiscordBot
             {
                 btn_Play.Content = FindResource("IconPlay");
 
-
-                //TODO: test pause while playlist playing not possible
 
                 //take next title in playlist
                 if (Handle.Data.IsPlaylistPlaying && !Handle.Bot.IsPause)

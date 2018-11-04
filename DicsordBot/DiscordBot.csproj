@@ -213,7 +213,8 @@
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
     <Reference Include="YoutubeSearch, Version=0.1.1.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\YoutubeSearch.dll.1.1\lib\YoutubeSearch.dll</HintPath>
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Dependencies\YoutubeSearch\YoutubeSearch.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -268,6 +269,9 @@
     </Compile>
     <Compile Include="UI\StreamMode.xaml.cs">
       <DependentUpon>StreamMode.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\StreamWarningPopup.xaml.cs">
+      <DependentUpon>StreamWarningPopup.xaml</DependentUpon>
     </Compile>
     <Compile Include="UI\UnhandledException.xaml.cs">
       <DependentUpon>UnhandledException.xaml</DependentUpon>
@@ -327,6 +331,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="UI\StreamMode.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\StreamWarningPopup.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -393,6 +401,9 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="res\empty.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="res\thumbnail_default.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

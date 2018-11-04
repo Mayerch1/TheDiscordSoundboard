@@ -63,6 +63,7 @@ namespace DiscordBot.Data
         private ObservableCollection<Hotkey> hotkeyList = new ObservableCollection<Hotkey>();
 
         private bool isFirstStart = true;
+        private bool isEulaAccepted = false;
 
         private string settingsPath;
         private int highestButtonToSave = -1;
@@ -95,6 +96,21 @@ namespace DiscordBot.Data
         /// </value>
         public bool IsFirstStart { get => isFirstStart;
             set { isFirstStart = value; OnPropertyChanged("IsFirstStart"); } }
+
+
+        /// <summary>
+        /// IsEulaAccepted
+        /// </summary>
+        /// <value> if true, the user acknowledged the legal consequences of using stream function</value>
+        public bool IsEulaAccepted
+        {
+            get => isEulaAccepted;
+            set
+            {
+                isEulaAccepted = value;
+                OnPropertyChanged("IsEulaAccepted");
+            }
+        }
 
         /// <summary>
         ///  SettingsPath property, automatically saved
