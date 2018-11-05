@@ -3,9 +3,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.27703.2035
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DiscordBot", "DicsordBot\DiscordBot.csproj", "{DDC0D602-01D6-45FF-85C0-8D2E21C7C6E0}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DiscordBot", "DiscordBot\DiscordBot.csproj", "{DDC0D602-01D6-45FF-85C0-8D2E21C7C6E0}"
 EndProject
 Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "SoundBoard Wizard", "SoundBoard Wizard\SoundBoard Wizard.vdproj", "{EAD955DD-7A98-4289-ABEE-BDFC073DEE47}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataManagement", "DataManagement\DataManagement.csproj", "{6745405B-8A1D-423F-9D17-95BAD658DB18}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "YoutubeSearch", "YoutubeSearch\YoutubeSearch.csproj", "{DFECE3E8-99D9-4652-B486-BEA1010329BA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -19,6 +23,14 @@ Global
 		{DDC0D602-01D6-45FF-85C0-8D2E21C7C6E0}.Release|Any CPU.Build.0 = Release|Any CPU
 		{EAD955DD-7A98-4289-ABEE-BDFC073DEE47}.Debug|Any CPU.ActiveCfg = Debug
 		{EAD955DD-7A98-4289-ABEE-BDFC073DEE47}.Release|Any CPU.ActiveCfg = Release
+		{6745405B-8A1D-423F-9D17-95BAD658DB18}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6745405B-8A1D-423F-9D17-95BAD658DB18}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6745405B-8A1D-423F-9D17-95BAD658DB18}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6745405B-8A1D-423F-9D17-95BAD658DB18}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DFECE3E8-99D9-4652-B486-BEA1010329BA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DFECE3E8-99D9-4652-B486-BEA1010329BA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DFECE3E8-99D9-4652-B486-BEA1010329BA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DFECE3E8-99D9-4652-B486-BEA1010329BA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
