@@ -32,7 +32,7 @@ namespace DiscordBot.UI
 
         public EulaRejectHandler EulaRejected;
 
-        
+       
         private ObservableCollection<Data.VideoData> _suggestions = new ObservableCollection<VideoData>();
         private string _url = "";
         private string _title = "Video Title";
@@ -44,7 +44,7 @@ namespace DiscordBot.UI
             get => _suggestions;
             set
             {
-                _suggestions = value; 
+                _suggestions = value;
                 OnPropertyChanged("Suggestions");
             }
         }
