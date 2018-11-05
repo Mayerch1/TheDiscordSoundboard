@@ -9,6 +9,7 @@ using System.Windows.Media.Imaging;
 
 namespace DiscordBot.UI
 {
+#pragma warning disable CS1591
     /// <summary>
     /// Interaction logic for StreamWarningPopup.xaml
     /// </summary>
@@ -71,4 +72,5 @@ namespace DiscordBot.UI
 
         #endregion NonTopmostPopup
     }
+#pragma warning restore CS1591
 }

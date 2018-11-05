@@ -8,7 +8,6 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media.Imaging;
-using MaterialDesignThemes.Wpf;
 using VideoLibrary;
 using YoutubeSearch;
 
@@ -176,7 +175,7 @@ namespace DiscordBot.UI
         {
             if (Url.Contains("http://") || Url.Contains("https://"))
             {
-                GetAndStartStream();
+                GetAndStartStream(Url);
             }
             else
             {
@@ -209,12 +208,14 @@ namespace DiscordBot.UI
         }
       
 
-        private async void GetAndStartStream()
+        private async void GetAndStartStream(string url, bool IsQueue = false)
         {
-            loadProgress.Visibility = Visibility.Visible;
+            if (url == null)
+                return;
 
+            loadProgress.Visibility = Visibility.Visible;
             //download video
-            Video vid = await IO.YTManager.getVideoAsync(Url);
+            Video vid = await IO.YTManager.getVideoAsync(url);
             if (vid == null)
             {
                 Handle.SnackbarWarning("Cannot request video.");
@@ -234,10 +235,21 @@ namespace DiscordBot.UI
 
                 //enqueue BotData item with stream
                 //reference
-                StartStream(new BotData(Title)
+
+                if (IsQueue)
                 {
-                    stream = stream,
-                });
+                    QueueVideo(new BotData(Title)
+                    {
+                        stream = stream,
+                    });
+                }
+                else
+                {
+                    StartStream(new BotData(Title)
+                    {
+                        stream = stream,
+                    });
+                }             
             }
             else
             {
@@ -252,9 +264,14 @@ namespace DiscordBot.UI
                 loadProgress.Visibility = Visibility.Collapsed;
 
                 if (location != null)
-                    StartStream(new BotData(Title, location));
+                {
+                    if (IsQueue)
+                        QueueVideo(new BotData(Title, location));
+                    else
+                        StartStream(new BotData(Title, location));
+                }
+                    
             }
-
             vid = null;
         }    
 
@@ -289,6 +306,13 @@ namespace DiscordBot.UI
             }
         }
 
+        private void context_addQueue_Click(object sender, RoutedEventArgs e)
+        {
+            if (sender is FrameworkElement fe)
+            {
+                GetAndStartStream(fe.Tag as string, true);
+            }
+        }
         #endregion events
 
         #region property changed
@@ -301,6 +325,8 @@ namespace DiscordBot.UI
         }
 
         #endregion property changed     
+
+        
     }
 
 #pragma warning restore CS1591

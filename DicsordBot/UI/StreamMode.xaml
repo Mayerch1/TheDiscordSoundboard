@@ -11,105 +11,127 @@
     <Grid>
 
         <Grid>
-            <materialDesign:Card x:Name="loadProgress" 
-                                 UniformCornerRadius="14" Visibility="Collapsed"  
+            <materialDesign:Card x:Name="loadProgress"
+                                 UniformCornerRadius="14" Visibility="Collapsed"
                                  Height="30" Width="30"
                                  Padding="4">
                 <ProgressBar Style="{StaticResource MaterialDesignCircularProgressBar}"
-                     Value ="0" IsIndeterminate="True"
-                     HorizontalAlignment="Center" VerticalAlignment="Top"/>
+                             Value="0" IsIndeterminate="True"
+                             HorizontalAlignment="Center" VerticalAlignment="Top" />
             </materialDesign:Card>
         </Grid>
 
         <Grid>
             <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="2.5*" />
-            <ColumnDefinition Width="*" />
-        </Grid.ColumnDefinitions>
-
-        
+                <ColumnDefinition Width="2.5*" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
 
 
-        <Grid Grid.Column="0">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="*" />
-                <RowDefinition Height="*" />
-            </Grid.RowDefinitions>
+            <Grid Grid.Column="0">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
 
-            <Grid Grid.Row="0">
-                <DockPanel VerticalAlignment="Top" Margin="20" LastChildFill="True">
-                       
-                            <Image  x:Name="img_thumbnail"
-                                    DockPanel.Dock="Left"
-                                    Width="256" Height="256" Margin="0,0,20,0"
-                                    Source="/res/thumbnail_default.png" />
+                <Grid Grid.Row="0">
+                    <DockPanel VerticalAlignment="Top" Margin="20" LastChildFill="True">
 
-                            <!--<Label Content="{Binding Duration}"
+                        <Image x:Name="img_thumbnail"
+                               DockPanel.Dock="Left"
+                               Width="256" Height="256" Margin="0,0,20,0"
+                               Source="/res/thumbnail_default.png" />
+
+                        <!--<Label Content="{Binding Duration}"
                                    VerticalAlignment="Bottom" HorizontalAlignment="Right"/>-->
-                       
-                   
 
-                    <Label Content="{Binding Title}"
-                           DockPanel.Dock="Top"
-                           Margin="0,30,0,0"
-                           FontSize="15" />
 
-                    <Button Click="btn_Stream_Click"
-                            DockPanel.Dock="Right"
-                            Height="45" Width="80" Margin="20"
-                            Content="Confirm"
-                            Background="{StaticResource PrimaryForegroundBrush}"
-                            BorderBrush="{x:Null}" />
+                        <Label Content="{Binding Title}"
+                               DockPanel.Dock="Top"
+                               Margin="0,30,0,0"
+                               FontSize="15" />
 
-                    <TextBox Text="{Binding Url}"
-                            KeyDown="box_url_KeyDown"
-                            Height="57"
-                            Style="{StaticResource MaterialDesignTextFieldBoxTextBox}"
-                             TextChanged="box_link_TextChanged"
-                            materialDesign:HintAssist.Hint="Url to Video" />
-                </DockPanel>
-            </Grid>
+                        <Button Click="btn_Stream_Click"
+                                DockPanel.Dock="Right"
+                                Height="45" Width="80" Margin="20"
+                                Content="Confirm"
+                                Background="{StaticResource PrimaryForegroundBrush}"
+                                BorderBrush="{x:Null}" />
 
-            <Grid Grid.Row="1">
-                <!-- recommended history-->
-                <ListBox DataContext="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}" ItemsSource="{Binding Suggestions}">
-                    <ListBox.ItemTemplate>
-                        <DataTemplate>
-                            <DockPanel Tag="{Binding Url}" MouseLeftButtonDown="list_History_MouseLeftButtonDown">
+                        <TextBox Text="{Binding Url}"
+                                 KeyDown="box_url_KeyDown"
+                                 Height="57"
+                                 Style="{StaticResource MaterialDesignTextFieldBoxTextBox}"
+                                 TextChanged="box_link_TextChanged"
+                                 materialDesign:HintAssist.Hint="Url to Video" />
+                    </DockPanel>
+                </Grid>
+
+                <Grid Grid.Row="1">
+                    <!-- recommended history-->
+                    <ListBox
+                        DataContext="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}"
+                        ItemsSource="{Binding Suggestions}">
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <DockPanel Tag="{Binding Url}" MouseLeftButtonDown="list_History_MouseLeftButtonDown">
+
+                                    <DockPanel.ContextMenu>
+                                        <ContextMenu>
+                                            <MenuItem Header="Add to Queue"
+                                                      Tag="{Binding Url}"
+                                                      Click="context_addQueue_Click"/>
+                                        </ContextMenu>
+                                    </DockPanel.ContextMenu>
+
+
                                     <Grid>
                                         <Image DockPanel.Dock="Left"
-                                       Source="{Binding ImageUrl}"
-                                       Width="64" Height="64"/>
+                                               Source="{Binding ImageUrl}"
+                                               Width="64" Height="64" />
                                         <Label Content="{Binding Duration}"
                                                VerticalAlignment="Bottom"
-                                               HorizontalAlignment="Right"/>
+                                               HorizontalAlignment="Right" />
                                     </Grid>
 
                                     <Label DockPanel.Dock="Right"
-                                               Content="{Binding Title}"/>
+                                           Content="{Binding Title}" />
+
+
                                 </DockPanel>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+                </Grid>
+            </Grid>
+
+            <Grid Grid.Column="1">
+                <!--history-->
+                <ListBox x:Name="list_History" ItemsSource="{Binding Videos}">
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <DockPanel Tag="{Binding Url}" MouseLeftButtonDown="list_History_MouseLeftButtonDown">
+
+                                <DockPanel.ContextMenu>
+                                    <ContextMenu>
+                                        <MenuItem Header="Add to Queue"
+                                                  Tag="{Binding Url}"
+                                                  Click="context_addQueue_Click"/>
+                                    </ContextMenu>
+                                </DockPanel.ContextMenu>
+
+
+
+                                <Image DockPanel.Dock="Left"
+                                       Source="{Binding ImageUrl}"
+                                       Width="64" Height="64" />
+                                <Label DockPanel.Dock="Right"
+                                       Content="{Binding Title}" />
+                            </DockPanel>
                         </DataTemplate>
                     </ListBox.ItemTemplate>
                 </ListBox>
             </Grid>
         </Grid>
-
-        <Grid Grid.Column="1">
-            <!--history-->
-            <ListBox x:Name="list_History" ItemsSource="{Binding Videos}">
-                <ListBox.ItemTemplate>
-                    <DataTemplate>
-                        <DockPanel Tag="{Binding Url}" MouseLeftButtonDown="list_History_MouseLeftButtonDown">
-                            <Image DockPanel.Dock="Left"
-                                   Source="{Binding ImageUrl}"
-                                   Width="64" Height="64"/>
-                            <Label DockPanel.Dock="Right"
-                                   Content="{Binding Title}"/>
-                        </DockPanel>
-                    </DataTemplate>
-                </ListBox.ItemTemplate>
-            </ListBox>
-        </Grid>
     </Grid>
-        </Grid>
 </UserControl>
