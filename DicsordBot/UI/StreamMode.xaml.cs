@@ -44,7 +44,7 @@ namespace DiscordBot.UI
             get => _suggestions;
             set
             {
-                _suggestions = value;
+                _suggestions = value; 
                 OnPropertyChanged("Suggestions");
             }
         }
