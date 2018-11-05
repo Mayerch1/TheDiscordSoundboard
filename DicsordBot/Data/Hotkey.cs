@@ -1,4 +1,4 @@
-﻿namespace DicsordBot.Data
+﻿namespace DiscordBot.Data
 {
     /// <summary>
     /// Hotkey class, contains basic information about a hotke

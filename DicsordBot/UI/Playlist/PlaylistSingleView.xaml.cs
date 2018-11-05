@@ -1,13 +1,13 @@
-﻿using GongSolutions.Wpf.DragDrop;
-using System;
+﻿using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media.Animation;
+using GongSolutions.Wpf.DragDrop;
 
-namespace DicsordBot.UI.Playlist
+namespace DiscordBot.UI.Playlist
 {
 #pragma warning disable CS1591
 
@@ -201,16 +201,14 @@ namespace DicsordBot.UI.Playlist
             var list = (ListBox)sender;
             if (list.SelectedItems.Count >= 2 && !isTopSelectionBarOpen)
             {
-                Storyboard sb;
-                sb = FindResource("OpenTopSelectionBar") as Storyboard;
-                sb.Begin();
+                Storyboard sb = FindResource("OpenTopSelectionBar") as Storyboard;
+                sb?.Begin();
                 isTopSelectionBarOpen = true;
             }
             else if (list.SelectedItems.Count <= 1 && isTopSelectionBarOpen)
-            {
-                Storyboard sb;
-                sb = FindResource("CloseTopSelectionBar") as Storyboard;
-                sb.Begin();
+            {                
+                Storyboard sb = FindResource("CloseTopSelectionBar") as Storyboard;
+                sb?.Begin();
                 isTopSelectionBarOpen = false;
             }
         }
@@ -301,7 +299,6 @@ namespace DicsordBot.UI.Playlist
             //move item from list to another position
             if (dropInfo.Data is Data.FileData sourceItem)
             {
-                Data.FileData targetItem = dropInfo.TargetItem as Data.FileData;
                 //insert sourceItem to new place
                 int oldIndex = PlaylistFiles.IndexOf(sourceItem);
                 PlaylistFiles.RemoveAt(oldIndex);
@@ -314,13 +311,14 @@ namespace DicsordBot.UI.Playlist
                 //convert item into Data.FileData
 
                 IDataObject obj = dropInfo.Data as IDataObject;
-                if (obj != null & obj.GetDataPresent(DataFormats.FileDrop))
+                if (obj != null && obj.GetDataPresent(DataFormats.FileDrop))
                 {
                     string[] files = (string[])obj.GetData(DataFormats.FileDrop);
                     foreach (var track in files)
                     {
                         if (IO.FileWatcher.checkForValidFile(track))
                         {
+                            //path must be valid
                             dropItem(dropInfo.InsertIndex, IO.FileWatcher.getAllFileInfo(track));
                         }
                     }

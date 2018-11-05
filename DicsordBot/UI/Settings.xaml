@@ -1,10 +1,9 @@
-﻿<UserControl x:Class="DicsordBot.UI.Settings"
+﻿<UserControl x:Class="DiscordBot.UI.Settings"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
-             xmlns:local="clr-namespace:DicsordBot.UI"
              mc:Ignorable="d"
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid>
@@ -64,7 +63,7 @@
                                 Style="{StaticResource MaterialDesignTextFieldBoxTextBox}"
                                 Text="{Binding ClientName}"
                                 TextChanged="box_userName_TextChanged"
-                                materialDesign:HintAssist.Hint="UserName#1234"
+                                materialDesign:HintAssist.Hint="Own UserName#1234"
                                 HorizontalAlignment="Left"
                                 Margin="0,20,0,0"
                                 VerticalAlignment="Top"

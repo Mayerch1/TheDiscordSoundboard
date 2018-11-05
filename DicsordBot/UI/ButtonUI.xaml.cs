@@ -1,11 +1,11 @@
-﻿using Microsoft.Win32;
-using System;
+﻿using System;
 using System.ComponentModel;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
+using Microsoft.Win32;
 
-namespace DicsordBot.UI
+namespace DiscordBot.UI
 {
     /// <summary>
     /// Interaction logic for ButtonUI.xaml
@@ -63,11 +63,6 @@ namespace DicsordBot.UI
             {
                 Handle.Data.Persistent.BtnList[index].Name = evaluateName(openFileDialog.FileName);
                 Handle.Data.Persistent.BtnList[index].File = openFileDialog.FileName;
-
-                var parent = (StackPanel)btn.Parent;
-
-                // changeBackFields(parent, index);
-                // changeFrontFields(parent, index);
             }
         }
 
@@ -88,42 +83,6 @@ namespace DicsordBot.UI
                 IO.BlurEffectManager.ToggleBlurEffect(false);
                 ToggleHotkey(true);
             };
-        }
-
-        private void changeBackFields(StackPanel parent, int index)
-        {
-            var sibblings = parent.Children;
-
-            foreach (var element in sibblings)
-            {
-                if (element is System.Windows.Controls.TextBox)
-                {
-                    var txtBox = (TextBox)element;
-                    if (txtBox.Name == "NameBox")
-                    {
-                        txtBox.Text = Handle.Data.Persistent.BtnList[index].Name;
-                    }
-                    else if (txtBox.Name == "FileBox")
-                    {
-                        txtBox.Text = Handle.Data.Persistent.BtnList[index].File;
-                    }
-                }
-            }
-        }
-
-        private void changeFrontFields(StackPanel parent, int index)
-        {
-            var grid = (Grid)this.Content;
-
-            var gridChild = (UIElementCollection)grid.Children;
-            var scroller = (ScrollViewer)gridChild[0];
-
-            var control = (ItemsControl)scroller.Content;
-            var cards = control.Items;
-
-            var targetCard = cards[index];
-
-            var grandParents = (Grid)parent.Parent;
         }
 
         //return only the file name from a Path to a file

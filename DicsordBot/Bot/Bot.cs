@@ -4,9 +4,11 @@ using Discord.WebSocket;
 using NAudio.Wave;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Threading.Tasks;
+using DiscordBot.Data;
 
-namespace DicsordBot.Bot
+namespace DiscordBot.Bot
 {
     /// <summary>
     /// Basic Bot class, directly communicates with the api, throws for every little sh
@@ -122,6 +124,12 @@ namespace DicsordBot.Bot
         public bool IsLoop { get; set; } = false;
 
         /// <summary>
+        /// is set if the bot is paused
+        /// </summary>
+        /// <remarks>unlocks it self, but must be set from outside</remarks>
+        public bool IsPause { get; set; } = false;
+
+        /// <summary>
         /// IsToAbort property
         /// </summary>
         private bool IsToAbort { get; set; } = false;
@@ -132,6 +140,8 @@ namespace DicsordBot.Bot
         /// IsEarrape property
         /// </summary>
         public bool IsEarrape { get; set; } = false;
+
+        private bool CanSeek { get; set; } = true;
 
         #endregion status propertys
 
@@ -146,7 +156,7 @@ namespace DicsordBot.Bot
         /// <remarks>
         /// Contains data representation of Buttons, to also store settings like a custom loop-state
         /// </remarks>
-        private List<Data.ButtonData> Queue { get; set; }
+        private List<Data.BotData> Queue { get; set; }
 
         private MediaFoundationReader Reader { get; set; }
         private MediaFoundationResampler ActiveResampler { get; set; }
@@ -162,7 +172,7 @@ namespace DicsordBot.Bot
         /// </summary>
         public Bot()
         {
-            Queue = new List<Data.ButtonData>();
+            Queue = new List<Data.BotData>();
             IsStreaming = false;
             IsChannelConnected = false;
             IsServerConnected = false;
@@ -174,33 +184,33 @@ namespace DicsordBot.Bot
         /// <summary>
         /// enqueues a btn into the queue, if queue is empy directly gather stream
         /// </summary>
-        /// <param name="btn"></param>
-        protected void enqueueAsync(Data.ButtonData btn)
+        /// <param name="data"></param>
+        protected void enqueueAsync(BotData data)
         {
             if (!IsStreaming && IsBufferEmpty)
             {
-                getStream(btn);
+                getStream(data);
             }
             else
             {
-                Queue.Add(btn);
+                Queue.Add(data);
             }
         }
 
         /// <summary>
         /// enqueues a btn at the first position of the queue
         /// </summary>
-        /// <param name="btn"></param>
-        protected void enqueuePriorityAsync(Data.ButtonData btn)
+        /// <param name="data"></param>
+        protected void enqueuePriorityAsync(BotData data)
         {
             if (!IsStreaming)
             {
-                getStream(btn);
+                getStream(data);
             }
             else
             {
                 //insert on first position
-                Queue.Insert(0, btn);
+                Queue.Insert(0, data);
             }
         }
 
@@ -229,7 +239,7 @@ namespace DicsordBot.Bot
         /// <param name="enforce">enforce the skip, even if nothing is playing</param>
         public void skipToTime(TimeSpan newTime, bool enforce = false)
         {
-            if (IsStreaming || enforce)
+            if ((IsStreaming || enforce) && CanSeek)
             {
                 Reader.CurrentTime = newTime;
             }
@@ -241,7 +251,7 @@ namespace DicsordBot.Bot
         /// <param name="skipTime">timeSpan to skip over</param>
         public void skipOverTime(TimeSpan skipTime)
         {
-            if (IsStreaming)
+            if (IsStreaming && CanSeek)
             {
                 Reader.CurrentTime = Reader.CurrentTime.Add(skipTime);
             }
@@ -276,23 +286,39 @@ namespace DicsordBot.Bot
         /// <summary>
         /// gets the stream saved in btn.File
         /// </summary>
-        /// <param name="btn">btn object</param>
-        private void getStream(Data.ButtonData btn)
+        /// <param name="data">BotData object</param>
+        private void getStream(BotData data)
         {
-            if (btn.File == null || btn.File == "")
+            //return if nothing to stream
+            if (!File.Exists(data.filePath) && data.stream == null)
                 return;
 
             OutFormat = new WaveFormat(sampleRate, bitDepth, channelCount);
 
-            Reader = new MediaFoundationReader(btn.File);
+            if (data.filePath != null)
+            {
+                Reader = new MediaFoundationReader(data.filePath);
+                
+                //set seekable
+                CanSeek = true;
+            }
+            else if (data.stream != null)
+            {
+
+                return;
+
+                //Reader = new StreamMediaFoundationReader(data.stream);
+               // Reader = new StreamMediaFoundationReader(data.stream);
+                //set non seekable bool
+                //CanSeek = data.stream.CanSeek;
+            }
+            NormalResampler = new MediaFoundationResampler(Reader, OutFormat);
 
             /*
              * Generate one normal resampler,
              * Generate one boosted resampler,
              * in applyVolume() the matching resampler is assigned to activeResampler
              */
-
-            NormalResampler = new MediaFoundationResampler(Reader, OutFormat);
 
             var volumeSampler = new VolumeWaveProvider16(NormalResampler);
             //this means 10,000%
@@ -303,7 +329,7 @@ namespace DicsordBot.Bot
 
             IsBufferEmpty = false;
 
-            loadOverrideSettings(btn);
+            loadOverrideSettings(data);
         }
 
         /// <summary>
@@ -342,6 +368,7 @@ namespace DicsordBot.Bot
                 int byteCount;
 
                 IsStreaming = true;
+                IsPause = false;
 
                 //repeat, read new block into buffer -> stream buffer
                 while ((byteCount = ActiveResampler.Read(buffer, 0, blockSize)) > 0)
@@ -407,13 +434,13 @@ namespace DicsordBot.Bot
         /// <summary>
         /// load all specific button settings, raise events to call back to ui for visual indication
         /// </summary>
-        /// <param name="btn">btn object</param>
-        private void loadOverrideSettings(Data.ButtonData btn)
+        /// <param name="data">BotData object</param>
+        private void loadOverrideSettings(BotData data)
         {
             //if earrape changes
-            if (IsEarrape != btn.IsEarrape)
+            if (IsEarrape != data.isEarrape)
             {
-                if (btn.IsEarrape)
+                if (data.isEarrape)
                 {
                     EarrapeStateChanged(true);
                 }
@@ -426,7 +453,7 @@ namespace DicsordBot.Bot
 
             //IsLoop will be set from outside
 
-            LoopStateChanged(btn.IsLoop);
+            LoopStateChanged(data.isLoop);
         }
 
         /// <summary>

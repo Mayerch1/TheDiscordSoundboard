@@ -3,7 +3,7 @@ using System.Runtime.InteropServices;
 using System.Windows;
 using System.Windows.Interop;
 
-namespace DicsordBot.IO
+namespace DiscordBot.IO
 {
     //This is for testing purposes only
     /// <summary>
@@ -15,12 +15,12 @@ namespace DicsordBot.IO
         /// delegate for hotkey event
         /// </summary>
         /// <param name="lParam">lParam with keycode and modifiers</param>
-        public delegate void RegisterdHotkeyHandle(IntPtr lParam);
+        public delegate void RegisteredHotkeyHandle(IntPtr lParam);
 
         /// <summary>
         /// triggered when registered hotkey was pressed
         /// </summary>
-        public static RegisterdHotkeyHandle RegisteredHotkeyPressed;
+        public static RegisteredHotkeyHandle RegisteredHotkeyPressed;
 
         [DllImport("User32.dll")]
         private static extern bool RegisterHotKey(

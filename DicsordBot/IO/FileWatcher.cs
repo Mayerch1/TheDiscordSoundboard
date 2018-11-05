@@ -5,7 +5,7 @@ using System.ComponentModel;
 using System.IO;
 using System.Linq;
 
-namespace DicsordBot.IO
+namespace DiscordBot.IO
 {
     /// <summary>
     /// static class for monitoring files on disk
@@ -24,10 +24,14 @@ namespace DicsordBot.IO
         /// <returns>true, if file is allowed and supported</returns>
         public static bool checkForValidFile(string path)
         {
+            if (String.IsNullOrWhiteSpace(path) || !File.Exists(path))
+                return false;
+
             string format = path.Substring(path.LastIndexOf('.') + 1);
 
             foreach (var testFormat in Handle.Data.Persistent.supportedFormats)
-                if (testFormat == format) return true;
+                if (testFormat == format)
+                    return true;
 
             return false;
         }
@@ -43,7 +47,8 @@ namespace DicsordBot.IO
         /// <param name="filter">filter to apply</param>
         /// <param name="source">source of FileData objects</param>
         /// <returns></returns>
-        public static ObservableCollection<Data.FileData> filterList(string filter, ObservableCollection<Data.FileData> source)
+        public static ObservableCollection<Data.FileData> filterList(string filter,
+            ObservableCollection<Data.FileData> source)
         {
             if (IsIndexing)
             {
@@ -63,6 +68,7 @@ namespace DicsordBot.IO
                     if (checkForLowerMatch(file, filter))
                         target.Add(file);
                 }
+
                 return target;
             }
             else
@@ -83,7 +89,8 @@ namespace DicsordBot.IO
         {
             //filter for all known attributes (ignore case)
             if (file.Name.ToLower().Contains(filterLower) || file.Author.ToLower().Contains(filterLower)
-                || file.Album.ToLower().Contains(filterLower) || file.Genre.ToLower().Contains(filterLower))
+                                                          || file.Album.ToLower().Contains(filterLower) ||
+                                                          file.Genre.ToLower().Contains(filterLower))
             {
                 return true;
             }
@@ -94,11 +101,11 @@ namespace DicsordBot.IO
         /// <summary>
         /// get all important information from a given file
         /// </summary>
-        /// <param name="FullPath">Path to file</param>
+        /// <param name="FullPath">Path to file, no validation</param>
         /// <returns>Data.FileData object, describing the file</returns>
         public static Data.FileData getAllFileInfo(string FullPath)
-        {
-            return getAllFileInfo(FullPath, Path.GetFileName(FullPath));
+        {           
+                return getAllFileInfo(FullPath, Path.GetFileName(FullPath));          
         }
 
         private static Data.FileData getAllFileInfo(string FullPath, string Name)
@@ -115,7 +122,10 @@ namespace DicsordBot.IO
             {
                 f = TagLib.File.Create(FullPath);
             }
-            catch { return file; }
+            catch
+            {
+                return file;
+            }
 
             //only set, when TagLib could load file
             var performers = f.Tag.Performers;
@@ -172,7 +182,6 @@ namespace DicsordBot.IO
             {
                 //await System.Threading.Tasks.Task.Delay(100);
                 System.Threading.Thread.Sleep(100);
-                Console.WriteLine("Another index in progress, waiting...");
             }
 
             if (e.Argument is Tuple<ObservableCollection<string>, bool> workingTuple)
@@ -193,9 +202,9 @@ namespace DicsordBot.IO
             {
                 indexFolder(dir, allowDuplicates);
             }
+
             //sort by name
             Handle.Data.Files = new ObservableCollection<Data.FileData>(Handle.Data.Files.OrderBy(o => o.Name));
-            Console.WriteLine("Finished indexing files");
         }
 
         /// <summary>
@@ -237,6 +246,7 @@ namespace DicsordBot.IO
 
             if (checkForValidFile(path))
             {
+                //path needs to be valid
                 Handle.Data.Files.Add(getAllFileInfo(path));
             }
         }
@@ -290,7 +300,7 @@ namespace DicsordBot.IO
 
         private static void FileSystemWatcher_Renamed(object sender, FileSystemEventArgs e)
         {
-            string oldPath = ((RenamedEventArgs)e).OldFullPath;
+            string oldPath = ((RenamedEventArgs) e).OldFullPath;
 
             for (int i = 0; i < Handle.Data.Files.Count; i++)
             {

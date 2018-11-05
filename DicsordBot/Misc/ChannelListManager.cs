@@ -1,10 +1,10 @@
-﻿using Discord.WebSocket;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Controls;
+using Discord.WebSocket;
 
-namespace DicsordBot
+namespace DiscordBot.Misc
 {
     internal class ChannelListManager
     {

@@ -2,7 +2,7 @@
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 
-namespace DicsordBot.Data
+namespace DiscordBot.Data
 {
     /// <summary>
     /// represents a playlist
@@ -99,10 +99,8 @@ namespace DicsordBot.Data
         private void OnPropertyChanged(string info)
         {
             PropertyChangedEventHandler handler = PropertyChanged;
-            if (handler != null)
-            {
-                handler(null, new PropertyChangedEventArgs(info));
-            }
+            handler?.Invoke(this, new PropertyChangedEventArgs(info));
+            
         }
 
         #endregion events

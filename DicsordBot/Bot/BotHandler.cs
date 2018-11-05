@@ -1,9 +1,10 @@
-﻿using Discord.WebSocket;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Discord.WebSocket;
+using DiscordBot.Data;
 
-namespace DicsordBot.Bot
+namespace DiscordBot.Bot
 {
     /// <summary>
     /// BotHandle inherites from Bot, failsave frame around the bot class
@@ -81,30 +82,30 @@ namespace DicsordBot.Bot
         /// <summary>
         /// enques a Button into the list, only the file property is relevant. Loop and Boost are optional
         /// </summary>
-        /// <param name="btn">ButtonData object which should be streamed</param>
+        /// <param name="data">BotData object which should be streamed</param>
         /// <returns>Task</returns>
         /// <remarks>
-        /// auto connects to Server, calls enqueAsync(ButtonData) of base
+        /// auto connects to Server, calls enqueAsync(BotData) of base
         /// </remarks>
-        new public async Task enqueueAsync(Data.ButtonData btn)
+        public new async Task enqueueAsync(BotData data)
         {
-            await enqueueRegardingPriorityAsync(btn, false);
+            await enqueueRegardingPriorityAsync(data, false);
         }
 
         /// <summary>
         /// enques a Button infront of the lsit, only the file property is relevant. Loop and Boost are optional
         /// </summary>
-        /// <param name="btn">ButtonData object which should be streamed</param>
+        /// <param name="data">BotData object which should be streamed</param>
         /// <returns>Task</returns>
         /// <remarks>
-        /// auto connects to Server, calls enqueAsync(ButtonData) of base
+        /// auto connects to Server, calls enqueAsync(BotData) of base
         /// </remarks>
-        new public async Task enqueuePriorityAsync(Data.ButtonData btn)
+        public new async Task enqueuePriorityAsync(BotData data)
         {
-            await enqueueRegardingPriorityAsync(btn, true);
+            await enqueueRegardingPriorityAsync(data, true);
         }
 
-        private async Task enqueueRegardingPriorityAsync(Data.ButtonData btn, bool isPriority)
+        private async Task enqueueRegardingPriorityAsync(BotData data, bool isPriority)
         {
             if (!await connectToServerAsync())
                 return;
@@ -112,14 +113,14 @@ namespace DicsordBot.Bot
             try
             {
                 if (isPriority)
-                    base.enqueuePriorityAsync(btn);
+                    base.enqueuePriorityAsync(data);
                 else
-                    base.enqueueAsync(btn);
+                    base.enqueueAsync(data);
             }
             catch (Exception ex)
             {
                 await disconnectFromChannelAsync();
-                handleReplayException(ex, "Trying to add a new file to the queue. (Button Nr: " + btn.ID + ", Name: \"" + btn.Name + "\").", btn.ID);
+                handleReplayException(ex, "Trying to add a new file to the queue. (Button Nr: " + data.id + ", Name: \"" + data.name + "\").", data.id);
             }
         }
 
@@ -130,7 +131,7 @@ namespace DicsordBot.Bot
         /// <remarks>
         /// auto connects to server and channel, calls resumeStream() of base
         /// </remarks>
-        new public async Task resumeStream()
+        public new async Task resumeStream()
         {
             if (!await connectToServerAsync())
                 return;
@@ -163,7 +164,7 @@ namespace DicsordBot.Bot
         /// <param name="isStreaming">bool, if bot is streaming on twitch or not</param>
         /// <returns>shows success of setting the game state</returns>
         /// <remarks>calls setGameState() of base</remarks>
-        new public async Task<bool> setGameState(string msg, string streamUrl = "", bool isStreaming = false)
+        public new async Task<bool> setGameState(string msg, string streamUrl = "", bool isStreaming = false)
         {
             if (!await connectToServerAsync())
                 return false;
@@ -198,7 +199,7 @@ namespace DicsordBot.Bot
             if (IsServerConnected)
                 return true;
 
-            if (Token == null || Token == "")
+            if (String.IsNullOrEmpty(Token))
                 return false;
 
             try
@@ -209,20 +210,16 @@ namespace DicsordBot.Bot
             {
                 SnackbarWarning("Invalid Token", SnackbarAction.Settings);
 
-                Console.WriteLine("connection Exception (Token)");
-
                 return false;
             }
             catch (System.Net.Http.HttpRequestException)
             {
-                SnackbarWarning("Can't reach the Discord-Servers due to timeout", SnackbarAction.None);
-                Console.WriteLine("connection Exception (Timeout, ...)");
+                SnackbarWarning("Can't reach the Discord-Servers", SnackbarAction.None);
                 return false;
             }
             catch (Exception ex)
             {
                 UI.UnhandledException.initWindow(ex, "Trying to connect to the Discord Servers");
-                Console.WriteLine("general connection Exception");
                 return false;
             }
 
@@ -340,7 +337,7 @@ namespace DicsordBot.Bot
         /// get a list of all channels of all servers
         /// </summary>
         /// <returns>list of all serves each with a list of all channels </returns>
-        new public async Task<List<List<SocketVoiceChannel>>> getAllChannels()
+        public new async Task<List<List<SocketVoiceChannel>>> getAllChannels()
         {
             if (!await connectToServerAsync())
                 return null;
@@ -365,7 +362,7 @@ namespace DicsordBot.Bot
         /// </summary>
         /// <param name="acceptOffline">also show clients which are currently offline</param>
         /// <returns>list of all serves each with a list of all channels</returns>
-        new public async Task<List<List<SocketGuildUser>>> getAllClients(bool acceptOffline = false)
+        public new async Task<List<List<SocketGuildUser>>> getAllClients(bool acceptOffline = false)
         {
             if (!await connectToServerAsync())
                 return null;

@@ -1,6 +1,10 @@
-﻿using System.Windows;
+﻿using System;
+using System.Windows.Threading;
+using DiscordBot.Bot;
+using DiscordBot.Misc;
+using Newtonsoft.Json.Serialization;
 
-namespace DicsordBot
+namespace DiscordBot
 {
     /// <summary>
     /// Static Handle contains Bot and Data instance, also provides synced properties and methods to show warnings/errors
@@ -15,12 +19,14 @@ namespace DicsordBot
         /// <summary>
         /// Bot class, handles all commands towards bot
         /// </summary>
-        public static Bot.BotHandle Bot { get; set; } = new Bot.BotHandle();
+        public static BotHandle Bot { get; set; } = new BotHandle();
 
         /// <summary>
         /// Provides methods depending on Bot, but are only used to get data, not to perform actions on bot
         /// </summary>
-        public static BotData BotData { get; set; } = new BotData();
+        public static BotMisc BotMisc { get; set; } = new BotMisc();
+
+   
 
         #region events
 
@@ -32,7 +38,7 @@ namespace DicsordBot
         /// </param>
         public static async void ClientName_Changed(string newName)
         {
-            var id = await BotData.resolveUserName(newName);
+            var id = await BotMisc.resolveUserName(newName);
 
             if (id > 0)
                 Data.Persistent.ClientId = id;
@@ -78,7 +84,7 @@ namespace DicsordBot
         /// <summary>
         /// used to convert old Bot SnackbarWarnings to new universal warnings
         /// </summary>
-        public static void PassBotSnackbarWarning(string msg, Bot.BotHandle.SnackbarAction action)
+        public static void PassBotSnackbarWarning(string msg, BotHandle.SnackbarAction action)
         {
             int converter = (int)action;
 
@@ -86,6 +92,7 @@ namespace DicsordBot
 
             SnackbarWarning(msg, convertAction);
         }
+      
 
         #endregion Snackbar
 
@@ -153,7 +160,7 @@ namespace DicsordBot
             {
                 //set clientId, by resolving userName
                 Data.Persistent.ClientName = value;
-                var uId = BotData.resolveUserName(value);
+                var uId = BotMisc.resolveUserName(value);
                 if (uId.Result > 0)
                     ClientId = uId.Result;
             }

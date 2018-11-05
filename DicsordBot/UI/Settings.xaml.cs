@@ -2,7 +2,7 @@
 using System.Windows;
 using System.Windows.Controls;
 
-namespace DicsordBot.UI
+namespace DiscordBot.UI
 {
 #pragma warning disable CS1591
 

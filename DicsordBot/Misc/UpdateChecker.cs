@@ -1,8 +1,7 @@
-﻿using System;
-using System.Net;
+﻿using System.Net;
 using System.Threading.Tasks;
 
-namespace DicsordBot
+namespace DiscordBot.Misc
 {
     /// <summary>
     /// Checks for upgrades and opens the download page

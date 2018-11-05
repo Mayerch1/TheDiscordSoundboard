@@ -1,11 +1,10 @@
-﻿<UserControl x:Class="DicsordBot.UI.About"
+﻿<UserControl x:Class="DiscordBot.UI.About"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
-             xmlns:local="clr-namespace:DicsordBot.UI"
-             xmlns:data="clr-namespace:DicsordBot.Data"
+             xmlns:data="clr-namespace:DiscordBot.Data"
              mc:Ignorable="d"
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid>
@@ -18,11 +17,10 @@
                     <StackPanel>
                         <TextBlock  VerticalAlignment="Center"  Margin="20,0,0,0" FontSize="30" materialDesign:ShadowAssist.ShadowDepth="Depth2" Text="About" FontWeight="Bold" Foreground="#262626" />
                         <StackPanel Orientation="Horizontal">
-                            <TextBlock Margin="20,-5,0,0" FontSize="20" Text="(v. "/>
+                            <TextBlock Margin="20,-5,0,0" FontSize="20" Text="(v. " />
                             <TextBlock Margin="0,-5,0,0" FontSize="20"  Text="{x:Static data:PersistentData.version}" />
-                            <TextBlock Margin="0,-5,0,0" FontSize="20" Text=")"/>
+                            <TextBlock Margin="0,-5,0,0" FontSize="20" Text=")" />
                         </StackPanel>
-                        
                     </StackPanel>
                 </materialDesign:ColorZone>
 

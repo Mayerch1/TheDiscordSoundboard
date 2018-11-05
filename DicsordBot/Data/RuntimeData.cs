@@ -2,7 +2,7 @@
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 
-namespace DicsordBot.Data
+namespace DiscordBot.Data
 {
     /// <summary>
     /// contains runtime data + class for persistent data, handles and manages those data
@@ -17,6 +17,7 @@ namespace DicsordBot.Data
         private const string fileFile = "\\Files.xml";
         private const string playlistFile = "\\Playlist.xml";
         private const string historyFile = "\\History.xml";
+        private const string videoHistoryFile = "\\VideoHistory.xml";
 
         #endregion constants
 
@@ -27,8 +28,7 @@ namespace DicsordBot.Data
         private ObservableCollection<FileData> files = new ObservableCollection<FileData>();
         private ObservableCollection<Playlist> playlists = new ObservableCollection<Playlist>();
         private History history = new History();
-        private int playlistIndex = 0;
-        private int playlistFileIndex = 0;
+        private VideoHistory videoHistory = new VideoHistory();
         private bool isPlaylistPlaying = false;
 
         #endregion fields
@@ -38,37 +38,45 @@ namespace DicsordBot.Data
         /// <summary>
         /// Persistent property (class)
         /// </summary>
-        public PersistentData Persistent { get { return persistent; } set { persistent = value; OnPropertyChanged("Persistent"); } }
+        public PersistentData Persistent { get => persistent;
+            set { persistent = value; OnPropertyChanged("Persistent"); } }
 
         /// <summary>
         /// Files property (collection of classes)
         /// </summary>
-        public ObservableCollection<FileData> Files { get { return files; } set { files = value; OnPropertyChanged("Files"); } }
+        public ObservableCollection<FileData> Files { get => files;
+            set { files = value; OnPropertyChanged("Files"); } }
 
         /// <summary>
         /// List of all playlists
         /// </summary>
-        public ObservableCollection<Playlist> Playlists { get { return playlists; } set { playlists = value; OnPropertyChanged("PlayLists"); } }
+        public ObservableCollection<Playlist> Playlists { get => playlists;
+            set { playlists = value; OnPropertyChanged("PlayLists"); } }
 
         /// <summary>
         /// History of played files
         /// </summary>
-        public History History { get { return history; } set { history = value; OnPropertyChanged("History"); } }
+        public History History { get => history;
+            set { history = value; OnPropertyChanged("History"); } }
 
         /// <summary>
-        /// index of currently played playlist
+        /// Videohistory of played videos
         /// </summary>
-        public int PlaylistIndex { get { return playlistIndex; } set { playlistIndex = value; OnPropertyChanged("PlaylistIndex"); } }
-
-        /// <summary>
-        /// file index of position in playlist
-        /// </summary>
-        public int PlaylistFileIndex { get { return playlistFileIndex; } set { playlistFileIndex = value; OnPropertyChanged("PlaylistFileIndex"); } }
+        public VideoHistory VideoHistory
+        {
+            get => videoHistory;
+            set
+            {
+                videoHistory = value;
+                OnPropertyChanged("VideoHistory");
+            }
+        }     
 
         /// <summary>
         /// IsPlaylistPlaying property
         /// </summary>
-        public bool IsPlaylistPlaying { get { return isPlaylistPlaying; } set { isPlaylistPlaying = value; OnPropertyChanged("IsPlaylistPlaying"); } }
+        public bool IsPlaylistPlaying { get => isPlaylistPlaying;
+            set { isPlaylistPlaying = value; OnPropertyChanged("IsPlaylistPlaying"); } }
 
         #endregion properties
 
@@ -192,6 +200,10 @@ namespace DicsordBot.Data
 
             if ((History = (History)loadObject(History, historyFile)) == null)
                 History = new History();
+
+            if((VideoHistory = (VideoHistory)loadObject(VideoHistory, videoHistoryFile)) == null)
+                VideoHistory = new VideoHistory();
+            
         }
 
         /// <summary>
@@ -271,6 +283,7 @@ namespace DicsordBot.Data
             saveObject(Files, fileFile);
             saveObject(Playlists, playlistFile);
             saveObject(History, historyFile);
+            saveObject(VideoHistory, videoHistoryFile);
         }
 
         /// <summary>

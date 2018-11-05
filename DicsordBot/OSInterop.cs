@@ -1,9 +1,9 @@
 ﻿using System;
+using System.Runtime.InteropServices;
 using System.Windows;
 using System.Windows.Interop;
-using System.Runtime.InteropServices;
 
-namespace DicsordBot
+namespace DiscordBot
 {
     /// <summary>
     /// extension for Window class, to get absolute position on screen

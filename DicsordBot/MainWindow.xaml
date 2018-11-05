@@ -1,16 +1,16 @@
-﻿<Window x:Class="DicsordBot.MainWindow"
+﻿<Window x:Class="DiscordBot.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:DicsordBot"
-        xmlns:UIScope="clr-namespace:DicsordBot.UI"
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        xmlns:ui="clr-namespace:DiscordBot.UI"
         mc:Ignorable="d"
         Title="The Discord Soundboard" Height="767" Width="1335" Closing="MainWindow_Closing"
         ResizeMode="CanResizeWithGrip"
         PreviewMouseDown="Window_PreviewMouseDown"
-        SizeChanged="Window_SizeChanged">
+        SizeChanged="Window_SizeChanged"
+        DataContext="{Binding RelativeSource={RelativeSource Self}}">
 
     <Window.Resources>
         <Storyboard x:Key="OpenMenu">
@@ -187,17 +187,22 @@
                                     <Grid Grid.Column="1">
                                         <Slider VerticalAlignment="Center"
 
-                                    x:Name="timeBar"
-                                    Foreground="{StaticResource PrimaryAccentBrush}"
-                                    Margin="0,0,0,0"
-                                    TickFrequency="1"
-                                    Orientation="Horizontal"
-                                    Minimum="0"
-                                    Maximum="{Binding TotalTime}"
-                                    Value="{Binding TitleTime}"
-                                    Width="Auto"
-                                    MinWidth="40"
-                                    ToolTipService.ToolTip="{Binding Path=Value, ElementName=timeBar}" />
+                                                x:Name="timeBar"
+                                                Foreground="{StaticResource PrimaryAccentBrush}"
+                                                Margin="0,0,0,0"
+                                                TickFrequency="1"
+                                                Orientation="Horizontal"
+                                                Minimum="0"
+                                                Maximum="{Binding TotalTime}"
+                                                Value="{Binding TitleTime}"
+                                                Width="Auto"
+                                                MinWidth="40"
+                                                ToolTipService.ToolTip="{Binding Path=Value, ElementName=timeBar, StringFormat='HH:mm'}">
+                                            <Slider.ToolTip>
+                                                <ToolTip Content="{Binding TitleTimeString}"/>
+                                            </Slider.ToolTip>
+
+                                        </Slider>
                                     </Grid>
 
                                     <Grid Grid.Column="2">
@@ -283,6 +288,13 @@
                         </StackPanel>
                     </Button>
 
+                    <Button Height="75" Margin="0,0,0,0" Foreground="Black" Background="{StaticResource PrimaryForegroundBrush}" BorderBrush="{StaticResource PrimaryForegroundBrush}" materialDesign:ShadowAssist.ShadowDepth="Depth0" Click="btn_Stream_Click"  HorizontalContentAlignment="Left">
+                        <StackPanel Orientation="Horizontal">
+                            <materialDesign:PackIcon Kind="YoutubePlay" Height="35" Width="35" VerticalAlignment="Center" />
+                            <TextBlock Text="STREAM" FontSize="20"  Margin="10,0,0,0" VerticalAlignment="Center" />
+                        </StackPanel>
+                    </Button>
+
                     <Button Height="75" Margin="0,0,0,0" Foreground="Black" Background="{StaticResource PrimaryForegroundBrush}" BorderBrush="{StaticResource PrimaryForegroundBrush}" materialDesign:ShadowAssist.ShadowDepth="Depth0" Click="btn_Settings_Click" HorizontalContentAlignment="Left">
 
                         <StackPanel Orientation="Horizontal">
@@ -317,14 +329,17 @@
                 </materialDesign:ColorZone>
             </Border>
 
-            <Border x:Name="MainGrid" Background="{StaticResource PrimaryBackgroundBrush}" DockPanel.Dock="Right" materialDesign:ShadowAssist.ShadowDepth="Depth2" materialDesign:ShadowAssist.ShadowEdges="Top">
+            <Border Background="{StaticResource PrimaryBackgroundBrush}" DockPanel.Dock="Right" materialDesign:ShadowAssist.ShadowDepth="Depth2" materialDesign:ShadowAssist.ShadowEdges="Top">
                 <!--Main Grid-->
                 <Grid>
-                    <Grid>
-                        <UIScope:ButtonUI x:Name="ButtonUI" />
+                    <Grid x:Name="MainGrid" Grid.ZIndex="0">
+                        <ui:ButtonUI x:Name="ButtonUI" />
                     </Grid>
-                    <Grid VerticalAlignment="Bottom" HorizontalAlignment="Center" Height="50">
-                        <materialDesign:Snackbar MessageQueue="{materialDesign:MessageQueue}" x:Name="snackBar_Hint" />
+
+                    <Grid VerticalAlignment="Bottom" HorizontalAlignment="Center" Height="50" Grid.ZIndex="2">
+                        <materialDesign:Snackbar DataContext="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}"  
+                                                 MessageQueue="{Binding SnackbarMessageQueue}"/>
+                        <!--<ui:Snackbar x:Name="SnackbarMain"/>-->
                     </Grid>
                 </Grid>
             </Border>

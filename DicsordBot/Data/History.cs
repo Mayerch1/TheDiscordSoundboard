@@ -1,6 +1,4 @@
-﻿using System.Xml.Serialization;
-
-namespace DicsordBot.Data
+﻿namespace DiscordBot.Data
 {
     /// <summary>
     /// extends Playlist to manage History with maximum amount of titles
