@@ -1,4 +1,4 @@
-﻿namespace DiscordBot.Bot
+﻿namespace BotModule
 {
     /// <summary>
     /// Class for custom bot exception

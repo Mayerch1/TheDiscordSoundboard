@@ -11,7 +11,7 @@ using VideoLibrary;
 using YoutubeSearch;
 using DataManagement;
 
-namespace DiscordBot.UI
+namespace StreamModule
 {
 #pragma warning disable CS1591
 
@@ -38,7 +38,18 @@ namespace DiscordBot.UI
         private string _title = "Video Title";
         private string _imageUri = "";
         private string _duration = "0:00";
+        private RuntimeData data;
 
+
+        public RuntimeData Data
+        {
+            get => data;
+            set
+            {
+                data = value;
+                OnPropertyChanged("Data");
+            }
+        }
 
         public ObservableCollection<VideoData> Suggestions
         {
@@ -92,27 +103,30 @@ namespace DiscordBot.UI
 
         public StreamMode()
         {
-
+            //TODO: hand in
+            RuntimeData dt = null;
+            Data = dt;
             //-------------------
             InitializeComponent();
-            list_History.DataContext = Handle.Data.VideoHistory;
+            list_History.DataContext = Data.VideoHistory;
 
             //--------------------
             //show legal warning
             //-------------------
-            if (!Handle.Data.Persistent.IsEulaAccepted)
+            if (!Data.Persistent.IsEulaAccepted)
             {
-                IO.BlurEffectManager.ToggleBlurEffect(true);
+                //TODO: blur
+                //IO.BlurEffectManager.ToggleBlurEffect(true);
 
                 
                 var popup = new StreamWarningPopup(Application.Current.MainWindow);
 
                 popup.Closed += delegate(object pSender, EventArgs pArgs)
                 {
-                   
-                   IO.BlurEffectManager.ToggleBlurEffect(false);
+                    //TODO: blur
+                    //IO.BlurEffectManager.ToggleBlurEffect(false);
 
-                    Handle.Data.Persistent.IsEulaAccepted = popup.eula;
+                    Data.Persistent.IsEulaAccepted = popup.eula;
 
                     //return, if eula was rejected
                     if(!popup.eula)
@@ -127,19 +141,20 @@ namespace DiscordBot.UI
         private void StartStream(BotData data)
         {
             PlayVideo(data);
-            Handle.Data.VideoHistory.addVideo(new VideoData(Url, Title, ImageUri));
+            Data.VideoHistory.addVideo(new VideoData(Url, Title, ImageUri));
         }
 
         private void QueueStream(BotData data)
         {
             QueueVideo(data);
-            Handle.Data.VideoHistory.addVideo(new VideoData(Url, Title, ImageUri));
+            Data.VideoHistory.addVideo(new VideoData(Url, Title, ImageUri));
         }
 
 
         private async void SetMetaDataAsync(string url)
         {
-            string id = IO.YTManager.getIdFromUrl(url);
+            //TODO: id
+            string id = YTManager.getIdFromUrl(url);
 
             if (String.IsNullOrWhiteSpace(id))
                 return;
@@ -152,8 +167,8 @@ namespace DiscordBot.UI
             catch
             {
                 //fallback, if rate limit blocks api call
-                ImageUri = IO.YTManager.getUrlToThumbnail(url);
-                Title = await IO.YTManager.GetTitleTask(url);
+                ImageUri = YTManager.getUrlToThumbnail(url);
+                Title = await YTManager.GetTitleTask(url);
                 return;
             }
 
@@ -218,10 +233,11 @@ namespace DiscordBot.UI
 
             loadProgress.Visibility = Visibility.Visible;
             //download video
-            Video vid = await IO.YTManager.getVideoAsync(url);
+            Video vid = await YTManager.getVideoAsync(url);
             if (vid == null)
             {
-                Handle.SnackbarWarning("Cannot request video.");
+                //TODO: snackbar
+                //Handle.SnackbarWarning("Cannot request video.");
                 loadProgress.Visibility = Visibility.Collapsed;
                 return;
             }
@@ -229,10 +245,10 @@ namespace DiscordBot.UI
             Title = vid.Title;
 
             //get playable stream
-            Stream stream = await IO.YTManager.getStreamAsync(vid);
+            Stream stream = await YTManager.getStreamAsync(vid);
 
             //disable it for now 
-            if (stream != null && !Handle.Data.Persistent.AlwaysCacheVideo)
+            if (stream != null && !Data.Persistent.AlwaysCacheVideo)
             {
                 loadProgress.Visibility = Visibility.Collapsed;
 
@@ -257,12 +273,13 @@ namespace DiscordBot.UI
             else
             {
                 //fall back to caching to disk
-                Handle.SnackbarWarning("Caching, this may take a while...");
+                //TODO: snackbar
+                //Handle.SnackbarWarning("Caching, this may take a while...");
 
                 //alternatively try to download the video
                
 
-                string location = await IO.YTManager.cacheVideo(vid);
+                string location = await YTManager.cacheVideo(vid);
 
                 loadProgress.Visibility = Visibility.Collapsed;
 

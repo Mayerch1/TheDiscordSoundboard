@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using Discord.WebSocket;
 using DataManagement;
 
-namespace DiscordBot.Bot
+namespace BotModule
 {
     /// <summary>
     /// BotHandle inherites from Bot, failsave frame around the bot class
@@ -175,7 +175,7 @@ namespace DiscordBot.Bot
             }
             catch (Exception ex)
             {
-                UI.UnhandledException.initWindow(ex, "Trying to set a GameStatus");
+                SnackbarWarning("Could not set game status");
                 Console.WriteLine("GameState Exception");
                 return false;
             }
@@ -219,8 +219,8 @@ namespace DiscordBot.Bot
             }
             catch (Exception ex)
             {
-                UI.UnhandledException.initWindow(ex, "Trying to connect to the Discord Servers");
-                return false;
+                SnackbarWarning("Could not connect to Discord Servers");
+                 return false;
             }
 
             return true;
@@ -274,7 +274,7 @@ namespace DiscordBot.Bot
             }
             catch (System.Threading.Tasks.TaskCanceledException ex)
             {
-                UI.UnhandledException.initWindow(ex, "Trying to connect to a voice channel (cancelled).");
+                SnackbarWarning("Task cancelled");                
                 return false;
             }
             catch (System.TimeoutException)
@@ -285,7 +285,7 @@ namespace DiscordBot.Bot
             catch (Exception ex)
             {
                 Console.WriteLine("Unhandled connection Exception");
-                UI.UnhandledException.initWindow(ex, "Trying to connect to a voice channel");
+                SnackbarWarning("Failed to connect to voice channel");
                 return false;
             }
             return true;

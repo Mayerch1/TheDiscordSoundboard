@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Windows.Threading;
-using DiscordBot.Bot;
+using BotModule;
 using DiscordBot.Misc;
 using Newtonsoft.Json.Serialization;
 

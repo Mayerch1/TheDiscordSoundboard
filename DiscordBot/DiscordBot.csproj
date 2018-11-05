@@ -85,23 +85,11 @@
     <Prefer32Bit>true</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Concentus, Version=1.1.6.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Concentus.1.1.7\lib\portable-net45+win+wpa81+wp80\Concentus.dll</HintPath>
-    </Reference>
-    <Reference Include="Discord.Net.Commands, Version=1.0.2.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Discord.Net.Commands.1.0.2\lib\netstandard1.1\Discord.Net.Commands.dll</HintPath>
-    </Reference>
     <Reference Include="Discord.Net.Core, Version=1.0.2.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Discord.Net.Core.1.0.2\lib\net45\Discord.Net.Core.dll</HintPath>
     </Reference>
     <Reference Include="Discord.Net.Rest, Version=1.0.2.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Discord.Net.Rest.1.0.2\lib\net45\Discord.Net.Rest.dll</HintPath>
-    </Reference>
-    <Reference Include="Discord.Net.Rpc, Version=1.0.2.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Discord.Net.Rpc.1.0.2\lib\net45\Discord.Net.Rpc.dll</HintPath>
-    </Reference>
-    <Reference Include="Discord.Net.Webhook, Version=1.0.2.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Discord.Net.Webhook.1.0.2\lib\netstandard1.1\Discord.Net.Webhook.dll</HintPath>
     </Reference>
     <Reference Include="Discord.Net.WebSocket, Version=1.0.2.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Discord.Net.WebSocket.1.0.2\lib\net45\Discord.Net.WebSocket.dll</HintPath>
@@ -221,17 +209,14 @@
     <Compile Include="IO\BlurEffectManager.cs" />
     <Compile Include="IO\ImageManager.cs" />
     <Compile Include="IO\YTManager.cs" />
+    <Compile Include="Misc\BotMisc.cs" />
+    <Compile Include="Misc\ChannelListManager.cs" />
     <Compile Include="Misc\PlaylistManager.cs" />
     <Compile Include="OSInterop.cs" />
     <Compile Include="UI\About.xaml.cs">
       <DependentUpon>About.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Misc\ChannelListManager.cs" />
     <Compile Include="IO\FileWatcher.cs" />
-    <Compile Include="Misc\BotMisc.cs" />
-    <Compile Include="Bot\BotException.cs" />
-    <Compile Include="Bot\Bot.cs" />
-    <Compile Include="Bot\BotHandler.cs" />
     <Compile Include="UI\ButtonHotkeyPopup.xaml.cs">
       <DependentUpon>ButtonHotkeyPopup.xaml</DependentUpon>
     </Compile>
@@ -395,6 +380,10 @@
     <ProjectReference Include="..\DataManagement\DataManagement.csproj">
       <Project>{6745405b-8a1d-423f-9d17-95bad658db18}</Project>
       <Name>DataManagement</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Modules\BotModule\BotModule.csproj">
+      <Project>{f05a9a53-0213-4334-82e4-36d922c23127}</Project>
+      <Name>BotModule</Name>
     </ProjectReference>
     <ProjectReference Include="..\YoutubeSearch\YoutubeSearch.csproj">
       <Project>{dfece3e8-99d9-4652-b486-bea1010329ba}</Project>

@@ -11,6 +11,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataManagement", "DataManag
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "YoutubeSearch", "YoutubeSearch\YoutubeSearch.csproj", "{DFECE3E8-99D9-4652-B486-BEA1010329BA}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Modules", "Modules", "{FDB3DAC9-EA39-42CB-A907-00D43559CF82}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BotModule", "Modules\BotModule\BotModule.csproj", "{F05A9A53-0213-4334-82E4-36D922C23127}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -31,9 +35,16 @@ Global
 		{DFECE3E8-99D9-4652-B486-BEA1010329BA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DFECE3E8-99D9-4652-B486-BEA1010329BA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DFECE3E8-99D9-4652-B486-BEA1010329BA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F05A9A53-0213-4334-82E4-36D922C23127}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F05A9A53-0213-4334-82E4-36D922C23127}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F05A9A53-0213-4334-82E4-36D922C23127}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F05A9A53-0213-4334-82E4-36D922C23127}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{F05A9A53-0213-4334-82E4-36D922C23127} = {FDB3DAC9-EA39-42CB-A907-00D43559CF82}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {91F95C41-3E7C-412E-A513-D717029282C8}

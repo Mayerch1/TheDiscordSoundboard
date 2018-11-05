@@ -8,7 +8,7 @@ using System.IO;
 using System.Threading.Tasks;
 using DataManagement;
 
-namespace DiscordBot.Bot
+namespace BotModule
 {
     /// <summary>
     /// Basic Bot class, directly communicates with the api, throws for every little sh
