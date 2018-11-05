@@ -5,7 +5,7 @@ using System.ComponentModel;
 using System.IO;
 using System.Linq;
 
-namespace SoundBoard.IO
+namespace DiscordBot.IO
 {
     /// <summary>
     /// static class for monitoring files on disk

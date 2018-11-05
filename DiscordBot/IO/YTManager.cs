@@ -11,7 +11,7 @@ using System.Web;
 using VideoLibrary;
 using YoutubeSearch;
 
-namespace SoundBoard.IO
+namespace DiscordBot.IO
 {
     /// <summary>
     /// Manages operations on youtube videos

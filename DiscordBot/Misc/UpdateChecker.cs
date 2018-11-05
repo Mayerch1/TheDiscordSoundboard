@@ -1,7 +1,7 @@
 ﻿using System.Net;
 using System.Threading.Tasks;
 
-namespace SoundBoard.Misc
+namespace DiscordBot.Misc
 {
     /// <summary>
     /// Checks for upgrades and opens the download page

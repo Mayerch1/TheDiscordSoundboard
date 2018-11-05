@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using Discord.WebSocket;
 using DataManagement;
 
-namespace SoundBoard.Bot
+namespace DiscordBot.Bot
 {
     /// <summary>
     /// BotHandle inherites from Bot, failsave frame around the bot class

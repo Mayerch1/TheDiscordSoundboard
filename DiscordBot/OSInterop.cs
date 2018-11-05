@@ -3,7 +3,7 @@ using System.Runtime.InteropServices;
 using System.Windows;
 using System.Windows.Interop;
 
-namespace SoundBoard
+namespace DiscordBot
 {
     /// <summary>
     /// extension for Window class, to get absolute position on screen

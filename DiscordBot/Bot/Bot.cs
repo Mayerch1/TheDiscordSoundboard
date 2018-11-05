@@ -8,7 +8,7 @@ using System.IO;
 using System.Threading.Tasks;
 using DataManagement;
 
-namespace SoundBoard.Bot
+namespace DiscordBot.Bot
 {
     /// <summary>
     /// Basic Bot class, directly communicates with the api, throws for every little sh

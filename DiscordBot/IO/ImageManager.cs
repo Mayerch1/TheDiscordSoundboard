@@ -5,7 +5,7 @@ using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
 
-namespace SoundBoard.IO
+namespace DiscordBot.IO
 {
     /// <summary>
     /// Manages Image operations

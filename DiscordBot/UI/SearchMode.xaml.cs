@@ -8,7 +8,7 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media.Animation;
 
-namespace SoundBoard.UI
+namespace DiscordBot.UI
 {
 #pragma warning disable CS1591
 

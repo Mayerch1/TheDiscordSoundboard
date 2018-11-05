@@ -7,7 +7,7 @@ using System.Windows.Input;
 using System.Windows.Media.Animation;
 using GongSolutions.Wpf.DragDrop;
 
-namespace SoundBoard.UI.Playlist
+namespace DiscordBot.UI.Playlist
 {
 #pragma warning disable CS1591
 

@@ -1,4 +1,4 @@
-﻿namespace SoundBoard.IO
+﻿namespace DiscordBot.IO
 {
     /// <summary>
     /// Handles blur and fade-out effect for any window

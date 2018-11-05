@@ -10,7 +10,7 @@ using System.Windows.Threading;
 using MaterialDesignThemes.Wpf;
 
 //TODO: rename project folder after merge
-namespace SoundBoard
+namespace DiscordBot
 {
     /// <inheritdoc cref="T:System.Windows.Window"/>
     ///  <summary>

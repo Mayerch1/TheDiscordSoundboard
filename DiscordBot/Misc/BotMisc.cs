@@ -2,7 +2,7 @@
 using System.Threading.Tasks;
 using Discord.WebSocket;
 
-namespace SoundBoard.Misc
+namespace DiscordBot.Misc
 {
     /// <summary>
     /// Gatheres Data from the Bot class (get methods only), methods uses Bot api with calls into Bot class, does not trigger bot actions

@@ -7,7 +7,7 @@ using System.Windows.Input;
 using System.Windows.Interop;
 using System.Windows.Media.Imaging;
 
-namespace SoundBoard.UI.Playlist
+namespace DiscordBot.UI.Playlist
 {
 #pragma warning disable CS1591
 

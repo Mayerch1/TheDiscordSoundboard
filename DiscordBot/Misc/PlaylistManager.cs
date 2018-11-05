@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Windows.Navigation;
 
-namespace SoundBoard.Misc
+namespace DiscordBot.Misc
 {
     /// <summary>
     /// manages playlist, skips tracks, etc

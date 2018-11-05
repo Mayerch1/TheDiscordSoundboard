@@ -11,7 +11,7 @@ using VideoLibrary;
 using YoutubeSearch;
 using DataManagement;
 
-namespace SoundBoard.UI
+namespace DiscordBot.UI
 {
 #pragma warning disable CS1591
 

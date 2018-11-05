@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Windows.Threading;
+using DiscordBot.Bot;
+using DiscordBot.Misc;
 using Newtonsoft.Json.Serialization;
-using SoundBoard.Bot;
-using SoundBoard.Misc;
 
-namespace SoundBoard
+namespace DiscordBot
 {
     /// <summary>
     /// Static Handle contains Bot and Data instance, also provides synced properties and methods to show warnings/errors

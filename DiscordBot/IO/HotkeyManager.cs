@@ -3,7 +3,7 @@ using System.Runtime.InteropServices;
 using System.Windows;
 using System.Windows.Interop;
 
-namespace SoundBoard.IO
+namespace DiscordBot.IO
 {
     //This is for testing purposes only
     /// <summary>

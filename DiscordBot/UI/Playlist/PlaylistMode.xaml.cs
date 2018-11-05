@@ -1,6 +1,6 @@
 ﻿using System.Windows.Controls;
 
-namespace SoundBoard.UI.Playlist
+namespace DiscordBot.UI.Playlist
 {
 #pragma warning disable CS1591
 

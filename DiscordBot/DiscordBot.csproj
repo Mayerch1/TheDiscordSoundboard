@@ -212,10 +212,6 @@
     <Reference Include="WindowsBase" />
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
-    <Reference Include="YoutubeSearch, Version=0.1.1.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>Dependencies\YoutubeSearch\YoutubeSearch.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
     <ApplicationDefinition Include="App.xaml">
@@ -399,6 +395,10 @@
     <ProjectReference Include="..\DataManagement\DataManagement.csproj">
       <Project>{6745405b-8a1d-423f-9d17-95bad658db18}</Project>
       <Name>DataManagement</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\YoutubeSearch\YoutubeSearch.csproj">
+      <Project>{dfece3e8-99d9-4652-b486-bea1010329ba}</Project>
+      <Name>YoutubeSearch</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

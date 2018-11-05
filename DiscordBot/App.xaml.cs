@@ -1,6 +1,6 @@
 ﻿using System.Windows;
 
-namespace SoundBoard
+namespace DiscordBot
 {
     /// <summary>
     /// Interaction logic for App.xaml

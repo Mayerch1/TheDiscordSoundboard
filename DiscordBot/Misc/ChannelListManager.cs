@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using System.Windows.Controls;
 using Discord.WebSocket;
 
-namespace SoundBoard.Misc
+namespace DiscordBot.Misc
 {
     internal class ChannelListManager
     {
