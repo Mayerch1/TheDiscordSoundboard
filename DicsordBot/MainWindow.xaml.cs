@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.ComponentModel;
 using System.IO;
 using System.Threading.Tasks;
@@ -579,6 +579,7 @@ namespace DiscordBot
                 Handle.Data.IsPlaylistPlaying = true;
             }
         }
+
 
         private async void triggerBotInstantReplay(Data.BotData data, bool disableHistory = false)
         {
