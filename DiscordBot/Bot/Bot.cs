@@ -6,9 +6,9 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
-using DiscordBot.Data;
+using DataManagement;
 
-namespace DiscordBot.Bot
+namespace SoundBoard.Bot
 {
     /// <summary>
     /// Basic Bot class, directly communicates with the api, throws for every little sh
@@ -156,7 +156,7 @@ namespace DiscordBot.Bot
         /// <remarks>
         /// Contains data representation of Buttons, to also store settings like a custom loop-state
         /// </remarks>
-        private List<Data.BotData> Queue { get; set; }
+        private List<DataManagement.BotData> Queue { get; set; }
 
         private MediaFoundationReader Reader { get; set; }
         private MediaFoundationResampler ActiveResampler { get; set; }
@@ -172,7 +172,7 @@ namespace DiscordBot.Bot
         /// </summary>
         public Bot()
         {
-            Queue = new List<Data.BotData>();
+            Queue = new List<BotData>();
             IsStreaming = false;
             IsChannelConnected = false;
             IsServerConnected = false;

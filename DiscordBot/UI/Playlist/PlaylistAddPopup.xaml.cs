@@ -7,7 +7,7 @@ using System.Windows.Input;
 using System.Windows.Interop;
 using System.Windows.Media.Imaging;
 
-namespace DiscordBot.UI.Playlist
+namespace SoundBoard.UI.Playlist
 {
 #pragma warning disable CS1591
 
@@ -16,7 +16,7 @@ namespace DiscordBot.UI.Playlist
     /// </summary>
     public partial class PlaylistAddPopup : Popup, INotifyPropertyChanged
     {
-        private string imagePath = Data.Playlist.defaultImage;
+        private string imagePath = DataManagement.Playlist.defaultImage;
 
         public string PlaylistName { get { return box_Name.Text; } set { box_Name.Text = value; } }
 
@@ -25,7 +25,7 @@ namespace DiscordBot.UI.Playlist
         public bool IsToDelete { get; set; } = false;
         public bool Result { get; set; } = false;
 
-        public PlaylistAddPopup(Window window, string currentName = "", string _imagePath = Data.Playlist.defaultImage)
+        public PlaylistAddPopup(Window window, string currentName = "", string _imagePath = DataManagement.Playlist.defaultImage)
         {
             this.StaysOpen = false;
             InitializeComponent();
@@ -92,7 +92,7 @@ namespace DiscordBot.UI.Playlist
 
             if (fileDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK && fileDialog.CheckFileExists)
             {
-                if (fileDialog.FileName != Data.Playlist.defaultImage)
+                if (fileDialog.FileName != DataManagement.Playlist.defaultImage)
                 {
                     //cache image
                     ImagePath = IO.ImageManager.cacheImage(fileDialog.FileName);
@@ -144,7 +144,7 @@ namespace DiscordBot.UI.Playlist
         private void ImageChanged(string path)
         {
             //default path is already set
-            if (path != Data.Playlist.defaultImage && System.IO.File.Exists(path))
+            if (path != DataManagement.Playlist.defaultImage && System.IO.File.Exists(path))
             {
                 btn_Image.Background = new System.Windows.Media.ImageBrush(new BitmapImage(new Uri(path, UriKind.RelativeOrAbsolute)));
             }

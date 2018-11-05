@@ -1,7 +1,7 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
 
-namespace DiscordBot.UI
+namespace SoundBoard.UI
 {
     /// <summary>
     /// Interaction logic for About.xaml

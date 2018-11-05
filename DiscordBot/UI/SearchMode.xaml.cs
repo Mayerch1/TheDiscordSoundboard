@@ -8,7 +8,7 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media.Animation;
 
-namespace DiscordBot.UI
+namespace SoundBoard.UI
 {
 #pragma warning disable CS1591
 
@@ -19,9 +19,9 @@ namespace DiscordBot.UI
     {
         private bool isTopSelectionBarOpen = false;
 
-        private ObservableCollection<Data.FileData> filteredFiles;
-        public ObservableCollection<Data.FileData> FilteredFiles { get { return filteredFiles; } set { filteredFiles = value; OnPropertyChanged("FilteredFiles"); } }
-        public ObservableCollection<Data.Playlist> Playlists { get { return Handle.Data.Playlists; } set { Handle.Data.Playlists = value; OnPropertyChanged("Playlists"); } }
+        private ObservableCollection<DataManagement.FileData> filteredFiles;
+        public ObservableCollection<DataManagement.FileData> FilteredFiles { get { return filteredFiles; } set { filteredFiles = value; OnPropertyChanged("FilteredFiles"); } }
+        public ObservableCollection<DataManagement.Playlist> Playlists { get { return Handle.Data.Playlists; } set { Handle.Data.Playlists = value; OnPropertyChanged("Playlists"); } }
 
         public delegate void ListItemPlayHandler(uint tag, bool isPriority);
 
@@ -30,7 +30,7 @@ namespace DiscordBot.UI
         public SearchMode()
         {
             //make deep copy
-            FilteredFiles = new ObservableCollection<Data.FileData>(Handle.Data.Files);
+            FilteredFiles = new ObservableCollection<DataManagement.FileData>(Handle.Data.Files);
 
             InitializeComponent();
             this.DataContext = this;
@@ -41,7 +41,7 @@ namespace DiscordBot.UI
         private void addSingleTitleToList(uint listId, uint fileId)
         {
             //find list from listId
-            Data.Playlist toAddList = null;
+            DataManagement.Playlist toAddList = null;
             foreach (var list in Handle.Data.Playlists)
             {
                 if (list.Id == listId)
@@ -62,7 +62,7 @@ namespace DiscordBot.UI
         private void addMultipleTitlesToList(uint listId, IList selectedFiles)
         {
             //find list from listId
-            Data.Playlist toAddList = null;
+            DataManagement.Playlist toAddList = null;
             foreach (var list in Handle.Data.Playlists)
             {
                 if (list.Id == listId)
@@ -76,7 +76,7 @@ namespace DiscordBot.UI
                 foreach (var title in Handle.Data.Files)
                 {
                     //add
-                    if (title.Id == ((Data.FileData)file).Id && toAddList != null)
+                    if (title.Id == ((DataManagement.FileData)file).Id && toAddList != null)
                         toAddList.Tracks.Add(title);
                 }
             }
@@ -124,7 +124,7 @@ namespace DiscordBot.UI
         {
             if (result == true)
                 //create new playlist from dialog result
-                Handle.Data.Playlists.Add(new Data.Playlist(playlistName, imagePath));
+                Handle.Data.Playlists.Add(new DataManagement.Playlist(playlistName, imagePath));
             else
                 return;
 
@@ -175,7 +175,7 @@ namespace DiscordBot.UI
         {
             if (result == true)
                 //create new playlist from dialog result
-                Handle.Data.Playlists.Add(new Data.Playlist(playlistName, imagePath));
+                Handle.Data.Playlists.Add(new DataManagement.Playlist(playlistName, imagePath));
             else
                 return;
 
@@ -196,7 +196,7 @@ namespace DiscordBot.UI
 
         private void btn_addMultipleToQueue_Clicked(object sender, RoutedEventArgs e)
         {
-            foreach (Data.FileData selected in list_All.SelectedItems)
+            foreach (DataManagement.FileData selected in list_All.SelectedItems)
             {
                 ListItemPlay(selected.Id, false);
             }
@@ -379,7 +379,7 @@ namespace DiscordBot.UI
                         //select the currently pressed listBoxItem
                         for (int i = 0; i < list_All.Items.Count; i++)
                         {
-                            if (((Data.FileData)list_All.Items[i]).Id == fileTag)
+                            if (((DataManagement.FileData)list_All.Items[i]).Id == fileTag)
                             {
                                 list_All.SelectedIndex = i;
                                 break;
@@ -416,7 +416,7 @@ namespace DiscordBot.UI
         {
             if (e.Key == Key.Enter)
             {
-                if (list_All.SelectedItem is Data.FileData item)
+                if (list_All.SelectedItem is DataManagement.FileData item)
                     ListItemPlay(item.Id, true);
             }
         }

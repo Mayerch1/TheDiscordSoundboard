@@ -1,7 +1,7 @@
 ﻿using System.Net;
 using System.Threading.Tasks;
 
-namespace DiscordBot.Misc
+namespace SoundBoard.Misc
 {
     /// <summary>
     /// Checks for upgrades and opens the download page
@@ -14,7 +14,7 @@ namespace DiscordBot.Misc
         /// <returns>Returns if version number differs from latest release</returns>
         public static async Task<bool> CheckForUpdate()
         {
-            HttpWebRequest req = (HttpWebRequest)WebRequest.Create(Data.PersistentData.urlToGitRepo + "releases/latest");
+            HttpWebRequest req = (HttpWebRequest)WebRequest.Create(DataManagement.PersistentData.urlToGitRepo + "releases/latest");
             WebResponse wResp = null;
             try
             {
@@ -32,7 +32,7 @@ namespace DiscordBot.Misc
 
             //this takes any published version as update, disregarding version numbers
             //cuts out everythis but the last part after the last '/'
-            if (resolved.Substring(resolved.LastIndexOf('/')).Substring(1) != Data.PersistentData.version)
+            if (resolved.Substring(resolved.LastIndexOf('/')).Substring(1) != DataManagement.PersistentData.version)
             {
                 return true;
             }
@@ -45,7 +45,7 @@ namespace DiscordBot.Misc
         /// </summary>
         public static void OpenUpdatePage()
         {
-            System.Diagnostics.Process.Start(Data.PersistentData.urlToGitRepo + "releases/latest");
+            System.Diagnostics.Process.Start(DataManagement.PersistentData.urlToGitRepo + "releases/latest");
         }
     }
 }

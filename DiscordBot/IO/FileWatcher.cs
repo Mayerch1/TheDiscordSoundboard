@@ -5,7 +5,7 @@ using System.ComponentModel;
 using System.IO;
 using System.Linq;
 
-namespace DiscordBot.IO
+namespace SoundBoard.IO
 {
     /// <summary>
     /// static class for monitoring files on disk
@@ -36,7 +36,7 @@ namespace DiscordBot.IO
             return false;
         }
 
-        private static Data.FileData getAllFileInfo(FileSystemEventArgs e)
+        private static DataManagement.FileData getAllFileInfo(FileSystemEventArgs e)
         {
             return getAllFileInfo(e.FullPath, e.Name);
         }
@@ -47,22 +47,22 @@ namespace DiscordBot.IO
         /// <param name="filter">filter to apply</param>
         /// <param name="source">source of FileData objects</param>
         /// <returns></returns>
-        public static ObservableCollection<Data.FileData> filterList(string filter,
-            ObservableCollection<Data.FileData> source)
+        public static ObservableCollection<DataManagement.FileData> filterList(string filter,
+            ObservableCollection<DataManagement.FileData> source)
         {
             if (IsIndexing)
             {
                 Handle.SnackbarWarning("An indexing process is running", Handle.SnackbarAction.None);
-                return new ObservableCollection<Data.FileData>(source);
+                return new ObservableCollection<DataManagement.FileData>(source);
             }
 
             if (!string.IsNullOrEmpty(filter))
             {
-                ObservableCollection<Data.FileData> target = new ObservableCollection<Data.FileData>();
+                ObservableCollection<DataManagement.FileData> target = new ObservableCollection<DataManagement.FileData>();
                 //make it once to lower, instead for any iteration
                 filter = filter.ToLower();
 
-                foreach (Data.FileData file in source)
+                foreach (DataManagement.FileData file in source)
                 {
                     //add all files matching
                     if (checkForLowerMatch(file, filter))
@@ -75,7 +75,7 @@ namespace DiscordBot.IO
             {
                 //reset filter if empty
                 //make deep copy
-                return new ObservableCollection<Data.FileData>(source);
+                return new ObservableCollection<DataManagement.FileData>(source);
             }
         }
 
@@ -85,7 +85,7 @@ namespace DiscordBot.IO
         /// <param name="file">File to search for a hit in, case does not matter</param>
         /// <param name="filterLower">Filter, must be provided in lower case</param>
         /// <returns>true, if the filter got a hit in any property</returns>
-        private static bool checkForLowerMatch(Data.FileData file, string filterLower)
+        private static bool checkForLowerMatch(DataManagement.FileData file, string filterLower)
         {
             //filter for all known attributes (ignore case)
             if (file.Name.ToLower().Contains(filterLower) || file.Author.ToLower().Contains(filterLower)
@@ -103,14 +103,14 @@ namespace DiscordBot.IO
         /// </summary>
         /// <param name="FullPath">Path to file, no validation</param>
         /// <returns>Data.FileData object, describing the file</returns>
-        public static Data.FileData getAllFileInfo(string FullPath)
+        public static DataManagement.FileData getAllFileInfo(string FullPath)
         {           
                 return getAllFileInfo(FullPath, Path.GetFileName(FullPath));          
         }
 
-        private static Data.FileData getAllFileInfo(string FullPath, string Name)
+        private static DataManagement.FileData getAllFileInfo(string FullPath, string Name)
         {
-            Data.FileData file = new Data.FileData()
+            DataManagement.FileData file = new DataManagement.FileData()
             {
                 //name is set based on file name
                 Name = Name.Remove(Name.LastIndexOf('.')),
@@ -204,7 +204,7 @@ namespace DiscordBot.IO
             }
 
             //sort by name
-            Handle.Data.Files = new ObservableCollection<Data.FileData>(Handle.Data.Files.OrderBy(o => o.Name));
+            Handle.Data.Files = new ObservableCollection<DataManagement.FileData>(Handle.Data.Files.OrderBy(o => o.Name));
         }
 
         /// <summary>
@@ -292,7 +292,7 @@ namespace DiscordBot.IO
         {
             if (checkForValidFile(e.FullPath))
             {
-                Data.FileData nFile = getAllFileInfo(e);
+                DataManagement.FileData nFile = getAllFileInfo(e);
 
                 Handle.Data.Files.Add(nFile);
             }

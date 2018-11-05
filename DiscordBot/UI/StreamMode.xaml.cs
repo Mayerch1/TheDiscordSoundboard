@@ -1,5 +1,4 @@
-﻿using DiscordBot.Data;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
@@ -10,8 +9,9 @@ using System.Windows.Input;
 using System.Windows.Media.Imaging;
 using VideoLibrary;
 using YoutubeSearch;
+using DataManagement;
 
-namespace DiscordBot.UI
+namespace SoundBoard.UI
 {
 #pragma warning disable CS1591
 
@@ -20,11 +20,11 @@ namespace DiscordBot.UI
     /// </summary>
     public partial class StreamMode : UserControl, INotifyPropertyChanged
     {
-        public delegate void PlayVideoHandler(Data.BotData data);
+        public delegate void PlayVideoHandler(BotData data);
 
         public PlayVideoHandler PlayVideo;
 
-        public delegate void QueueVideoHandler(Data.BotData data);
+        public delegate void QueueVideoHandler(BotData data);
 
         public QueueVideoHandler QueueVideo;
 
@@ -33,13 +33,13 @@ namespace DiscordBot.UI
         public EulaRejectHandler EulaRejected;
 
        
-        private ObservableCollection<Data.VideoData> _suggestions = new ObservableCollection<VideoData>();
+        private ObservableCollection<VideoData> _suggestions = new ObservableCollection<VideoData>();
         private string _url = "";
         private string _title = "Video Title";
         private string _imageUri = "";
         private string _duration = "0:00";
 
-        public ObservableCollection<Data.VideoData> Suggestions
+        public ObservableCollection<VideoData> Suggestions
         {
             get => _suggestions;
             set
@@ -121,13 +121,13 @@ namespace DiscordBot.UI
         }
 
 
-        private void StartStream(Data.BotData data)
+        private void StartStream(BotData data)
         {
             PlayVideo(data);
-            Handle.Data.VideoHistory.addVideo(new Data.VideoData(Url, Title, ImageUri));
+            Handle.Data.VideoHistory.addVideo(new VideoData(Url, Title, ImageUri));
         }
 
-        private void QueueStream(Data.BotData data)
+        private void QueueStream(BotData data)
         {
             QueueVideo(data);
             Handle.Data.VideoHistory.addVideo(new VideoData(Url, Title, ImageUri));
@@ -203,7 +203,7 @@ namespace DiscordBot.UI
     
             foreach (var item in result)
             {  
-                Suggestions.Add(new Data.VideoData(item));   
+                Suggestions.Add(new VideoData(item));   
             }
         }
       

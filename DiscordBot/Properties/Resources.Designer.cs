@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace DiscordBot.Properties
+namespace SoundBoard.Properties
 {
 
 

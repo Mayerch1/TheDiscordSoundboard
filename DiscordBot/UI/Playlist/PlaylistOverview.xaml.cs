@@ -1,7 +1,7 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
 
-namespace DiscordBot.UI.Playlist
+namespace SoundBoard.UI.Playlist
 {
 #pragma warning disable CS1591
 
@@ -31,7 +31,7 @@ namespace DiscordBot.UI.Playlist
                 IO.BlurEffectManager.ToggleBlurEffect(false);
 
                 if (popup.Result == true)
-                    Handle.Data.Playlists.Add(new Data.Playlist(popup.PlaylistName, popup.ImagePath));
+                    Handle.Data.Playlists.Add(new DataManagement.Playlist(popup.PlaylistName, popup.ImagePath));
             };
         }
 

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 
-namespace DiscordBot.Data
+namespace DataManagement
 {
     /// <summary>
     /// Class for VideoHistory

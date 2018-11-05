@@ -2,7 +2,7 @@
 using System.Threading.Tasks;
 using Discord.WebSocket;
 
-namespace DiscordBot.Misc
+namespace SoundBoard.Misc
 {
     /// <summary>
     /// Gatheres Data from the Bot class (get methods only), methods uses Bot api with calls into Bot class, does not trigger bot actions
@@ -78,9 +78,9 @@ namespace DiscordBot.Misc
         /// </summary>
         /// <param name="btn">ButtonData objcet to convert</param>
         /// <returns>BotData object</returns>
-        public Data.BotData getBotData(Data.ButtonData btn)
+        public DataManagement.BotData getBotData(DataManagement.ButtonData btn)
         {
-            return new Data.BotData()
+            return new DataManagement.BotData()
             {
                 name = btn.Name,
                 filePath = btn.File,

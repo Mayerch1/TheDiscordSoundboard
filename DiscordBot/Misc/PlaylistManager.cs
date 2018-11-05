@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Windows.Navigation;
 
-namespace DiscordBot.Misc
+namespace SoundBoard.Misc
 {
     /// <summary>
     /// manages playlist, skips tracks, etc
@@ -19,7 +19,7 @@ namespace DiscordBot.Misc
 
 
         //get current playlist or history out of list
-        private static Data.Playlist Playlist =>
+        private static DataManagement.Playlist Playlist =>
             ListIndex >= 0 ? Handle.Data.Playlists[ListIndex] : Handle.Data.History;
 
 
@@ -29,7 +29,7 @@ namespace DiscordBot.Misc
         /// <param name="listIndex">index of list</param>
         /// <param name="fileIndex">first file to play</param>
         /// <return>first track</return>
-        public static Data.FileData InitList(int listIndex, int fileIndex)
+        public static DataManagement.FileData InitList(int listIndex, int fileIndex)
         {
             ListIndex = listIndex;
             FileIndex = fileIndex;
@@ -56,7 +56,7 @@ namespace DiscordBot.Misc
         /// get the next track in the list
         /// </summary>
         /// <returns>null on error or end of list</returns>
-        public static Data.FileData GetNextTrack()
+        public static DataManagement.FileData GetNextTrack()
         {
             if (!_isInitialized)
                 return null;

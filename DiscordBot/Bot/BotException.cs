@@ -1,4 +1,4 @@
-﻿namespace DiscordBot.Bot
+﻿namespace SoundBoard.Bot
 {
     /// <summary>
     /// Class for custom bot exception

@@ -2,7 +2,7 @@
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 
-namespace DiscordBot.Data
+namespace DataManagement
 {
     /// <summary>
     /// contains runtime data + class for persistent data, handles and manages those data
@@ -168,16 +168,7 @@ namespace DiscordBot.Data
         /// loads all Propertys of RuntimeData from different xml files
         /// </summary>
         public void loadAll()
-        {
-            try
-            {
-                Persistent.SettingsPath = Properties.Settings.Default.Path;
-            }
-            catch
-            {
-                Persistent.SettingsPath = null;
-            }
-
+        {         
             if (String.IsNullOrWhiteSpace(Persistent.SettingsPath))
                 Persistent.SettingsPath = System.Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + applicationDirectory;
 
@@ -270,14 +261,7 @@ namespace DiscordBot.Data
         /// </summary>
         public void saveAll()
         {
-            try
-            {
-                Properties.Settings.Default.Path = Persistent.SettingsPath;
-            }
-            catch {/* do nothing */}
-
-            Properties.Settings.Default.Save();
-
+     
             cleanBtnList();
             saveObject(Persistent, saveFile);
             saveObject(Files, fileFile);

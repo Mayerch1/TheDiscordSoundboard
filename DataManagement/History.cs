@@ -1,4 +1,4 @@
-﻿namespace DiscordBot.Data
+﻿namespace DataManagement
 {
     /// <summary>
     /// extends Playlist to manage History with maximum amount of titles
@@ -16,7 +16,7 @@
         /// add Title to history, removes any title above max Length of history
         /// </summary>
         /// <param name="title"></param>
-        public void addTitle(Data.FileData title)
+        public void addTitle(FileData title)
         {
             base.Tracks.Insert(0, title);
             while (base.Tracks.Count > maxHistoryLen)

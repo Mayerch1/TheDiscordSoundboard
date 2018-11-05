@@ -5,7 +5,7 @@ using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
 
-namespace DiscordBot.IO
+namespace SoundBoard.IO
 {
     /// <summary>
     /// Manages Image operations
@@ -18,7 +18,7 @@ namespace DiscordBot.IO
         /// <param name="imagePath">path to image</param>
         public static string cacheImage(string imagePath)
         {
-            string folder = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\" + Data.PersistentData.defaultFolderName + @"\" + Data.PersistentData.imageCacheFolder;
+            string folder = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\" + DataManagement.PersistentData.defaultFolderName + @"\" + DataManagement.PersistentData.imageCacheFolder;
 
             if (!Directory.Exists(folder))
             {
@@ -89,10 +89,10 @@ namespace DiscordBot.IO
         /// clears the cache folder, for unused images
         /// </summary>
         /// <param name="playlists">playists with all cached images as property</param>
-        public static void clearImageCache(ObservableCollection<Data.Playlist> playlists)
+        public static void clearImageCache(ObservableCollection<DataManagement.Playlist> playlists)
         {
             List<string> usedImages = new List<string>();
-            string folder = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\" + Data.PersistentData.defaultFolderName + @"\" + Data.PersistentData.imageCacheFolder;
+            string folder = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\" + DataManagement.PersistentData.defaultFolderName + @"\" + DataManagement.PersistentData.imageCacheFolder;
             string[] files;
             try
             {

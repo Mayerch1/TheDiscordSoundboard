@@ -2,7 +2,7 @@
 using System.ComponentModel;
 using System.Xml.Serialization;
 
-namespace DiscordBot.Data
+namespace DataManagement
 {
     /// <summary>
     /// represents one file out of all local files,

@@ -11,7 +11,7 @@ using System.Web;
 using VideoLibrary;
 using YoutubeSearch;
 
-namespace DiscordBot.IO
+namespace SoundBoard.IO
 {
     /// <summary>
     /// Manages operations on youtube videos
@@ -29,7 +29,7 @@ namespace DiscordBot.IO
         public static void clearVideoCache(string whiteList = "")
         {
             string folder = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\" +
-                            Data.PersistentData.defaultFolderName + @"\" + Data.PersistentData.videoCacheFolder;
+                            DataManagement.PersistentData.defaultFolderName + @"\" + DataManagement.PersistentData.videoCacheFolder;
 
             if (Directory.Exists(folder))
             {
@@ -177,7 +177,7 @@ namespace DiscordBot.IO
         public static async Task<string> cacheVideo(Video vid)
         {
             string folder = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\" +
-                            Data.PersistentData.defaultFolderName + @"\" + Data.PersistentData.videoCacheFolder;
+                            DataManagement.PersistentData.defaultFolderName + @"\" + DataManagement.PersistentData.videoCacheFolder;
             //save video into cache folder
             if (!Directory.Exists(folder))
             {

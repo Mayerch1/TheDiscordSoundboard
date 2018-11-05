@@ -4,7 +4,7 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Xml.Serialization;
 
-namespace DiscordBot.Data
+namespace DataManagement
 {
     /// <summary>
     /// stores all data which are permanentaly preserved
@@ -116,7 +116,7 @@ namespace DiscordBot.Data
         ///  SettingsPath property, automatically saved
         /// </summary>
         public string SettingsPath { get => settingsPath;
-            set { settingsPath = value; Properties.Settings.Default.Path = value; OnPropertyChanged("SettingsPath"); } }
+            set { settingsPath = value;  OnPropertyChanged("SettingsPath"); } }
 
         /// <summary>
         ///  HihgestButtonToSave property

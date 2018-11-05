@@ -1,6 +1,6 @@
 ﻿using System.IO;
 
-namespace DiscordBot.Data
+namespace DataManagement
 {
 #pragma warning disable CS1591
 

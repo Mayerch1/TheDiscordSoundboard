@@ -5,7 +5,7 @@ using System.Diagnostics;
 using System.Windows;
 using System.Windows.Controls;
 
-namespace DiscordBot.UI
+namespace SoundBoard.UI
 {
     /// <summary>
     /// Interaction logic for UnhandledException.xaml
@@ -85,7 +85,7 @@ namespace DiscordBot.UI
 
         private void btn_report_Click(object sender, EventArgs e)
         {
-            System.Diagnostics.Process.Start(Data.PersistentData.urlToGitRepo + "issues/new/choose");
+            System.Diagnostics.Process.Start(DataManagement.PersistentData.urlToGitRepo + "issues/new/choose");
         }
 
         private void btn_copy_Click(object sender, EventArgs e)

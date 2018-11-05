@@ -2,7 +2,7 @@
 using System.Windows;
 using System.Windows.Controls;
 
-namespace DiscordBot.UI
+namespace SoundBoard.UI
 {
 #pragma warning disable CS1591
 
@@ -42,7 +42,7 @@ namespace DiscordBot.UI
 
         private void openHelpPage(string page)
         {
-            System.Diagnostics.Process.Start(Data.PersistentData.urlToGitRepo + "wiki/" + page);
+            System.Diagnostics.Process.Start(DataManagement.PersistentData.urlToGitRepo + "wiki/" + page);
         }
 
         private void box_userName_TextChanged(object sender, TextChangedEventArgs e)

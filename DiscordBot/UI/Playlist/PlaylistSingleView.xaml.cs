@@ -7,7 +7,7 @@ using System.Windows.Input;
 using System.Windows.Media.Animation;
 using GongSolutions.Wpf.DragDrop;
 
-namespace DiscordBot.UI.Playlist
+namespace SoundBoard.UI.Playlist
 {
 #pragma warning disable CS1591
 
@@ -16,7 +16,7 @@ namespace DiscordBot.UI.Playlist
     /// </summary>
     public partial class PlaylistSingleView : UserControl, INotifyPropertyChanged, IDropTarget
     {
-        public delegate void SinglePlaylistItemEnqueuedHandler(Data.FileData file);
+        public delegate void SinglePlaylistItemEnqueuedHandler(DataManagement.FileData file);
 
         public SinglePlaylistItemEnqueuedHandler SinglePlaylistItemEnqueued;
 
@@ -33,13 +33,13 @@ namespace DiscordBot.UI.Playlist
         /// </summary>
         private int listIndex = 0;
 
-        private Data.Playlist refPlaylist;
+        private DataManagement.Playlist refPlaylist;
         private bool isTopSelectionBarOpen = false;
 
-        private ObservableCollection<Data.FileData> filteredFiles;
+        private ObservableCollection<DataManagement.FileData> filteredFiles;
         private string Filter { get; set; }
 
-        public Data.Playlist Playlist
+        public DataManagement.Playlist Playlist
         {
             get
             {
@@ -54,8 +54,8 @@ namespace DiscordBot.UI.Playlist
             }
         }
 
-        public ObservableCollection<Data.FileData> PlaylistFiles { get { return Playlist.Tracks; } set { Playlist.Tracks = value; OnPropertyChanged("PlaylistFiles"); } }
-        public ObservableCollection<Data.FileData> FilteredFiles { get { return filteredFiles; } set { filteredFiles = value; OnPropertyChanged("FilteredFiles"); } }
+        public ObservableCollection<DataManagement.FileData> PlaylistFiles { get { return Playlist.Tracks; } set { Playlist.Tracks = value; OnPropertyChanged("PlaylistFiles"); } }
+        public ObservableCollection<DataManagement.FileData> FilteredFiles { get { return filteredFiles; } set { filteredFiles = value; OnPropertyChanged("FilteredFiles"); } }
 
         public PlaylistSingleView(uint _listId)
         {
@@ -69,7 +69,7 @@ namespace DiscordBot.UI.Playlist
                 }
             }
             //deep copy
-            FilteredFiles = new ObservableCollection<Data.FileData>(PlaylistFiles);
+            FilteredFiles = new ObservableCollection<DataManagement.FileData>(PlaylistFiles);
             InitializeComponent();
             this.DataContext = this;
         }
@@ -78,12 +78,12 @@ namespace DiscordBot.UI.Playlist
         /// takes list as reference, no editing possible
         /// </summary>
         /// <param name="list"></param>
-        public PlaylistSingleView(Data.Playlist list)
+        public PlaylistSingleView(DataManagement.Playlist list)
         {
             listIndex = -1;
             refPlaylist = list;
             //deep copy
-            FilteredFiles = new ObservableCollection<Data.FileData>(PlaylistFiles);
+            FilteredFiles = new ObservableCollection<DataManagement.FileData>(PlaylistFiles);
             InitializeComponent();
             this.DataContext = this;
         }
@@ -145,7 +145,7 @@ namespace DiscordBot.UI.Playlist
 
         private void addMultipleToQueue_Click(object sender, RoutedEventArgs e)
         {
-            foreach (Data.FileData selected in list_All.SelectedItems)
+            foreach (DataManagement.FileData selected in list_All.SelectedItems)
                 SinglePlaylistItemEnqueued(selected);
         }
 
@@ -218,7 +218,7 @@ namespace DiscordBot.UI.Playlist
             if (e.Key == Key.Enter)
             {
                 //start replay of file
-                if (list_All.SelectedItem is Data.FileData item)
+                if (list_All.SelectedItem is DataManagement.FileData item)
                 {
                     SinglePlaylistStartPlay(listIndex, item.Id);
                 }
@@ -232,7 +232,7 @@ namespace DiscordBot.UI.Playlist
                     //find corresponding item
                     for (int i = 0; i < PlaylistFiles.Count; i++)
                     {
-                        if ((Data.FileData)item == PlaylistFiles[i])
+                        if ((DataManagement.FileData)item == PlaylistFiles[i])
                         {
                             PlaylistFiles.RemoveAt(i);
                             filteredFiles = IO.FileWatcher.filterList(box_Filter.Text, PlaylistFiles);
@@ -287,7 +287,7 @@ namespace DiscordBot.UI.Playlist
         {
             dropInfo.DropTargetAdorner = DropTargetAdorners.Insert;
 
-            if (dropInfo.Data is Data.FileData sourceItem)
+            if (dropInfo.Data is DataManagement.FileData sourceItem)
 
                 dropInfo.Effects = DragDropEffects.Move;
             else
@@ -297,7 +297,7 @@ namespace DiscordBot.UI.Playlist
         void IDropTarget.Drop(IDropInfo dropInfo)
         {
             //move item from list to another position
-            if (dropInfo.Data is Data.FileData sourceItem)
+            if (dropInfo.Data is DataManagement.FileData sourceItem)
             {
                 //insert sourceItem to new place
                 int oldIndex = PlaylistFiles.IndexOf(sourceItem);
@@ -326,7 +326,7 @@ namespace DiscordBot.UI.Playlist
             }
         }
 
-        private void dropItem(int index, Data.FileData file)
+        private void dropItem(int index, DataManagement.FileData file)
         {
             //drop on new position
             if (index < PlaylistFiles.Count)

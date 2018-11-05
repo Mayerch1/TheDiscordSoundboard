@@ -222,10 +222,6 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="Data\BotData.cs" />
-    <Compile Include="Data\History.cs" />
-    <Compile Include="Data\VideoData.cs" />
-    <Compile Include="Data\VideoHistory.cs" />
     <Compile Include="IO\BlurEffectManager.cs" />
     <Compile Include="IO\ImageManager.cs" />
     <Compile Include="IO\YTManager.cs" />
@@ -234,17 +230,12 @@
     <Compile Include="UI\About.xaml.cs">
       <DependentUpon>About.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Data\Hotkey.cs" />
     <Compile Include="Misc\ChannelListManager.cs" />
-    <Compile Include="Data\FileData.cs" />
-    <Compile Include="Data\Playlist.cs" />
     <Compile Include="IO\FileWatcher.cs" />
     <Compile Include="Misc\BotMisc.cs" />
     <Compile Include="Bot\BotException.cs" />
     <Compile Include="Bot\Bot.cs" />
     <Compile Include="Bot\BotHandler.cs" />
-    <Compile Include="Data\PersistentData.cs" />
-    <Compile Include="Data\RuntimeData.cs" />
     <Compile Include="UI\ButtonHotkeyPopup.xaml.cs">
       <DependentUpon>ButtonHotkeyPopup.xaml</DependentUpon>
     </Compile>
@@ -297,7 +288,6 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Data\ButtonData.cs" />
     <Compile Include="UI\ButtonUI.xaml.cs">
       <DependentUpon>ButtonUI.xaml</DependentUpon>
     </Compile>
@@ -404,6 +394,12 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="res\thumbnail_default.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\DataManagement\DataManagement.csproj">
+      <Project>{6745405b-8a1d-423f-9d17-95bad658db18}</Project>
+      <Name>DataManagement</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

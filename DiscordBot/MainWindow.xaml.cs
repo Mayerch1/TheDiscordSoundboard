@@ -10,7 +10,7 @@ using System.Windows.Threading;
 using MaterialDesignThemes.Wpf;
 
 //TODO: rename project folder after merge
-namespace DiscordBot
+namespace SoundBoard
 {
     /// <inheritdoc cref="T:System.Windows.Window"/>
     ///  <summary>
@@ -132,6 +132,17 @@ namespace DiscordBot
 
         public MainWindow()
         {
+
+            //load from properties, because library cannot access it
+            try
+            {
+                Handle.Data.Persistent.SettingsPath = Properties.Settings.Default.Path;
+            }
+            catch
+            {
+                Handle.Data.Persistent.SettingsPath = null;
+            }
+
             //test comment
             //need this, so other tasks will wait
             Handle.Data.loadAll();
@@ -197,6 +208,14 @@ namespace DiscordBot
 
         private async void cleanUp()
         {
+            try
+            {
+                Properties.Settings.Default.Path = Handle.Data.Persistent.SettingsPath;
+                Properties.Settings.Default.Save();
+            }
+            catch {/* do nothing */}
+
+
             Handle.Data.saveAll();
 
             IO.ImageManager.clearImageCache(Handle.Data.Playlists);
@@ -524,7 +543,7 @@ namespace DiscordBot
                 if (file.Id == index)
                 {
                     //create ButtonData to feed to bot
-                    Data.BotData data = new Data.BotData(file.Name, file.Path);
+                    DataManagement.BotData data = new DataManagement.BotData(file.Name, file.Path);
 
                     if (isPriority)
                         //interrupt current stream
@@ -536,17 +555,17 @@ namespace DiscordBot
             }
         }
 
-        private void Playlist_SingleFile_Play(Data.FileData file)
+        private void Playlist_SingleFile_Play(DataManagement.FileData file)
         {
-            triggerBotQueueReplay(new Data.BotData(file.Name, file.Path));
+            triggerBotQueueReplay(new DataManagement.BotData(file.Name, file.Path));
         }
 
-        private void Stream_Video_Play(Data.BotData data)
+        private void Stream_Video_Play(DataManagement.BotData data)
         {
             triggerBotInstantReplay(data, true);
         }
 
-        private void Stream_Video_Queue(Data.BotData data)
+        private void Stream_Video_Queue(DataManagement.BotData data)
         {
             triggerBotQueueReplay(data, true);
         }
@@ -569,19 +588,19 @@ namespace DiscordBot
             }
 
             //init playlist Mgr
-            Data.FileData nextFile = Misc.PlaylistManager.InitList(listIndex, (int) fileIndex);
+            DataManagement.FileData nextFile = Misc.PlaylistManager.InitList(listIndex, (int) fileIndex);
 
 
             if (nextFile != null)
             {
-                triggerBotInstantReplay(new Data.BotData(nextFile.Name,
+                triggerBotInstantReplay(new DataManagement.BotData(nextFile.Name,
                     nextFile.Path));
                 Handle.Data.IsPlaylistPlaying = true;
             }
         }
 
 
-        private async void triggerBotInstantReplay(Data.BotData data, bool disableHistory = false)
+        private async void triggerBotInstantReplay(DataManagement.BotData data, bool disableHistory = false)
         {
             //place song in front of queue
             await Handle.Bot.enqueuePriorityAsync(data);
@@ -594,7 +613,7 @@ namespace DiscordBot
                 Handle.Bot.skipTrack();
         }
 
-        private async void triggerBotQueueReplay(Data.BotData data, bool disableHistory = false)
+        private async void triggerBotQueueReplay(DataManagement.BotData data, bool disableHistory = false)
         {
             await Handle.Bot.enqueueAsync(data);
 
@@ -607,7 +626,7 @@ namespace DiscordBot
 
         #endregion BotPlayDelegates
 
-        private void addTitleToHistory(Data.BotData title)
+        private void addTitleToHistory(DataManagement.BotData title)
         {
             if (File.Exists(title.filePath))
                 Handle.Data.History.addTitle(IO.FileWatcher.getAllFileInfo(title.filePath));
@@ -643,7 +662,7 @@ namespace DiscordBot
                     if (nextFile != null)
                     {
                         //enqueue next file
-                        triggerBotQueueReplay(new Data.BotData(nextFile.Name, nextFile.Path));
+                        triggerBotQueueReplay(new DataManagement.BotData(nextFile.Name, nextFile.Path));
 
                         Handle.Data.IsPlaylistPlaying = true;
                     }

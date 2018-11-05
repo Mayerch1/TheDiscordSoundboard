@@ -5,7 +5,7 @@ using System.Windows.Controls.Primitives;
 using System.Windows.Input;
 using System.Windows.Interop;
 
-namespace DiscordBot.UI
+namespace SoundBoard.UI
 {
 #pragma warning disable CS1591
 
@@ -14,10 +14,10 @@ namespace DiscordBot.UI
     /// </summary>
     public partial class ButtonHotkeyPopup : Popup
     {
-        private Data.ButtonData Btn { get { return Handle.Data.Persistent.BtnList[btnIndex]; } set { Handle.Data.Persistent.BtnList[btnIndex] = value; } }
+        private DataManagement.ButtonData Btn { get { return Handle.Data.Persistent.BtnList[btnIndex]; } set { Handle.Data.Persistent.BtnList[btnIndex] = value; } }
         private int btnIndex = 0;
 
-        private Data.Hotkey Hotkey { get { return Handle.Data.Persistent.HotkeyList[hotkeyIndex]; } set { Handle.Data.Persistent.HotkeyList[hotkeyIndex] = value; } }
+        private DataManagement.Hotkey Hotkey { get { return Handle.Data.Persistent.HotkeyList[hotkeyIndex]; } set { Handle.Data.Persistent.HotkeyList[hotkeyIndex] = value; } }
         private int hotkeyIndex = -1;
         private int BtnId { get; set; }
 
@@ -49,7 +49,7 @@ namespace DiscordBot.UI
             if (hotkeyIndex == -1)
             {
                 //create new hotkey, set hotkeyIndex to new hotkey
-                var newHotkey = new Data.Hotkey()
+                var newHotkey = new DataManagement.Hotkey()
                 {
                     btn_id = BtnId,
                 };

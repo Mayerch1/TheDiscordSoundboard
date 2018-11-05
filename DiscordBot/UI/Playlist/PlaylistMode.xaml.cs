@@ -1,6 +1,6 @@
 ﻿using System.Windows.Controls;
 
-namespace DiscordBot.UI.Playlist
+namespace SoundBoard.UI.Playlist
 {
 #pragma warning disable CS1591
 
@@ -16,7 +16,7 @@ namespace DiscordBot.UI.Playlist
             PlaylistOverview.OpenPlaylist += openPlaylist;
         }
 
-        public delegate void PlaylistItemEnqueuedHandler(Data.FileData file);
+        public delegate void PlaylistItemEnqueuedHandler(DataManagement.FileData file);
 
         public PlaylistItemEnqueuedHandler PlaylistItemEnqueued;
 
@@ -51,7 +51,7 @@ namespace DiscordBot.UI.Playlist
             PlaylistGrid.Children.Add(overview);
         }
 
-        private void PlaylistItemQueued(Data.FileData file)
+        private void PlaylistItemQueued(DataManagement.FileData file)
         {
             PlaylistItemEnqueued(file);
         }

@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using YoutubeSearch;
 
-namespace DiscordBot.Data
+namespace DataManagement
 {
     /// <inheritdoc />
     /// <summary>
