@@ -1,4 +1,6 @@
-﻿namespace DiscordBot.IO
+﻿using System.Windows;
+
+namespace Util.IO
 {
     /// <summary>
     /// Handles blur and fade-out effect for any window
@@ -21,7 +23,7 @@
         /// </summary>
         /// <param name="isEnabled">toggle effect on or off</param>
         /// <param name="window">window to apply effect on</param>
-        public static void ApplyBlurEffect(bool isEnabled, MainWindow window)
+        public static void ApplyBlurEffect(bool isEnabled, Window window)
 
         {
             if (isEnabled)

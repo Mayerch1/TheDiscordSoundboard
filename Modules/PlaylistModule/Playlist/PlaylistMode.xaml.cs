@@ -1,19 +1,41 @@
-﻿using System.Windows.Controls;
+﻿using System.ComponentModel;
+using System.Windows.Controls;
+using DataManagement;
 
-namespace DiscordBot.UI.Playlist
+namespace PlaylistModule.Playlist
 {
 #pragma warning disable CS1591
 
     /// <summary>
     /// Interaction logic for PlaylistMode.xaml
     /// </summary>
-    public partial class PlaylistMode : UserControl
+    public partial class PlaylistMode : UserControl, INotifyPropertyChanged
     {
-        public PlaylistMode()
+        private RuntimeData data;
+
+        public RuntimeData Data
         {
+            get => data;
+            set
+            {
+                data = value;
+                OnPropertyChanged("Data");
+            }
+        }
+
+
+        public PlaylistMode(RuntimeData dt)
+        {
+            Data = dt;
             InitializeComponent();
-            this.DataContext = Handle.Data;
-            PlaylistOverview.OpenPlaylist += openPlaylist;
+
+            PlaylistOverview playlistOverview = new PlaylistOverview(Data);
+            playlistOverview.OpenPlaylist += openPlaylist;
+
+            PlaylistGrid.Children.Add(playlistOverview);
+
+            this.DataContext = Data;
+           
         }
 
         public delegate void PlaylistItemEnqueuedHandler(DataManagement.FileData file);
@@ -31,9 +53,9 @@ namespace DiscordBot.UI.Playlist
 
             PlaylistSingleView playList;
             if (listId >= 0)
-                playList = new PlaylistSingleView((uint)listId);
+                playList = new PlaylistSingleView((uint)listId, Data);
             else
-                playList = new PlaylistSingleView(Handle.Data.History);
+                playList = new PlaylistSingleView(Data.History, Data);
 
             playList.SinglePlaylistStartPlay += InnerPlaylistPlay;
             playList.SinglePlaylistItemEnqueued += PlaylistItemQueued;
@@ -45,7 +67,7 @@ namespace DiscordBot.UI.Playlist
         private void LeaveSinglePlaylistView()
         {
             PlaylistGrid.Children.RemoveAt(0);
-            var overview = new PlaylistOverview();
+            var overview = new PlaylistOverview(Data);
             overview.OpenPlaylist += openPlaylist;
 
             PlaylistGrid.Children.Add(overview);
@@ -59,6 +81,15 @@ namespace DiscordBot.UI.Playlist
         private void InnerPlaylistPlay(int listIndex, uint fileIndex)
         {
             PlaylistStartPlay(listIndex, fileIndex);
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        private void OnPropertyChanged(string info)
+        {
+            PropertyChangedEventHandler handler = PropertyChanged;
+
+            handler?.Invoke(this, new PropertyChangedEventArgs(info));
         }
     }
 

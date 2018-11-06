@@ -6,8 +6,10 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media.Animation;
 using GongSolutions.Wpf.DragDrop;
+using DataManagement;
+using Util;
 
-namespace DiscordBot.UI.Playlist
+namespace PlaylistModule.Playlist
 {
 #pragma warning disable CS1591
 
@@ -38,17 +40,30 @@ namespace DiscordBot.UI.Playlist
 
         private ObservableCollection<DataManagement.FileData> filteredFiles;
         private string Filter { get; set; }
+        
+        private RuntimeData data;
 
+        public RuntimeData Data
+        {
+            get => data;
+            set
+            {
+                data = value;
+                OnPropertyChanged("Data");
+            }
+        }
+
+        
         public DataManagement.Playlist Playlist
         {
             get
             {
-                if (listIndex >= 0) return Handle.Data.Playlists[listIndex];
+                if (listIndex >= 0) return Data.Playlists[listIndex];
                 else return refPlaylist;
             }
             set
             {
-                if (listIndex >= 0) { Handle.Data.Playlists[listIndex] = value; }
+                if (listIndex >= 0) { Data.Playlists[listIndex] = value; }
                 else { refPlaylist = value; }
                 OnPropertyChanged("Playlist");
             }
@@ -57,12 +72,13 @@ namespace DiscordBot.UI.Playlist
         public ObservableCollection<DataManagement.FileData> PlaylistFiles { get { return Playlist.Tracks; } set { Playlist.Tracks = value; OnPropertyChanged("PlaylistFiles"); } }
         public ObservableCollection<DataManagement.FileData> FilteredFiles { get { return filteredFiles; } set { filteredFiles = value; OnPropertyChanged("FilteredFiles"); } }
 
-        public PlaylistSingleView(uint _listId)
+        public PlaylistSingleView(uint _listId, RuntimeData dt)
         {
+            Data = dt;
             //get index of playlist
-            for (int i = 0; i < Handle.Data.Playlists.Count; i++)
+            for (int i = 0; i < Data.Playlists.Count; i++)
             {
-                if (Handle.Data.Playlists[i].Id == _listId)
+                if (Data.Playlists[i].Id == _listId)
                 {
                     listIndex = i;
                     break;
@@ -78,8 +94,9 @@ namespace DiscordBot.UI.Playlist
         /// takes list as reference, no editing possible
         /// </summary>
         /// <param name="list"></param>
-        public PlaylistSingleView(DataManagement.Playlist list)
+        public PlaylistSingleView(DataManagement.Playlist list, RuntimeData dt)
         {
+            Data = dt;
             listIndex = -1;
             refPlaylist = list;
             //deep copy
@@ -98,7 +115,7 @@ namespace DiscordBot.UI.Playlist
             }
             else if (result == false && isToDelete == true)
             {
-                Handle.Data.Playlists.RemoveAt(listIndex);
+                Data.Playlists.RemoveAt(listIndex);
                 LeaveSingleView();
             }
         }
@@ -135,7 +152,7 @@ namespace DiscordBot.UI.Playlist
                     //refresh if history
                     if (listIndex == -1)
                     {
-                        filteredFiles = IO.FileWatcher.filterList(box_Filter.Text, PlaylistFiles);
+                        filteredFiles = Util.IO.FileWatcher.filterList(box_Filter.Text, PlaylistFiles);
                         OnPropertyChanged("FilteredFiles");
                     }
                     break;
@@ -152,7 +169,7 @@ namespace DiscordBot.UI.Playlist
         private void box_Search_TextChanged(object sender, TextChangedEventArgs e)
         {
             var filter = ((TextBox)sender).Text;
-            filteredFiles = IO.FileWatcher.filterList(filter, PlaylistFiles);
+            filteredFiles = Util.IO.FileWatcher.filterList(filter, PlaylistFiles);
             OnPropertyChanged("FilteredFiles");
         }
 
@@ -235,7 +252,7 @@ namespace DiscordBot.UI.Playlist
                         if ((DataManagement.FileData)item == PlaylistFiles[i])
                         {
                             PlaylistFiles.RemoveAt(i);
-                            filteredFiles = IO.FileWatcher.filterList(box_Filter.Text, PlaylistFiles);
+                            filteredFiles = Util.IO.FileWatcher.filterList(box_Filter.Text, PlaylistFiles);
                             OnPropertyChanged("FilteredFiles");
                             break;
                         }
@@ -252,14 +269,14 @@ namespace DiscordBot.UI.Playlist
         private void openDialog(string name, Window window, string imagePath)
         {
             //show edit window
-            IO.BlurEffectManager.ToggleBlurEffect(true);
+            Util.IO.BlurEffectManager.ToggleBlurEffect(true);
 
             var popup = new PlaylistAddPopup(window, name, imagePath);
             popup.IsOpen = true;
 
             popup.Closed += delegate (object dSender, EventArgs dE)
             {
-                IO.BlurEffectManager.ToggleBlurEffect(false);
+                Util.IO.BlurEffectManager.ToggleBlurEffect(false);
                 ProcessDialogResult(popup.Result, popup.IsToDelete, popup.PlaylistName, popup.ImagePath);
             };
         }
@@ -316,10 +333,10 @@ namespace DiscordBot.UI.Playlist
                     string[] files = (string[])obj.GetData(DataFormats.FileDrop);
                     foreach (var track in files)
                     {
-                        if (IO.FileWatcher.checkForValidFile(track))
+                        if (Util.IO.FileWatcher.checkForValidFile(track))
                         {
                             //path must be valid
-                            dropItem(dropInfo.InsertIndex, IO.FileWatcher.getAllFileInfo(track));
+                            dropItem(dropInfo.InsertIndex, Util.IO.FileWatcher.getAllFileInfo(track));
                         }
                     }
                 }
@@ -334,7 +351,7 @@ namespace DiscordBot.UI.Playlist
             else
                 PlaylistFiles.Add(file);
 
-            filteredFiles = IO.FileWatcher.filterList(box_Filter.Text, PlaylistFiles);
+            filteredFiles = Util.IO.FileWatcher.filterList(box_Filter.Text, PlaylistFiles);
             OnPropertyChanged("FilteredFiles");
         }
 

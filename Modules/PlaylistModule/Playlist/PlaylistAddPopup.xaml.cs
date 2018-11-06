@@ -7,7 +7,7 @@ using System.Windows.Input;
 using System.Windows.Interop;
 using System.Windows.Media.Imaging;
 
-namespace DiscordBot.UI.Playlist
+namespace PlaylistModule.Playlist
 {
 #pragma warning disable CS1591
 
@@ -36,8 +36,7 @@ namespace DiscordBot.UI.Playlist
             initPosition(window);
 
             box_Name.SelectAll();
-
-            box_Name.Focus();
+            
 
             this.DataContext = this;
         }
@@ -95,7 +94,7 @@ namespace DiscordBot.UI.Playlist
                 if (fileDialog.FileName != DataManagement.Playlist.defaultImage)
                 {
                     //cache image
-                    ImagePath = IO.ImageManager.cacheImage(fileDialog.FileName);
+                    ImagePath = Util.IO.ImageManager.cacheImage(fileDialog.FileName);
                 }
             }
 

@@ -74,7 +74,7 @@ namespace DiscordBot.UI
                     scanCollection.Add(dialog.SelectedPath);
 
                     //rescan added files
-                    IO.FileWatcher.indexFiles(scanCollection, false);
+                    Util.IO.FileWatcher.indexFiles(scanCollection, false);
                 }
             }
         }
@@ -92,7 +92,7 @@ namespace DiscordBot.UI
                     Handle.Data.Persistent.MediaSources.RemoveAt(index);
 
                     //delete/recsan all files
-                    IO.FileWatcher.indexCleanFiles(Handle.Data.Persistent.MediaSources);
+                    Util.IO.FileWatcher.indexCleanFiles(Handle.Data.Persistent.MediaSources);
                 }
             }
         }

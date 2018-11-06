@@ -10,6 +10,7 @@ using System.Windows.Media.Imaging;
 using VideoLibrary;
 using YoutubeSearch;
 using DataManagement;
+using Util.IO;
 
 namespace StreamModule
 {
@@ -32,21 +33,22 @@ namespace StreamModule
 
         public EulaRejectHandler EulaRejected;
 
-       
+
         private ObservableCollection<VideoData> _suggestions = new ObservableCollection<VideoData>();
         private string _url = "";
         private string _title = "Video Title";
         private string _imageUri = "";
         private string _duration = "0:00";
-        private RuntimeData data;
+        private RuntimeData _data;
+
 
 
         public RuntimeData Data
         {
-            get => data;
+            get => _data;
             set
             {
-                data = value;
+                _data = value;
                 OnPropertyChanged("Data");
             }
         }
@@ -60,28 +62,31 @@ namespace StreamModule
                 OnPropertyChanged("Suggestions");
             }
         }
-     
+
         public string Url
-        { get => _url;
+        {
+            get => _url;
             set
             {
-                _url = value;                              
+                _url = value;
                 SetMetaDataAsync(value);
                 OnPropertyChanged("Url");
             }
         }
-     
+
         public string Title
-        { get => _title;
+        {
+            get => _title;
             set
             {
                 _title = value;
                 OnPropertyChanged("Title");
             }
         }
-     
+
         public string ImageUri
-        { get => _imageUri;
+        {
+            get => _imageUri;
             set
             {
                 _imageUri = value;
@@ -101,10 +106,8 @@ namespace StreamModule
         }
 
 
-        public StreamMode()
+        public StreamMode(DataManagement.RuntimeData dt)
         {
-            //TODO: hand in
-            RuntimeData dt = null;
             Data = dt;
             //-------------------
             InitializeComponent();
@@ -115,21 +118,21 @@ namespace StreamModule
             //-------------------
             if (!Data.Persistent.IsEulaAccepted)
             {
-                //TODO: blur
-                //IO.BlurEffectManager.ToggleBlurEffect(true);
-
                 
+                Util.IO.BlurEffectManager.ToggleBlurEffect(true);
+
+
                 var popup = new StreamWarningPopup(Application.Current.MainWindow);
 
-                popup.Closed += delegate(object pSender, EventArgs pArgs)
+                popup.Closed += delegate (object pSender, EventArgs pArgs)
                 {
-                    //TODO: blur
-                    //IO.BlurEffectManager.ToggleBlurEffect(false);
+
+                    Util.IO.BlurEffectManager.ToggleBlurEffect(false);
 
                     Data.Persistent.IsEulaAccepted = popup.eula;
 
                     //return, if eula was rejected
-                    if(!popup.eula)
+                    if (!popup.eula)
                         EulaRejected();
                 };
 
@@ -153,7 +156,6 @@ namespace StreamModule
 
         private async void SetMetaDataAsync(string url)
         {
-            //TODO: id
             string id = YTManager.getIdFromUrl(url);
 
             if (String.IsNullOrWhiteSpace(id))
@@ -179,8 +181,8 @@ namespace StreamModule
                 ImageUri = videoInfo.Thumbnail;
                 Title = videoInfo.Title;
                 Duration = videoInfo.Duration;
-            }          
-        }    
+            }
+        }
 
         private void box_link_TextChanged(object sender, TextChangedEventArgs e)
         {
@@ -188,7 +190,7 @@ namespace StreamModule
                 Url = box.Text;
         }
 
-        
+
         private void ProcessEntry()
         {
             if (Url.Contains("http://") || Url.Contains("https://"))
@@ -206,7 +208,7 @@ namespace StreamModule
         {
             Suggestions.Clear();
 
-            const int pages =1;
+            const int pages = 1;
 
             List<VideoInformation> result;
 
@@ -218,13 +220,13 @@ namespace StreamModule
             {
                 return;
             }
-    
+
             foreach (var item in result)
-            {  
-                Suggestions.Add(new VideoData(item));   
+            {
+                Suggestions.Add(new VideoData(item));
             }
         }
-      
+
 
         private async void GetAndStartStream(string url, bool IsQueue = false)
         {
@@ -236,8 +238,8 @@ namespace StreamModule
             Video vid = await YTManager.getVideoAsync(url);
             if (vid == null)
             {
-                //TODO: snackbar
-                //Handle.SnackbarWarning("Cannot request video.");
+                
+                SnackbarManager.SnackbarMessage("Cannot request video.");
                 loadProgress.Visibility = Visibility.Collapsed;
                 return;
             }
@@ -268,16 +270,16 @@ namespace StreamModule
                     {
                         stream = stream,
                     });
-                }             
+                }
             }
             else
             {
                 //fall back to caching to disk
-                //TODO: snackbar
-                //Handle.SnackbarWarning("Caching, this may take a while...");
+      
+                SnackbarManager.SnackbarMessage("Caching, this may take a while...");
 
                 //alternatively try to download the video
-               
+
 
                 string location = await YTManager.cacheVideo(vid);
 
@@ -290,19 +292,19 @@ namespace StreamModule
                     else
                         StartStream(new BotData(Title, location));
                 }
-                    
+
             }
             vid = null;
-        }    
+        }
 
         #region events
 
         private void box_url_KeyDown(object sender, KeyEventArgs e)
         {
-            Url = ((TextBox) sender).Text;
+            Url = ((TextBox)sender).Text;
 
             if (e.Key == Key.Enter)
-            {               
+            {
                 ProcessEntry();
             }
         }
@@ -322,7 +324,7 @@ namespace StreamModule
             if (sender is FrameworkElement fe)
             {
                 Url = fe.Tag.ToString();
-                
+
             }
         }
 
@@ -340,13 +342,13 @@ namespace StreamModule
         public event PropertyChangedEventHandler PropertyChanged;
 
         private void OnPropertyChanged(string info)
-        {          
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(info));           
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(info));
         }
 
         #endregion property changed     
 
-        
+
     }
 
 #pragma warning restore CS1591

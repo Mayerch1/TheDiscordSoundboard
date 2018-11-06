@@ -1,37 +1,52 @@
-﻿using System.Windows;
+﻿using System.ComponentModel;
+using System.Windows;
 using System.Windows.Controls;
+using DataManagement;
 
-namespace DiscordBot.UI.Playlist
+namespace PlaylistModule.Playlist
 {
 #pragma warning disable CS1591
 
     /// <summary>
     /// Interaction logic for PlaylistOverview.xaml
     /// </summary>
-    public partial class PlaylistOverview : UserControl
+    public partial class PlaylistOverview : UserControl, INotifyPropertyChanged
     {
         public delegate void OpenPlaylistHandler(int listId);
 
         public OpenPlaylistHandler OpenPlaylist;
 
-        public PlaylistOverview()
+        private RuntimeData data;
+
+        public RuntimeData Data
         {
+            get => data;
+            set
+            {
+                data = value;
+                OnPropertyChanged("Data");
+            }
+        }
+
+        public PlaylistOverview(RuntimeData dt)
+        {
+            Data = dt;
             InitializeComponent();
         }
 
         private void btn_playlistAdd_Click(object sender, RoutedEventArgs e)
         {
-            IO.BlurEffectManager.ToggleBlurEffect(true);
+            Util.IO.BlurEffectManager.ToggleBlurEffect(true);
 
             var popup = new PlaylistAddPopup(Application.Current.MainWindow);
             popup.IsOpen = true;
 
             popup.Closed += delegate (object dSender, System.EventArgs pE)
             {
-                IO.BlurEffectManager.ToggleBlurEffect(false);
+                Util.IO.BlurEffectManager.ToggleBlurEffect(false);
 
                 if (popup.Result == true)
-                    Handle.Data.Playlists.Add(new DataManagement.Playlist(popup.PlaylistName, popup.ImagePath));
+                    Data.Playlists.Add(new DataManagement.Playlist(popup.PlaylistName, popup.ImagePath));
             };
         }
 
@@ -44,6 +59,15 @@ namespace DiscordBot.UI.Playlist
         private void btn_showHistory_Click(object sender, RoutedEventArgs e)
         {
             OpenPlaylist(-1);
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        private void OnPropertyChanged(string info)
+        {
+            PropertyChangedEventHandler handler = PropertyChanged;
+
+            handler?.Invoke(this, new PropertyChangedEventArgs(info));
         }
     }
 

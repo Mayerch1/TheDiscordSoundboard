@@ -60,7 +60,7 @@
                             <Separator Margin="0,5,0,0" />
 
                             <TextBox
-                                Style="{StaticResource MaterialDesignTextFieldBoxTextBox}"
+                                Style="{StaticResource MaterialDesignFilledTextFieldTextBox}"
                                 Text="{Binding ClientName}"
                                 TextChanged="box_userName_TextChanged"
                                 materialDesign:HintAssist.Hint="Own UserName#1234"
@@ -72,7 +72,7 @@
                                 Width="450" />
 
                             <TextBox
-                                Style="{StaticResource MaterialDesignTextFieldBoxTextBox}"
+                                Style="{StaticResource MaterialDesignFilledTextFieldTextBox}"
                                 Text="{Binding Token}"
                                 materialDesign:HintAssist.Hint="Bot Token"
                                 HorizontalAlignment="Left"
@@ -83,7 +83,7 @@
                                 Width="450" TextChanged="box_token_TextChanged" />
 
                             <TextBox
-                                Style="{StaticResource MaterialDesignTextFieldBoxTextBox}"
+                                Style="{StaticResource MaterialDesignFilledTextFieldTextBox}"
                                 Text="{Binding SettingsPath}"
                                 materialDesign:HintAssist.Hint="Storage Directory"
                                 HorizontalAlignment="Left"

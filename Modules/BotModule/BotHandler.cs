@@ -160,7 +160,7 @@ namespace BotModule
         /// sets the GameState of the bot
         /// </summary>
         /// <param name="msg">Message to be displayed</param>
-        /// <param name="streamUrl">Url to twitch-stream, only relevant when isStreamin is true</param>
+        /// <param name="streamUrl">Url to twitch-stream, only relevant when isStreaming is true</param>
         /// <param name="isStreaming">bool, if bot is streaming on twitch or not</param>
         /// <returns>shows success of setting the game state</returns>
         /// <remarks>calls setGameState() of base</remarks>

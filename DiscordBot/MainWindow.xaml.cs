@@ -7,7 +7,11 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media.Animation;
 using System.Windows.Threading;
+using BotModule;
 using MaterialDesignThemes.Wpf;
+using StreamModule;
+using PlaylistModule;
+using Util.IO;
 
 namespace DiscordBot
 {
@@ -155,7 +159,7 @@ namespace DiscordBot
             registerEmbedEvents(ButtonUI);
 
             //file watcher
-            IO.FileWatcher.StartMonitor(Handle.Data.Persistent.MediaSources);
+            FileWatcher.StartMonitor(Handle.Data.Persistent.MediaSources, Handle.Data);
 
             initTimer();
 
@@ -179,7 +183,7 @@ namespace DiscordBot
                 initDelayedAsync();
             }
 
-            IO.FileWatcher.indexFiles(Handle.Data.Persistent.MediaSources);
+            FileWatcher.indexFiles(Handle.Data.Persistent.MediaSources);
         }
 
         private void MainWindow_Closing(object sender, CancelEventArgs e)
@@ -217,8 +221,9 @@ namespace DiscordBot
 
             Handle.Data.saveAll();
 
-            IO.ImageManager.clearImageCache(Handle.Data.Playlists);
-            IO.YTManager.clearVideoCache();
+            ImageManager.clearImageCache(Handle.Data.Playlists);
+            //TODO: clear
+            //IO.YTManager.clearVideoCache();
 
             //this will prevent the StreamState-changed handler from queueing the next song, when trying to disconnect
             Handle.Data.IsPlaylistPlaying = false;
@@ -235,7 +240,7 @@ namespace DiscordBot
             await Handle.Bot.connectToServerAsync();
             if (await Misc.UpdateChecker.CheckForUpdate())
             {
-                Handle.SnackbarWarning("A newer version is available", Handle.SnackbarAction.Update);
+                SnackbarManager.SnackbarMessage("A newer version is available", SnackbarManager.SnackbarAction.Update);
             }
         }
 
@@ -401,16 +406,16 @@ namespace DiscordBot
                     ui.ToggleHotkey += ToggleHotkey;
                     break;
 
-                case UI.SearchMode ui:
+                case PlaylistModule.SearchMode ui:
                     ui.ListItemPlay += List_Item_Play;
                     break;
 
-                case UI.Playlist.PlaylistMode ui:
+                case PlaylistModule.Playlist.PlaylistMode ui:
                     ui.PlaylistStartPlay += Playlist_Play;
                     ui.PlaylistItemEnqueued += Playlist_SingleFile_Play;
                     break;
 
-                case UI.StreamMode ui:
+                case StreamModule.StreamMode ui:
                     ui.PlayVideo += Stream_Video_Play;
                     ui.QueueVideo += Stream_Video_Queue;
                     ui.EulaRejected += Stream_Eula_Rejected;
@@ -425,7 +430,7 @@ namespace DiscordBot
             Handle.Data.Persistent.ClientNameChanged += Handle.ClientName_Changed;
 
             //universal SnackbarWarning
-            Handle.SnackbarWarning += SnackbarMessage_Show;
+            SnackbarManager.SnackbarMessage += SnackbarMessage_Show;
 
             //route bot warning to universal Handle.SnackbarWarning
             Handle.Bot.SnackbarWarning += Handle.PassBotSnackbarWarning;
@@ -457,9 +462,9 @@ namespace DiscordBot
             };
 
             //fancy stuff
-            IO.BlurEffectManager.ToggleBlurEffect += delegate(bool isEnabled)
+            Util.IO.BlurEffectManager.ToggleBlurEffect += delegate(bool isEnabled)
             {
-                IO.BlurEffectManager.ApplyBlurEffect(isEnabled, this);
+                Util.IO.BlurEffectManager.ApplyBlurEffect(isEnabled, this);
             };
         }
 
@@ -498,22 +503,22 @@ namespace DiscordBot
             //this is called, when no action is required/provided
         }
 
-        private void SnackbarMessage_Show(string msg, Handle.SnackbarAction action)
+        private void SnackbarMessage_Show(string msg, SnackbarManager.SnackbarAction action)
         {
             string optionMsg = action.ToString();
 
-            if (action == Handle.SnackbarAction.None)
+            if (action == SnackbarManager.SnackbarAction.None)
                 optionMsg = "Roger Dodger";
 
             Action handler;
 
             switch (action)
             {
-                case Handle.SnackbarAction.Settings:
+                case SnackbarManager.SnackbarAction.Settings:
                     handler = btn_Settings_Click;
                     break;
 
-                case Handle.SnackbarAction.Update:
+                case SnackbarManager.SnackbarAction.Update:
                     handler = Misc.UpdateChecker.OpenUpdatePage;
                     break;
 
@@ -628,7 +633,7 @@ namespace DiscordBot
         private void addTitleToHistory(DataManagement.BotData title)
         {
             if (File.Exists(title.filePath))
-                Handle.Data.History.addTitle(IO.FileWatcher.getAllFileInfo(title.filePath));
+                Handle.Data.History.addTitle(FileWatcher.getAllFileInfo(title.filePath));
         }
 
         private async void bot_streamState_Changed(bool newState)
@@ -737,7 +742,7 @@ namespace DiscordBot
         private void btn_Playlist_Click(object sender, RoutedEventArgs e)
         {
             MainGrid.Children.Clear();
-            UI.Playlist.PlaylistMode playUI = new UI.Playlist.PlaylistMode();
+            PlaylistModule.Playlist.PlaylistMode playUI = new PlaylistModule.Playlist.PlaylistMode(Handle.Data);
             registerEmbedEvents(playUI);
             MainGrid.Children.Add(playUI);
         }
@@ -745,7 +750,8 @@ namespace DiscordBot
         private void btn_Stream_Click(object sender, RoutedEventArgs e)
         {
             MainGrid.Children.Clear();
-            UI.StreamMode streamUI = new UI.StreamMode();
+            //UI.StreamMode streamUI = new UI.StreamMode();
+            StreamMode streamUI = new StreamMode(Handle.Data);
             registerEmbedEvents(streamUI);
             MainGrid.Children.Add(streamUI);
         }
@@ -769,7 +775,7 @@ namespace DiscordBot
         private void btn_Search_Click(object sender, RoutedEventArgs e)
         {
             MainGrid.Children.Clear();
-            UI.SearchMode searchMode = new UI.SearchMode();
+            SearchMode searchMode = new SearchMode(Handle.Data);
             registerEmbedEvents(searchMode);
 
             MainGrid.Children.Add(searchMode);
@@ -835,11 +841,11 @@ namespace DiscordBot
                     snackMsg = "Joining to owner permanently";
                 }
 
-                Handle.SnackbarWarning(snackMsg, Handle.SnackbarAction.None);
+                SnackbarManager.SnackbarMessage(snackMsg, SnackbarManager.SnackbarAction.None);
             }
             catch
             {
-                /* do nothing if someting other than a channel is selected*/
+                /* do nothing if something other than a channel is selected*/
             }
         }
 

@@ -7,8 +7,9 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media.Animation;
+using DataManagement;
 
-namespace DiscordBot.UI
+namespace PlaylistModule
 {
 #pragma warning disable CS1591
 
@@ -18,19 +19,32 @@ namespace DiscordBot.UI
     public partial class SearchMode : UserControl, INotifyPropertyChanged
     {
         private bool isTopSelectionBarOpen = false;
+        private RuntimeData data;
+
+        public RuntimeData Data
+        {
+            get => data;
+            set
+            {
+                data = value;
+                OnPropertyChanged("Data");
+            }
+        }
+
 
         private ObservableCollection<DataManagement.FileData> filteredFiles;
         public ObservableCollection<DataManagement.FileData> FilteredFiles { get { return filteredFiles; } set { filteredFiles = value; OnPropertyChanged("FilteredFiles"); } }
-        public ObservableCollection<DataManagement.Playlist> Playlists { get { return Handle.Data.Playlists; } set { Handle.Data.Playlists = value; OnPropertyChanged("Playlists"); } }
+        public ObservableCollection<DataManagement.Playlist> Playlists { get { return Data.Playlists; } set { Data.Playlists = value; OnPropertyChanged("Playlists"); } }
 
         public delegate void ListItemPlayHandler(uint tag, bool isPriority);
 
         public ListItemPlayHandler ListItemPlay;
 
-        public SearchMode()
+        public SearchMode(RuntimeData dt)
         {
+            Data = dt;
             //make deep copy
-            FilteredFiles = new ObservableCollection<DataManagement.FileData>(Handle.Data.Files);
+            FilteredFiles = new ObservableCollection<DataManagement.FileData>(Data.Files);
 
             InitializeComponent();
             this.DataContext = this;
@@ -42,14 +56,14 @@ namespace DiscordBot.UI
         {
             //find list from listId
             DataManagement.Playlist toAddList = null;
-            foreach (var list in Handle.Data.Playlists)
+            foreach (var list in Data.Playlists)
             {
                 if (list.Id == listId)
                     toAddList = list;
             }
 
             //search for fileTag in list
-            foreach (var title in Handle.Data.Files)
+            foreach (var title in Data.Files)
             {
                 if (title.Id == fileId)
                 {
@@ -63,7 +77,7 @@ namespace DiscordBot.UI
         {
             //find list from listId
             DataManagement.Playlist toAddList = null;
-            foreach (var list in Handle.Data.Playlists)
+            foreach (var list in Data.Playlists)
             {
                 if (list.Id == listId)
                     toAddList = list;
@@ -73,7 +87,7 @@ namespace DiscordBot.UI
             foreach (var file in selectedFiles)
             {
                 //search for title with tag, add this to lsit
-                foreach (var title in Handle.Data.Files)
+                foreach (var title in Data.Files)
                 {
                     //add
                     if (title.Id == ((DataManagement.FileData)file).Id && toAddList != null)
@@ -104,14 +118,14 @@ namespace DiscordBot.UI
         {
             //create menu, to create new playlsit
 
-            IO.BlurEffectManager.ToggleBlurEffect(true);
+            Util.IO.BlurEffectManager.ToggleBlurEffect(true);
 
             var popup = new Playlist.PlaylistAddPopup(Application.Current.MainWindow);
             popup.IsOpen = true;
 
             popup.Closed += delegate (object dSender, EventArgs dE)
             {
-                IO.BlurEffectManager.ToggleBlurEffect(false);
+                Util.IO.BlurEffectManager.ToggleBlurEffect(false);
                 //get tag
                 uint fileTag = (uint)((FrameworkElement)((FrameworkElement)sender).Parent).Tag;
 
@@ -124,12 +138,12 @@ namespace DiscordBot.UI
         {
             if (result == true)
                 //create new playlist from dialog result
-                Handle.Data.Playlists.Add(new DataManagement.Playlist(playlistName, imagePath));
+                Data.Playlists.Add(new DataManagement.Playlist(playlistName, imagePath));
             else
                 return;
 
             //id from last index, because it's last added from step above
-            uint listId = Handle.Data.Playlists[(int)(Handle.Data.Playlists.Count - 1)].Id;
+            uint listId = Data.Playlists[(int)(Data.Playlists.Count - 1)].Id;
 
             addSingleTitleToList(listId, fileTag);
         }
@@ -159,14 +173,14 @@ namespace DiscordBot.UI
         {
             //create menu, to create new playlsit
 
-            IO.BlurEffectManager.ToggleBlurEffect(true);
+            Util.IO.BlurEffectManager.ToggleBlurEffect(true);
 
             var popup = new Playlist.PlaylistAddPopup(Application.Current.MainWindow);
             popup.IsOpen = true;
 
             popup.Closed += delegate (object dSender, EventArgs dE)
             {
-                IO.BlurEffectManager.ToggleBlurEffect(false);
+                Util.IO.BlurEffectManager.ToggleBlurEffect(false);
                 ProcessMultipleAddDialog(popup.Result, popup.PlaylistName, popup.ImagePath);
             };
         }
@@ -175,12 +189,12 @@ namespace DiscordBot.UI
         {
             if (result == true)
                 //create new playlist from dialog result
-                Handle.Data.Playlists.Add(new DataManagement.Playlist(playlistName, imagePath));
+                Data.Playlists.Add(new DataManagement.Playlist(playlistName, imagePath));
             else
                 return;
 
             //new playlist is on last index
-            uint listId = Handle.Data.Playlists[(int)(Handle.Data.Playlists.Count - 1)].Id;
+            uint listId = Data.Playlists[(int)(Data.Playlists.Count - 1)].Id;
 
             addMultipleTitlesToList(listId, list_All.SelectedItems);
         }
@@ -225,7 +239,7 @@ namespace DiscordBot.UI
         {
             //get file of tag
             string path = "";
-            foreach (var file in Handle.Data.Files)
+            foreach (var file in Data.Files)
             {
                 if (file.Id == fileTag)
                 {
@@ -260,7 +274,7 @@ namespace DiscordBot.UI
             playListItems.Add(newListItem);
 
             //any existing playlist item as submenu
-            foreach (var list in Handle.Data.Playlists)
+            foreach (var list in Data.Playlists)
             {
                 var playlist = new MenuItem()
                 {
@@ -426,7 +440,7 @@ namespace DiscordBot.UI
             var filter = ((TextBox)sender).Text;
 
             //refresh after list is filtered, minimizes render Time
-            filteredFiles = IO.FileWatcher.filterList(filter, Handle.Data.Files);
+            filteredFiles = Util.IO.FileWatcher.filterList(filter, Data.Files);
             OnPropertyChanged("FilteredFiles");
         }
 

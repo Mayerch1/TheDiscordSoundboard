@@ -4,8 +4,10 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.IO;
 using System.Linq;
+using Util.IO;
+using DataManagement;
 
-namespace DiscordBot.IO
+namespace Util.IO
 {
     /// <summary>
     /// static class for monitoring files on disk
@@ -16,6 +18,8 @@ namespace DiscordBot.IO
         /// Is true when an indexing proccess is running
         /// </summary>
         private static bool IsIndexing { get; set; } = false;
+
+        private static RuntimeData Data;
 
         /// <summary>
         /// checks wether the filetype is on the whitelist
@@ -29,7 +33,7 @@ namespace DiscordBot.IO
 
             string format = path.Substring(path.LastIndexOf('.') + 1);
 
-            foreach (var testFormat in Handle.Data.Persistent.supportedFormats)
+            foreach (var testFormat in Data.Persistent.supportedFormats)
                 if (testFormat == format)
                     return true;
 
@@ -52,7 +56,7 @@ namespace DiscordBot.IO
         {
             if (IsIndexing)
             {
-                Handle.SnackbarWarning("An indexing process is running", Handle.SnackbarAction.None);
+                SnackbarManager.SnackbarMessage("An indexing process is running", SnackbarManager.SnackbarAction.None);
                 return new ObservableCollection<DataManagement.FileData>(source);
             }
 
@@ -156,7 +160,7 @@ namespace DiscordBot.IO
         /// <param name="allowDuplicates">if true, doesn't test if file is already in list</param>
         public static void indexCleanFiles(ObservableCollection<string> sources, bool allowDuplicates = false)
         {
-            Handle.Data.Files.Clear();
+            Data.Files.Clear();
             indexFiles(sources, allowDuplicates);
         }
 
@@ -204,7 +208,7 @@ namespace DiscordBot.IO
             }
 
             //sort by name
-            Handle.Data.Files = new ObservableCollection<DataManagement.FileData>(Handle.Data.Files.OrderBy(o => o.Name));
+            Data.Files = new ObservableCollection<DataManagement.FileData>(Data.Files.OrderBy(o => o.Name));
         }
 
         /// <summary>
@@ -238,7 +242,7 @@ namespace DiscordBot.IO
             if (!allowDuplicates)
             {
                 //check for existing files, to avoid duplicates
-                foreach (var singleFile in Handle.Data.Files)
+                foreach (var singleFile in Data.Files)
                 {
                     if (singleFile.Path == path) return;
                 }
@@ -247,7 +251,7 @@ namespace DiscordBot.IO
             if (checkForValidFile(path))
             {
                 //path needs to be valid
-                Handle.Data.Files.Add(getAllFileInfo(path));
+                Data.Files.Add(getAllFileInfo(path));
             }
         }
 
@@ -255,8 +259,10 @@ namespace DiscordBot.IO
         /// inits one watcher for each path
         /// </summary>
         /// <param name="sources">collection of paths to directories to watch</param>
-        public static void StartMonitor(ObservableCollection<string> sources)
+        public static void StartMonitor(ObservableCollection<string> sources, RuntimeData dataRef)
         {
+            Data = dataRef;
+
             foreach (var path in sources)
                 initWatcher(path);
         }
@@ -294,7 +300,7 @@ namespace DiscordBot.IO
             {
                 DataManagement.FileData nFile = getAllFileInfo(e);
 
-                Handle.Data.Files.Add(nFile);
+                Data.Files.Add(nFile);
             }
         }
 
@@ -302,11 +308,11 @@ namespace DiscordBot.IO
         {
             string oldPath = ((RenamedEventArgs) e).OldFullPath;
 
-            for (int i = 0; i < Handle.Data.Files.Count; i++)
+            for (int i = 0; i < Data.Files.Count; i++)
             {
-                if (Handle.Data.Files[i].Path == oldPath)
+                if (Data.Files[i].Path == oldPath)
                 {
-                    Handle.Data.Files[i] = getAllFileInfo(e);
+                    Data.Files[i] = getAllFileInfo(e);
                     break;
                 }
             }
@@ -314,11 +320,11 @@ namespace DiscordBot.IO
 
         private static void FileSystemWatcher_Changed(object sender, FileSystemEventArgs e)
         {
-            for (int i = 0; i < Handle.Data.Files.Count; i++)
+            for (int i = 0; i < Data.Files.Count; i++)
             {
-                if (Handle.Data.Files[i].Path == e.FullPath)
+                if (Data.Files[i].Path == e.FullPath)
                 {
-                    Handle.Data.Files[i] = getAllFileInfo(e);
+                    Data.Files[i] = getAllFileInfo(e);
                     break;
                 }
             }
@@ -326,11 +332,11 @@ namespace DiscordBot.IO
 
         private static void FileSystemWatcher_Deleted(object sender, FileSystemEventArgs e)
         {
-            for (int i = 0; i < Handle.Data.Files.Count; i++)
+            for (int i = 0; i < Data.Files.Count; i++)
             {
-                if (Handle.Data.Files[i].Path == e.FullPath)
+                if (Data.Files[i].Path == e.FullPath)
                 {
-                    Handle.Data.Files.RemoveAt(i);
+                    Data.Files.RemoveAt(i);
                     break;
                 }
             }

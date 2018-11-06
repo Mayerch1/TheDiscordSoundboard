@@ -8,10 +8,11 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Web;
+using Util.IO;
 using VideoLibrary;
 using YoutubeSearch;
 
-namespace DiscordBot.IO
+namespace StreamModule
 {
     /// <summary>
     /// Manages operations on youtube videos
@@ -132,7 +133,9 @@ namespace DiscordBot.IO
             }
             catch (Exception ex)
             {
-                UI.UnhandledException.initWindow(ex, "Error in requesting Video information");
+                //TODO exception
+                //UI.UnhandledException.initWindow(ex, "Error in requesting Video information");
+                throw;
                 return null;
             }
 
@@ -195,17 +198,21 @@ namespace DiscordBot.IO
             }
             catch (System.Net.Http.HttpRequestException)
             {
-                Handle.SnackbarWarning("Could not decrypt video");
+
+
+                SnackbarManager.SnackbarMessage("Could not decrypt video");
                 return null;
             }
             catch (System.OutOfMemoryException)
             {
-                Handle.SnackbarWarning("File too large");
+             
+                SnackbarManager.SnackbarMessage("File too large");
                 Console.WriteLine(@"File " + name + @" is to large to save");
             }
             catch (Exception)
             {
-                Handle.SnackbarWarning("Failed to cache Video");
+               
+                SnackbarManager.SnackbarMessage("Failed to cache Video");
                 Console.WriteLine(@"Failed to cache file");
                 return null;
             }

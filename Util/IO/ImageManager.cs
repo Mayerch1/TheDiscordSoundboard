@@ -5,7 +5,7 @@ using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
 
-namespace DiscordBot.IO
+namespace Util.IO
 {
     /// <summary>
     /// Manages Image operations
