@@ -286,6 +286,8 @@ namespace DataManagement
             }
 
             System.IO.StreamWriter file;
+            
+
             try
             {
                 file = System.IO.File.CreateText(Persistent.SettingsPath + _file);

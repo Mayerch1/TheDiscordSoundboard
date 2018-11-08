@@ -52,6 +52,7 @@
     <Compile Include="IO\BlurEffectManager.cs" />
     <Compile Include="IO\FileWatcher.cs" />
     <Compile Include="IO\ImageManager.cs" />
+    <Compile Include="IO\LogManager.cs" />
     <Compile Include="IO\SnackbarManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

@@ -173,7 +173,7 @@ namespace BotModule
             {
                 await base.setGameState(msg, streamUrl, isStreaming);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 SnackbarWarning("Could not set game status");
                 Console.WriteLine("GameState Exception");
@@ -206,20 +206,9 @@ namespace BotModule
             {
                 await base.connectToServerAsync(Token);
             }
-            catch (Discord.Net.HttpException)
-            {
-                SnackbarWarning("Invalid Token", SnackbarAction.Settings);
-
-                return false;
-            }
-            catch (System.Net.Http.HttpRequestException)
-            {
-                SnackbarWarning("Can't reach the Discord-Servers", SnackbarAction.None);
-                return false;
-            }
             catch (Exception ex)
             {
-                SnackbarWarning("Could not connect to Discord Servers");
+                handleReplayException(ex, "Could not connect to Discord Servers");
                  return false;
             }
 
@@ -271,21 +260,10 @@ namespace BotModule
                         ChannelId = 0;
                     await base.connectToChannelAsync(CurrentChannelId);
                 }
-            }
-            catch (System.Threading.Tasks.TaskCanceledException ex)
-            {
-                SnackbarWarning("Task cancelled");                
-                return false;
-            }
-            catch (System.TimeoutException)
-            {
-                SnackbarWarning("Cannot join channel. Check permission", SnackbarAction.None);
-                return false;
-            }
+            }           
             catch (Exception ex)
             {
-                Console.WriteLine("Unhandled connection Exception");
-                SnackbarWarning("Failed to connect to voice channel");
+                handleReplayException(ex, "Failed to connect to voice channel");
                 return false;
             }
             return true;
@@ -297,6 +275,7 @@ namespace BotModule
 
         private void handleReplayException(Exception ex, string msg, int btnId = -1)
         {
+            const string location = "BotModule/BotHandler";
             string btnStr;
             //resolve button number/name
             if (btnId >= 0)
@@ -304,6 +283,9 @@ namespace BotModule
                 btnStr = "File of Button number " + (btnId + 1);
             else
                 btnStr = "The file ";
+
+            if (ex == null)
+                return;
 
             switch (ex)
             {
@@ -323,8 +305,33 @@ namespace BotModule
                     SnackbarWarning(btnStr + " is not supported.");
                     break;
 
-                default:
-                    Console.WriteLine("Failed to handle error (BotHandler.cs)");
+                case System.TimeoutException iEx:
+                    SnackbarWarning("Cannot join channel. Check permission");
+                    Util.IO.LogManager.LogException(iEx, location, "No permission to join channel");
+                    break;
+
+                case TaskCanceledException iEx:
+                    SnackbarWarning("Task cancelled");
+                    break;
+
+                case System.DllNotFoundException iEx:
+                    SnackbarWarning("Missing dll");
+                    Util.IO.LogManager.LogException(iEx, location, "Missing dll", true);
+                    break;
+
+                case Discord.Net.HttpException iEx:
+                    SnackbarWarning("Invalid Token", SnackbarAction.Settings);
+                    Util.IO.LogManager.LogException(iEx, location , "Invalid Token");
+                    break;
+
+                case System.Net.Http.HttpRequestException iEx:
+                    SnackbarWarning("Can't reach the Discord-Servers");
+                    Util.IO.LogManager.LogException(iEx, location, "Cannot reach Discord servers");
+                    break;
+
+                case Exception iEx:
+                    SnackbarWarning(msg);
+                    Util.IO.LogManager.LogException(iEx, location, msg, true);
                     break;
             }
         }

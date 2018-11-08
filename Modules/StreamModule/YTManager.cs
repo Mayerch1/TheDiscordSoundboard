@@ -133,9 +133,7 @@ namespace StreamModule
             }
             catch (Exception ex)
             {
-                //TODO exception
-                //UI.UnhandledException.initWindow(ex, "Error in requesting Video information");
-                throw;
+                Util.IO.LogManager.LogException(ex, "StreamModule/YTManager", "Error in requesting Video information", true);
                 return null;
             }
 
@@ -155,9 +153,9 @@ namespace StreamModule
                 {
                     return await cl.StreamAsync(vid);
                 }
-                catch
+                catch(Exception ex)
                 {
-                    Console.WriteLine("getStream Async failed.");
+                    Util.IO.LogManager.LogException(ex, "StreamModule/YTManager", "Could not retrieve stream object");
                     return null;
                 }
             }
@@ -198,22 +196,18 @@ namespace StreamModule
             }
             catch (System.Net.Http.HttpRequestException)
             {
-
-
                 SnackbarManager.SnackbarMessage("Could not decrypt video");
                 return null;
             }
             catch (System.OutOfMemoryException)
             {
-             
                 SnackbarManager.SnackbarMessage("File too large");
                 Console.WriteLine(@"File " + name + @" is to large to save");
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-               
                 SnackbarManager.SnackbarMessage("Failed to cache Video");
-                Console.WriteLine(@"Failed to cache file");
+                Util.IO.LogManager.LogException(ex, "StreamModule/YTManager", "Failed to cache video");
                 return null;
             }
 

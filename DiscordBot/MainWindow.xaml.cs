@@ -1,6 +1,7 @@
 using System;
 using System.ComponentModel;
 using System.IO;
+using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -8,9 +9,11 @@ using System.Windows.Input;
 using System.Windows.Media.Animation;
 using System.Windows.Threading;
 using BotModule;
+using DiscordBot.UI;
 using MaterialDesignThemes.Wpf;
 using StreamModule;
 using PlaylistModule;
+using PlaylistModule.Playlist;
 using Util.IO;
 
 namespace DiscordBot
@@ -135,15 +138,16 @@ namespace DiscordBot
 
         public MainWindow()
         {
-
+            Util.IO.LogManager.InitLog();
             //load from properties, because library cannot access it
             try
             {
                 Handle.Data.Persistent.SettingsPath = Properties.Settings.Default.Path;
             }
-            catch
+            catch(Exception ex)
             {
                 Handle.Data.Persistent.SettingsPath = null;
+                Util.IO.LogManager.LogException(ex, "DiscordBot/Main", "Could not load settings location", true);
             }
 
             //test comment
@@ -154,9 +158,13 @@ namespace DiscordBot
 
             LastVolume = Volume;
 
+
+            SetDynamicMenu();
+
             //events
             registerEvents();
-            registerEmbedEvents(ButtonUI);
+
+            registerButtonEvents(ButtonUI);
 
             //file watcher
             FileWatcher.StartMonitor(Handle.Data.Persistent.MediaSources, Handle.Data);
@@ -222,13 +230,20 @@ namespace DiscordBot
             Handle.Data.saveAll();
 
             ImageManager.clearImageCache(Handle.Data.Playlists);
-            //TODO: clear
-            //IO.YTManager.clearVideoCache();
+            if (File.Exists("StreamModule.dll"))
+                clearVideoCache();
+            
 
             //this will prevent the StreamState-changed handler from queueing the next song, when trying to disconnect
             Handle.Data.IsPlaylistPlaying = false;
             await Handle.Bot.disconnectFromServerAsync();
         }
+
+        private void clearVideoCache()
+        {
+            StreamModule.YTManager.clearVideoCache();
+        }
+
 
         private async void initAsync()
         {
@@ -257,6 +272,13 @@ namespace DiscordBot
             resizeTimer.Tick += new EventHandler(Window_ResizingDone);
             resizeTimer.Interval = new TimeSpan(0, 0, 0, 0, 75);
         }
+
+
+        private void SetDynamicMenu()
+        {
+            //TODO: menu entry based on presence of dlls
+        }
+
 
         private void dispatcherTimer_Tick(object sender, EventArgs e)
         {
@@ -397,33 +419,9 @@ namespace DiscordBot
 
         #region event stuff
 
-        private void registerEmbedEvents(object embed)
-        {
-            switch (embed)
-            {
-                case UI.ButtonUI ui:
-                    ui.InstantButtonClicked += btn_InstantButton_Clicked;
-                    ui.ToggleHotkey += ToggleHotkey;
-                    break;
+        
 
-                case PlaylistModule.SearchMode ui:
-                    ui.ListItemPlay += List_Item_Play;
-                    break;
-
-                case PlaylistModule.Playlist.PlaylistMode ui:
-                    ui.PlaylistStartPlay += Playlist_Play;
-                    ui.PlaylistItemEnqueued += Playlist_SingleFile_Play;
-                    break;
-
-                case StreamModule.StreamMode ui:
-                    ui.PlayVideo += Stream_Video_Play;
-                    ui.QueueVideo += Stream_Video_Queue;
-                    ui.EulaRejected += Stream_Eula_Rejected;
-                    break;
-            }
-        }
-
-        //call only once
+         //call only once
         private void registerEvents()
         {
             //event to resolve new clientName into clientId
@@ -729,6 +727,7 @@ namespace DiscordBot
 
         private void btn_About_Click(object sender, RoutedEventArgs e)
         {
+            //About is mandatory
             MainGrid.Children.Clear();
             MainGrid.Children.Add(new UI.About());
         }
@@ -741,42 +740,73 @@ namespace DiscordBot
 
         private void btn_Playlist_Click(object sender, RoutedEventArgs e)
         {
+            if (File.Exists("PlaylistModule.dll"))
+                LoadPlaylistMode();
+            else
+                SnackbarManager.SnackbarMessage("Module not installed");
+
+
+
+        }
+
+        private void LoadPlaylistMode()
+        {
             MainGrid.Children.Clear();
             PlaylistModule.Playlist.PlaylistMode playUI = new PlaylistModule.Playlist.PlaylistMode(Handle.Data);
-            registerEmbedEvents(playUI);
+            registerPlaylistEvents(playUI);
             MainGrid.Children.Add(playUI);
         }
 
         private void btn_Stream_Click(object sender, RoutedEventArgs e)
         {
-            MainGrid.Children.Clear();
-            //UI.StreamMode streamUI = new UI.StreamMode();
-            StreamMode streamUI = new StreamMode(Handle.Data);
-            registerEmbedEvents(streamUI);
-            MainGrid.Children.Add(streamUI);
+            if (File.Exists("StreamModule.dll"))
+                LoadStreamMode();
+            else
+                SnackbarManager.SnackbarMessage("Module not installed");
+
         }
 
+        private void LoadStreamMode()
+        {
+            MainGrid.Children.Clear();
+            //UI.StreamMode streamUI = new UI.StreamMode();
+
+            StreamMode streamUI = new StreamMode(Handle.Data);
+            registerStreamEvents(streamUI);
+            MainGrid.Children.Add(streamUI);
+        }
+       
 
         private void btn_Settings_Click()
         {
+            //settings are mandatory
             MainGrid.Children.Clear();
             MainGrid.Children.Add(new UI.Settings());
         }
 
         private void btn_Sounds_Click(object sender, RoutedEventArgs e)
         {
+            //buttonUI is mandatory
             //change embeds for maingrid
             MainGrid.Children.Clear();
             UI.ButtonUI btnUI = new UI.ButtonUI();
-            registerEmbedEvents(btnUI);
+            registerButtonEvents(btnUI);
             MainGrid.Children.Add(btnUI);
         }
 
         private void btn_Search_Click(object sender, RoutedEventArgs e)
         {
+            if (File.Exists("PlaylistModule.dll"))
+                LoadSearchMode();
+            else
+                SnackbarManager.SnackbarMessage("Module not installed");
+        }
+
+        private void LoadSearchMode()
+        {
             MainGrid.Children.Clear();
             SearchMode searchMode = new SearchMode(Handle.Data);
-            registerEmbedEvents(searchMode);
+            registerSearchEvents(searchMode);
 
             MainGrid.Children.Add(searchMode);
         }
@@ -919,6 +949,38 @@ namespace DiscordBot
         }
 
         #endregion event stuff
+
+
+        #region stuff related to dll
+
+        private void registerButtonEvents(ButtonUI ui)
+        {
+            ui.InstantButtonClicked += btn_InstantButton_Clicked;
+            ui.ToggleHotkey += ToggleHotkey;
+        }
+
+        private void registerSearchEvents(SearchMode ui)
+        {
+            ui.ListItemPlay += List_Item_Play;
+        }
+
+        private void registerPlaylistEvents(PlaylistMode ui)
+        {
+            ui.PlaylistStartPlay += Playlist_Play;
+            ui.PlaylistItemEnqueued += Playlist_SingleFile_Play;
+        }
+
+        private void registerStreamEvents(StreamMode ui)
+        {
+            ui.PlayVideo += Stream_Video_Play;
+            ui.QueueVideo += Stream_Video_Queue;
+            ui.EulaRejected += Stream_Eula_Rejected;
+        }
+#endregion stuff related to dll
+
+
+
+
 
 #pragma warning restore CS1591
     }
