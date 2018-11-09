@@ -8,7 +8,20 @@
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800"
              DataContext="{Binding RelativeSource={RelativeSource Self}}">
-    <Grid>
+
+
+    <UserControl.Resources>
+        
+        <Style TargetType="ListBoxItem" BasedOn="{StaticResource {x:Type ListBoxItem}}">
+        <Setter Property="Padding" Value="0" />
+        <Setter Property="FontSize" Value="13" />
+        <Setter Property="FontFamily" Value="Segoe UI" />
+        </Style>
+    </UserControl.Resources>
+
+
+
+    <Grid Margin="20,20,0,0">
         <Grid>
             <materialDesign:Card x:Name="loadProgress"
                                  UniformCornerRadius="14" Visibility="Collapsed"
@@ -29,48 +42,63 @@
 
             <Grid Grid.Column="0">
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="*" />
+                    <RowDefinition Height="Auto" />
                     <RowDefinition Height="*" />
                 </Grid.RowDefinitions>
 
                 <Grid Grid.Row="0">
-                    <DockPanel VerticalAlignment="Top" Margin="20" LastChildFill="True">
+                    <DockPanel VerticalAlignment="Top" LastChildFill="True">
 
-                        <Image x:Name="img_thumbnail"
-                               DockPanel.Dock="Left"
-                               Width="256" Height="256" Margin="0,0,20,0"
-                               Source="/res/thumbnail_default.png" />
+                        <Grid Height="Auto" Width="Auto" Margin="0,0,30,0" DockPanel.Dock="Left">
+                          
+                            <Image x:Name="img_thumbnail"
+                               Width="256" Height="144"
+                               Source="/res/thumbnail_default.png"
+                               HorizontalAlignment="Stretch"
+                               VerticalAlignment="Center" />
 
-                        <!--<Label Content="{Binding Duration}"
-                                   VerticalAlignment="Bottom" HorizontalAlignment="Right"/>-->
+                            <Label Content="{Binding Duration}"
+                               VerticalAlignment="Bottom" 
+                               HorizontalAlignment="Right"
+                               Background="Black"
+                               Foreground="White"/>
+                            
+                        </Grid>
 
+                        <DockPanel DockPanel.Dock="Bottom">
+                            <Button Click="btn_Stream_Click"
+                                DockPanel.Dock="Right"
+                                Height="Auto" Width="Auto" Margin="20"
+                                Background="{StaticResource PrimaryForegroundBrush}"
+                                BorderBrush="{x:Null}">
+                                <materialDesign:PackIcon Kind="ArrowRight" Height="30" Width="30" Margin="5"/>
+                            </Button>
+                            
+                        <TextBox Text="{Binding Url}"
+                                 KeyDown="box_url_KeyDown"
+                                 Height="60"
+                                 Style="{StaticResource MaterialDesignFilledTextFieldTextBox}"
+                                 TextChanged="box_link_TextChanged"
+                                 materialDesign:HintAssist.Hint="Url to Video"/>
+                        </DockPanel>
 
                         <Label Content="{Binding Title}"
                                DockPanel.Dock="Top"
-                               Margin="0,30,0,0"
+                               Margin="0,0,0,0"
                                FontSize="15" />
 
-                        <Button Click="btn_Stream_Click"
-                                DockPanel.Dock="Right"
-                                Height="45" Width="80" Margin="20"
-                                Content="Confirm"
-                                Background="{StaticResource PrimaryForegroundBrush}"
-                                BorderBrush="{x:Null}" />
-
-                        <TextBox Text="{Binding Url}"
-                                 KeyDown="box_url_KeyDown"
-                                 Height="57"
-                                 Style="{StaticResource MaterialDesignFilledTextFieldTextBox}"
-                                 TextChanged="box_link_TextChanged"
-                                 materialDesign:HintAssist.Hint="Url to Video" />
+                   
                     </DockPanel>
+                        
                 </Grid>
 
-                <Grid Grid.Row="1">
-                    <!-- recommended history-->
-                    <ListBox
+                <Grid Grid.Row="1" Margin="0,20,50,0">
+                    <!-- recommended -->
+                    
+                        <ListBox
                         DataContext="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}"
-                        ItemsSource="{Binding Suggestions}">
+                        ItemsSource="{Binding Suggestions}"
+                        HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch">
                         <ListBox.ItemTemplate>
                             <DataTemplate>
                                 <DockPanel Tag="{Binding Url}" MouseLeftButtonDown="list_History_MouseLeftButtonDown">
@@ -90,7 +118,10 @@
                                                Width="64" Height="64" />
                                         <Label Content="{Binding Duration}"
                                                VerticalAlignment="Bottom"
-                                               HorizontalAlignment="Right" />
+                                               HorizontalAlignment="Right"
+                                               Background="Black"
+                                               Foreground="White"
+                                               FontSize="9"/>
                                     </Grid>
 
                                     <Label DockPanel.Dock="Right"
@@ -101,15 +132,19 @@
                             </DataTemplate>
                         </ListBox.ItemTemplate>
                     </ListBox>
+                    
                 </Grid>
             </Grid>
 
             <Grid Grid.Column="1">
                 <!--history-->
-                <ListBox x:Name="list_History" ItemsSource="{Binding Videos}">
+                <DockPanel>
+                    <TextBlock Text="History:" FontSize="15" Margin="5" DockPanel.Dock="Top"/>
+                    
+                    <ListBox x:Name="list_History" ItemsSource="{Binding Videos}" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch">
                     <ListBox.ItemTemplate>
                         <DataTemplate>
-                            <DockPanel Tag="{Binding Url}" MouseLeftButtonDown="list_History_MouseLeftButtonDown">
+                            <DockPanel Tag="{Binding Url}" MouseLeftButtonDown="list_History_MouseLeftButtonDown" Margin="5">
 
                                 <DockPanel.ContextMenu>
                                     <ContextMenu>
@@ -121,15 +156,25 @@
 
 
 
-                                <Image DockPanel.Dock="Left"
-                                       Source="{Binding ImageUrl}"
-                                       Width="64" Height="64" />
-                                <Label DockPanel.Dock="Right"
-                                       Content="{Binding Title}" />
-                            </DockPanel>
+                                    <Grid>
+                                        <Image DockPanel.Dock="Left"
+                                               Source="{Binding ImageUrl}"
+                                               Width="64" Height="64" />
+                                        <Label Content="{Binding Duration}"
+                                               VerticalAlignment="Bottom"
+                                               HorizontalAlignment="Right"
+                                               Background="Black"
+                                               Foreground="White"
+                                               FontSize="9"/>
+                                    </Grid>
+
+                                    <Label DockPanel.Dock="Right"
+                                           Content="{Binding Title}" />
+                                </DockPanel>
                         </DataTemplate>
                     </ListBox.ItemTemplate>
                 </ListBox>
+                </DockPanel>
             </Grid>
         </Grid>
     </Grid>
