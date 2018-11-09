@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
 using System.Runtime.InteropServices;
@@ -276,7 +277,62 @@ namespace DiscordBot
 
         private void SetDynamicMenu()
         {
-            //TODO: menu entry based on presence of dlls
+            //ButtonMode is already added, as its mandatory
+            var ButtonList = new List<Button>();
+          
+            //add search and playlist mode
+            if (File.Exists("PlaylistModule.dll"))
+            {
+                ButtonList.Add(getMenuButton("IconMagnify", "SEARCH", btn_Search_Click));
+                ButtonList.Add(getMenuButton("IconPlaylistPlay", "PLAYLISTS", btn_Playlist_Click));
+            }
+
+            //add stream mode
+            if(File.Exists("StreamModule.dll"))
+                ButtonList.Add(getMenuButton("IconYoutubePlay", "STREAM", btn_Stream_Click));
+
+            //add settings mode
+            ButtonList.Add(getMenuButton("IconSettings", "SETTINGS", btn_Settings_Click));
+
+            //add about mode
+            ButtonList.Add(getMenuButton("IconInformation", "ABOUT", btn_About_Click));
+
+            //TODO make addRange
+            foreach (var item in ButtonList)
+            {
+                stackPanel_Menu.Children.Add(item);
+            }
+        }
+
+        private Button getMenuButton(string iconStr, string textStr, RoutedEventHandler handler)
+        {
+            //create button (with Style) and StackPanel
+            var btn = new Button()
+            {
+                Style = FindResource("MenuButton") as Style,
+            };
+            var stack = new StackPanel()
+            {
+                Orientation = Orientation.Horizontal,
+            };
+
+            stack.Children.Add(FindResource(iconStr) as UIElement);
+
+            //create TextBlock with Style
+            var menuTxt = new TextBlock()
+            {
+                Style = FindResource("MenuTextBlock") as Style,
+            };
+            menuTxt.Text = textStr;
+
+            //add TextBlock, then add StackPanel to Button
+            stack.Children.Add(menuTxt);
+          
+            btn.Content = stack;
+
+            btn.Click += handler;
+
+            return btn;
         }
 
 
