@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Windows.Threading;
-using DiscordBot.Bot;
+using BotModule;
 using DiscordBot.Misc;
 using Newtonsoft.Json.Serialization;
 
@@ -46,41 +46,7 @@ namespace DiscordBot
 
         #endregion events
 
-        #region Snackbar
-
-        /// <summary>
-        /// SnackbarAction enum, passed into delegate for informing eventHandler on requested action
-        /// </summary>
-        public enum SnackbarAction
-        {
-            /// <summary>
-            /// Open the Settings menu, when clicked
-            /// </summary>
-            Settings,
-
-            /// <summary>
-            /// Open the update page, when clicked
-            /// </summary>
-            Update,
-
-            /// <summary>
-            /// Do nothing on click
-            /// </summary>
-            None
-        };
-
-        /// <summary>
-        /// SnackbarWarningHandle
-        /// </summary>
-        /// <param name="msg">Error decsription</param>
-        /// <param name="action">Enum for triggered action in shown Snackbar</param>
-        public delegate void SnackarWarningHandle(string msg, SnackbarAction action = SnackbarAction.None);
-
-        /// <summary>
-        /// SnackbarWarning instance
-        /// </summary>
-        public static SnackarWarningHandle SnackbarWarning;
-
+        #region Snackbar converter
         /// <summary>
         /// used to convert old Bot SnackbarWarnings to new universal warnings
         /// </summary>
@@ -88,13 +54,13 @@ namespace DiscordBot
         {
             int converter = (int)action;
 
-            SnackbarAction convertAction = (SnackbarAction)converter;
+            Util.IO.SnackbarManager.SnackbarAction convertAction = (Util.IO.SnackbarManager.SnackbarAction)converter;
 
-            SnackbarWarning(msg, convertAction);
+            Util.IO.SnackbarManager.SnackbarMessage(msg, convertAction);
         }
       
 
-        #endregion Snackbar
+        #endregion Snackbar converter
 
         #region handle shared data
 

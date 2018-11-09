@@ -73,14 +73,14 @@ namespace DiscordBot.UI
             //disable hotkeys, while editing them
             ToggleHotkey(false);
             //trigger blur effect
-            IO.BlurEffectManager.ToggleBlurEffect(true);
+            Util.IO.BlurEffectManager.ToggleBlurEffect(true);
 
             var popup = new ButtonHotkeyPopup(tag, Application.Current.MainWindow);
             popup.IsOpen = true;
 
             popup.Closed += delegate (object pSender, EventArgs pE)
             {
-                IO.BlurEffectManager.ToggleBlurEffect(false);
+                Util.IO.BlurEffectManager.ToggleBlurEffect(false);
                 ToggleHotkey(true);
             };
         }

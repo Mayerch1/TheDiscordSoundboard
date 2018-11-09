@@ -61,6 +61,28 @@
         <materialDesign:PackIcon x:Key="IconRepeatAll" Kind="Repeat" Height="21" Width="21" />
         <materialDesign:PackIcon x:Key="IconPlay" Kind="Play" />
         <materialDesign:PackIcon x:Key="IconPause" Kind="Pause" />
+        <materialDesign:PackIcon x:Key="IconMagnify" Kind="Magnify" Width ="35" Height="35" VerticalAlignment="Center"/>
+        <materialDesign:PackIcon x:Key="IconPlaylistPlay" Kind="PlaylistPlay" Width ="35" Height="35" VerticalAlignment="Center"/>
+        <materialDesign:PackIcon x:Key="IconYoutubePlay" Kind="YoutubePlay" Width ="35" Height="35" VerticalAlignment="Center"/>
+        <materialDesign:PackIcon x:Key="IconSettings" Kind="Settings" Width ="35" Height="35" VerticalAlignment="Center"/>
+        <materialDesign:PackIcon x:Key="IconInformation" Kind="Information" Width ="35" Height="35" VerticalAlignment="Center"/>
+
+        <Style x:Key="MenuTextBlock" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="20"/>
+            <Setter Property="Margin" Value="10,0,0,0"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+        </Style>
+
+        <Style x:Key="MenuButton" TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
+            <Setter Property="Height" Value="75"/>
+            <Setter Property="Margin" Value="0,0,0,0"/>
+            <Setter Property="Foreground" Value="Black"/>
+            <Setter Property="Background" Value="{StaticResource PrimaryForegroundBrush}"/>
+            <Setter Property="BorderBrush" Value="{StaticResource PrimaryForegroundBrush}"/>
+            <Setter Property="materialDesign:ShadowAssist.ShadowDepth" Value="Depth0"/>
+            <Setter Property="HorizontalContentAlignment" Value="Left"/>
+        </Style>
+
     </Window.Resources>
     <Grid>
         <Grid x:Name="grd_ChannelList" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="0,60,20,0" Width="0" Height="0" Grid.ZIndex="1">
@@ -260,53 +282,18 @@
 
             <Border Width="70" x:Name="brd_LeftPanel" Background="{StaticResource PrimaryForegroundBrush}" DockPanel.Dock="Left">
                 <!--Left Panel-->
-                <StackPanel Orientation="Vertical">
+                <StackPanel Orientation="Vertical" x:Name="stackPanel_Menu">
                     <materialDesign:ColorZone Background="{StaticResource PrimaryForegroundBrush}" VerticalAlignment="Top" materialDesign:ShadowAssist.ShadowEdges="Bottom" materialDesign:ShadowAssist.ShadowDepth="Depth2" Height="55" HorizontalContentAlignment="Left">
 
                         <!--Header Left-->
                         <ToggleButton  Style="{DynamicResource MaterialDesignHamburgerToggleButton}" x:Name="btn_ToggleMenu" Height="50" Margin="14,5,5,5" Foreground="Black" Background="{StaticResource PrimaryForegroundBrush}" BorderBrush="{StaticResource PrimaryForegroundBrush}" materialDesign:ShadowAssist.ShadowDepth="Depth0" VerticalAlignment="Center" Click="btn_ToggleMenu_Click" />
                     </materialDesign:ColorZone>
 
+
                     <Button Height="75" Margin="0,20,0,0" Foreground="Black" Background="{StaticResource PrimaryForegroundBrush}" BorderBrush="{StaticResource PrimaryForegroundBrush}" materialDesign:ShadowAssist.ShadowDepth="Depth0" Click="btn_Sounds_Click"  HorizontalContentAlignment="Left">
                         <StackPanel Orientation="Horizontal">
                             <materialDesign:PackIcon Kind="ArrowRightDropCircleOutline" Height="35" Width="35" VerticalAlignment="Center" />
                             <TextBlock Text="SOUNDS" FontSize="20"  Margin="10,0,0,0" VerticalAlignment="Center" />
-                        </StackPanel>
-                    </Button>
-
-                    <Button Height="75" Margin="0,0,0,0" Foreground="Black" Background="{StaticResource PrimaryForegroundBrush}" BorderBrush="{StaticResource PrimaryForegroundBrush}" materialDesign:ShadowAssist.ShadowDepth="Depth0" Click="btn_Search_Click"  HorizontalContentAlignment="Left">
-                        <StackPanel Orientation="Horizontal">
-                            <materialDesign:PackIcon Kind="Magnify" Height="35" Width="35" VerticalAlignment="Center" />
-                            <TextBlock Text="SEARCH" FontSize="20"  Margin="10,0,0,0" VerticalAlignment="Center" />
-                        </StackPanel>
-                    </Button>
-
-                    <Button Height="75" Margin="0,0,0,0" Foreground="Black" Background="{StaticResource PrimaryForegroundBrush}" BorderBrush="{StaticResource PrimaryForegroundBrush}" materialDesign:ShadowAssist.ShadowDepth="Depth0" Click="btn_Playlist_Click"  HorizontalContentAlignment="Left">
-                        <StackPanel Orientation="Horizontal">
-                            <materialDesign:PackIcon Kind="PlaylistPlay" Height="35" Width="35" VerticalAlignment="Center" />
-                            <TextBlock Text="PLAYLISTS" FontSize="20"  Margin="10,0,0,0" VerticalAlignment="Center" />
-                        </StackPanel>
-                    </Button>
-
-                    <Button Height="75" Margin="0,0,0,0" Foreground="Black" Background="{StaticResource PrimaryForegroundBrush}" BorderBrush="{StaticResource PrimaryForegroundBrush}" materialDesign:ShadowAssist.ShadowDepth="Depth0" Click="btn_Stream_Click"  HorizontalContentAlignment="Left">
-                        <StackPanel Orientation="Horizontal">
-                            <materialDesign:PackIcon Kind="YoutubePlay" Height="35" Width="35" VerticalAlignment="Center" />
-                            <TextBlock Text="STREAM" FontSize="20"  Margin="10,0,0,0" VerticalAlignment="Center" />
-                        </StackPanel>
-                    </Button>
-
-                    <Button Height="75" Margin="0,0,0,0" Foreground="Black" Background="{StaticResource PrimaryForegroundBrush}" BorderBrush="{StaticResource PrimaryForegroundBrush}" materialDesign:ShadowAssist.ShadowDepth="Depth0" Click="btn_Settings_Click" HorizontalContentAlignment="Left">
-
-                        <StackPanel Orientation="Horizontal">
-                            <materialDesign:PackIcon Kind="Settings" Height="35" Width="35" VerticalAlignment="Center" />
-                            <TextBlock Text="SETTINGS" FontSize="20"  Margin="10,0,0,0" VerticalAlignment="Center" />
-                        </StackPanel>
-                    </Button>
-
-                    <Button Height="75" Margin="0,0,0,0" Foreground="Black" Background="{StaticResource PrimaryForegroundBrush}" BorderBrush="{StaticResource PrimaryForegroundBrush}" materialDesign:ShadowAssist.ShadowDepth="Depth0" Click="btn_About_Click"  HorizontalContentAlignment="Left">
-                        <StackPanel Orientation="Horizontal">
-                            <materialDesign:PackIcon Kind="Information" Height="35" Width="35" VerticalAlignment="Center" />
-                            <TextBlock Text="ABOUT" FontSize="20"  Margin="10,0,0,0" VerticalAlignment="Center" />
                         </StackPanel>
                     </Button>
                 </StackPanel>
