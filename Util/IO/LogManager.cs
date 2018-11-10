@@ -10,7 +10,7 @@ namespace Util.IO
 {
     public static class LogManager
     {
-        private static readonly string path = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) +
+        private static string path = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) +
                                               @"\" + DataManagement.PersistentData.defaultFolderName + @"\logs" + @"\";
 
         private static string name;
@@ -19,10 +19,12 @@ namespace Util.IO
 
 
         /// <summary>
-        /// Initialises the logFile for this session
+        /// Initializes the logFile for this session
         /// </summary>
         public static void InitLog()
         {
+            path += DateTime.Today.ToString("yyyy") + @"\" + DateTime.Today.ToString("MMM") + @"\";
+
             if (!Directory.Exists(path))
             {
                 Directory.CreateDirectory(path);
@@ -43,6 +45,11 @@ namespace Util.IO
                 name = timeStr + "-" + ctr + ".log.txt";
                 file = path + name;
             }
+        }
+
+        public static void OpenLog()
+        {
+            System.Diagnostics.Process.Start(file);
         }
 
         /// <summary>

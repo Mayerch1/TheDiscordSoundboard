@@ -22,16 +22,27 @@ namespace DataManagement
         { }
 
 
-
         /// <summary>
         /// adds video to history, respects maxHistoryLen
         /// </summary>
         /// <param name="vid"></param>
         public void addVideo(VideoData vid)
         {
-            videos.Insert(0, vid);
+            //see if video was already played
+            var oldVid = videos.FirstOrDefault(x => x.Url == vid.Url);
+          
 
-            //delete vids over limit
+            //remove video
+            if (oldVid != null)
+            {
+                videos.Remove(oldVid);
+            }
+
+            //insert at top of list
+            videos.Insert(0, vid);
+            
+
+            //delete videos above limit
             while(videos.Count > maxHistoryLen)
                 videos.RemoveAt(videos.Count-1);
         }

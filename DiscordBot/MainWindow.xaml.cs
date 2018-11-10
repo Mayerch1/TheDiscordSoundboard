@@ -576,6 +576,10 @@ namespace DiscordBot
                     handler = Misc.UpdateChecker.OpenUpdatePage;
                     break;
 
+                case SnackbarManager.SnackbarAction.Log:
+                    handler = Util.IO.LogManager.OpenLog;
+                    break;
+
                 default:
                     handler = snackBar_Click;
                     break;
@@ -927,7 +931,7 @@ namespace DiscordBot
                     snackMsg = "Joining to owner permanently";
                 }
 
-                SnackbarManager.SnackbarMessage(snackMsg, SnackbarManager.SnackbarAction.None);
+                SnackbarManager.SnackbarMessage(snackMsg);
             }
             catch
             {

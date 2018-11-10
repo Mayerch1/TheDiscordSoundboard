@@ -24,6 +24,11 @@ namespace Util.IO
             Update,
 
             /// <summary>
+            /// Open the log file, to see more details
+            /// </summary>
+            Log,
+
+            /// <summary>
             /// Do nothing on click
             /// </summary>
             None

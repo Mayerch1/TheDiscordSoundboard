@@ -144,13 +144,13 @@ namespace StreamModule
         private void StartStream(BotData data)
         {
             PlayVideo(data);
-            Data.VideoHistory.addVideo(new VideoData(Url, Title, ImageUri));
+            Data.VideoHistory.addVideo(new VideoData(Url, Title, ImageUri, Duration));
         }
 
         private void QueueStream(BotData data)
         {
             QueueVideo(data);
-            Data.VideoHistory.addVideo(new VideoData(Url, Title, ImageUri));
+            Data.VideoHistory.addVideo(new VideoData(Url, Title, ImageUri, Duration));
         }
 
 
@@ -239,7 +239,7 @@ namespace StreamModule
             if (vid == null)
             {
                 
-                SnackbarManager.SnackbarMessage("Cannot request video.");
+                SnackbarManager.SnackbarMessage("Cannot cache video.");
                 loadProgress.Visibility = Visibility.Collapsed;
                 return;
             }

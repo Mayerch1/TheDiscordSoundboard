@@ -133,7 +133,7 @@ namespace StreamModule
             }
             catch (Exception ex)
             {
-                Util.IO.LogManager.LogException(ex, "StreamModule/YTManager", "Error in requesting Video information", true);
+                Util.IO.LogManager.LogException(ex, "StreamModule/YTManager", "Error in requesting Video information");
                 return null;
             }
 
@@ -194,9 +194,10 @@ namespace StreamModule
                 //make async
                 File.WriteAllBytes(location, await vid.GetBytesAsync());
             }
-            catch (System.Net.Http.HttpRequestException)
+            catch (System.Net.Http.HttpRequestException ex)
             {
-                SnackbarManager.SnackbarMessage("Could not decrypt video");
+                Util.IO.LogManager.LogException(ex, "StreamModule/YTManager", "Failed to decrypt video");
+                SnackbarManager.SnackbarMessage("Could not decrypt video", SnackbarManager.SnackbarAction.Log);
                 return null;
             }
             catch (System.OutOfMemoryException)
@@ -206,7 +207,7 @@ namespace StreamModule
             }
             catch (Exception ex)
             {
-                SnackbarManager.SnackbarMessage("Failed to cache Video");
+                SnackbarManager.SnackbarMessage("Failed to cache Video", SnackbarManager.SnackbarAction.Log);
                 Util.IO.LogManager.LogException(ex, "StreamModule/YTManager", "Failed to cache video");
                 return null;
             }
