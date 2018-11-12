@@ -220,9 +220,6 @@
     <Compile Include="UI\Settings.xaml.cs">
       <DependentUpon>Settings.xaml</DependentUpon>
     </Compile>
-    <Compile Include="UI\UnhandledException.xaml.cs">
-      <DependentUpon>UnhandledException.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Misc\UpdateChecker.cs" />
     <Page Include="UI\About.xaml">
       <SubType>Designer</SubType>
@@ -253,10 +250,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Page Include="UI\Settings.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="UI\UnhandledException.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

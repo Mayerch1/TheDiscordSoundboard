@@ -1,333 +1,206 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <ClassDiagram MajorVersion="1" MinorVersion="1">
-  <Class Name="DicsordBot.About" BaseTypeListCollapsed="true">
-    <Position X="29.25" Y="1" Width="1.5" />
-    <TypeIdentifier>
-      <HashCode>AAAAQAAAAAAAAAAAAAAAAAAAAAAABAAAAAAAAAAAAAA=</HashCode>
-      <FileName>About.xaml.cs</FileName>
-    </TypeIdentifier>
-    <Lollipop Position="0.2" Collapsed="true" />
-  </Class>
-  <Class Name="DicsordBot.App" Collapsed="true">
-    <Position X="0.5" Y="0.5" Width="1.5" />
+  <Class Name="DiscordBot.App" Collapsed="true">
+    <Position X="2.25" Y="0.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>App.xaml.cs</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="DicsordBot.ButtonUI" BaseTypeListCollapsed="true">
-    <Position X="21" Y="0.5" Width="1.5" />
-    <NestedTypes>
-      <Delegate Name="DicsordBot.ButtonUI.InstantButtonClickedHandler" Collapsed="true">
-        <TypeIdentifier>
-          <NewMemberFileName>ButtonUI.xaml.cs</NewMemberFileName>
-        </TypeIdentifier>
-      </Delegate>
-    </NestedTypes>
+  <Class Name="DiscordBot.Handle">
+    <Position X="5.75" Y="8.25" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAACAAAAAAAAgAAAMAAAAAAAgAgBAAAIAAAAgABAAAA=</HashCode>
-      <FileName>ButtonUI.xaml.cs</FileName>
-    </TypeIdentifier>
-    <Lollipop Position="0.2" Collapsed="true" />
-  </Class>
-  <Class Name="DicsordBot.BotData">
-    <Position X="1.25" Y="10" Width="1.5" />
-    <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAAAAAAIAAAAAAAAgAAAAAEAAAAAAA=</HashCode>
-      <FileName>Handle\BotData.cs</FileName>
-    </TypeIdentifier>
-  </Class>
-  <Class Name="DicsordBot.ChannelListManager">
-    <Position X="17.5" Y="0.75" Width="1.5" />
-    <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAYAAAAAAAAIAAAAAAAAAAAQAAAAAA=</HashCode>
-      <FileName>Handle\ChannelListManager.cs</FileName>
-    </TypeIdentifier>
-  </Class>
-  <Class Name="DicsordBot.FileWatcher">
-    <Position X="7" Y="0.5" Width="1.5" />
-    <TypeIdentifier>
-      <HashCode>AAhAAAAAAAAAQAAAAAQAAAAEABAAKAABAAYAAGAAAAA=</HashCode>
-      <FileName>Handle\FileWatcher.cs</FileName>
-    </TypeIdentifier>
-  </Class>
-  <Class Name="DicsordBot.Handle">
-    <Position X="0.5" Y="6.25" Width="1.5" />
-    <TypeIdentifier>
-      <HashCode>AAEAACAAAACAAAAAgQABEAAAAAIAABABQAYAAAABAAA=</HashCode>
-      <FileName>Handle\Handle.cs</FileName>
+      <HashCode>AAEAAAAAAAAAAQAAgAAAAAAAAAIAABAAQAYAAAABAAA=</HashCode>
+      <FileName>Handle.cs</FileName>
     </TypeIdentifier>
     <ShowAsAssociation>
-      <Property Name="Bot" />
-      <Property Name="BotData" />
       <Property Name="Data" />
     </ShowAsAssociation>
   </Class>
-  <Class Name="DicsordBot.HotkeyManager">
-    <Position X="5.25" Y="0.5" Width="1.5" />
+  <Class Name="DiscordBot.MainWindow" BaseTypeListCollapsed="true">
+    <Position X="9.25" Y="0.5" Width="1.5" />
     <NestedTypes>
-      <Delegate Name="DicsordBot.HotkeyManager.RegisterdHotkeyHandle" Collapsed="true">
-        <TypeIdentifier>
-          <NewMemberFileName>Handle\HotkeyManager.cs</NewMemberFileName>
-        </TypeIdentifier>
-      </Delegate>
-    </NestedTypes>
-    <TypeIdentifier>
-      <HashCode>AAAAEAAAAEADAAAAAAAACAAAAAAAAAAAAQIAAAAAKAA=</HashCode>
-      <FileName>Handle\HotkeyManager.cs</FileName>
-    </TypeIdentifier>
-  </Class>
-  <Class Name="DicsordBot.UpdateChecker">
-    <Position X="8.75" Y="0.5" Width="1.5" />
-    <TypeIdentifier>
-      <HashCode>AAIAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAAAAAA=</HashCode>
-      <FileName>Handle\UpdateChecker.cs</FileName>
-    </TypeIdentifier>
-  </Class>
-  <Class Name="DicsordBot.Hint" BaseTypeListCollapsed="true">
-    <Position X="29.25" Y="2.75" Width="1.5" />
-    <TypeIdentifier>
-      <HashCode>AAAAABAIAAAQAAAAIAAAAAAAgAIAAAAAQAgAAEAAAAA=</HashCode>
-      <FileName>Hint.xaml.cs</FileName>
-    </TypeIdentifier>
-    <Lollipop Position="0.2" Collapsed="true" />
-  </Class>
-  <Class Name="DicsordBot.MainWindow" BaseTypeListCollapsed="true">
-    <Position X="19.25" Y="0.5" Width="1.5" />
-    <NestedTypes>
-      <Enum Name="DicsordBot.MainWindow.LoopState" Collapsed="true">
+      <Enum Name="DiscordBot.MainWindow.LoopState" Collapsed="true">
         <TypeIdentifier>
           <NewMemberFileName>MainWindow.xaml.cs</NewMemberFileName>
         </TypeIdentifier>
       </Enum>
     </NestedTypes>
     <TypeIdentifier>
-      <HashCode>RQAAEJFQMIAFAoUgYBABACIQ4AACEQEEARs0qAEAgAk=</HashCode>
+      <HashCode>QYAiENnQMIADAoUg8ZABAGIx4ABCFQEFARs06EEIgEk=</HashCode>
       <FileName>MainWindow.xaml.cs</FileName>
     </TypeIdentifier>
     <Lollipop Position="0.2" Collapsed="true" />
   </Class>
-  <Class Name="DicsordBot.PlaylistMode" BaseTypeListCollapsed="true">
-    <Position X="22.75" Y="5" Width="1.5" />
+  <Class Name="DiscordBot.OSInterop">
+    <Position X="4" Y="8.25" Width="1.5" />
     <NestedTypes>
-      <Delegate Name="DicsordBot.PlaylistMode.PlaylistItemPlayHandler" Collapsed="true">
+      <Struct Name="DiscordBot.OSInterop.RECT" Collapsed="true">
         <TypeIdentifier>
-          <NewMemberFileName>PlaylistMode.xaml.cs</NewMemberFileName>
+          <NewMemberFileName>OSInterop.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Struct>
+      <Class Name="DiscordBot.OSInterop.MONITORINFOEX" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>OSInterop.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Class>
+    </NestedTypes>
+    <TypeIdentifier>
+      <HashCode>AAQAAAAAAAABAAAAAAAAIAAAAAAAAAAAAAQAAgAAAAA=</HashCode>
+      <FileName>OSInterop.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DiscordBot.WPFExtensionMethods">
+    <Position X="0.5" Y="8.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAAAA=</HashCode>
+      <FileName>OSInterop.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DiscordBot.IO.HotkeyManager">
+    <Position X="7.5" Y="5" Width="1.5" />
+    <NestedTypes>
+      <Delegate Name="DiscordBot.IO.HotkeyManager.RegisteredHotkeyHandle" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>IO\HotkeyManager.cs</NewMemberFileName>
         </TypeIdentifier>
       </Delegate>
     </NestedTypes>
     <TypeIdentifier>
-      <HashCode>AAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAAAAAAAAAA=</HashCode>
-      <FileName>PlaylistMode.xaml.cs</FileName>
+      <HashCode>AAAAEAAAAEADAAAAAAAACAAAAAAgAAAAAQIQAAAAKAA=</HashCode>
+      <FileName>IO\HotkeyManager.cs</FileName>
     </TypeIdentifier>
-    <Lollipop Position="0.2" Collapsed="true" />
   </Class>
-  <Class Name="DicsordBot.SearchMode" BaseTypeListCollapsed="true">
-    <Position X="22.75" Y="0.5" Width="1.5" />
-    <NestedTypes>
-      <Delegate Name="DicsordBot.SearchMode.ListItemPlayHandler" Collapsed="true">
-        <TypeIdentifier>
-          <NewMemberFileName>SearchMode.xaml.cs</NewMemberFileName>
-        </TypeIdentifier>
-      </Delegate>
-    </NestedTypes>
+  <Class Name="DiscordBot.Misc.BotMisc">
+    <Position X="4" Y="0.5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>ABAAAABBAAAAAACAIEAAAAAAgAAAIAEAAiAAAAAAAAA=</HashCode>
-      <FileName>SearchMode.xaml.cs</FileName>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAIAAAAAAAAgAAAAAEAAAAAAA=</HashCode>
+      <FileName>Misc\BotMisc.cs</FileName>
     </TypeIdentifier>
-    <Lollipop Position="0.2" Collapsed="true" />
   </Class>
-  <Class Name="DicsordBot.Settings" BaseTypeListCollapsed="true">
-    <Position X="25" Y="0.75" Width="1.5" />
+  <Class Name="DiscordBot.Misc.ChannelListManager">
+    <Position X="4" Y="2.25" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAEAAAAAABAAAAAAAAAAAAAAAAAAAABA=</HashCode>
-      <FileName>Settings.xaml.cs</FileName>
+      <HashCode>AAAAAAAACAAAAAAYAAAAAAAAIAAAAAAAAAAAQAAAAAA=</HashCode>
+      <FileName>Misc\ChannelListManager.cs</FileName>
     </TypeIdentifier>
-    <Lollipop Position="0.2" Collapsed="true" />
   </Class>
-  <Class Name="DicsordBot.UnhandledException" BaseTypeListCollapsed="true">
-    <Position X="27.25" Y="0.75" Width="1.5" />
+  <Class Name="DiscordBot.Misc.PlaylistManager">
+    <Position X="2.25" Y="8.25" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AIACAIAAAAAAAiASIAIoAAgAjAAAAAAAQEAAQEBABkA=</HashCode>
-      <FileName>UnhandledException.xaml.cs</FileName>
+      <HashCode>AAAQAAAQAAIEAAgAAAAAAAAEAAAAAAgAAQAAAAAIAAA=</HashCode>
+      <FileName>Misc\PlaylistManager.cs</FileName>
     </TypeIdentifier>
-    <Lollipop Position="0.2" Collapsed="true" />
   </Class>
-  <Class Name="DicsordBot.MyStack">
-    <Position X="27.25" Y="7.25" Width="1.5" />
+  <Class Name="DiscordBot.Misc.UpdateChecker">
+    <Position X="11" Y="4" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAgAAAAAAAAAAAAAAAAAA=</HashCode>
-      <FileName>UnhandledException.xaml.cs</FileName>
+      <HashCode>AAIAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Misc\UpdateChecker.cs</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="DicsordBot.Bot.Bot">
-    <Position X="4.75" Y="7" Width="1.5" />
-    <NestedTypes>
-      <Delegate Name="DicsordBot.Bot.Bot.StreamStateHandler" Collapsed="true">
-        <TypeIdentifier>
-          <NewMemberFileName>Bot\Bot.cs</NewMemberFileName>
-        </TypeIdentifier>
-      </Delegate>
-      <Delegate Name="DicsordBot.Bot.Bot.EarrapeStateHandler" Collapsed="true">
-        <TypeIdentifier>
-          <NewMemberFileName>Bot\Bot.cs</NewMemberFileName>
-        </TypeIdentifier>
-      </Delegate>
-      <Delegate Name="DicsordBot.Bot.Bot.LoopStateHandler" Collapsed="true">
-        <TypeIdentifier>
-          <NewMemberFileName>Bot\Bot.cs</NewMemberFileName>
-        </TypeIdentifier>
-      </Delegate>
-    </NestedTypes>
-    <TypeIdentifier>
-      <HashCode>ASAAADwAgA0MEAkACQAiEBIAQiAAAMAAGRIRwRRAgAQ=</HashCode>
-      <FileName>Bot\Bot.cs</FileName>
-    </TypeIdentifier>
-  </Class>
-  <Class Name="DicsordBot.Bot.BotException">
-    <Position X="3" Y="13" Width="1.5" />
-    <NestedTypes>
-      <Enum Name="DicsordBot.Bot.BotException.type" Collapsed="true">
-        <TypeIdentifier>
-          <NewMemberFileName>Bot\BotException.cs</NewMemberFileName>
-        </TypeIdentifier>
-      </Enum>
-      <Enum Name="DicsordBot.Bot.BotException.connectionError" Collapsed="true">
-        <TypeIdentifier>
-          <NewMemberFileName>Bot\BotException.cs</NewMemberFileName>
-        </TypeIdentifier>
-      </Enum>
-    </NestedTypes>
-    <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAAAAAAABAAAAAAAAAAAQAAAAAAAAA=</HashCode>
-      <FileName>Bot\BotException.cs</FileName>
-    </TypeIdentifier>
-  </Class>
-  <Class Name="DicsordBot.Bot.BotHandle">
-    <Position X="3" Y="7" Width="1.5" />
-    <NestedTypes>
-      <Delegate Name="DicsordBot.Bot.BotHandle.FileWarningThrown" Collapsed="true">
-        <TypeIdentifier>
-          <NewMemberFileName>Bot\BotHandler.cs</NewMemberFileName>
-        </TypeIdentifier>
-      </Delegate>
-      <Delegate Name="DicsordBot.Bot.BotHandle.TokenWarningThrown" Collapsed="true">
-        <TypeIdentifier>
-          <NewMemberFileName>Bot\BotHandler.cs</NewMemberFileName>
-        </TypeIdentifier>
-      </Delegate>
-      <Delegate Name="DicsordBot.Bot.BotHandle.ChannelWarningThrown" Collapsed="true">
-        <TypeIdentifier>
-          <NewMemberFileName>Bot\BotHandler.cs</NewMemberFileName>
-        </TypeIdentifier>
-      </Delegate>
-      <Delegate Name="DicsordBot.Bot.BotHandle.ClientWarningThrown" Collapsed="true">
-        <TypeIdentifier>
-          <NewMemberFileName>Bot\BotHandler.cs</NewMemberFileName>
-        </TypeIdentifier>
-      </Delegate>
-      <Enum Name="DicsordBot.Bot.BotHandle.SnackBarAction" Collapsed="true">
-        <TypeIdentifier>
-          <NewMemberFileName>Bot\BotHandler.cs</NewMemberFileName>
-        </TypeIdentifier>
-      </Enum>
-      <Delegate Name="DicsordBot.Bot.BotHandle.SnackBarWarningThrown" Collapsed="true">
-        <TypeIdentifier>
-          <NewMemberFileName>Bot\BotHandler.cs</NewMemberFileName>
-        </TypeIdentifier>
-      </Delegate>
-    </NestedTypes>
-    <TypeIdentifier>
-      <HashCode>AGAAAAAAAAEAAAgAhAAQEBIAAAAAEAAEABYQQQBBAAA=</HashCode>
-      <FileName>Bot\BotHandler.cs</FileName>
-    </TypeIdentifier>
-  </Class>
-  <Class Name="DicsordBot.Data.ButtonData" BaseTypeListCollapsed="true">
-    <Position X="15.75" Y="6.25" Width="1.5" />
-    <TypeIdentifier>
-      <HashCode>AAAAAIAAAAAAgAEAIIABAAQAgAAFAAACBQBAAAAEAAA=</HashCode>
-      <FileName>Data\ButtonData.cs</FileName>
-    </TypeIdentifier>
-    <Lollipop Position="0.2" Collapsed="true" />
-  </Class>
-  <Class Name="DicsordBot.Data.FileData" BaseTypeListCollapsed="true">
-    <Position X="8.75" Y="6" Width="1.5" />
-    <TypeIdentifier>
-      <HashCode>AAACAAACAAAAAAIA4EICAIRCgAAEAAAIAAAACAAAAgA=</HashCode>
-      <FileName>Data\FileData.cs</FileName>
-    </TypeIdentifier>
-    <Lollipop Position="0.2" Collapsed="true" />
-  </Class>
-  <Class Name="DicsordBot.Data.Hotkey">
-    <Position X="11" Y="12.75" Width="1.5" />
-    <TypeIdentifier>
-      <HashCode>QAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACAAAAAQA=</HashCode>
-      <FileName>Data\Hotkey.cs</FileName>
-    </TypeIdentifier>
-  </Class>
-  <Class Name="DicsordBot.Data.PersistentData" BaseTypeListCollapsed="true">
-    <Position X="13.5" Y="6.25" Width="1.5" />
-    <NestedTypes>
-      <Delegate Name="DicsordBot.Data.PersistentData.ClientNameHandler" Collapsed="true">
-        <TypeIdentifier>
-          <NewMemberFileName>Data\Persistent.cs</NewMemberFileName>
-        </TypeIdentifier>
-      </Delegate>
-    </NestedTypes>
-    <TypeIdentifier>
-      <HashCode>QEEASGgAgAAgAAAw4gYAAAgGhgBAABQwwoYAgACHhEA=</HashCode>
-      <FileName>Data\Persistent.cs</FileName>
-    </TypeIdentifier>
-    <ShowAsCollectionAssociation>
-      <Property Name="BtnList" />
-      <Property Name="HotkeyList" />
-      <Property Name="PlayListIndex" />
-    </ShowAsCollectionAssociation>
-    <Lollipop Position="0.2" Collapsed="true" />
-  </Class>
-  <Class Name="DicsordBot.Data.Playlist" BaseTypeListCollapsed="true">
-    <Position X="11" Y="6.25" Width="1.5" />
-    <TypeIdentifier>
-      <HashCode>AEACAAAAAEAAAABAIAAAAAQAgAAEAAAAAAAAAAAAAgA=</HashCode>
-      <FileName>Data\Playlist.cs</FileName>
-    </TypeIdentifier>
-    <ShowAsCollectionAssociation>
-      <Property Name="Tracks" />
-    </ShowAsCollectionAssociation>
-    <Lollipop Position="0.2" Collapsed="true" />
-  </Class>
-  <Class Name="DicsordBot.Data.RuntimeData" BaseTypeListCollapsed="true">
-    <Position X="6.75" Y="6.25" Width="1.5" />
-    <TypeIdentifier>
-      <HashCode>EAgWAAAAAAMAIAIAYAIAAAAAgEAEEABQgIAIg6AABIA=</HashCode>
-      <FileName>Data\RuntimeData.cs</FileName>
-    </TypeIdentifier>
-    <ShowAsAssociation>
-      <Property Name="Persistent" />
-    </ShowAsAssociation>
-    <ShowAsCollectionAssociation>
-      <Property Name="Files" />
-      <Property Name="Playlists" />
-    </ShowAsCollectionAssociation>
-    <Lollipop Position="0.2" Collapsed="true" />
-  </Class>
-  <Class Name="DicsordBot.Properties.Resources" Collapsed="true">
-    <Position X="0.5" Y="2.5" Width="1.5" />
+  <Class Name="DiscordBot.Properties.Resources" Collapsed="true">
+    <Position X="0.5" Y="9.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAABEAAAAQAAAAAAAAAAAAAAAIA=</HashCode>
     </TypeIdentifier>
   </Class>
-  <Class Name="DicsordBot.Properties.Settings" Collapsed="true">
+  <Class Name="DiscordBot.Properties.Settings">
     <Position X="0.5" Y="1.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAIAAAAAIAAAAAABAAAAAAAAAAAAAAA=</HashCode>
     </TypeIdentifier>
   </Class>
-  <Struct Name="DicsordBot.MyTreeItem">
-    <Position X="17.5" Y="3" Width="1.5" />
+  <Class Name="DiscordBot.UI.About" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="0.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAQAAAAAAAAAAAAAAAAAAAAAAABAAAAAAAAAAAAAA=</HashCode>
+      <FileName>UI\About.xaml.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="DiscordBot.UI.ButtonHotkeyPopup" BaseTypeListCollapsed="true">
+    <Position X="5.75" Y="0.5" Width="1.5" />
+    <NestedTypes>
+      <Struct Name="DiscordBot.UI.ButtonHotkeyPopup.RECT" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>UI\ButtonHotkeyPopup.xaml.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Struct>
+    </NestedTypes>
+    <TypeIdentifier>
+      <HashCode>YAACAAAAgIAICICgAAAEQMAAAAAwAAIAAAICAAQAAQA=</HashCode>
+      <FileName>UI\ButtonHotkeyPopup.xaml.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="DiscordBot.UI.ButtonUI" BaseTypeListCollapsed="true">
+    <Position X="7.5" Y="0.5" Width="1.5" />
+    <NestedTypes>
+      <Delegate Name="DiscordBot.UI.ButtonUI.InstantButtonClickedHandler" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>UI\ButtonUI.xaml.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Delegate>
+      <Delegate Name="DiscordBot.UI.ButtonUI.ToggleHotkeyHandler" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>UI\ButtonUI.xaml.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Delegate>
+    </NestedTypes>
+    <TypeIdentifier>
+      <HashCode>AAACAAAAAAAAAAAAIAAAAAAAkAgBAAQIAAAAgABAAAA=</HashCode>
+      <FileName>UI\ButtonUI.xaml.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="DiscordBot.UI.Settings" BaseTypeListCollapsed="true">
+    <Position X="11" Y="1" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAQAAEAAIAAAASAAAAAAAAAAAAAAAAAAAAI=</HashCode>
+      <FileName>UI\Settings.xaml.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="DiscordBot.UI.UnhandledException" BaseTypeListCollapsed="true">
+    <Position X="13" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AIACAIAAAAAAAiASIAIoAAgAjAAAAAAAQEAAQEBABkA=</HashCode>
+      <FileName>UI\UnhandledException.xaml.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="DiscordBot.UI.MyStack">
+    <Position X="2.25" Y="6" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAgAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>UI\UnhandledException.xaml.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="DataManagement.RuntimeData">
+    <Position X="4.25" Y="11.5" Width="1.5" />
+    <TypeIdentifier />
+    <ShowAsAssociation>
+      <Property Name="Persistent" />
+    </ShowAsAssociation>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="DataManagement.PersistentData">
+    <Position X="2.25" Y="11.75" Width="1.5" />
+    <NestedTypes>
+      <Delegate Name="DataManagement.PersistentData.ClientNameHandler" Collapsed="true">
+        <TypeIdentifier />
+      </Delegate>
+    </NestedTypes>
+    <TypeIdentifier />
+    <Lollipop Position="0.2" />
+  </Class>
+  <Struct Name="DiscordBot.Misc.MyTreeItem">
+    <Position X="0.5" Y="6" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAEAAAAAAAAAAAEAAAAAAAAAAAAAgA=</HashCode>
-      <FileName>Handle\ChannelListManager.cs</FileName>
+      <FileName>Misc\ChannelListManager.cs</FileName>
     </TypeIdentifier>
   </Struct>
   <Font Name="Segoe UI" Size="9" />
