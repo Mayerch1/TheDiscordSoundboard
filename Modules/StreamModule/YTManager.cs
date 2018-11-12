@@ -128,6 +128,8 @@ namespace StreamModule
                 //get audios, only aac
                 var audios = videos.Where(v => v.AudioFormat != AudioFormat.Unknown && v.AudioFormat != AudioFormat.Vorbis).ToList();
 
+                
+
                 //save audio into Video, only with audio
                 mpAudio = audios.FirstOrDefault(x => x.AudioBitrate > 0);
             }
@@ -136,6 +138,9 @@ namespace StreamModule
                 Util.IO.LogManager.LogException(ex, "StreamModule/YTManager", "Error in requesting Video information");
                 return null;
             }
+
+
+
 
             return mpAudio;
         }

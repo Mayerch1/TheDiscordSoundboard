@@ -83,9 +83,7 @@ namespace DiscordBot.UI
             //set button number, not! the Id
             box_ButtonInfo.Text += "(Nr. " + (Btn.ID + 1) + ")";
 
-            box_Hotkey.Text = KeyInterop.KeyFromVirtualKey((int)vk_code).ToString();
-
-            box_Hotkey.Focus();
+            box_Hotkey.Text = KeyInterop.KeyFromVirtualKey((int)vk_code).ToString();           
 
             //set modiifier checkbox
             setModifierCheckBoxes(mod_code);

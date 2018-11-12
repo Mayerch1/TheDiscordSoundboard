@@ -19,9 +19,6 @@
     </UserControl.Resources>
 
 
-
-
-
     <Grid>
         <ScrollViewer Background="White">
 

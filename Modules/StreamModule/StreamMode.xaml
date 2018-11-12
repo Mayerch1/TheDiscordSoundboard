@@ -27,6 +27,40 @@
             <Setter Property="materialDesign:ShadowAssist.ShadowEdges" Value="All" />
         </Style>
 
+        <!-- Template for recommendation and history listBox -->
+        <DataTemplate x:Key="VideoListTemplate">
+            <DockPanel Tag="{Binding Url}"
+                       MouseLeftButtonDown="list_History_MouseLeftButtonDown">
+
+                <DockPanel.ContextMenu>
+                    <ContextMenu>
+                        <MenuItem Header="Add to Queue"
+                                  Tag="{Binding Url}"
+                                  Click="context_addQueue_Click" />
+                    </ContextMenu>
+                </DockPanel.ContextMenu>
+
+
+                <Grid>
+                    <Image DockPanel.Dock="Left"
+                           Source="{Binding ImageUrl}"
+                           Width="64" Height="64" />
+                    <Label Content="{Binding Duration}"
+                           VerticalAlignment="Bottom"
+                           HorizontalAlignment="Right"
+                           Background="Black"
+                           Foreground="White"
+                           FontSize="9"
+                           Opacity="0.8" />
+                </Grid>
+
+                <Label DockPanel.Dock="Right"
+                       Content="{Binding Title}" />
+
+
+            </DockPanel>
+        </DataTemplate>
+        <!-- end of template for recommendations and history listBox -->
     </UserControl.Resources>
 
 
@@ -99,48 +133,21 @@
                     </materialDesign:ColorZone>
 
 
-                    <materialDesign:ColorZone Style="{StaticResource FloatingSection}" DockPanel.Dock="Bottom" VerticalAlignment="Stretch">
-                        <ScrollViewer PreviewMouseWheel="Recommended_OnPreviewMouseWheel">
-                            <ListBox
-                            DataContext="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}"
-                            ItemsSource="{Binding Suggestions}"
-                            HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch">
-                                <ListBox.ItemTemplate>
-                                    <DataTemplate>
-                                        <DockPanel Tag="{Binding Url}"
-                                               MouseLeftButtonDown="list_History_MouseLeftButtonDown">
-
-                                            <DockPanel.ContextMenu>
-                                                <ContextMenu>
-                                                    <MenuItem Header="Add to Queue"
-                                                          Tag="{Binding Url}"
-                                                          Click="context_addQueue_Click" />
-                                                </ContextMenu>
-                                            </DockPanel.ContextMenu>
+                    <materialDesign:ColorZone Style="{StaticResource FloatingSection}" DockPanel.Dock="Bottom"
+                                              VerticalAlignment="Stretch">
+                        <DockPanel LastChildFill="True">
+                            <TextBlock Text="Recommendations:" FontSize="15" Margin="5" DockPanel.Dock="Top" />
 
 
-                                            <Grid>
-                                                <Image DockPanel.Dock="Left"
-                                                   Source="{Binding ImageUrl}"
-                                                   Width="64" Height="64" />
-                                                <Label Content="{Binding Duration}"
-                                                   VerticalAlignment="Bottom"
-                                                   HorizontalAlignment="Right"
-                                                   Background="Black"
-                                                   Foreground="White"
-                                                   FontSize="9"
-                                                   Opacity="0.8" />
-                                            </Grid>
+                            <ScrollViewer PreviewMouseWheel="Recommended_OnPreviewMouseWheel">
+                                <ListBox
+                                    DataContext="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}"
+                                    ItemsSource="{Binding Suggestions}"
+                                    HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch"
+                                    ItemTemplate="{StaticResource VideoListTemplate}" />
 
-                                            <Label DockPanel.Dock="Right"
-                                               Content="{Binding Title}" />
-
-
-                                        </DockPanel>
-                                    </DataTemplate>
-                                </ListBox.ItemTemplate>
-                            </ListBox>
-                        </ScrollViewer>
+                            </ScrollViewer>
+                        </DockPanel>
                     </materialDesign:ColorZone>
                 </DockPanel>
             </Grid>
@@ -148,46 +155,14 @@
             <Grid Grid.Column="1">
                 <!--history-->
                 <materialDesign:ColorZone Style="{StaticResource FloatingSection}">
-                    <DockPanel>
+                    <DockPanel LastChildFill="True">
                         <TextBlock Text="History:" FontSize="15" Margin="5" DockPanel.Dock="Top" />
 
                         <ScrollViewer PreviewMouseWheel="Recommended_OnPreviewMouseWheel">
-                        <ListBox x:Name="list_History" ItemsSource="{Binding Videos}"
-                                 HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch">
-                            <ListBox.ItemTemplate>
-                                <DataTemplate>
-                                    <DockPanel Tag="{Binding Url}"
-                                               MouseLeftButtonDown="list_History_MouseLeftButtonDown" Margin="5">
-
-                                        <DockPanel.ContextMenu>
-                                            <ContextMenu>
-                                                <MenuItem Header="Add to Queue"
-                                                          Tag="{Binding Url}"
-                                                          Click="context_addQueue_Click" />
-                                            </ContextMenu>
-                                        </DockPanel.ContextMenu>
-
-
-                                        <Grid>
-                                            <Image DockPanel.Dock="Left"
-                                                   Source="{Binding ImageUrl}"
-                                                   Width="64" Height="64" />
-                                            <Label Content="{Binding Duration}"
-                                                   VerticalAlignment="Bottom"
-                                                   HorizontalAlignment="Right"
-                                                   Background="Black"
-                                                   Foreground="White"
-                                                   FontSize="9"
-                                                   Opacity="0.8" />
-                                        </Grid>
-
-                                        <Label DockPanel.Dock="Right"
-                                               Content="{Binding Title}" />
-                                    </DockPanel>
-                                </DataTemplate>
-                            </ListBox.ItemTemplate>
-                        </ListBox>
-                            </ScrollViewer>
+                            <ListBox x:Name="list_History" ItemsSource="{Binding Videos}"
+                                     HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch"
+                                     ItemTemplate="{StaticResource VideoListTemplate}" />
+                        </ScrollViewer>
                     </DockPanel>
                 </materialDesign:ColorZone>
             </Grid>
