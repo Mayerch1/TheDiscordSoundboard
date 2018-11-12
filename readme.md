@@ -1,5 +1,5 @@
 
-<img src="DicsordBot/res/speaker.png" alt="drawing" style="width:100px;"/>
+<img src="DiscordBot/res/speaker.png" alt="drawing" style="width:100px;"/>
 
 
 # Welcome to TDS <br> 
@@ -14,12 +14,6 @@ this is a small Discord-Soundboard for streaming Sounds/Music into Discord - voi
 In contrast to a 'normal' Soundbot, this application hosts a bot on your local machine for the duration of the playback.
 This brings the advantage of an guaranteed availability of the service, combined with the abillity to stream local files from your Harddrive.
 <br>
-
->Developer Information: <br/>
->All source code in the folders 'Bot' and 'Data' is able to run as standalone (per folder).
->The source code in 'Handle' requires both, 'Bot' and 'Data' -source to run unmodified.
->
->For this reason, a code documentation was added for those sectors
 
 ---
 

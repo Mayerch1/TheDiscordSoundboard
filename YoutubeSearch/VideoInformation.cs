@@ -15,13 +15,18 @@
 
 namespace YoutubeSearch
 {
+    /// <summary>
+    /// Information storage for search result of <see cref="VideoSearch"/>
+    /// </summary>
     public class VideoInformation
     {
+#pragma warning disable CS1591
         public string Title { get; set; }
         public string Author { get; set; }
         public string Description { get; set; }
         public string Duration { get; set; }
         public string Url { get; set; }
         public string Thumbnail { get; set; }
+#pragma warning restore CS1591
     }
 }

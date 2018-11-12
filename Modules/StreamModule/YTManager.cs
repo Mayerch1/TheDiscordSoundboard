@@ -200,8 +200,9 @@ namespace StreamModule
                 SnackbarManager.SnackbarMessage("Could not decrypt video", SnackbarManager.SnackbarAction.Log);
                 return null;
             }
-            catch (System.OutOfMemoryException)
+            catch (System.OutOfMemoryException ex)
             {
+                Util.IO.LogManager.LogException(ex, "StreamModule/YTManager", "Tried to cache video to disk");
                 SnackbarManager.SnackbarMessage("File too large");
                 Console.WriteLine(@"File " + name + @" is to large to save");
             }

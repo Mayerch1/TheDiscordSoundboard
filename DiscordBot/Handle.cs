@@ -31,7 +31,7 @@ namespace DiscordBot
         #region events
 
         /// <summary>
-        /// event method, for changed clientname, triggers update of user id
+        /// event method, for changed client name, triggers update of user id
         /// </summary>
         /// <param name="newName">
         /// new ClientName 'Name#1234'
@@ -44,23 +44,7 @@ namespace DiscordBot
                 Data.Persistent.ClientId = id;
         }
 
-        #endregion events
-
-        #region Snackbar converter
-        /// <summary>
-        /// used to convert old Bot SnackbarWarnings to new universal warnings
-        /// </summary>
-        public static void PassBotSnackbarWarning(string msg, BotHandle.SnackbarAction action)
-        {
-            int converter = (int)action;
-
-            Util.IO.SnackbarManager.SnackbarAction convertAction = (Util.IO.SnackbarManager.SnackbarAction)converter;
-
-            Util.IO.SnackbarManager.SnackbarMessage(msg, convertAction);
-        }
-      
-
-        #endregion Snackbar converter
+        #endregion events   
 
         #region handle shared data
 

@@ -71,23 +71,6 @@ namespace DiscordBot.Misc
             }
 
             return 0;
-        }
-
-        /// <summary>
-        /// converts ButtonData to BotData, needs to be as sub-routine bc of different namespaces
-        /// </summary>
-        /// <param name="btn">ButtonData objcet to convert</param>
-        /// <returns>BotData object</returns>
-        public DataManagement.BotData getBotData(DataManagement.ButtonData btn)
-        {
-            return new DataManagement.BotData()
-            {
-                name = btn.Name,
-                filePath = btn.File,
-                isEarrape = btn.IsEarrape,
-                isLoop = btn.IsLoop,
-                id = btn.ID,
-            };
-        }
+        }      
     }
 }

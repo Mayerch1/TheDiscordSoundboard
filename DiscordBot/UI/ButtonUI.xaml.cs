@@ -14,7 +14,7 @@ namespace DiscordBot.UI
     {
 #pragma warning disable CS1591
 
-        public delegate void InstantButtonClickedHandler(int btnListIndex);
+        public delegate void InstantButtonClickedHandler(int btnListIndex, bool isInstant);
 
         public InstantButtonClickedHandler InstantButtonClicked;
 
@@ -36,12 +36,22 @@ namespace DiscordBot.UI
         {
             //event is handled in MainWindow
 
-            Button btn = (Button)sender;
-
-            int index = (int)btn.Tag;
-
-            InstantButtonClicked(index);
+            if (sender is FrameworkElement fe)
+            {
+                if (fe.Tag != null)
+                    InstantButtonClicked((int)fe.Tag, true);
+            }
         }
+
+        private void btn_Queue_Click(object sender, RoutedEventArgs e)
+        {
+            if (sender is FrameworkElement fe)
+            {
+                if(fe.Tag != null)               
+                InstantButtonClicked((int)fe.Tag , false);
+            }
+        }
+
 
         private void btn_FileChooser_Click(object sender, RoutedEventArgs e)
         {

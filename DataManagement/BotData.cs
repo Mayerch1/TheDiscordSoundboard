@@ -13,17 +13,12 @@ namespace DataManagement
         {
         }
 
-        public BotData(string _name)
+        public BotData(string name, string filePath="")
         {
-            name = _name;
+            this.name = name;
+            this.filePath = filePath;
         }
-
-        public BotData(string _name, string _filePath)
-        {
-            name = _name;
-            filePath = _filePath;
-        }
-
+     
         public BotData(ButtonData btn)
         {
             name = btn.Name;

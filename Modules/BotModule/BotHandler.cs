@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Discord.WebSocket;
 using DataManagement;
+using Util.IO;
 
 namespace BotModule
 {
@@ -23,30 +24,7 @@ namespace BotModule
         {
         }
 
-        #region event handlers
-
-#pragma warning disable CS1591
-
-        /// <summary>
-        ///  SnackBarAction enum, passed into delegate for informing eventhandler on requested information
-        /// </summary>
-        public enum SnackbarAction { Settings, Update, None };
-
-#pragma warning restore CS1591
-
-        /// <summary>
-        /// SnackBarWarningThrown delegate
-        /// </summary>
-        /// <param name="msg">Error description</param>
-        /// <param name="action">Enum for triggered action in event Handler</param>
-        public delegate void SnackbarWarningThrown(string msg, SnackbarAction action = SnackbarAction.None);
-
-        /// <summary>
-        /// SnackBarWarningThrown field
-        /// </summary>
-        public SnackbarWarningThrown SnackbarWarning;
-
-        #endregion event handlers
+   
 
         #region properties
 
@@ -175,7 +153,7 @@ namespace BotModule
             }
             catch (Exception)
             {
-                SnackbarWarning("Could not set game status");
+                Util.IO.SnackbarManager.SnackbarMessage("Could not set game status");
                 Console.WriteLine("GameState Exception");
                 return false;
             }
@@ -239,7 +217,7 @@ namespace BotModule
 
                 if (client == null)
                 {
-                    SnackbarWarning("Cannot find specified owner.", SnackbarAction.None);
+                    Util.IO.SnackbarManager.SnackbarMessage("Cannot find specified owner.");
                     return false;
                 }
             }
@@ -290,47 +268,47 @@ namespace BotModule
             switch (ex)
             {
                 case System.IO.DirectoryNotFoundException iEx:
-                    SnackbarWarning(btnStr + " could not be found.");
+                    SnackbarManager.SnackbarMessage(btnStr + " could not be found.");
                     break;
 
                 case System.IO.FileNotFoundException iEx:
-                    SnackbarWarning(btnStr + " could not be found.");
+                    SnackbarManager.SnackbarMessage(btnStr + " could not be found.");
                     break;
 
                 case System.IO.InvalidDataException iEx:
-                    SnackbarWarning(btnStr + " is damaged.");
+                    SnackbarManager.SnackbarMessage(btnStr + " is damaged.");
                     break;
 
                 case System.Runtime.InteropServices.COMException iEx:
-                    SnackbarWarning(btnStr + " is not supported.");
+                    SnackbarManager.SnackbarMessage(btnStr + " is not supported.");
                     break;
 
                 case System.TimeoutException iEx:
-                    SnackbarWarning("Cannot join channel. Check permission");
+                    SnackbarManager.SnackbarMessage("Cannot join channel. Check permission");
                     Util.IO.LogManager.LogException(iEx, location, "No permission to join channel");
                     break;
 
                 case TaskCanceledException iEx:
-                    SnackbarWarning("Task cancelled");
+                    SnackbarManager.SnackbarMessage("Task cancelled");
                     break;
 
                 case System.DllNotFoundException iEx:
-                    SnackbarWarning("Missing dll");
+                    SnackbarManager.SnackbarMessage("Missing dll");
                     Util.IO.LogManager.LogException(iEx, location, "Missing dll", true);
                     break;
 
                 case Discord.Net.HttpException iEx:
-                    SnackbarWarning("Invalid Token", SnackbarAction.Settings);
+                    SnackbarManager.SnackbarMessage("Invalid Token", SnackbarManager.SnackbarAction.Settings);
                     Util.IO.LogManager.LogException(iEx, location , "Invalid Token");
                     break;
 
                 case System.Net.Http.HttpRequestException iEx:
-                    SnackbarWarning("Can't reach the Discord-Servers");
+                    SnackbarManager.SnackbarMessage("Can't reach the Discord-Servers");
                     Util.IO.LogManager.LogException(iEx, location, "Cannot reach Discord servers");
                     break;
 
                 case Exception iEx:
-                    SnackbarWarning(msg);
+                    SnackbarManager.SnackbarMessage(msg);
                     Util.IO.LogManager.LogException(iEx, location, msg, true);
                     break;
             }
@@ -357,7 +335,7 @@ namespace BotModule
             }
             catch
             {
-                SnackbarWarning("Cannot request channel list");
+                SnackbarManager.SnackbarMessage("Cannot request channel list");
                 return null;
             }
 
@@ -382,7 +360,7 @@ namespace BotModule
             }
             catch
             {
-                SnackbarWarning("Cannot get clients. Retry later");
+                SnackbarManager.SnackbarMessage("Cannot get clients. Retry later");
                 return null;
             }
 

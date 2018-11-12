@@ -38,6 +38,15 @@
 
                                     <Button Height="80" Width="171" Tag="{Binding ID}" Foreground="#939393" Content="{Binding Name}" Click="btn_Instant_Click" BorderBrush="{x:Null}" BorderThickness="0" Background="{x:Null}">
 
+
+                                        <Button.ContextMenu>
+                                            <ContextMenu>
+                                                <MenuItem Header="Add to Queue" 
+                                                          Tag="{Binding ID}"
+                                                          Click="btn_Queue_Click"/>
+                                            </ContextMenu>
+                                        </Button.ContextMenu>
+
                                         <Button.Style>
                                             <Style TargetType="{x:Type Button}" BasedOn="{StaticResource MaterialDesignRaisedDarkButton}">
                                                 <Style.Triggers>

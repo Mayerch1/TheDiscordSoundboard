@@ -259,6 +259,7 @@ namespace Util.IO
         /// inits one watcher for each path
         /// </summary>
         /// <param name="sources">collection of paths to directories to watch</param>
+        /// <param name="dataRef">Ref to <see cref="RuntimeData"/> object</param>
         public static void StartMonitor(ObservableCollection<string> sources, RuntimeData dataRef)
         {
             Data = dataRef;

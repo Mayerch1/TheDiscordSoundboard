@@ -216,8 +216,9 @@ namespace StreamModule
             {
                 result = await new VideoSearch().SearchQueryTaskAsync(filter, pages);
             }
-            catch
+            catch (Exception ex)
             {
+                Util.IO.LogManager.LogException(ex, "StreamModule/StreamMode", "Could not accomplish search for video");
                 return;
             }
 
@@ -298,7 +299,13 @@ namespace StreamModule
         }
 
         #region events
-
+        private void Recommended_OnPreviewMouseWheel(object sender, MouseWheelEventArgs e)
+        {
+            //intercept scroll event and make scroll viewer accept the wheel
+            ScrollViewer scv = (ScrollViewer)sender;
+            scv.ScrollToVerticalOffset(scv.VerticalOffset - e.Delta / 4);
+            e.Handled = true;
+        }
         private void box_url_KeyDown(object sender, KeyEventArgs e)
         {
             Url = ((TextBox)sender).Text;
@@ -349,6 +356,7 @@ namespace StreamModule
         #endregion property changed     
 
 
+        
     }
 
 #pragma warning restore CS1591

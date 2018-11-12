@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 
 namespace Util.IO
 {
+    /// <summary>
+    /// Manage and pass Snackbar messages to delegate listeners <seealso cref="SnackbarMessage"/>
+    /// </summary>
     public static class SnackbarManager
     {
         /// <summary>

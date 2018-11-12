@@ -93,7 +93,8 @@ namespace PlaylistModule.Playlist
         /// <summary>
         /// takes list as reference, no editing possible
         /// </summary>
-        /// <param name="list"></param>
+        /// <param name="list">Opened playlist</param>
+        /// <param name="dt">Ref to <see cref="RuntimeData"/> object</param>
         public PlaylistSingleView(DataManagement.Playlist list, RuntimeData dt)
         {
             Data = dt;

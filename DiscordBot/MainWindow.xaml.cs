@@ -297,7 +297,7 @@ namespace DiscordBot
             //add about mode
             ButtonList.Add(getMenuButton("IconInformation", "ABOUT", btn_About_Click));
 
-            //TODO make addRange
+                    
             foreach (var item in ButtonList)
             {
                 stackPanel_Menu.Children.Add(item);
@@ -486,10 +486,7 @@ namespace DiscordBot
             //universal SnackbarWarning
             SnackbarManager.SnackbarMessage += SnackbarMessage_Show;
 
-            //route bot warning to universal Handle.SnackbarWarning
-            Handle.Bot.SnackbarWarning += Handle.PassBotSnackbarWarning;
-
-
+            
             //hotkey stuff
             IO.HotkeyManager.RegisteredHotkeyPressed += Hotkey_Pressed;
 
@@ -548,7 +545,7 @@ namespace DiscordBot
             foreach (var hotkey in Handle.Data.Persistent.HotkeyList)
             {
                 if (keyCode == hotkey.vk_code && modCode == hotkey.mod_code && hotkey.btn_id >= 0)
-                    btn_InstantButton_Clicked(hotkey.btn_id);
+                    btn_InstantButton_Clicked(hotkey.btn_id, true);
             }
         }
 
@@ -591,10 +588,15 @@ namespace DiscordBot
 
         #region BotPlayDelegates
 
-        private void btn_InstantButton_Clicked(int btnListIndex)
+        private void btn_InstantButton_Clicked(int btnListIndex, bool isInstant)
         {
-            //interrupt stream
-            triggerBotInstantReplay(Handle.BotMisc.getBotData(Handle.Data.Persistent.BtnList[btnListIndex]));
+        
+            //play as priority or as queue
+            if(isInstant)
+            triggerBotInstantReplay(new DataManagement.BotData(Handle.Data.Persistent.BtnList[btnListIndex]));
+            else
+            triggerBotQueueReplay(new DataManagement.BotData(Handle.Data.Persistent.BtnList[btnListIndex]));
+                       
         }
 
         private void List_Item_Play(uint index, bool isPriority = true)

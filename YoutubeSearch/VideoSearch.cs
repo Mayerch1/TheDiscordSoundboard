@@ -23,6 +23,9 @@ using System.Threading.Tasks;
 
 namespace YoutubeSearch
 {
+    /// <summary>
+    /// Provides methods and fields for searching youtube videos
+    /// </summary>
     public class VideoSearch
     {
         //constants for easier maintainability
@@ -44,7 +47,7 @@ namespace YoutubeSearch
         string thumbnail;
 
         /// <summary>
-        /// Doing search query with given parameters. Returns a List<> object.
+        /// Doing search query with given parameters. Returns a List object.
         /// </summary>
         /// <param name="querystring"></param>
         /// <param name="querypages"></param>
@@ -69,7 +72,7 @@ namespace YoutubeSearch
         }
 
         /// <summary>
-        /// Doing search query with given parameters. Returns a List<> object.
+        /// Doing search query with given parameters. Returns a List object.
         /// </summary>
         /// <param name="querystring"></param>
         /// <param name="querypages"></param>

@@ -8,6 +8,9 @@ using System.Windows.Controls;
 
 namespace Util.IO
 {
+    /// <summary>
+    /// Manages all log-based operations
+    /// </summary>
     public static class LogManager
     {
         private static string path = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) +
@@ -47,6 +50,9 @@ namespace Util.IO
             }
         }
 
+        /// <summary>
+        /// Open the current log file using the default application
+        /// </summary>
         public static void OpenLog()
         {
             System.Diagnostics.Process.Start(file);
@@ -56,6 +62,9 @@ namespace Util.IO
         /// writes a specific Exception into the log
         /// </summary>
         /// <param name="ex">Exception to be logged</param>
+        /// <param name="occurence">String for Module and Class of occurence</param>
+        /// <param name="info">Descriptive descriptive of error or error circumstances</param>
+        /// <param name="vital">a vital exception will log more information like stack trace</param>
         public static async void LogException(Exception ex, string occurence, string info, bool vital = false)
         {
             string date = "[" + DateTime.Now.ToString("HH:mm:ss") + "]";
@@ -71,7 +80,7 @@ namespace Util.IO
                 }
             }
             catch
-            { }
+            {/*putting a log here would probably cause endless loop*/ }
         }
 
 

@@ -20,9 +20,10 @@ namespace DiscordBot.Misc
             {
                 wResp = await req.GetResponseAsync();
             }
-            catch (System.Net.WebException)
+            catch (System.Net.WebException ex)
             {
                 //if not available, assume there are no updates
+                Util.IO.LogManager.LogException(ex, "DiscordBot/UpdateChecker", "Could not search for updates");
                 return false;
             }
 
