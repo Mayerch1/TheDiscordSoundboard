@@ -276,9 +276,7 @@ namespace StreamModule
             else
             {
                 //fall back to caching to disk
-      
-                SnackbarManager.SnackbarMessage("Caching, this may take a while...");
-
+                  
                 //alternatively try to download the video
 
 

@@ -211,6 +211,12 @@ namespace StreamModule
                 SnackbarManager.SnackbarMessage("File too large");
                 Console.WriteLine(@"File " + name + @" is to large to save");
             }
+            catch (System.IO.IOException ex)
+            {
+                //return old file
+                if (File.Exists(location))
+                    return location;
+            }
             catch (Exception ex)
             {
                 SnackbarManager.SnackbarMessage("Failed to cache Video", SnackbarManager.SnackbarAction.Log);
