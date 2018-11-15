@@ -13,7 +13,7 @@
 
             <StackPanel Orientation="Vertical">
 
-                <materialDesign:ColorZone Background="{StaticResource PrimaryBackgroundBrush}" materialDesign:ShadowAssist.ShadowDepth="Depth1" materialDesign:ShadowAssist.ShadowEdges="Bottom" Height="75">
+                <materialDesign:ColorZone Style="{StaticResource FloatingHeader}">
                     <StackPanel>
                         <TextBlock  VerticalAlignment="Center"  Margin="20,0,0,0" FontSize="30" materialDesign:ShadowAssist.ShadowDepth="Depth2" Text="About" FontWeight="Bold" Foreground="#262626" />
                         <StackPanel Orientation="Horizontal">
@@ -24,7 +24,7 @@
                     </StackPanel>
                 </materialDesign:ColorZone>
 
-                <materialDesign:ColorZone Background="{StaticResource PrimaryBackgroundBrush}" materialDesign:ShadowAssist.ShadowDepth="Depth2" materialDesign:ShadowAssist.ShadowEdges="All" Margin="5,5,5,5" Height="Auto">
+                <materialDesign:ColorZone Style="{StaticResource FloatingSection}">
 
                     <Grid Margin="20,20,20,20">
 
@@ -39,8 +39,7 @@
                     </Grid>
                 </materialDesign:ColorZone>
 
-                <materialDesign:ColorZone Background="{StaticResource PrimaryBackgroundBrush}" materialDesign:ShadowAssist.ShadowDepth="Depth2" materialDesign:ShadowAssist.ShadowEdges="All" Margin="5,5,5,5" Height="Auto">
-
+                <materialDesign:ColorZone Style="{StaticResource FloatingSection}">
                     <Grid Margin="20,20,20,20">
 
                         <Button
@@ -55,8 +54,7 @@
                     </Grid>
                 </materialDesign:ColorZone>
 
-                <materialDesign:ColorZone Background="{StaticResource PrimaryBackgroundBrush}" materialDesign:ShadowAssist.ShadowDepth="Depth2" materialDesign:ShadowAssist.ShadowEdges="All" Margin="5,5,5,5" Height="Auto">
-
+                <materialDesign:ColorZone Style="{StaticResource FloatingSection}">
                     <Grid Margin="20,20,20,20">
                         <Button Margin="5"
                                 Width="250"

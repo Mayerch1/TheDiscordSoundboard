@@ -33,7 +33,7 @@ See the ['Long Term Features' - Project](https://github.com/Mayerch1/TheDiscordS
 2. Rights to invite a bot to your server (only for setup)
 3. Internet Connection (obviously)
 4. Administrator rights (only if using installer, for setup)
-4. Some soundfiles to stream
+4. Some soundfiles to stream (or link to YT)
 
 <br/>
 
@@ -70,21 +70,3 @@ To see, how to set up the application on it's first startup, have a look at [thi
 
 
 ---
-
-> ###### F: Why can't I stream Videos from Youtube? <br>
->    1. Downloading videos can be illegal in some cases. Further, the separation of sound and video is not allowed. (As we know so far) <br>
->    2. This bot is built to fill the gap for streaming files from your disk. There're plenty of very good music bots out there to play online-videos. So there's no need, to use your own bandwith to stream a youtube video. <br/>
->    <br/>
->    But let's see what the future brings
-
-
-
-
-
-
-
-
-
-
-
-

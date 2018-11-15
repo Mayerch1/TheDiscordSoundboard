@@ -6,89 +6,108 @@
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              mc:Ignorable="d"
              d:DesignHeight="450" d:DesignWidth="800">
+    <UserControl.Resources>
+        <Style x:Key="CardButtonTextStyle" TargetType="TextBlock" BasedOn="{StaticResource {x:Type TextBlock}}">
+            <Setter Property="HorizontalAlignment" Value="Center"/>
+            <Setter Property="VerticalAlignment" Value="Bottom"/>
+            <Setter Property="Margin" Value="15"/>
+            <Setter Property="FontSize" Value="20"/>
+            <Setter Property="Text" Value="{Binding Name}"/>
+        </Style>
+
+
+        <Style x:Key="CardButtonIconStyle" TargetType="materialDesign:PackIcon" BasedOn="{StaticResource {x:Type materialDesign:PackIcon}}">
+            <Setter Property="Height" Value="100"/>
+            <Setter Property="Width" Value="100"/>
+            <Setter Property="Foreground" Value="Gray"/>
+            <Setter Property="Margin" Value="5"/>
+            <Setter Property="HorizontalAlignment" Value="Center"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+        </Style>
+
+        <Style x:Key="CardButtonStyle" TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
+            <Setter Property="Width" Value="220"/>
+            <Setter Property="Height" Value="200"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="BorderBrush" Value="{x:Null}"/>
+            <Setter Property="materialDesign:ShadowAssist.ShadowDepth" Value="Depth2"/>
+            <Setter Property="VerticalAlignment" Value="Top"/>
+            <Setter Property="Margin" Value="14,14,0,14"/>
+            <Setter Property="Tag" Value="{Binding Id}"/>
+        </Style>
+
+    </UserControl.Resources>
+
+
     <Grid>
-
-        <DockPanel>
-            <ScrollViewer HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Hidden">
+        <DockPanel LastChildFill="True">
+            <materialDesign:ColorZone Style="{StaticResource FloatingSection}" VerticalAlignment="Stretch" DockPanel.Dock="Left">
                 <StackPanel Orientation="Vertical">
-                    <Button DockPanel.Dock="Left"
-                        Click="btn_playlistAdd_Click"
-                        Width="220" Height="200"
-                        BorderThickness="0"
-                        BorderBrush="{x:Null}"
-                        materialDesign:ShadowAssist.ShadowDepth="Depth2"
-                        Margin="14,14,0,14"
-                        VerticalAlignment="Top">
-
+                    <Button Style="{StaticResource CardButtonStyle}" Margin="14" Click="btn_playlistAdd_Click">
                         <Button.Template>
                             <ControlTemplate>
                                 <Border CornerRadius="10">
                                     <Border.Background>
-                                        <ImageBrush ImageSource="/res/empty.png" Stretch="UniformToFill" TileMode="None" />
+                                        <ImageBrush ImageSource="/res/empty.png" Stretch="UniformToFill"
+                                                    TileMode="None" />
                                     </Border.Background>
                                     <StackPanel Orientation="Vertical" VerticalAlignment="Bottom">
-                                        <materialDesign:PackIcon Kind="PlusCircle" Height="100" Width="100" Foreground="Gray" Margin="5" HorizontalAlignment="Center" VerticalAlignment="Center" />
-                                        <TextBlock Text="Create a playlist" HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="15" FontSize="20" />
+                                        <materialDesign:PackIcon Style="{StaticResource CardButtonIconStyle}" Kind="PlusCircle"  />
+                                        <TextBlock Style="{StaticResource CardButtonTextStyle}" Text="Create a playlist" />
                                     </StackPanel>
                                 </Border>
                             </ControlTemplate>
                         </Button.Template>
                     </Button>
-                    <Button DockPanel.Dock="Left"
-                        Click="btn_showHistory_Click"
-                        Width="220" Height="200"
-                        BorderThickness="0"
-                        BorderBrush="{x:Null}"
-                        materialDesign:ShadowAssist.ShadowDepth="Depth2"
-                        Margin="14,14,0,14"
-                        VerticalAlignment="Top"
-                        DataContext="{Binding History}">
-
+                    <Button Style="{StaticResource CardButtonStyle}" Margin="14" Click="btn_showHistory_Click" DataContext="{Binding History}">
                         <Button.Template>
                             <ControlTemplate>
                                 <Border CornerRadius="10">
                                     <Border.Background>
-                                        <ImageBrush ImageSource="{Binding ImagePath}" Stretch="UniformToFill" TileMode="None" />
+                                        <ImageBrush ImageSource="{Binding ImagePath}" Stretch="UniformToFill"
+                                                    TileMode="None" />
                                     </Border.Background>
                                     <StackPanel Orientation="Vertical" VerticalAlignment="Bottom">
-                                        <materialDesign:PackIcon Kind="History" Height="100" Width="100" Foreground="Gray" Margin="5" HorizontalAlignment="Center" VerticalAlignment="Center" />
-                                        <TextBlock Text="{Binding Name}" HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="15" FontSize="20" />
+                                        <materialDesign:PackIcon Style="{StaticResource CardButtonIconStyle}" Kind="History"/>
+                                        <TextBlock Style="{StaticResource CardButtonTextStyle}" />
                                     </StackPanel>
                                 </Border>
                             </ControlTemplate>
                         </Button.Template>
                     </Button>
                 </StackPanel>
-            </ScrollViewer>
-            <ScrollViewer>
+            </materialDesign:ColorZone>
 
-                <ItemsControl ItemsSource="{Binding Playlists}">
-                    <ItemsControl.ItemTemplate>
-                        <DataTemplate>
+            <materialDesign:ColorZone Style="{StaticResource FloatingSection}" VerticalAlignment="Stretch">
+                <ScrollViewer>
+                    <ItemsControl ItemsSource="{Binding Playlists}">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
 
-                            <Button Width="220" Height="200" BorderThickness="0" Tag="{Binding Id}" BorderBrush="{x:Null}" materialDesign:ShadowAssist.ShadowDepth="Depth2" Margin="28,14,0,14" Click="btn_playlistOpen_Click" Content="{Binding Name}">
+                                <Button Style="{StaticResource CardButtonStyle}" Click="btn_playlistOpen_Click">
+                                    <Button.Template>
+                                        <ControlTemplate>
+                                            <Border CornerRadius="10">
+                                                <Border.Background>
+                                                    <ImageBrush ImageSource="{Binding ImagePath}"
+                                                                Stretch="UniformToFill" TileMode="None" />
+                                                </Border.Background>
 
-                                <Button.Template>
-                                    <ControlTemplate>
-                                        <Border CornerRadius="10">
-                                            <Border.Background>
-                                                <ImageBrush ImageSource="{Binding ImagePath}" Stretch="UniformToFill" TileMode="None" />
-                                            </Border.Background>
-
-                                            <TextBlock Text="{Binding Name}" HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="15" FontSize="20" />
-                                        </Border>
-                                    </ControlTemplate>
-                                </Button.Template>
-                            </Button>
-                        </DataTemplate>
-                    </ItemsControl.ItemTemplate>
-                    <ItemsControl.ItemsPanel>
-                        <ItemsPanelTemplate>
-                            <WrapPanel />
-                        </ItemsPanelTemplate>
-                    </ItemsControl.ItemsPanel>
-                </ItemsControl>
-            </ScrollViewer>
+                                                <TextBlock Style="{StaticResource CardButtonTextStyle}"/>
+                                            </Border>
+                                        </ControlTemplate>
+                                    </Button.Template>
+                                </Button>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <WrapPanel />
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                    </ItemsControl>
+                </ScrollViewer>
+            </materialDesign:ColorZone>
         </DockPanel>
     </Grid>
 </UserControl>

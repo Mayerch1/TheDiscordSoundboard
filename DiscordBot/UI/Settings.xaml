@@ -8,13 +8,7 @@
              d:DesignHeight="450" d:DesignWidth="800">
 
     <UserControl.Resources>
-        <Style x:Key="FloatingSection" TargetType="materialDesign:ColorZone" BasedOn="{StaticResource {x:Type materialDesign:ColorZone}}">
-            <Setter Property="Background" Value="{StaticResource PrimaryBackgroundBrush}"/>
-            <Setter Property="Margin" Value="5"/>
-            <Setter Property="Height" Value="Auto"/>
-            <Setter Property="materialDesign:ShadowAssist.ShadowDepth" Value="Depth2"/>
-            <Setter Property="materialDesign:ShadowAssist.ShadowEdges" Value="All"/>
-        </Style>
+        
 
     </UserControl.Resources>
 
@@ -24,7 +18,7 @@
 
             <StackPanel Orientation="Vertical">
 
-                <materialDesign:ColorZone Background="{StaticResource PrimaryBackgroundBrush}" materialDesign:ShadowAssist.ShadowDepth="Depth1" materialDesign:ShadowAssist.ShadowEdges="Bottom" Height="75">
+                <materialDesign:ColorZone Style="{StaticResource FloatingHeader}">
 
                     <TextBlock VerticalAlignment="Center"  Margin="20,0,0,0" FontSize="30" materialDesign:ShadowAssist.ShadowDepth="Depth2" Text="Settings" FontWeight="Bold" Foreground="#262626" />
                 </materialDesign:ColorZone>
