@@ -12,7 +12,7 @@ this is a small Discord-Soundboard for streaming Sounds/Music into Discord - voi
 <br>
 <br>
 In contrast to a 'normal' Soundbot, this application hosts a bot on your local machine for the duration of the playback.
-This brings the advantage of an guaranteed availability of the service, combined with the abillity to stream local files from your Harddrive.
+This brings the advantage of an guaranteed availability of the service, combined with the abillity to stream local files from your Harddrive. The latest release enables you, to stream YouTube videos into a dicsord voice-channel.
 <br>
 
 ---
