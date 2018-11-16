@@ -1,16 +1,18 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{6745405B-8A1D-423F-9D17-95BAD658DB18}</ProjectGuid>
+    <ProjectGuid>{DFECE3E8-99D9-4652-B486-BEA1010329BA}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>DataManagement</RootNamespace>
-    <AssemblyName>DataManagement</AssemblyName>
-    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <RootNamespace>YoutubeSearch</RootNamespace>
+    <AssemblyName>YoutubeSearch</AssemblyName>
     <FileAlignment>512</FileAlignment>
+    <ReleaseVersion>1.1</ReleaseVersion>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -20,7 +22,8 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <DocumentationFile>bin\Debug\DataManagement.xml</DocumentationFile>
+    <Prefer32Bit>false</Prefer32Bit>
+    <DocumentationFile>bin\Debug\YoutubeSearch.xml</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -29,6 +32,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -41,23 +45,17 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BotData.cs" />
-    <Compile Include="ButtonData.cs" />
-    <Compile Include="FileData.cs" />
-    <Compile Include="History.cs" />
-    <Compile Include="Hotkey.cs" />
-    <Compile Include="PersistentData.cs" />
-    <Compile Include="Playlist.cs" />
+    <Compile Include="VideoInformation.cs" />
+    <Compile Include="VideoItemHelper.cs" />
+    <Compile Include="VideoSearch.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="RuntimeData.cs" />
-    <Compile Include="VideoData.cs" />
-    <Compile Include="VideoHistory.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\YoutubeSearch\YoutubeSearch.csproj">
-      <Project>{dfece3e8-99d9-4652-b486-bea1010329ba}</Project>
-      <Name>YoutubeSearch</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
 </Project>

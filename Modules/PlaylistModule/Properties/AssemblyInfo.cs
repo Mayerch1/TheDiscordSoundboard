@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("DataManagement")]
+[assembly: AssemblyTitle("PlaylistModule")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("DataManagement")]
+[assembly: AssemblyProduct("PlaylistModule")]
 [assembly: AssemblyCopyright("Copyright ©  2018")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("6745405b-8a1d-423f-9d17-95bad658db18")]
+[assembly: Guid("b1ee8812-c82c-4de7-a589-5e1d88e49c20")]
 
 // Version information for an assembly consists of the following four values:
 //

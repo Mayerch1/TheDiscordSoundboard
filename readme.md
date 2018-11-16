@@ -1,5 +1,5 @@
 
-<img src="DicsordBot/res/speaker.png" alt="drawing" style="width:100px;"/>
+<img src="DiscordBot/res/speaker.png" alt="drawing" style="width:100px;"/>
 
 
 # Welcome to TDS <br> 
@@ -12,14 +12,8 @@ this is a small Discord-Soundboard for streaming Sounds/Music into Discord - voi
 <br>
 <br>
 In contrast to a 'normal' Soundbot, this application hosts a bot on your local machine for the duration of the playback.
-This brings the advantage of an guaranteed availability of the service, combined with the abillity to stream local files from your Harddrive.
+This brings the advantage of an guaranteed availability of the service, combined with the abillity to stream local files from your Harddrive. The latest release enables you, to stream YouTube videos into a dicsord voice-channel.
 <br>
-
->Developer Information: <br/>
->All source code in the folders 'Bot' and 'Data' is able to run as standalone (per folder).
->The source code in 'Handle' requires both, 'Bot' and 'Data' -source to run unmodified.
->
->For this reason, a code documentation was added for those sectors
 
 ---
 
@@ -39,7 +33,7 @@ See the ['Long Term Features' - Project](https://github.com/Mayerch1/TheDiscordS
 2. Rights to invite a bot to your server (only for setup)
 3. Internet Connection (obviously)
 4. Administrator rights (only if using installer, for setup)
-4. Some soundfiles to stream
+4. Some soundfiles to stream (or link to YT)
 
 <br/>
 
@@ -76,21 +70,3 @@ To see, how to set up the application on it's first startup, have a look at [thi
 
 
 ---
-
-> ###### F: Why can't I stream Videos from Youtube? <br>
->    1. Downloading videos can be illegal in some cases. Further, the separation of sound and video is not allowed. (As we know so far) <br>
->    2. This bot is built to fill the gap for streaming files from your disk. There're plenty of very good music bots out there to play online-videos. So there's no need, to use your own bandwith to stream a youtube video. <br/>
->    <br/>
->    But let's see what the future brings
-
-
-
-
-
-
-
-
-
-
-
-
