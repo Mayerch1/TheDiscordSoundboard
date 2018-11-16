@@ -45,7 +45,7 @@ namespace DataManagement
         /// <summary>
         /// version of this build, refers to the github release number
         /// </summary>
-        public const string version = "2.1.0";
+        public const string version = "2.2.0";
 
         /// <summary>
         /// a list with all supported formats (only ending)

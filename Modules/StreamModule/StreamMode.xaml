@@ -104,6 +104,13 @@
                                         Background="{StaticResource PrimaryForegroundBrush}"
                                         BorderBrush="{x:Null}">
                                     <materialDesign:PackIcon Kind="ArrowRight" Height="30" Width="30" Margin="5" />
+                                    <Button.ContextMenu>
+                                        <ContextMenu>
+                                            <MenuItem Header="Add to Queue"
+                                                      Tag="{Binding Url}"
+                                                      Click="context_addQueue_Click"/>
+                                        </ContextMenu>
+                                    </Button.ContextMenu>
                                 </Button>
 
                                 <TextBox Text="{Binding Url}"
@@ -111,7 +118,7 @@
                                          Height="60"
                                          Style="{StaticResource MaterialDesignFilledTextFieldTextBox}"
                                          TextChanged="box_link_TextChanged"
-                                         materialDesign:HintAssist.Hint="Url to Video" />
+                                         materialDesign:HintAssist.Hint="Search or Url to Video" />
                             </DockPanel>
 
                             <Label Content="{Binding Title}"
@@ -147,7 +154,7 @@
 
             <Grid Grid.Column="1">
                 <!--history-->
-                <materialDesign:ColorZone Style="{StaticResource FloatingSection}">
+                <materialDesign:ColorZone Style="{StaticResource FloatingSection}" VerticalAlignment="Stretch">
                     <DockPanel LastChildFill="True">
 
                     
