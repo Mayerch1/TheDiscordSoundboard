@@ -9,7 +9,7 @@
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid>
 
-        <ScrollViewer Background="White">
+        <ScrollViewer>
 
             <StackPanel Orientation="Vertical">
 
@@ -46,8 +46,8 @@
                             Margin="5"
                             Width="250"
                             HorizontalAlignment="Center"
-                            Background="{StaticResource PrimaryAccentBrush}"
-                            BorderBrush="{StaticResource PrimaryAccentBrush}"
+                            Background="{DynamicResource SecondaryAccentBrush}"
+                            BorderBrush="{DynamicResource SecondaryAccentBrush}"
                             Click="btn_Donate_Click">
                             <Image Stretch="Uniform" Source="/res/paypal.png" />
                         </Button>
@@ -59,8 +59,8 @@
                         <Button Margin="5"
                                 Width="250"
                                 HorizontalAlignment="Center"
-                                Background="{StaticResource PrimaryAccentBrush}"
-                                BorderBrush="{StaticResource PrimaryAccentBrush}"
+                                Background="{DynamicResource SecondaryAccentBrush}"
+                                BorderBrush="{DynamicResource SecondaryAccentBrush}"
                                 Click="btn_license_Click"
                                 Content="View License" />
                     </Grid>

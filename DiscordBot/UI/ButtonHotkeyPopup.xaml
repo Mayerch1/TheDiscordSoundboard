@@ -7,7 +7,7 @@
              mc:Ignorable="d"
              d:DesignHeight="450" d:DesignWidth="800" KeyDown="Window_KeyDown">
 
-    <Grid Background="{StaticResource PrimaryBackgroundBrush}">
+    <Grid Background="{DynamicResource MaterialDesignPaper}">
         <StackPanel Orientation="Vertical" VerticalAlignment="Top" Margin="20">
 
             <Grid  HorizontalAlignment="Center">
@@ -82,14 +82,14 @@
 
                 <Grid Grid.Column="1" Margin="10,0,0,0">
                     <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="0,0,5,0">
-                        <Button Click="btn_abort" Background="{StaticResource PrimaryAccentBrush}"
+                        <Button Click="btn_abort" Background="{DynamicResource SecondaryAccentBrush}"
                                 BorderBrush="{x:Null}"
                                     Margin="0,0,10,0">
                             <materialDesign:PackIcon Kind="Close"
 
  />
                         </Button>
-                        <Button  Click="btn_Accept_Click" Background="{StaticResource PrimaryAccentBrush}"
+                        <Button  Click="btn_Accept_Click" Background="{DynamicResource SecondaryAccentBrush}"
                                  BorderBrush="{x:Null}">
                             <materialDesign:PackIcon Kind="Check" />
                         </Button>

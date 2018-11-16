@@ -17,7 +17,7 @@
 
 
 
-    <Grid Background="{StaticResource PrimaryBackgroundBrush}">
+    <Grid Background="{DynamicResource MaterialDesignPaper}">
         <DockPanel VerticalAlignment="Stretch" Margin="20" LastChildFill="True">
 
 
@@ -39,12 +39,12 @@
 
                 <StackPanel DockPanel.Dock="Right" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,0,5,0">
                     <Button Click="btn_Decline_Click"
-                            Background="{StaticResource PrimaryAccentBrush}"
+                            Background="{DynamicResource SecondaryAccentBrush}"
                             BorderBrush="{x:Null}"
                             Margin="0,0,10,0">
                         <materialDesign:PackIcon Kind="Close" />
                     </Button>
-                    <Button Click="btn_Accept_Click" Background="{StaticResource PrimaryAccentBrush}"
+                    <Button Click="btn_Accept_Click" Background="{DynamicResource SecondaryAccentBrush}"
                             BorderBrush="{x:Null}">
                         <materialDesign:PackIcon Kind="Check" />
                     </Button>

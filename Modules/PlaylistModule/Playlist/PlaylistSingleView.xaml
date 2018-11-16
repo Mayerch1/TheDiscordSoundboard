@@ -6,6 +6,7 @@
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              xmlns:dd="urn:gong-wpf-dragdrop"
              mc:Ignorable="d"
+
              d:DesignHeight="300" d:DesignWidth="300" AllowDrop="True">
 
     <UserControl.Resources>
@@ -85,7 +86,7 @@
                         </DockPanel>
                     </materialDesign:ColorZone>
 
-                    <materialDesign:ColorZone Background="{StaticResource PrimaryBackgroundBrush}"
+                    <materialDesign:ColorZone Background="{DynamicResource MaterialDesignPaper}"
                                               materialDesign:ShadowAssist.ShadowDepth="Depth2"
                                               materialDesign:ShadowAssist.ShadowEdges="All" Height="Auto" />
                 </StackPanel>

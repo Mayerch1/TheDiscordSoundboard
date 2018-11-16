@@ -10,6 +10,11 @@
         ResizeMode="CanResizeWithGrip"
         PreviewMouseDown="Window_PreviewMouseDown"
         SizeChanged="Window_SizeChanged"
+        TextElement.Foreground="{DynamicResource MaterialDesignBody}"
+        Background="{DynamicResource MaterialDesignPaper}"
+        TextElement.FontWeight="Medium"
+        TextElement.FontSize="14"
+        FontFamily="pack://application:,,,/MaterialDesignThemes.Wpf;component/Resources/Roboto/#Roboto"
         DataContext="{Binding RelativeSource={RelativeSource Self}}">
 
     <Window.Resources>
@@ -77,8 +82,8 @@
             <Setter Property="Height" Value="75"/>
             <Setter Property="Margin" Value="0,0,0,0"/>
             <Setter Property="Foreground" Value="Black"/>
-            <Setter Property="Background" Value="{StaticResource PrimaryForegroundBrush}"/>
-            <Setter Property="BorderBrush" Value="{StaticResource PrimaryForegroundBrush}"/>
+            <Setter Property="Background" Value="{DynamicResource PrimaryHueMidBrush}"/>
+            <Setter Property="BorderBrush" Value="{DynamicResource PrimaryHueMidBrush}"/>
             <Setter Property="materialDesign:ShadowAssist.ShadowDepth" Value="Depth0"/>
             <Setter Property="HorizontalContentAlignment" Value="Left"/>
         </Style>
@@ -88,11 +93,8 @@
         <Grid x:Name="grd_ChannelList" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="0,60,20,0" Width="0" Height="0" Grid.ZIndex="1">
             <!-- channel selector-->
             <!-- is closed on startup-->
-            <materialDesign:ColorZone x:Name="col_ChannelList" materialDesign:ShadowAssist.ShadowDepth="Depth1" materialDesign:ShadowAssist.ShadowEdges="All" Height="400" Width="250" CornerRadius="5">
-                <materialDesign:ColorZone.Background>
-                    <SolidColorBrush Color="White" Opacity="1" />
-                </materialDesign:ColorZone.Background>
-
+            <materialDesign:ColorZone x:Name="col_ChannelList" materialDesign:ShadowAssist.ShadowDepth="Depth1" materialDesign:ShadowAssist.ShadowEdges="All" Height="400" Width="250" CornerRadius="5" Background="{DynamicResource MaterialDesignPaper}">
+               
                 <DockPanel Margin="0,5,0,0">
                     <DockPanel DockPanel.Dock="Top" HorizontalAlignment="Stretch">
                         <TextBlock Margin="5" DockPanel.Dock="Left" Text="Permanent Selection" />
@@ -118,14 +120,14 @@
         </Grid>
         <DockPanel LastChildFill="True" Grid.ZIndex="0">
 
-            <Grid DockPanel.Dock="Bottom" Background="{StaticResource PrimaryBackgroundBrush}">
+            <Grid DockPanel.Dock="Bottom" Background="{DynamicResource PrimaryBackgroundBrush }">
                 <StackPanel>
 
-                    <materialDesign:ColorZone x:Name="col_LeftPanel"  Background="{StaticResource PrimaryForegroundBrush}" Height="5" Width="70" HorizontalAlignment="Left" />
+                    <materialDesign:ColorZone x:Name="col_LeftPanel"  Background="{DynamicResource PrimaryHueMidBrush}" Height="5" Width="70" HorizontalAlignment="Left" />
 
                     <materialDesign:ColorZone materialDesign:ShadowAssist.ShadowDepth="Depth2" materialDesign:ShadowAssist.ShadowEdges="Top" Height="75">
 
-                        <Grid Background="{StaticResource PrimaryBackgroundBrush}" DockPanel.Dock="Bottom">
+                        <Grid Background="{DynamicResource MaterialDesignPaper}" DockPanel.Dock="Bottom">
 
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="2*" />
@@ -140,8 +142,8 @@
                                     <Button x:Name="btn_Previous"
                                     Click="btn_Previous_Click"
                                     materialDesign:ShadowAssist.ShadowDepth="Depth0"
-                                    Background="{StaticResource PrimaryBackgroundBrush}"
-                                    BorderBrush="{StaticResource PrimaryBackgroundBrush}"
+                                    Background="{DynamicResource MaterialDesignPaper}"
+                                    BorderBrush="{DynamicResource MaterialDesignPaper}"
                                     Style="{StaticResource MaterialDesignFloatingActionMiniLightButton}"
                                     ToolTip="Pervious"
                                     HorizontalAlignment="Left">
@@ -154,9 +156,9 @@
                                     </Button>
 
                                     <Button x:Name="btn_Play"
-                                   Background="{StaticResource PrimaryForegroundBrush}"
+                                   Background="{DynamicResource PrimaryHueMidBrush}"
                                     Margin="10,0,10,0"
-                                    BorderBrush="{StaticResource PrimaryAccentBrush}"
+                                    BorderBrush="{DynamicResource SecondaryAccentBrush}"
                                     Style="{StaticResource MaterialDesignFloatingActionButton}"
                                     Click="btn_Play_Click"
                                       Content="{materialDesign:PackIcon Play}" />
@@ -164,8 +166,8 @@
                                     <Button x:Name="btn_Next"
                                     Click="btn_Next_Click"
                                     materialDesign:ShadowAssist.ShadowDepth="Depth0"
-                                    Background="{StaticResource PrimaryBackgroundBrush}"
-                                    BorderBrush="{StaticResource PrimaryBackgroundBrush}"
+                                    Background="{DynamicResource MaterialDesignPaper}"
+                                    BorderBrush="{DynamicResource MaterialDesignPaper}"
                                     Style="{DynamicResource MaterialDesignFloatingActionMiniLightButton}"
                                             ToolTip="Next">
 
@@ -178,10 +180,11 @@
 
                                     <Button x:Name="btn_Repeat" HorizontalAlignment="Right"
                                         Click="btn_Repeat_Click"
+                                            
                                       Style="{StaticResource MaterialDesignFloatingActionMiniLightButton}"
                                       ToolTip="Repeat"
-                                        Background="White"
-                                        BorderBrush="White"
+                                        Background="{DynamicResource MaterialDesignPaper}"
+                                        BorderBrush="{DynamicResource MaterialDesignPaper}"
                                         materialDesign:ShadowAssist.ShadowDepth="Depth0">
 
                                         <materialDesign:PackIcon
@@ -210,7 +213,7 @@
                                         <Slider VerticalAlignment="Center"
 
                                                 x:Name="timeBar"
-                                                Foreground="{StaticResource PrimaryAccentBrush}"
+                                                Foreground="{DynamicResource SecondaryAccentBrush}"
                                                 Margin="0,0,0,0"
                                                 TickFrequency="1"
                                                 Orientation="Horizontal"
@@ -251,8 +254,8 @@
                                     <Button x:Name ="btn_Volume" HorizontalAlignment="Center"
                                     Click="btn_Volume_Click"
                                     materialDesign:ShadowAssist.ShadowDepth="Depth0"
-                                    Background="{StaticResource PrimaryBackgroundBrush}"
-                                    BorderBrush="{StaticResource PrimaryBackgroundBrush}"
+                                    Background="{DynamicResource MaterialDesignPaper}"
+                                    BorderBrush="{DynamicResource MaterialDesignPaper}"
                                     Style="{StaticResource MaterialDesignFloatingActionMiniLightButton}"
                                     ToolTip="Mute">
 
@@ -265,7 +268,7 @@
 
                                     <Slider VerticalAlignment="Center"
 
-                                        Foreground="{StaticResource PrimaryAccentBrush}"
+                                        Foreground="{DynamicResource SecondaryAccentBrush}"
                                         Margin="5,0,0,0"
                                         TickFrequency="5"
                                         Orientation="Horizontal"
@@ -280,17 +283,17 @@
                 </StackPanel>
             </Grid>
 
-            <Border Width="70" x:Name="brd_LeftPanel" Background="{StaticResource PrimaryForegroundBrush}" DockPanel.Dock="Left">
+            <Border Width="70" x:Name="brd_LeftPanel" Background="{DynamicResource PrimaryHueMidBrush}" DockPanel.Dock="Left">
                 <!--Left Panel-->
                 <StackPanel Orientation="Vertical" x:Name="stackPanel_Menu">
-                    <materialDesign:ColorZone Background="{StaticResource PrimaryForegroundBrush}" VerticalAlignment="Top" materialDesign:ShadowAssist.ShadowEdges="Bottom" materialDesign:ShadowAssist.ShadowDepth="Depth2" Height="55" HorizontalContentAlignment="Left">
+                    <materialDesign:ColorZone Background="{DynamicResource PrimaryHueMidBrush}" VerticalAlignment="Top" materialDesign:ShadowAssist.ShadowEdges="Bottom" materialDesign:ShadowAssist.ShadowDepth="Depth2" Height="55" HorizontalContentAlignment="Left">
 
                         <!--Header Left-->
-                        <ToggleButton  Style="{DynamicResource MaterialDesignHamburgerToggleButton}" x:Name="btn_ToggleMenu" Height="50" Margin="14,5,5,5" Foreground="Black" Background="{StaticResource PrimaryForegroundBrush}" BorderBrush="{StaticResource PrimaryForegroundBrush}" materialDesign:ShadowAssist.ShadowDepth="Depth0" VerticalAlignment="Center" Click="btn_ToggleMenu_Click" />
+                        <ToggleButton  Style="{DynamicResource MaterialDesignHamburgerToggleButton}" x:Name="btn_ToggleMenu" Height="50" Margin="14,5,5,5" Foreground="Black" Background="{DynamicResource PrimaryHueMidBrush}" BorderBrush="{DynamicResource PrimaryHueMidBrush}" materialDesign:ShadowAssist.ShadowDepth="Depth0" VerticalAlignment="Center" Click="btn_ToggleMenu_Click" />
                     </materialDesign:ColorZone>
 
 
-                    <Button Height="75" Margin="0,20,0,0" Foreground="Black" Background="{StaticResource PrimaryForegroundBrush}" BorderBrush="{StaticResource PrimaryForegroundBrush}" materialDesign:ShadowAssist.ShadowDepth="Depth0" Click="btn_Sounds_Click"  HorizontalContentAlignment="Left">
+                    <Button Height="75" Margin="0,20,0,0" Foreground="Black" Background="{DynamicResource PrimaryHueMidBrush}" BorderBrush="{DynamicResource PrimaryHueMidBrush}" materialDesign:ShadowAssist.ShadowDepth="Depth0" Click="btn_Sounds_Click"  HorizontalContentAlignment="Left">
                         <StackPanel Orientation="Horizontal">
                             <materialDesign:PackIcon Kind="ArrowRightDropCircleOutline" Height="35" Width="35" VerticalAlignment="Center" />
                             <TextBlock Text="SOUNDS" FontSize="20"  Margin="10,0,0,0" VerticalAlignment="Center" />
@@ -299,14 +302,14 @@
                 </StackPanel>
             </Border>
 
-            <Border Height="60" DockPanel.Dock="Top" Background="{StaticResource PrimaryBackgroundBrush}">
-                <materialDesign:ColorZone Height="55" materialDesign:ShadowAssist.ShadowDepth="Depth1" materialDesign:ShadowAssist.ShadowEdges="Bottom" Background="{StaticResource PrimaryBackgroundBrush}">
+            <Border Height="60" DockPanel.Dock="Top" Background="{DynamicResource MaterialDesignPaper}">
+                <materialDesign:ColorZone Height="55" materialDesign:ShadowAssist.ShadowDepth="Depth1" materialDesign:ShadowAssist.ShadowEdges="Bottom" Background="{DynamicResource MaterialDesignPaper}">
 
                     <Button HorizontalAlignment="Right" Margin="0,0,20,0"
                         x:Name="btn_Avatar"
                         Style="{StaticResource MaterialDesignFloatingActionMiniLightButton}"
                         ToolTip="Select a channel"
-                        BorderBrush="{StaticResource PrimaryAccentBrush}"
+                        BorderBrush="{DynamicResource SecondaryAccentBrush}"
                         Click="btn_Avatar_Click">
 
                         <Button.Background>
@@ -316,7 +319,7 @@
                 </materialDesign:ColorZone>
             </Border>
 
-            <Border Background="{StaticResource PrimaryBackgroundBrush}" DockPanel.Dock="Right" materialDesign:ShadowAssist.ShadowDepth="Depth2" materialDesign:ShadowAssist.ShadowEdges="Top">
+            <Border Background="{DynamicResource MaterialDesignPaper}" DockPanel.Dock="Right" materialDesign:ShadowAssist.ShadowDepth="Depth2" materialDesign:ShadowAssist.ShadowEdges="Top">
                 <!--Main Grid-->
                 <Grid>
                     <Grid x:Name="MainGrid" Grid.ZIndex="0">

@@ -14,7 +14,7 @@
 
 
     <Grid>
-        <ScrollViewer Background="White">
+        <ScrollViewer>
 
             <StackPanel Orientation="Vertical">
 
@@ -51,8 +51,8 @@
                                     Click="btn_Help_Application_Click"
                                     Margin="0,20,0,0"
                                     materialDesign:ShadowAssist.ShadowDepth="Depth0"
-                                    Background="{StaticResource PrimaryBackgroundBrush}"
-                                    BorderBrush="{StaticResource PrimaryBackgroundBrush}"
+                                    Background="{DynamicResource MaterialDesignPaper}"
+                                    BorderBrush="{DynamicResource MaterialDesignPaper}"
                                     Style="{DynamicResource MaterialDesignFloatingActionMiniLightButton}"
                                     ToolTip="Open the instruction">
 
@@ -118,8 +118,8 @@
                                     Click="btn_Help_Files_Click"
                                     Margin="0,20,0,0"
                                     materialDesign:ShadowAssist.ShadowDepth="Depth0"
-                                    Background="{StaticResource PrimaryBackgroundBrush}"
-                                    BorderBrush="{StaticResource PrimaryBackgroundBrush}"
+                                    Background="{DynamicResource MaterialDesignPaper}"
+                                    BorderBrush="{DynamicResource MaterialDesignPaper}"
                                     Style="{DynamicResource MaterialDesignFloatingActionMiniLightButton}"
                                     ToolTip="Open the instruction">
 
@@ -140,10 +140,10 @@
                                 </ScrollViewer>
 
                                 <StackPanel Orientation="Horizontal" VerticalAlignment="Top">
-                                    <Button Click="btn_addMediaSource_Click" Background="{StaticResource PrimaryForegroundBrush}" BorderBrush="{x:Null}">
+                                    <Button Click="btn_addMediaSource_Click" Background="{DynamicResource PrimaryHueMidBrush}" BorderBrush="{x:Null}">
                                         <materialDesign:PackIcon Kind="Plus" />
                                     </Button>
-                                    <Button Click="btn_deleteMediaSource_Click" Background="{StaticResource PrimaryForegroundBrush}" BorderBrush="{x:Null}">
+                                    <Button Click="btn_deleteMediaSource_Click" Background="{DynamicResource PrimaryHueMidBrush}" BorderBrush="{x:Null}">
                                         <materialDesign:PackIcon Kind="Minus" />
                                     </Button>
                                 </StackPanel>
