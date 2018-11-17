@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{6745405B-8A1D-423F-9D17-95BAD658DB18}</ProjectGuid>
+    <ProjectGuid>{BF622E71-ACB5-401D-8AE2-4ABACE38AE00}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>DataManagement</RootNamespace>
-    <AssemblyName>DataManagement</AssemblyName>
+    <RootNamespace>GithubVersionChecker</RootNamespace>
+    <AssemblyName>GithubVersionChecker</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -20,7 +20,6 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <DocumentationFile>bin\Debug\DataManagement.xml</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -31,12 +30,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="MaterialDesignColors, Version=1.1.3.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\MaterialDesignColors.1.1.3\lib\net45\MaterialDesignColors.dll</HintPath>
-    </Reference>
-    <Reference Include="MaterialDesignThemes.Wpf, Version=2.5.0.1205, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\MaterialDesignThemes.2.5.0.1205\lib\net45\MaterialDesignThemes.Wpf.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -47,26 +40,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BotData.cs" />
-    <Compile Include="ButtonData.cs" />
-    <Compile Include="FileData.cs" />
-    <Compile Include="History.cs" />
-    <Compile Include="Hotkey.cs" />
-    <Compile Include="PersistentData.cs" />
-    <Compile Include="Playlist.cs" />
+    <Compile Include="GithubVersionChecker.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="RuntimeData.cs" />
-    <Compile Include="VideoData.cs" />
-    <Compile Include="VideoHistory.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\YoutubeSearch\YoutubeSearch.csproj">
-      <Project>{dfece3e8-99d9-4652-b486-bea1010329ba}</Project>
-      <Name>YoutubeSearch</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
+using MaterialDesignThemes.Wpf;
 
 namespace DiscordBot.UI
 {
@@ -30,6 +32,9 @@ namespace DiscordBot.UI
             Handle.Token = ((TextBox)sender).Text;
         }
 
+
+       
+
         private void btn_Help_Application_Click(object sender, RoutedEventArgs e)
         {
             openHelpPage("Settings#application");
@@ -42,7 +47,7 @@ namespace DiscordBot.UI
 
         private void openHelpPage(string page)
         {
-            System.Diagnostics.Process.Start(DataManagement.PersistentData.urlToGitRepo + "wiki/" + page);
+            System.Diagnostics.Process.Start(DataManagement.PersistentData.gitCompleteUrl + "wiki/" + page);
         }
 
         private void box_userName_TextChanged(object sender, TextChangedEventArgs e)

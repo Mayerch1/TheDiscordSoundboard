@@ -120,7 +120,7 @@
         </Grid>
         <DockPanel LastChildFill="True" Grid.ZIndex="0">
 
-            <Grid DockPanel.Dock="Bottom" Background="{DynamicResource PrimaryBackgroundBrush }">
+            <Grid DockPanel.Dock="Bottom" >
                 <StackPanel>
 
                     <materialDesign:ColorZone x:Name="col_LeftPanel"  Background="{DynamicResource PrimaryHueMidBrush}" Height="5" Width="70" HorizontalAlignment="Left" />
@@ -302,14 +302,14 @@
                 </StackPanel>
             </Border>
 
-            <Border Height="60" DockPanel.Dock="Top" Background="{DynamicResource MaterialDesignPaper}">
+            <Border Height="60" DockPanel.Dock="Top">
                 <materialDesign:ColorZone Height="55" materialDesign:ShadowAssist.ShadowDepth="Depth1" materialDesign:ShadowAssist.ShadowEdges="Bottom" Background="{DynamicResource MaterialDesignPaper}">
 
                     <Button HorizontalAlignment="Right" Margin="0,0,20,0"
                         x:Name="btn_Avatar"
                         Style="{StaticResource MaterialDesignFloatingActionMiniLightButton}"
                         ToolTip="Select a channel"
-                        BorderBrush="{DynamicResource SecondaryAccentBrush}"
+                        BorderBrush="{DynamicResource PrimaryHueLightBrush}"
                         Click="btn_Avatar_Click">
 
                         <Button.Background>

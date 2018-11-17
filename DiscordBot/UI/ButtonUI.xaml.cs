@@ -62,7 +62,7 @@ namespace DiscordBot.UI
 
             openFileDialog.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyMusic);
 
-            string allFormats = "*" + Handle.Data.Persistent.supportedFormats.Aggregate((i, j) => i + ";" + "*" + j);
+            string allFormats = "*" + Handle.Data.Persistent.SupportedFormats.Aggregate((i, j) => i + ";" + "*" + j);
             string allFormatString = "all supported types |" + allFormats;
 
             openFileDialog.Filter = allFormatString +

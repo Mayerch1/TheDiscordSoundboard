@@ -21,6 +21,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Util", "Util\Util.csproj", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PlaylistModule", "Modules\PlaylistModule\PlaylistModule.csproj", "{B1EE8812-C82C-4DE7-A589-5E1D88E49C20}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GithubVersionChecker", "GithubVersionChecker\GithubVersionChecker.csproj", "{BF622E71-ACB5-401D-8AE2-4ABACE38AE00}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -57,6 +59,10 @@ Global
 		{B1EE8812-C82C-4DE7-A589-5E1D88E49C20}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B1EE8812-C82C-4DE7-A589-5E1D88E49C20}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B1EE8812-C82C-4DE7-A589-5E1D88E49C20}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BF622E71-ACB5-401D-8AE2-4ABACE38AE00}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BF622E71-ACB5-401D-8AE2-4ABACE38AE00}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BF622E71-ACB5-401D-8AE2-4ABACE38AE00}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BF622E71-ACB5-401D-8AE2-4ABACE38AE00}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

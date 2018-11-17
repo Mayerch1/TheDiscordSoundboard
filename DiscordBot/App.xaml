@@ -17,8 +17,8 @@
             </Style>
             <Style x:Key="FloatingHeader" TargetType="materialDesign:ColorZone"
                    BasedOn="{StaticResource {x:Type materialDesign:ColorZone}}">
-                <Setter Property="Background" Value="{DynamicResource PrimaryHueDarkBrush}" />
-                <Setter Property="Foreground" Value="{DynamicResource PrimaryHueDarkForegroundBrush}"/>
+                <Setter Property="Background" Value="{DynamicResource PrimaryHueLightBrush}" />
+                <Setter Property="Foreground" Value="{DynamicResource PrimaryHueLightForegroundBrush}"/>
                 <Setter Property="Margin" Value="5" />
                 <Setter Property="Height" Value="75" />
                 <Setter Property="materialDesign:ShadowAssist.ShadowDepth" Value="Depth1" />
@@ -27,7 +27,7 @@
 
 
             <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Dark.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Light.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Defaults.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/MaterialDesignColors;component/Themes/Recommended/Primary/MaterialDesignColor.Indigo.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/MaterialDesignColors;component/Themes/Recommended/Accent/MaterialDesignColor.Lime.xaml" />

@@ -61,6 +61,7 @@
                                 HorizontalAlignment="Center"
                                 Background="{DynamicResource SecondaryAccentBrush}"
                                 BorderBrush="{DynamicResource SecondaryAccentBrush}"
+                                Foreground="{DynamicResource SecondaryAccentForegroundBrush}"
                                 Click="btn_license_Click"
                                 Content="View License" />
                     </Grid>

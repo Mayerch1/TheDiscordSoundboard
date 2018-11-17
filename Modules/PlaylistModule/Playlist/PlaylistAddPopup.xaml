@@ -30,7 +30,8 @@
                     <materialDesign:PackIcon Kind="Bitbucket" />
                 </Button>
                 <Button Content="Accept" Click="btn_Accept_Click" IsDefault="True"
-                        Background="{DynamicResource PrimaryHueMidBrush}" />
+                        Background="{DynamicResource PrimaryHueMidBrush}"
+                        Foreground="{DynamicResource PrimaryHueMidForegroundBrush}"/>
             </StackPanel>
         </StackPanel>
     </StackPanel>

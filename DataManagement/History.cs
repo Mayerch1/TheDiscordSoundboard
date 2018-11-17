@@ -5,7 +5,6 @@
     /// </summary>
     public class History : Playlist
     {
-        private const int maxHistoryLen = 50;
 
         /// <summary>
         /// Default constructor of history
@@ -16,10 +15,11 @@
         /// add Title to history, removes any title above max Length of history
         /// </summary>
         /// <param name="title"></param>
-        public void addTitle(FileData title)
+        /// <param name="maxLen">max. number of files in list</param>
+        public void addTitle(FileData title, int maxLen)
         {
             base.Tracks.Insert(0, title);
-            while (base.Tracks.Count > maxHistoryLen)
+            while (base.Tracks.Count > maxLen)
             {
                 base.Tracks.RemoveAt(base.Tracks.Count - 1);
             }

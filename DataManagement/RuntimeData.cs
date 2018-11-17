@@ -130,10 +130,10 @@ namespace DataManagement
             cleanBtnList();
 
             //upsize again, if list is to short to display
-            if (Persistent.BtnList.Count < PersistentData.minVisibleButtons || Persistent.BtnList.Count < (Persistent.HighestButtonToSave + 2))
+            if (Persistent.BtnList.Count < Persistent.MinVisibleButtons || Persistent.BtnList.Count < (Persistent.HighestButtonToSave + 2))
             {
                 //use highest from both if values above (short if)
-                int highestBtn = PersistentData.minVisibleButtons > (Persistent.HighestButtonToSave + 2) ? PersistentData.minVisibleButtons : (Persistent.HighestButtonToSave + 2);
+                int highestBtn = Persistent.MinVisibleButtons > (Persistent.HighestButtonToSave + 2) ? Persistent.MinVisibleButtons : (Persistent.HighestButtonToSave + 2);
 
                 for (int i = Persistent.BtnList.Count; i < highestBtn; i++)
                 {
@@ -235,7 +235,7 @@ namespace DataManagement
         private void loadDefaultValues()
         {
             //init the visible Buttons
-            for (int i = 0; i < PersistentData.minVisibleButtons; i++)
+            for (int i = 0; i < Persistent.MinVisibleButtons; i++)
             {
                 Persistent.BtnList.Add(mkDefaultButtonData());
             }

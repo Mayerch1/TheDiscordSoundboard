@@ -8,7 +8,7 @@
              d:DesignHeight="450" d:DesignWidth="800">
 
     <UserControl.Resources>
-        
+        <!-- list picker style -->
 
     </UserControl.Resources>
 
@@ -20,7 +20,9 @@
 
                 <materialDesign:ColorZone Style="{StaticResource FloatingHeader}">
 
-                    <TextBlock VerticalAlignment="Center"  Margin="20,0,0,0" FontSize="30" materialDesign:ShadowAssist.ShadowDepth="Depth2" Text="Settings" FontWeight="Bold" Foreground="#262626" />
+                    <TextBlock VerticalAlignment="Center" Margin="20,0,0,0" FontSize="30"
+                               materialDesign:ShadowAssist.ShadowDepth="Depth2" Text="Settings" FontWeight="Bold"
+                               Foreground="#262626" />
                 </materialDesign:ColorZone>
 
                 <materialDesign:ColorZone Style="{StaticResource FloatingSection}">
@@ -29,123 +31,139 @@
 
                         <StackPanel Orientation="Vertical">
                             <!--Settings Content-->
-                            <!-- add when dark/light slider is working
-                            <TextBlock Text="Appearance" FontSize="15" FontWeight="Bold" />
+                            
 
-                            <Separator Margin="0,5,0,0" />
 
-                            <StackPanel Orientation="Horizontal" Margin="0,20,0,0">
-                                <TextBlock Text="Light" Margin="10" FontSize="15" />
+                            <StackPanel Orientation="Vertical">
+                                <!-- general application settings-->
+                                <StackPanel Orientation="Horizontal">
 
-                                <ToggleButton IsChecked="{Binding IsDarkTheme}">
-                                </ToggleButton>
+                                    <TextBlock Text="Application" FontSize="15" FontWeight="Bold" />
+                                    <Button
+                                        Click="btn_Help_Application_Click"
+                                        Margin="0,20,0,0"
+                                        materialDesign:ShadowAssist.ShadowDepth="Depth0"
+                                        Background="{DynamicResource MaterialDesignPaper}"
+                                        BorderBrush="{DynamicResource MaterialDesignPaper}"
+                                        Style="{DynamicResource MaterialDesignFloatingActionMiniLightButton}"
+                                        ToolTip="Open the instruction">
 
-                                <TextBlock Text="Dark" Margin="10" FontSize="15" />
-                            </StackPanel>
+                                        <materialDesign:PackIcon
 
--->
-                            <!-- general application settings-->
-                            <StackPanel Orientation="Horizontal">
-                                <TextBlock Text="Application" FontSize="15" FontWeight="Bold" Margin="0,30,0,0" />
-                                <Button
-                                    Click="btn_Help_Application_Click"
-                                    Margin="0,20,0,0"
-                                    materialDesign:ShadowAssist.ShadowDepth="Depth0"
-                                    Background="{DynamicResource MaterialDesignPaper}"
-                                    BorderBrush="{DynamicResource MaterialDesignPaper}"
-                                    Style="{DynamicResource MaterialDesignFloatingActionMiniLightButton}"
-                                    ToolTip="Open the instruction">
-
-                                    <materialDesign:PackIcon
-
-                                          Kind="HelpCircleOutline"
-                                          Height="15"
-                                          Width="15" />
-                                </Button>
-                            </StackPanel>
-
-                            <Separator Margin="0,5,0,0" />
-
-                            <TextBox
-                                Style="{StaticResource MaterialDesignFilledTextFieldTextBox}"
-                                Text="{Binding ClientName}"
-                                TextChanged="box_userName_TextChanged"
-                                materialDesign:HintAssist.Hint="Own UserName#1234"
-                                HorizontalAlignment="Left"
-                                Margin="0,20,0,0"
-                                VerticalAlignment="Top"
-                                AcceptsReturn="False"
-                                TextWrapping="NoWrap"
-                                Width="450" />
-
-                            <TextBox
-                                Style="{StaticResource MaterialDesignFilledTextFieldTextBox}"
-                                Text="{Binding Token}"
-                                materialDesign:HintAssist.Hint="Bot Token"
-                                HorizontalAlignment="Left"
-                                Margin="0,20,0,0"
-                                VerticalAlignment="Top"
-                                AcceptsReturn="False"
-                                TextWrapping="NoWrap"
-                                Width="450" TextChanged="box_token_TextChanged" />
-
-                            <TextBox
-                                Style="{StaticResource MaterialDesignFilledTextFieldTextBox}"
-                                Text="{Binding SettingsPath}"
-                                materialDesign:HintAssist.Hint="Storage Directory"
-                                HorizontalAlignment="Left"
-                                Margin="0,20,0,0"
-                                VerticalAlignment="Top"
-                                AcceptsReturn="False"
-                                TextWrapping="NoWrap"
-                                Width="450" />
-
-                            <StackPanel Orientation="Horizontal" Margin="5,5,0,0">
-                                <TextBlock VerticalAlignment="Bottom">Volume Cap</TextBlock>
-
-                                <Slider Minimum="1" Maximum="100" Style="{StaticResource MaterialDesignDiscreteSlider}"
-                                    Margin="10,0,0,0"
-                                    ToolTip="Set Maximum Volume to this percentage"
-                                    Value="{Binding VolumeCap}"
-                                    Width="280" />
-                            </StackPanel>
-
-                            <!-- Media library stuff-->
-
-                            <StackPanel Orientation="Horizontal">
-                                <TextBlock Text="Files" FontSize="15" FontWeight="Bold" Margin="0,30,0,0" />
-                                <Button
-                                    Click="btn_Help_Files_Click"
-                                    Margin="0,20,0,0"
-                                    materialDesign:ShadowAssist.ShadowDepth="Depth0"
-                                    Background="{DynamicResource MaterialDesignPaper}"
-                                    BorderBrush="{DynamicResource MaterialDesignPaper}"
-                                    Style="{DynamicResource MaterialDesignFloatingActionMiniLightButton}"
-                                    ToolTip="Open the instruction">
-
-                                    <materialDesign:PackIcon
-
-                                          Kind="HelpCircleOutline"
-                                          Height="15"
-                                          Width="15" />
-                                </Button>
-                            </StackPanel>
-
-                            <Separator Margin="0,5,0,20" />
-
-                            <StackPanel Orientation="Horizontal">
-                                <ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Hidden">
-                                    <ListBox x:Name="list_MediaSources" ItemsSource="{Binding MediaSources}" MinWidth="300">
-                                    </ListBox>
-                                </ScrollViewer>
-
-                                <StackPanel Orientation="Horizontal" VerticalAlignment="Top">
-                                    <Button Click="btn_addMediaSource_Click" Background="{DynamicResource PrimaryHueMidBrush}" BorderBrush="{x:Null}">
-                                        <materialDesign:PackIcon Kind="Plus" />
+                                            Kind="HelpCircleOutline"
+                                            Height="15"
+                                            Width="15" />
                                     </Button>
-                                    <Button Click="btn_deleteMediaSource_Click" Background="{DynamicResource PrimaryHueMidBrush}" BorderBrush="{x:Null}">
-                                        <materialDesign:PackIcon Kind="Minus" />
+                                </StackPanel>
+
+                                <Separator Margin="0,5,0,0" />
+
+                                <TextBox
+                                    Style="{StaticResource MaterialDesignFilledTextFieldTextBox}"
+                                    Text="{Binding ClientName}"
+                                    TextChanged="box_userName_TextChanged"
+                                    materialDesign:HintAssist.Hint="Own UserName#1234"
+                                    HorizontalAlignment="Left"
+                                    Margin="0,20,0,0"
+                                    VerticalAlignment="Top"
+                                    AcceptsReturn="False"
+                                    TextWrapping="NoWrap"
+                                    Width="450" />
+
+                                <TextBox
+                                    Style="{StaticResource MaterialDesignFilledTextFieldTextBox}"
+                                    Text="{Binding Token}"
+                                    materialDesign:HintAssist.Hint="Bot Token"
+                                    HorizontalAlignment="Left"
+                                    Margin="0,20,0,0"
+                                    VerticalAlignment="Top"
+                                    AcceptsReturn="False"
+                                    TextWrapping="NoWrap"
+                                    Width="450" TextChanged="box_token_TextChanged" />
+
+                                <TextBox
+                                    Style="{StaticResource MaterialDesignFilledTextFieldTextBox}"
+                                    Text="{Binding SettingsPath}"
+                                    materialDesign:HintAssist.Hint="Storage Directory"
+                                    HorizontalAlignment="Left"
+                                    Margin="0,20,0,0"
+                                    VerticalAlignment="Top"
+                                    AcceptsReturn="False"
+                                    TextWrapping="NoWrap"
+                                    Width="450" />
+
+                                <StackPanel Orientation="Horizontal" Margin="5,5,0,0">
+                                    <TextBlock VerticalAlignment="Bottom">Volume Cap</TextBlock>
+
+                                    <Slider Minimum="1" Maximum="100"
+                                            Style="{StaticResource MaterialDesignDiscreteSlider}"
+                                            Margin="10,0,0,0"
+                                            ToolTip="Set Maximum Volume to this percentage"
+                                            Value="{Binding VolumeCap}"
+                                            Width="280" />
+                                </StackPanel>
+                            </StackPanel>
+
+                            <StackPanel Orientation="Vertical">
+                                <!-- Appearance -->
+
+                                <TextBlock Text="Appearance" FontSize="15" FontWeight="Bold" Margin="0,30,0,0" />
+
+                                <Separator Margin="0,5,0,0" />
+
+                                <StackPanel Orientation="Horizontal" Margin="0,20,0,0">
+                                    <TextBlock Text="Light" Margin="10" FontSize="15" />
+
+                                    <ToggleButton IsChecked="{Binding IsDarkTheme}" />
+
+                                    <TextBlock Text="Dark" Margin="10" FontSize="15" />
+                                </StackPanel>
+                            </StackPanel>
+
+
+                            <StackPanel Orientation="Vertical">
+                                <!-- File related stuff-->
+
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="Files" FontSize="15" FontWeight="Bold" Margin="0,30,0,0" />
+                                    <Button
+                                        Click="btn_Help_Files_Click"
+                                        Margin="0,20,0,0"
+                                        materialDesign:ShadowAssist.ShadowDepth="Depth0"
+                                        Background="{DynamicResource MaterialDesignPaper}"
+                                        BorderBrush="{DynamicResource MaterialDesignPaper}"
+                                        Style="{DynamicResource MaterialDesignFloatingActionMiniLightButton}"
+                                        ToolTip="Open the instruction">
+
+                                        <materialDesign:PackIcon
+
+                                            Kind="HelpCircleOutline"
+                                            Height="15"
+                                            Width="15" />
                                     </Button>
+                                </StackPanel>
+
+                                <Separator Margin="0,5,0,20" />
+
+                                <StackPanel Orientation="Horizontal">
+                                    <ScrollViewer HorizontalScrollBarVisibility="Disabled"
+                                                  VerticalScrollBarVisibility="Hidden">
+                                        <ListBox x:Name="list_MediaSources" ItemsSource="{Binding MediaSources}"
+                                                 MinWidth="300" />
+                                    </ScrollViewer>
+
+                                    <StackPanel Orientation="Horizontal" VerticalAlignment="Top">
+                                        <Button Click="btn_addMediaSource_Click"
+                                                Background="{DynamicResource PrimaryHueMidBrush}"
+                                                BorderBrush="{x:Null}">
+                                            <materialDesign:PackIcon Kind="Plus" />
+                                        </Button>
+                                        <Button Click="btn_deleteMediaSource_Click"
+                                                Background="{DynamicResource PrimaryHueMidBrush}"
+                                                BorderBrush="{x:Null}">
+                                            <materialDesign:PackIcon Kind="Minus" />
+                                        </Button>
+                                    </StackPanel>
                                 </StackPanel>
                             </StackPanel>
                         </StackPanel>
@@ -154,4 +172,4 @@
             </StackPanel>
         </ScrollViewer>
     </Grid>
-</UserControl> 
+</UserControl>

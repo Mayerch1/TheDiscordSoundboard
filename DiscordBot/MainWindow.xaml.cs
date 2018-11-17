@@ -11,6 +11,8 @@ using System.Windows.Media.Animation;
 using System.Windows.Threading;
 using BotModule;
 using DiscordBot.UI;
+using GithubVersionChecker;
+using MaterialDesignColors;
 using MaterialDesignThemes.Wpf;
 using StreamModule;
 using PlaylistModule;
@@ -155,7 +157,15 @@ namespace DiscordBot
             //need this, so other tasks will wait
             Handle.Data.loadAll();
 
+
             InitializeComponent();
+
+            //--------
+            //self assign theme values
+            //this will apply themes to the ui
+            
+            Handle.Data.Persistent.IsDarkTheme = Handle.Data.Persistent.IsDarkTheme;
+            //--------
 
             LastVolume = Volume;
 
@@ -193,6 +203,9 @@ namespace DiscordBot
             }
 
             FileWatcher.indexFiles(Handle.Data.Persistent.MediaSources);
+
+
+           
         }
 
         private void MainWindow_Closing(object sender, CancelEventArgs e)
@@ -253,11 +266,7 @@ namespace DiscordBot
             Handle.Volume = Handle.Data.Persistent.Volume;
             Handle.ChannelId = Handle.Data.Persistent.ChannelId;
 
-            await Handle.Bot.connectToServerAsync();
-            if (await Misc.UpdateChecker.CheckForUpdate())
-            {
-                SnackbarManager.SnackbarMessage("A newer version is available", SnackbarManager.SnackbarAction.Update);
-            }
+            await Handle.Bot.connectToServerAsync();                     
         }
 
         private void initTimer()
@@ -266,12 +275,13 @@ namespace DiscordBot
             //ticks 4 times a second
             DispatcherTimer dispatcherTimer = new DispatcherTimer();
             dispatcherTimer.Tick += new EventHandler(dispatcherTimer_Tick);
-            dispatcherTimer.Interval = new TimeSpan(0, 0, 0, 0, 250);
+            dispatcherTimer.Interval = new TimeSpan(0, 0, 0, 0, 250);           
             dispatcherTimer.Start();
             //-------------------
             //timer for resizing
             resizeTimer.Tick += new EventHandler(Window_ResizingDone);
             resizeTimer.Interval = new TimeSpan(0, 0, 0, 0, 75);
+            
         }
 
 
@@ -338,6 +348,7 @@ namespace DiscordBot
 
         private void dispatcherTimer_Tick(object sender, EventArgs e)
         {
+            
             //tell ui that positioning properties have changed
             if (Handle.Bot.IsStreaming)
             {
@@ -352,6 +363,14 @@ namespace DiscordBot
         {
             //delay this method by 2,5 seconds
             await Task.Delay(2500);
+
+            //search for updates on github/releases
+            var git = new GithubVersionChecker.GithubUpdateChecker(DataManagement.PersistentData.gitAuthor, DataManagement.PersistentData.gitRepo);
+            if (await git.CheckForUpdateAsync(DataManagement.PersistentData.version, VersionChange.Revision))
+            {
+                SnackbarManager.SnackbarMessage("A newer version is available", SnackbarManager.SnackbarAction.Update);
+            }
+
 
             //resolve user to get avatar-url
             var client = Handle.BotMisc.extractClient(await Handle.Bot.getAllClients(true), Handle.ClientId);
@@ -554,6 +573,12 @@ namespace DiscordBot
             //this is called, when no action is required/provided
         }
 
+        private void snackBar_OpenUpdate()
+        {
+            System.Diagnostics.Process.Start(DataManagement.PersistentData.gitCompleteUrl);
+        }
+
+
         private void SnackbarMessage_Show(string msg, SnackbarManager.SnackbarAction action)
         {
             string optionMsg = action.ToString();
@@ -570,7 +595,7 @@ namespace DiscordBot
                     break;
 
                 case SnackbarManager.SnackbarAction.Update:
-                    handler = Misc.UpdateChecker.OpenUpdatePage;
+                    handler = snackBar_OpenUpdate;
                     break;
 
                 case SnackbarManager.SnackbarAction.Log:
@@ -693,7 +718,7 @@ namespace DiscordBot
         private void addTitleToHistory(DataManagement.BotData title)
         {
             if (File.Exists(title.filePath))
-                Handle.Data.History.addTitle(FileWatcher.getAllFileInfo(title.filePath));
+                Handle.Data.History.addTitle(FileWatcher.getAllFileInfo(title.filePath), Handle.Data.Persistent.MaxHistoryLen);
         }
 
         private async void bot_streamState_Changed(bool newState)

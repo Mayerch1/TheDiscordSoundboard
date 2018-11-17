@@ -220,7 +220,6 @@
     <Compile Include="UI\Settings.xaml.cs">
       <DependentUpon>Settings.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Misc\UpdateChecker.cs" />
     <Page Include="UI\About.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -312,6 +311,10 @@
     <ProjectReference Include="..\DataManagement\DataManagement.csproj">
       <Project>{6745405b-8a1d-423f-9d17-95bad658db18}</Project>
       <Name>DataManagement</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\GithubVersionChecker\GithubVersionChecker.csproj">
+      <Project>{bf622e71-acb5-401d-8ae2-4abace38ae00}</Project>
+      <Name>GithubVersionChecker</Name>
     </ProjectReference>
     <ProjectReference Include="..\Modules\BotModule\BotModule.csproj">
       <Project>{f05a9a53-0213-4334-82e4-36d922c23127}</Project>

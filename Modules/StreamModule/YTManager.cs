@@ -211,7 +211,7 @@ namespace StreamModule
                 SnackbarManager.SnackbarMessage("File too large");
                 Console.WriteLine(@"File " + name + @" is to large to save");
             }
-            catch (System.IO.IOException ex)
+            catch (System.IO.IOException)
             {
                 //return old file
                 if (File.Exists(location))

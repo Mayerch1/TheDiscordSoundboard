@@ -59,7 +59,7 @@
                                         </Button.Style>
                                     </Button>
 
-                                    <Button Name="TestButton" Height="Auto" Width="Auto" Command="{x:Static materialDesign:Flipper.FlipCommand}"  BorderBrush="{x:Null}" Foreground="#FF707070" HorizontalAlignment="Right" VerticalAlignment="Top" Background="{x:Null}">
+                                        <Button Name="TestButton" Height="Auto" Width="Auto" Command="{x:Static materialDesign:Flipper.FlipCommand}"  BorderBrush="{x:Null}" Foreground="#FF707070" HorizontalAlignment="Right" VerticalAlignment="Top" Background="{x:Null}">
                                         <materialDesign:PackIcon
                                             Kind="Settings"
                                             Width="25"
@@ -86,7 +86,7 @@
                                 <StackPanel Orientation="Vertical">
 
                                     <Grid>
-                                        <materialDesign:ColorZone Mode="Accent" Padding="0" Background="{DynamicResource PrimaryHueMidBrush}">
+                                        <materialDesign:ColorZone Mode="Accent" Padding="0" Background="{DynamicResource PrimaryHueMidBrush}" Foreground="{DynamicResource PrimaryHueMidForegroundBrush}">
 
                                             <Button Style="{StaticResource MaterialDesignToolForegroundButton}" Command="{x:Static materialDesign:Flipper.FlipCommand}" HorizontalAlignment="Stretch" Click="btn_Return_Click">
                                                 BACK
@@ -98,10 +98,10 @@
                                         <StackPanel Orientation="Vertical">
 
                                             <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
-                                                <Button Margin="0,0,10,0" Click="btn_FileChooser_Click" Tag="{Binding ID}" VerticalAlignment="Top" BorderBrush="{DynamicResource SecondaryAccentBrush}" Background="{DynamicResource SecondaryAccentBrush}">
+                                                    <Button Margin="0,0,10,0" Click="btn_FileChooser_Click" Tag="{Binding ID}" VerticalAlignment="Top" BorderBrush="{DynamicResource SecondaryAccentBrush}" Background="{DynamicResource SecondaryAccentBrush}" Foreground="{DynamicResource SecondaryAccentForegroundBrush}">
                                                     <materialDesign:PackIcon Kind="File" Width="25" Height="25" />
                                                 </Button>
-                                                <Button Margin="5,0,0,0" Click="btn_HotkeyEditor_Click" Tag="{Binding ID}" VerticalAlignment="Top" BorderBrush="{DynamicResource SecondaryAccentBrush}"  Background="{DynamicResource SecondaryAccentBrush}">
+                                                    <Button Margin="5,0,0,0" Click="btn_HotkeyEditor_Click" Tag="{Binding ID}" VerticalAlignment="Top" BorderBrush="{DynamicResource SecondaryAccentBrush}"  Background="{DynamicResource SecondaryAccentBrush}" Foreground="{DynamicResource SecondaryAccentForegroundBrush}">
                                                     <materialDesign:PackIcon Kind="Keyboard" Width="25" Height="25" />
                                                 </Button>
                                             </StackPanel>

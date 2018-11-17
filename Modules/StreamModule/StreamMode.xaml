@@ -103,6 +103,7 @@
                                         DockPanel.Dock="Right"
                                         Height="Auto" Width="Auto" Margin="20"
                                         Background="{DynamicResource PrimaryHueMidBrush}"
+                                        Foreground="{DynamicResource PrimaryHueMidForegroundBrush}"
                                         BorderBrush="{x:Null}">
                                     <materialDesign:PackIcon Kind="ArrowRight" Height="30" Width="30" Margin="5" />
                                     <Button.ContextMenu>
