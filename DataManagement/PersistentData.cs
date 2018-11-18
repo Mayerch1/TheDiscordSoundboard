@@ -61,11 +61,13 @@ namespace DataManagement
 
         #region persistend fields
 
+        private bool dontSave = false;
+
         private ObservableCollection<ButtonData> btnList = new ObservableCollection<ButtonData>();
         private ObservableCollection<string> mediaSources = new ObservableCollection<string>();
         private ObservableCollection<FileData> playListIndex = new ObservableCollection<FileData>();
         private ObservableCollection<Hotkey> hotkeyList = new ObservableCollection<Hotkey>();
-        private ObservableCollection<string> supportedFormats = new ObservableCollection<string> { "mp3", "wav", "asf", "wma", "wmv", "sami", "smi", "3g2", "3gp", "3pg2", "3pgg", "aac", "adts", "m4a", "m4v", "mov", "mp4" };
+        private ObservableCollection<string> supportedFormats = new ObservableCollection<string>();
 
         private bool isFirstStart = true;
         private bool isEulaAccepted = false;
@@ -96,6 +98,23 @@ namespace DataManagement
         #endregion persistend fields
 
         #region persistend properties
+
+
+        /// <summary>
+        /// For debugging, will not save any changes
+        /// </summary>
+        public bool DontSave
+        {
+            get => dontSave;
+            set
+            {
+                dontSave = value;
+                OnPropertyChanged("DontSave");
+            }
+        }
+
+
+
 
         /// <summary>
         /// IsFirstStart property

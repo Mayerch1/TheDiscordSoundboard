@@ -194,7 +194,13 @@ namespace DiscordBot
             {
                 Handle.Data.Persistent.IsFirstStart = false;
 
-                btn_Settings_Click(null, null);
+                //switch to settings page
+                //btn_Settings_Click(null, null);
+
+                //start tutorial
+                MainGrid.Children.Clear();
+                MainGrid.Children.Add(new UI.Tutorial.TutorialMaster());
+
             }
             else
             {
@@ -202,10 +208,7 @@ namespace DiscordBot
                 initDelayedAsync();
             }
 
-            FileWatcher.indexFiles(Handle.Data.Persistent.MediaSources);
-
-
-           
+            FileWatcher.indexFiles(Handle.Data.Persistent.MediaSources);          
         }
 
         private void MainWindow_Closing(object sender, CancelEventArgs e)
@@ -235,13 +238,13 @@ namespace DiscordBot
         {
             try
             {
-                Properties.Settings.Default.Path = Handle.Data.Persistent.SettingsPath;
+                Properties.Settings.Default.Path = Handle.Data.Persistent.SettingsPath;              
                 Properties.Settings.Default.Save();
             }
             catch {/* do nothing */}
 
-
-            Handle.Data.saveAll();
+            if (!Handle.Data.Persistent.DontSave)
+                Handle.Data.saveAll();
 
             ImageManager.clearImageCache(Handle.Data.Playlists);
             if (File.Exists("StreamModule.dll"))
@@ -538,8 +541,7 @@ namespace DiscordBot
             };
         }
 
-        private void PassBlurEffectDelegate(bool isEnabled)
-        { }
+    
 
         private void ToggleHotkey(bool isEnabled)
         {
@@ -618,9 +620,9 @@ namespace DiscordBot
         
             //play as priority or as queue
             if(isInstant)
-            triggerBotInstantReplay(new DataManagement.BotData(Handle.Data.Persistent.BtnList[btnListIndex]));
+            triggerInstantReplay(new DataManagement.BotData(Handle.Data.Persistent.BtnList[btnListIndex]));
             else
-            triggerBotQueueReplay(new DataManagement.BotData(Handle.Data.Persistent.BtnList[btnListIndex]));
+            triggerQueueReplay(new DataManagement.BotData(Handle.Data.Persistent.BtnList[btnListIndex]));
                        
         }
 
@@ -636,27 +638,27 @@ namespace DiscordBot
 
                     if (isPriority)
                         //interrupt current stream
-                        triggerBotInstantReplay(data);
+                        triggerInstantReplay(data);
                     else
 
-                        triggerBotQueueReplay(data);
+                        triggerQueueReplay(data);
                 }
             }
         }
 
         private void Playlist_SingleFile_Play(DataManagement.FileData file)
         {
-            triggerBotQueueReplay(new DataManagement.BotData(file.Name, file.Path));
+            triggerQueueReplay(new DataManagement.BotData(file.Name, file.Path));
         }
 
         private void Stream_Video_Play(DataManagement.BotData data)
         {
-            triggerBotInstantReplay(data, true);
+            triggerInstantReplay(data, true);
         }
 
         private void Stream_Video_Queue(DataManagement.BotData data)
         {
-            triggerBotQueueReplay(data, true);
+            triggerQueueReplay(data, true);
         }
 
         private void Stream_Eula_Rejected()
@@ -682,14 +684,26 @@ namespace DiscordBot
 
             if (nextFile != null)
             {
-                triggerBotInstantReplay(new DataManagement.BotData(nextFile.Name,
+                triggerInstantReplay(new DataManagement.BotData(nextFile.Name,
                     nextFile.Path));
                 Handle.Data.IsPlaylistPlaying = true;
             }
         }
 
 
-        private async void triggerBotInstantReplay(DataManagement.BotData data, bool disableHistory = false)
+        private async void triggerInstantReplay(DataManagement.BotData data, bool disableHistory = false)
+        {
+            await triggerBotInstantReplay(data, disableHistory);
+        }
+
+        private async void triggerQueueReplay(DataManagement.BotData data, bool disableHistory = false)
+        {
+            await triggerBotQueueReplay(data, disableHistory);
+        }
+
+
+
+        private async Task triggerBotInstantReplay(DataManagement.BotData data, bool disableHistory)
         {
             //place song in front of queue
             await Handle.Bot.enqueuePriorityAsync(data);
@@ -702,7 +716,7 @@ namespace DiscordBot
                 Handle.Bot.skipTrack();
         }
 
-        private async void triggerBotQueueReplay(DataManagement.BotData data, bool disableHistory = false)
+        private async Task triggerBotQueueReplay(DataManagement.BotData data, bool disableHistory)
         {
             await Handle.Bot.enqueueAsync(data);
 
@@ -751,7 +765,7 @@ namespace DiscordBot
                     if (nextFile != null)
                     {
                         //enqueue next file
-                        triggerBotQueueReplay(new DataManagement.BotData(nextFile.Name, nextFile.Path));
+                        triggerQueueReplay(new DataManagement.BotData(nextFile.Name, nextFile.Path));
 
                         Handle.Data.IsPlaylistPlaying = true;
                     }

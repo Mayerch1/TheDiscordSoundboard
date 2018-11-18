@@ -95,6 +95,7 @@
                 <ListBox x:Name="list_All" ItemsSource="{Binding FilteredFiles}" SelectionMode="Extended"
                          KeyDown="stack_list_KeyDown" HorizontalContentAlignment="Stretch"
                          SelectionChanged="list_All_SelectionChanged"
+                         MinHeight="50"
                          dd:DragDrop.IsDragSource="True"
                          dd:DragDrop.IsDropTarget="True"
                          dd:DragDrop.DropHandler="{Binding}">

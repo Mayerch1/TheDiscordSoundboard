@@ -31,10 +31,7 @@ namespace DiscordBot.UI
         {
             Handle.Token = ((TextBox)sender).Text;
         }
-
-
-       
-
+   
         private void btn_Help_Application_Click(object sender, RoutedEventArgs e)
         {
             openHelpPage("Settings#application");
@@ -43,6 +40,10 @@ namespace DiscordBot.UI
         private void btn_Help_Files_Click(object sender, RoutedEventArgs e)
         {
             openHelpPage("Settings#files");
+        }
+        private void btn_Help_Appearance_Click(object sender, RoutedEventArgs e)
+        {
+            openHelpPage("Settings#appearance");
         }
 
         private void openHelpPage(string page)

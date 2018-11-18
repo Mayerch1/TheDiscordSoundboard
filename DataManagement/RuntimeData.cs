@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 
@@ -18,6 +19,7 @@ namespace DataManagement
         private const string playlistFile = "\\Playlist.xml";
         private const string historyFile = "\\History.xml";
         private const string videoHistoryFile = "\\VideoHistory.xml";
+        private readonly List<string> supportedFormatsBackup = new List<string> { "mp3", "wav", "asf", "wma", "wmv", "sami", "smi", "3g2", "3gp", "3pg2", "3pgg", "aac", "adts", "m4a", "m4v", "mov", "mp4" };
 
         #endregion constants
 
@@ -172,6 +174,7 @@ namespace DataManagement
             if (String.IsNullOrWhiteSpace(Persistent.SettingsPath))
                 Persistent.SettingsPath = System.Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + applicationDirectory;
 
+
             if ((Persistent = (PersistentData)loadObject(Persistent, saveFile)) == null)
             {
                 //create new one, old one was overwirtten with =null
@@ -180,6 +183,8 @@ namespace DataManagement
                 Persistent.SettingsPath = System.Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + applicationDirectory;
                 loadDefaultValues();
             }
+
+
             //normalize btn
             resizeBtnList();
 
@@ -241,6 +246,7 @@ namespace DataManagement
             }
             //init media sources
             Persistent.MediaSources.Add(Environment.GetFolderPath(Environment.SpecialFolder.MyMusic));
+            Persistent.SupportedFormats = new ObservableCollection<string>(supportedFormatsBackup);
         }
 
         /// <summary>

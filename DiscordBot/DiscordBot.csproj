@@ -220,6 +220,30 @@
     <Compile Include="UI\Settings.xaml.cs">
       <DependentUpon>Settings.xaml</DependentUpon>
     </Compile>
+    <Compile Include="UI\Tutorial\Slide_Intro.xaml.cs">
+      <DependentUpon>Slide_Intro.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\Tutorial\Slide_Bot_1.xaml.cs">
+      <DependentUpon>Slide_Bot_1.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\Tutorial\Slide_Bot_2.xaml.cs">
+      <DependentUpon>Slide_Bot_2.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\Tutorial\Slide_Bot_3.xaml.cs">
+      <DependentUpon>Slide_Bot_3.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\Tutorial\Slide_Bot_4.xaml.cs">
+      <DependentUpon>Slide_Bot_4.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\Tutorial\Slide_Bot_5.xaml.cs">
+      <DependentUpon>Slide_Bot_5.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\Tutorial\Slide_EnterCredentials.xaml.cs">
+      <DependentUpon>Slide_EnterCredentials.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\Tutorial\TutorialMaster.xaml.cs">
+      <DependentUpon>TutorialMaster.xaml</DependentUpon>
+    </Compile>
     <Page Include="UI\About.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -249,6 +273,38 @@
       <SubType>Code</SubType>
     </Compile>
     <Page Include="UI\Settings.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\Tutorial\Slide_Intro.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="UI\Tutorial\Slide_Bot_1.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="UI\Tutorial\Slide_Bot_2.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="UI\Tutorial\Slide_Bot_3.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="UI\Tutorial\Slide_Bot_4.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="UI\Tutorial\Slide_Bot_5.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="UI\Tutorial\Slide_EnterCredentials.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="UI\Tutorial\TutorialMaster.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

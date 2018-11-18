@@ -10,6 +10,17 @@
     <UserControl.Resources>
         <!-- list picker style -->
 
+
+        <!-- help icon -->
+        <Style x:Key="HelpButton" TargetType="Button" BasedOn="{StaticResource MaterialDesignFloatingActionMiniLightButton}">
+            <Setter Property="materialDesign:ShadowAssist.ShadowDepth" Value="Depth0"/>
+            <Setter Property="Background" Value="{DynamicResource MaterialDesignPaper}"/>
+            <Setter Property="BorderBrush" Value="{DynamicResource MaterialDesignPaper}"/>
+            <Setter Property="Foreground" Value="{DynamicResource MaterialDesignBody}"/>
+            <Setter Property="Margin" Value="0,20,0,0"/>
+            <Setter Property="ToolTip" Value="Open the wiki-page"/>
+        </Style>
+
     </UserControl.Resources>
 
 
@@ -21,8 +32,7 @@
                 <materialDesign:ColorZone Style="{StaticResource FloatingHeader}">
 
                     <TextBlock VerticalAlignment="Center" Margin="20,0,0,0" FontSize="30"
-                               materialDesign:ShadowAssist.ShadowDepth="Depth2" Text="Settings" FontWeight="Bold"
-                               Foreground="#262626" />
+                               materialDesign:ShadowAssist.ShadowDepth="Depth2" Text="Settings" FontWeight="Bold"/>
                 </materialDesign:ColorZone>
 
                 <materialDesign:ColorZone Style="{StaticResource FloatingSection}">
@@ -39,14 +49,9 @@
                                 <StackPanel Orientation="Horizontal">
 
                                     <TextBlock Text="Application" FontSize="15" FontWeight="Bold" />
-                                    <Button
-                                        Click="btn_Help_Application_Click"
-                                        Margin="0,20,0,0"
-                                        materialDesign:ShadowAssist.ShadowDepth="Depth0"
-                                        Background="{DynamicResource MaterialDesignPaper}"
-                                        BorderBrush="{DynamicResource MaterialDesignPaper}"
-                                        Style="{DynamicResource MaterialDesignFloatingActionMiniLightButton}"
-                                        ToolTip="Open the instruction">
+                                    <Button Click="btn_Help_Application_Click"
+                                            Style="{StaticResource HelpButton}"
+                                            Margin="0,-11,0,0">
 
                                         <materialDesign:PackIcon
 
@@ -107,7 +112,20 @@
                             <StackPanel Orientation="Vertical">
                                 <!-- Appearance -->
 
+                                <StackPanel Orientation="Horizontal">
                                 <TextBlock Text="Appearance" FontSize="15" FontWeight="Bold" Margin="0,30,0,0" />
+                                    <Button
+                                        Click="btn_Help_Appearance_Click"
+                                       
+                                        Style="{StaticResource HelpButton}">
+
+                                        <materialDesign:PackIcon
+
+                                            Kind="HelpCircleOutline"
+                                            Height="15"
+                                            Width="15" />
+                                    </Button>
+                                </StackPanel>
 
                                 <Separator Margin="0,5,0,0" />
 
@@ -117,6 +135,12 @@
                                     <ToggleButton IsChecked="{Binding IsDarkTheme}" />
 
                                     <TextBlock Text="Dark" Margin="10" FontSize="15" />
+
+                                </StackPanel>
+
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="Don't Save (Debug)"/>
+                                    <CheckBox IsChecked="{Binding DontSave}"/>
                                 </StackPanel>
                             </StackPanel>
 
@@ -127,13 +151,8 @@
                                 <StackPanel Orientation="Horizontal">
                                     <TextBlock Text="Files" FontSize="15" FontWeight="Bold" Margin="0,30,0,0" />
                                     <Button
-                                        Click="btn_Help_Files_Click"
-                                        Margin="0,20,0,0"
-                                        materialDesign:ShadowAssist.ShadowDepth="Depth0"
-                                        Background="{DynamicResource MaterialDesignPaper}"
-                                        BorderBrush="{DynamicResource MaterialDesignPaper}"
-                                        Style="{DynamicResource MaterialDesignFloatingActionMiniLightButton}"
-                                        ToolTip="Open the instruction">
+                                        Click="btn_Help_Files_Click"                                        
+                                        Style="{StaticResource HelpButton}">
 
                                         <materialDesign:PackIcon
 
