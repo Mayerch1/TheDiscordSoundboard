@@ -61,9 +61,9 @@
         <materialDesign:PackIcon x:Key="IconLowVolume" Margin="5,0,5,0" Kind="VolumeLow" Height="24" Width="24" />
         <materialDesign:PackIcon x:Key="IconMediumVolume" Margin="5,0,5,0" Kind="VolumeMedium" Height="24" Width="24" />
         <materialDesign:PackIcon x:Key="IconHighVolume"  Margin="5,0,5,0" Kind="VolumeHigh" Height="24" Width="24" />
-        <materialDesign:PackIcon x:Key="IconRepeatOnce" Kind="RepeatOnce" Height="21" Width="21" />
+        <materialDesign:PackIcon x:Key="IconRepeatOnce" Kind="RepeatOnce" Height="21" Width="21" Foreground="{DynamicResource SecondaryAccentBrush}"/>
         <materialDesign:PackIcon x:Key="IconRepeatOff" Kind="RepeatOff" Height="21" Width="21" />
-        <materialDesign:PackIcon x:Key="IconRepeatAll" Kind="Repeat" Height="21" Width="21" />
+        <materialDesign:PackIcon x:Key="IconRepeatAll" Kind="Repeat" Height="21" Width="21" Foreground="{DynamicResource SecondaryAccentBrush}"/>
         <materialDesign:PackIcon x:Key="IconPlay" Kind="Play" />
         <materialDesign:PackIcon x:Key="IconPause" Kind="Pause" />
         <materialDesign:PackIcon x:Key="IconMagnify" Kind="Magnify" Width ="35" Height="35" VerticalAlignment="Center"/>
@@ -83,7 +83,7 @@
             <Setter Property="Margin" Value="0,0,0,0"/>
             <Setter Property="Foreground" Value="Black"/>
             <Setter Property="Background" Value="{DynamicResource PrimaryHueMidBrush}"/>
-            <Setter Property="BorderBrush" Value="{DynamicResource PrimaryHueMidBrush}"/>
+            <Setter Property="BorderBrush" Value="{x:Null}"/>
             <Setter Property="materialDesign:ShadowAssist.ShadowDepth" Value="Depth0"/>
             <Setter Property="HorizontalContentAlignment" Value="Left"/>
         </Style>
@@ -142,8 +142,9 @@
                                     <Button x:Name="btn_Previous"
                                     Click="btn_Previous_Click"
                                     materialDesign:ShadowAssist.ShadowDepth="Depth0"
-                                    Background="{DynamicResource MaterialDesignPaper}"
-                                    BorderBrush="{DynamicResource MaterialDesignPaper}"
+                                    Background="{x:Null}"
+                                    BorderBrush="{x:Null}"
+                                    Foreground="{DynamicResource MaterialDesignBody}"
                                     Style="{StaticResource MaterialDesignFloatingActionMiniLightButton}"
                                     ToolTip="Pervious"
                                     HorizontalAlignment="Left">
@@ -156,9 +157,10 @@
                                     </Button>
 
                                     <Button x:Name="btn_Play"
-                                   Background="{DynamicResource PrimaryHueMidBrush}"
+                                    Background="{DynamicResource PrimaryHueMidBrush}"
                                     Margin="10,0,10,0"
-                                    BorderBrush="{DynamicResource SecondaryAccentBrush}"
+                                    BorderBrush="{DynamicResource PrimaryHueMidBrush}"
+                                    Foreground="{DynamicResource PrimaryHueMidForegroundBrush}"
                                     Style="{StaticResource MaterialDesignFloatingActionButton}"
                                     Click="btn_Play_Click"
                                       Content="{materialDesign:PackIcon Play}" />
@@ -166,8 +168,9 @@
                                     <Button x:Name="btn_Next"
                                     Click="btn_Next_Click"
                                     materialDesign:ShadowAssist.ShadowDepth="Depth0"
-                                    Background="{DynamicResource MaterialDesignPaper}"
-                                    BorderBrush="{DynamicResource MaterialDesignPaper}"
+                                    Background="{x:Null}"
+                                    BorderBrush="{x:Null}"
+                                    Foreground="{DynamicResource MaterialDesignBody}"
                                     Style="{DynamicResource MaterialDesignFloatingActionMiniLightButton}"
                                             ToolTip="Next">
 
@@ -183,8 +186,9 @@
                                             
                                       Style="{StaticResource MaterialDesignFloatingActionMiniLightButton}"
                                       ToolTip="Repeat"
-                                        Background="{DynamicResource MaterialDesignPaper}"
-                                        BorderBrush="{DynamicResource MaterialDesignPaper}"
+                                        Background="{x:Null}"
+                                        BorderBrush="{x:Null}"
+                                            Foreground="{DynamicResource MaterialDesignBody}"
                                         materialDesign:ShadowAssist.ShadowDepth="Depth0">
 
                                         <materialDesign:PackIcon
@@ -213,7 +217,7 @@
                                         <Slider VerticalAlignment="Center"
 
                                                 x:Name="timeBar"
-                                                Foreground="{DynamicResource SecondaryAccentBrush}"
+                                                Foreground="{DynamicResource PrimaryHueMidBrush}"
                                                 Margin="0,0,0,0"
                                                 TickFrequency="1"
                                                 Orientation="Horizontal"
@@ -254,8 +258,9 @@
                                     <Button x:Name ="btn_Volume" HorizontalAlignment="Center"
                                     Click="btn_Volume_Click"
                                     materialDesign:ShadowAssist.ShadowDepth="Depth0"
-                                    Background="{DynamicResource MaterialDesignPaper}"
-                                    BorderBrush="{DynamicResource MaterialDesignPaper}"
+                                    Background="{x:Null}"
+                                    BorderBrush="{x:Null}"
+                                    Foreground="{DynamicResource MaterialDesignBody}"
                                     Style="{StaticResource MaterialDesignFloatingActionMiniLightButton}"
                                     ToolTip="Mute">
 
@@ -268,7 +273,7 @@
 
                                     <Slider VerticalAlignment="Center"
 
-                                        Foreground="{DynamicResource SecondaryAccentBrush}"
+                                        Foreground="{DynamicResource PrimaryHueMidBrush}"
                                         Margin="5,0,0,0"
                                         TickFrequency="5"
                                         Orientation="Horizontal"
@@ -309,7 +314,7 @@
                         x:Name="btn_Avatar"
                         Style="{StaticResource MaterialDesignFloatingActionMiniLightButton}"
                         ToolTip="Select a channel"
-                        BorderBrush="{DynamicResource PrimaryHueLightBrush}"
+                        BorderBrush="{DynamicResource PrimaryHueMidBrush}"
                         Click="btn_Avatar_Click">
 
                         <Button.Background>

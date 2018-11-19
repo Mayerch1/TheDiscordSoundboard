@@ -40,8 +40,9 @@
             <Grid Grid.Row="0">
                 <StackPanel>
                     <materialDesign:ColorZone Height="35" materialDesign:ShadowAssist.ShadowDepth="Depth1"
-                                              materialDesign:ShadowAssist.ShadowEdges="Bottom" Background="White"
-                                              HorizontalAlignment="Stretch" Margin="0,5,0,5">
+                                              materialDesign:ShadowAssist.ShadowEdges="Bottom"
+                                              HorizontalAlignment="Stretch" Margin="0,5,0,5"
+                                              Background="{DynamicResource MaterialDesignPaper}">
                         <DockPanel LastChildFill="True">
                             <Button Background="Gray" BorderBrush="Gray" Click="btn_editList_Click" Height="30"
                                     Width="30" DockPanel.Dock="Right"
@@ -49,7 +50,7 @@
                                     Margin="10,0,10,5">
                                 <materialDesign:PackIcon Kind="Pencil" Height="20" Width="20" />
                             </Button>
-                            <TextBlock DataContext="{Binding Playlist}" Text="{Binding Name}" DockPanel.Dock="Left"
+                            <TextBlock DataContext="{Binding Playlist}" Text="{Binding Name}" DockPanel.Dock="Left" VerticalAlignment="Center"
                                        FontSize="20" FontWeight="Bold" Margin="10,0,0,0" />
                         </DockPanel>
                     </materialDesign:ColorZone>
