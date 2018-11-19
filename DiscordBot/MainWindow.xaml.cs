@@ -212,7 +212,7 @@ namespace DiscordBot
                 initDelayedAsync();
             }
 
-            FileWatcher.indexFiles(Handle.Data.Persistent.MediaSources);          
+            FileWatcher.indexFiles(Handle.Data.Persistent.MediaSources);
         }
 
         private void MainWindow_Closing(object sender, CancelEventArgs e)

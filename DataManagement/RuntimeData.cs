@@ -183,6 +183,9 @@ namespace DataManagement
                 Persistent.SettingsPath = System.Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + applicationDirectory;
                 loadDefaultValues();
             }
+            if (Persistent.SupportedFormats.Count == 0)
+                Persistent.SupportedFormats = new ObservableCollection<string>(supportedFormatsBackup);
+
 
 
             //normalize btn
@@ -245,8 +248,7 @@ namespace DataManagement
                 Persistent.BtnList.Add(mkDefaultButtonData());
             }
             //init media sources
-            Persistent.MediaSources.Add(Environment.GetFolderPath(Environment.SpecialFolder.MyMusic));
-            Persistent.SupportedFormats = new ObservableCollection<string>(supportedFormatsBackup);
+            Persistent.MediaSources.Add(Environment.GetFolderPath(Environment.SpecialFolder.MyMusic));           
         }
 
         /// <summary>
