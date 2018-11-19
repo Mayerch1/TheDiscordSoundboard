@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
+using System.Linq;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using System.Windows;
@@ -11,6 +12,7 @@ using System.Windows.Media.Animation;
 using System.Windows.Threading;
 using BotModule;
 using DiscordBot.UI;
+using DiscordBot.UI.Tutorial;
 using GithubVersionChecker;
 using MaterialDesignColors;
 using MaterialDesignThemes.Wpf;
@@ -165,6 +167,8 @@ namespace DiscordBot
             //this will apply themes to the ui
             
             Handle.Data.Persistent.IsDarkTheme = Handle.Data.Persistent.IsDarkTheme;
+            Handle.Data.Persistent.PrimarySwatch = Handle.Data.Persistent.PrimarySwatch;
+            Handle.Data.Persistent.SecondarySwatch = Handle.Data.Persistent.SecondarySwatch;
             //--------
 
             LastVolume = Volume;
@@ -194,13 +198,13 @@ namespace DiscordBot
             {
                 Handle.Data.Persistent.IsFirstStart = false;
 
-                //switch to settings page
-                //btn_Settings_Click(null, null);
+                //register events, this will trigger initialization after completed setup
+                var ui = new TutorialMaster();
+                registerTutorialEvents(ui);
 
                 //start tutorial
                 MainGrid.Children.Clear();
-                MainGrid.Children.Add(new UI.Tutorial.TutorialMaster());
-
+                MainGrid.Children.Add(ui);
             }
             else
             {
@@ -382,6 +386,11 @@ namespace DiscordBot
 
             //get channel list to display in TreeView
             initChannelList();
+
+
+            var palette = new PaletteHelper().QueryPalette();
+
+            var x = new MaterialDesignColors.SwatchesProvider();   
         }
 
         private async void initChannelList()
@@ -1054,6 +1063,15 @@ namespace DiscordBot
 
         #region stuff related to dll
 
+        private void registerTutorialEvents(TutorialMaster ui)
+        {
+            ui.TutorialFinished += delegate
+            {
+                initAsync();
+                initDelayedAsync();
+            };
+        }
+
         private void registerButtonEvents(ButtonUI ui)
         {
             ui.InstantButtonClicked += btn_InstantButton_Clicked;
@@ -1078,9 +1096,6 @@ namespace DiscordBot
             ui.EulaRejected += Stream_Eula_Rejected;
         }
 #endregion stuff related to dll
-
-
-
 
 
 #pragma warning restore CS1591

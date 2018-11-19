@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using MaterialDesignThemes.Wpf.Transitions;
 
 namespace DiscordBot.UI.Tutorial
 {
@@ -21,9 +22,41 @@ namespace DiscordBot.UI.Tutorial
     /// </summary>
     public partial class TutorialMaster : UserControl
     {
+        public delegate void TutorialFinishedHandle();
+
+        public TutorialFinishedHandle TutorialFinished;
+
+
         public TutorialMaster()
         {
             InitializeComponent();
+        }
+
+        private void Selector_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (sender is Transitioner element)
+            {
+
+                var item = element.Items.CurrentItem;
+                RegisterSlideEvents(item);
+            }
+            
+        }
+
+        private void RegisterSlideEvents(object obj)
+        {
+            switch (obj)
+            {
+                case Slide_EnterCredentials sl:
+                    sl.FinishedSetup += FinishSetup;
+                    break;
+            }
+        }
+
+        private void FinishSetup(bool isOk)
+        {
+            if (isOk)
+                TutorialFinished();
         }
     }
 #pragma warning restore CS1591

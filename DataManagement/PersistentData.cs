@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Linq;
 using System.Xml.Serialization;
 using MaterialDesignColors;
 using MaterialDesignThemes.Wpf;
@@ -15,6 +16,8 @@ namespace DataManagement
     public class PersistentData : INotifyPropertyChanged
     {
         #region consts
+
+        public const string urlToBotRegister = "https://discordapp.com/login?redirect_to=%2Fdevelopers%2Fapplications%2Fme";
 
 
         /// <summary>
@@ -84,8 +87,8 @@ namespace DataManagement
 
 
         private bool isDarkTheme = false;
-        private Swatch primarySwatch = null;
-        private Swatch secondarySwatch = null;
+        private string primarySwatch = null;
+        private string secondarySwatch = null;
 
 
         private int minVisibleButtons = 35;
@@ -189,17 +192,23 @@ namespace DataManagement
         /// <summary>
         /// this is the main color scheme
         /// </summary>
-        [XmlIgnore]
-        public Swatch PrimarySwatch
+        public string PrimarySwatch
         {
             get => primarySwatch;
             set
             {
-                if (value != null)
+                if (!String.IsNullOrWhiteSpace(value))
                 {
-                    primarySwatch = value;
-                    new PaletteHelper().ReplacePrimaryColor(value);
-                    OnPropertyChanged("PrimarySwatch");
+                    //find swatch in table
+                    var newSwatch = new MaterialDesignColors.SwatchesProvider().Swatches.FirstOrDefault(sw => sw.Name == value);
+
+                    if (newSwatch != null)
+                    {
+                        //replace old primary swatch
+                        new PaletteHelper().ReplacePrimaryColor(newSwatch);
+                        primarySwatch = value;
+                        OnPropertyChanged("PrimarySwatch");
+                    }                 
                 }
             }
         }
@@ -207,57 +216,27 @@ namespace DataManagement
         /// <summary>
         /// this is the secondary color scheme
         /// </summary>
-        [XmlIgnore]
-        public Swatch SecondarySwatch
+        public string SecondarySwatch
         {
             get => secondarySwatch;
             set
             {
-                if (value != null)
+                if (!String.IsNullOrWhiteSpace(value))
                 {
-                    secondarySwatch = value;
-                    new PaletteHelper().ReplaceAccentColor(value);
-                    OnPropertyChanged("SecondarySwatch");
+                    //find swatch in table of defaults
+                    var newSwatch = new MaterialDesignColors.SwatchesProvider().Swatches.FirstOrDefault(sw => sw.Name == value);
+
+                    if (newSwatch != null)
+                    {
+                        //replace old primary swatch
+                        new PaletteHelper().ReplaceAccentColor(newSwatch);
+                        secondarySwatch = value;
+                        OnPropertyChanged("SecondarySwatch");
+                    }                                    
                 }
             }
         }
-
-
-        /// <summary>
-        /// string of primary swatch for saving
-        /// </summary>
-        public string PrimarySwatchString
-        {
-            get
-            {
-                return DateTime.Now.ToString();
-                //if (PrimarySwatch != null)
-                //{
-                //    return PrimarySwatch.Name;
-                //}
-
-                //return null;
-            }
-            
-
-        }
-    
-        /// <summary>
-        /// string of primary swatch for saving
-        /// </summary>
-        public string SecondarySwatchString
-        {
-            get
-            {
-                return "test123";
-                //if (SecondarySwatch != null)
-                //{
-                //    return SecondarySwatch.Name;
-                //}
-
-                //return null;
-            }          
-        }
+   
 
         //raise ClientNameChanged to check for client names, if old Token was not able to do so
         /// <summary>

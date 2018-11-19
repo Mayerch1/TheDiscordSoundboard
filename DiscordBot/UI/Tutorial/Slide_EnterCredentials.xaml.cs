@@ -21,6 +21,10 @@ namespace DiscordBot.UI.Tutorial
     /// </summary>
     public partial class Slide_EnterCredentials : UserControl
     {
+        public delegate void FinishedSetupHandle(bool ok);
+
+        public FinishedSetupHandle FinishedSetup;
+
         public Slide_EnterCredentials()
         {
             InitializeComponent();
@@ -30,6 +34,7 @@ namespace DiscordBot.UI.Tutorial
         {
             Handle.Data.Persistent.ClientName = box_Username.Text;
             Handle.Data.Persistent.Token = box_Token.Text;
+            FinishedSetup(true);
         }
 
         private void box_Username_TextChanged(object sender, TextChangedEventArgs e)

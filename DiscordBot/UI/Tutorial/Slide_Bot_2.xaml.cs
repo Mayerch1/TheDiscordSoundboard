@@ -25,6 +25,11 @@ namespace DiscordBot.UI.Tutorial
         {
             InitializeComponent();
         }
+
+        private void btn_OpenSite_Click(object sender, EventArgs e)
+        {
+            System.Diagnostics.Process.Start(DataManagement.PersistentData.urlToBotRegister);
+        }
     }
 #pragma warning restore CS1591
 }

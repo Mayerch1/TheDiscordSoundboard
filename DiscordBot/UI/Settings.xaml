@@ -137,11 +137,6 @@
                                     <TextBlock Text="Dark" Margin="10" FontSize="15" />
 
                                 </StackPanel>
-
-                                <StackPanel Orientation="Horizontal">
-                                    <TextBlock Text="Don't Save (Debug)"/>
-                                    <CheckBox IsChecked="{Binding DontSave}"/>
-                                </StackPanel>
                             </StackPanel>
 
 
