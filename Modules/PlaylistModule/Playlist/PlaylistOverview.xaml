@@ -42,7 +42,7 @@
 
     <Grid>
         <DockPanel LastChildFill="True">
-            <materialDesign:ColorZone Style="{StaticResource FloatingSection}" VerticalAlignment="Stretch" DockPanel.Dock="Left">
+            <materialDesign:ColorZone  VerticalAlignment="Stretch" DockPanel.Dock="Left">
                 <StackPanel Orientation="Vertical">
                     <Button Style="{StaticResource CardButtonStyle}" Margin="14" Click="btn_playlistAdd_Click">
                         <Button.Template>
@@ -79,13 +79,12 @@
                 </StackPanel>
             </materialDesign:ColorZone>
 
-            <materialDesign:ColorZone Style="{StaticResource FloatingSection}" VerticalAlignment="Stretch">
+            
                 <ScrollViewer>
                     <ItemsControl ItemsSource="{Binding Playlists}">
                         <ItemsControl.ItemTemplate>
-                            <DataTemplate>
-
-                                <Button Style="{StaticResource CardButtonStyle}" Click="btn_playlistOpen_Click">
+                        <DataTemplate>
+                            <Button Style="{StaticResource CardButtonStyle}" Click="btn_playlistOpen_Click">
                                     <Button.Template>
                                         <ControlTemplate>
                                             <Border CornerRadius="10">
@@ -108,7 +107,7 @@
                         </ItemsControl.ItemsPanel>
                     </ItemsControl>
                 </ScrollViewer>
-            </materialDesign:ColorZone>
+           
         </DockPanel>
     </Grid>
 </UserControl>

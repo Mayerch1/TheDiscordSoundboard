@@ -20,7 +20,7 @@
     </UserControl.Resources>
 
     <Grid x:Name="grd_ButtonUI">
-        <materialDesign:ColorZone Style="{StaticResource FloatingSection}" VerticalAlignment="Stretch">
+        
 
         <ScrollViewer>
 
@@ -148,6 +148,6 @@
                 </ItemsControl.ItemsPanel>
             </ItemsControl>
         </ScrollViewer>
-            </materialDesign:ColorZone>
+            
     </Grid>
 </UserControl>

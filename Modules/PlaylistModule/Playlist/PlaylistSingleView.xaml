@@ -12,7 +12,7 @@
     <UserControl.Resources>
         <Style TargetType="ListBoxItem" BasedOn="{StaticResource {x:Type ListBoxItem}}">
             <Setter Property="Padding" Value="0" />
-            <Setter Property="FontSize" Value="13" />
+            <Setter Property="FontSize" Value="14" />
             <Setter Property="FontFamily" Value="Segoe UI" />
         </Style>
 
@@ -30,7 +30,7 @@
         </Storyboard>
     </UserControl.Resources>
 
-    <materialDesign:ColorZone Style="{StaticResource FloatingSection}">
+    
         <Grid>
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto" />
@@ -39,15 +39,16 @@
 
             <Grid Grid.Row="0">
                 <StackPanel>
-                    <materialDesign:ColorZone Height="35" materialDesign:ShadowAssist.ShadowDepth="Depth1"
+                    <materialDesign:ColorZone Height="45" materialDesign:ShadowAssist.ShadowDepth="Depth1"
                                               materialDesign:ShadowAssist.ShadowEdges="Bottom"
                                               HorizontalAlignment="Stretch" Margin="0,5,0,5"
                                               Background="{DynamicResource MaterialDesignPaper}">
-                        <DockPanel LastChildFill="True">
+                        <DockPanel LastChildFill="True" Margin="0,0,0,5">
                             <Button Background="Gray" BorderBrush="Gray" Click="btn_editList_Click" Height="30"
                                     Width="30" DockPanel.Dock="Right"
                                     Style="{StaticResource MaterialDesignFloatingActionMiniLightButton}"
-                                    Margin="10,0,10,5">
+                                    Margin="10,0,10,5"
+                                    VerticalAlignment="Center">
                                 <materialDesign:PackIcon Kind="Pencil" Height="20" Width="20" />
                             </Button>
                             <TextBlock DataContext="{Binding Playlist}" Text="{Binding Name}" DockPanel.Dock="Left" VerticalAlignment="Center"
@@ -66,7 +67,8 @@
                                 <TextBox x:Name="box_Filter" TextChanged="box_Search_TextChanged"
                                          materialDesign:HintAssist.Hint="Search"
                                          materialDesign:TextFieldAssist.DecorationVisibility="Hidden"
-                                         BorderThickness="0" VerticalAlignment="Center" />
+                                         BorderThickness="0" VerticalAlignment="Center"
+                                         Foreground="Gray"/>
                             </DockPanel>
                         </materialDesign:ColorZone>
                     </StackPanel>
@@ -92,7 +94,7 @@
                                               materialDesign:ShadowAssist.ShadowEdges="All" Height="Auto" />
                 </StackPanel>
             </Grid>
-            <Grid Grid.Row="1" Margin="0,0,0,0" MaxWidth="2000" MinWidth="600">
+            <Grid Grid.Row="1" Margin="0,2,0,0" MaxWidth="1800" MinWidth="600">
                 <ListBox x:Name="list_All" ItemsSource="{Binding FilteredFiles}" SelectionMode="Extended"
                          KeyDown="stack_list_KeyDown" HorizontalContentAlignment="Stretch"
                          SelectionChanged="list_All_SelectionChanged"
@@ -209,5 +211,5 @@
                 </ListBox>
             </Grid>
         </Grid>
-    </materialDesign:ColorZone>
+    
 </UserControl>
