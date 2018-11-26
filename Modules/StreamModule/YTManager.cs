@@ -60,9 +60,15 @@ namespace StreamModule
         /// <returns>null if no url was entered</returns>
         public static string getIdFromUrl(string url)
         {
-            if ((url.Contains("https://") || url.Contains("http://")) && url.Contains("="))
+            if (url.Contains("https://") || url.Contains("http://"))
             {
-                return url.Substring(url.LastIndexOf('=') + 1);
+                const string delimiter = "watch?v=";
+                const string shortDelimiter = ".be/";
+
+                if(url.Contains(delimiter))
+                    return url.Substring(url.LastIndexOf(delimiter) + delimiter.Length);
+                else if (url.Contains(shortDelimiter))
+                    return url.Substring(url.LastIndexOf(shortDelimiter) + shortDelimiter.Length);
             }
 
             return null;         

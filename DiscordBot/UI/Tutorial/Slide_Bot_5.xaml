@@ -18,13 +18,16 @@
         </Grid.ColumnDefinitions>
         <materialDesign:Transitioner Name="Transitioner" Grid.Column="1" SelectedIndex="0" DefaultTransitionOrigin="1, 1">
             <Border Background="#009688">
-                <TextBlock Foreground="Azure" Margin="24" TextWrapping="Wrap">You can set .DefaultTransitionOrigin, to help with transitions such as the circle wipe, which are triggered from code.</TextBlock>
+                <Image Source="/res/Tutorial/create_5.png" Width="450" Height="450"/>
             </Border>
             <materialDesign:TransitionerSlide TransitionOrigin="0.25, 0.25">
                 <materialDesign:TransitionerSlide.BackwardWipe>
                     <materialDesign:CircleWipe/>
                 </materialDesign:TransitionerSlide.BackwardWipe>
-                <Border Background="#E64A19"/>
+                <Border Background="#E64A19">
+                    <Image Source="/res/Tutorial/create_6.png" Width="450" Height="450"/>
+                </Border>
+
             </materialDesign:TransitionerSlide>
         </materialDesign:Transitioner>
         <StackPanel Margin="16 0 16 0">

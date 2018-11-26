@@ -18,7 +18,8 @@
             <materialDesign:ColorZone Mode="PrimaryMid" materialDesign:ShadowAssist.ShadowDepth="Depth3" Margin="4">
                 <StackPanel Margin="16" Orientation="Horizontal">
                     <materialDesign:PackIcon Kind="Account" Height="32" Width="32" />
-                    <TextBlock Style="{DynamicResource MaterialDesignHeadlineTextBlock}" Margin="16 0 0 0">Contacts</TextBlock>
+                    <TextBlock Style="{DynamicResource MaterialDesignHeadlineTextBlock}" Margin="16 0 0 0">Ask to copy token and enter below</TextBlock>
+                    <Image Source="/res/Tutorial/create_4.png" Width="150" Height="150"/>
                 </StackPanel>
             </materialDesign:ColorZone>
         </materialDesign:TransitioningContent>
@@ -106,7 +107,9 @@
             </materialDesign:TransitioningContent>
 
         </ItemsControl>
-       
+
+        <Image Source="/res/Tutorial/create_4.png" Width="150" Height="150"/>
+
         <StackPanel Orientation="Horizontal" Grid.Row="2" HorizontalAlignment="Right">
             <Button Style="{DynamicResource MaterialDesignFloatingActionMiniButton}" 
                     Command="{x:Static materialDesign:Transitioner.MovePreviousCommand}"

@@ -4,23 +4,63 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             xmlns:materialDesignColors="clr-namespace:MaterialDesignColors;assembly=MaterialDesignColors"
+             xmlns:system="clr-namespace:System;assembly=mscorlib"
              mc:Ignorable="d"
-             d:DesignHeight="450" d:DesignWidth="800">
+             d:DesignHeight="450" d:DesignWidth="800"
+             PreviewMouseDown="Settings_OnPreviewMouseDown">
 
     <UserControl.Resources>
-        <!-- list picker style -->
+        <DataTemplate x:Key="SwatchPrimaryTemplate" DataType="{x:Type materialDesignColors:Swatch}">
+            <Button
+                Tag="{Binding Name}"
+                Margin="5"
+                BorderBrush="{x:Null}"
+                Click="btn_PrimarySwatch_Click"
+                Command="{x:Static materialDesign:DialogHost.CloseDialogCommand}">
+                <Button.Background>
+                    <SolidColorBrush Color="{Binding ExemplarHue.Color}" />
+                </Button.Background>
+                <Button.Foreground>
+                    <SolidColorBrush Color="{Binding ExemplarHue.Foreground}" />
+                </Button.Foreground>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="{Binding Name}" />
+                    <materialDesign:PackIcon Width="16" Height="16" Kind="Palette" />
+                </StackPanel>
+            </Button>
+        </DataTemplate>
 
+        <DataTemplate x:Key="SwatchAccentTemplate" DataType="{x:Type materialDesignColors:Swatch}">
+            <Button
+                Tag="{Binding Name}"
+                Margin="5"
+                BorderBrush="{x:Null}"
+                Click="btn_AccentSwatch_Click"
+                Command="{x:Static materialDesign:DialogHost.CloseDialogCommand}">
+                <Button.Background>
+                    <SolidColorBrush Color="{Binding AccentExemplarHue.Color}" />
+                </Button.Background>
+                <Button.Foreground>
+                    <SolidColorBrush Color="{Binding AccentExemplarHue.Foreground}" />
+                </Button.Foreground>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="{Binding Name}" />
+                    <materialDesign:PackIcon Width="16" Height="16" Kind="Palette" />
+                </StackPanel>
+            </Button>
+        </DataTemplate>
 
         <!-- help icon -->
-        <Style x:Key="HelpButton" TargetType="Button" BasedOn="{StaticResource MaterialDesignFloatingActionMiniLightButton}">
-            <Setter Property="materialDesign:ShadowAssist.ShadowDepth" Value="Depth0"/>
-            <Setter Property="Background" Value="{DynamicResource MaterialDesignPaper}"/>
-            <Setter Property="BorderBrush" Value="{DynamicResource MaterialDesignPaper}"/>
-            <Setter Property="Foreground" Value="{DynamicResource MaterialDesignBody}"/>
-            <Setter Property="Margin" Value="0,20,0,0"/>
-            <Setter Property="ToolTip" Value="Open the wiki-page"/>
+        <Style x:Key="HelpButton" TargetType="Button"
+               BasedOn="{StaticResource MaterialDesignFloatingActionMiniLightButton}">
+            <Setter Property="materialDesign:ShadowAssist.ShadowDepth" Value="Depth0" />
+            <Setter Property="Background" Value="{DynamicResource MaterialDesignPaper}" />
+            <Setter Property="BorderBrush" Value="{DynamicResource MaterialDesignPaper}" />
+            <Setter Property="Foreground" Value="{DynamicResource MaterialDesignBody}" />
+            <Setter Property="Margin" Value="0,20,0,0" />
+            <Setter Property="ToolTip" Value="Open the wiki-page" />
         </Style>
-
     </UserControl.Resources>
 
 
@@ -32,7 +72,7 @@
                 <materialDesign:ColorZone Style="{StaticResource FloatingHeader}">
 
                     <TextBlock VerticalAlignment="Center" Margin="20,0,0,0" FontSize="30"
-                               materialDesign:ShadowAssist.ShadowDepth="Depth2" Text="Settings" FontWeight="Bold"/>
+                               materialDesign:ShadowAssist.ShadowDepth="Depth2" Text="Settings" FontWeight="Bold" />
                 </materialDesign:ColorZone>
 
                 <materialDesign:ColorZone Style="{StaticResource FloatingSection}">
@@ -41,7 +81,6 @@
 
                         <StackPanel Orientation="Vertical">
                             <!--Settings Content-->
-                            
 
 
                             <StackPanel Orientation="Vertical">
@@ -113,10 +152,10 @@
                                 <!-- Appearance -->
 
                                 <StackPanel Orientation="Horizontal">
-                                <TextBlock Text="Appearance" FontSize="15" FontWeight="Bold" Margin="0,30,0,0" />
+                                    <TextBlock Text="Appearance" FontSize="15" FontWeight="Bold" Margin="0,30,0,0" />
                                     <Button
                                         Click="btn_Help_Appearance_Click"
-                                       
+
                                         Style="{StaticResource HelpButton}">
 
                                         <materialDesign:PackIcon
@@ -137,6 +176,59 @@
                                     <TextBlock Text="Dark" Margin="10" FontSize="15" />
 
                                 </StackPanel>
+
+                                <StackPanel Orientation="Horizontal" Margin="0,20,0,0">
+                                    <!-- dialog host for primary colors-->
+                                    <materialDesign:DialogHost x:Name="dialogHost_Primary" materialDesign:DialogHost.DialogClosingAttached="dialogHost_OnDialogClosing"
+                                        HorizontalAlignment="Center" VerticalAlignment="Center"
+                                        CloseOnClickAway="True">
+                                        <materialDesign:DialogHost.DialogContent>
+
+                                            <ItemsControl ItemsSource="{Binding PrimarySwatches}"
+                                                          DataContext="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}"
+                                                          ItemTemplate="{StaticResource SwatchPrimaryTemplate}">
+                                                <ItemsControl.ItemsPanel>
+                                                    <ItemsPanelTemplate>
+                                                        <WrapPanel />
+                                                    </ItemsPanelTemplate>
+                                                </ItemsControl.ItemsPanel>
+                                            </ItemsControl>
+
+                                        </materialDesign:DialogHost.DialogContent>
+
+                                        <Button Background="{DynamicResource PrimaryHueMidBrush}"
+                                                Foreground="{DynamicResource PrimaryHueMidForegroundBrush}"
+                                                BorderBrush="{x:Null}"
+                                                Command="{x:Static materialDesign:DialogHost.OpenDialogCommand}"
+                                                Content="Primary" />
+                                    </materialDesign:DialogHost>
+
+                                    <!-- dialog host for accent colors-->
+                                    <materialDesign:DialogHost x:Name="dialogHost_Accent" materialDesign:DialogHost.DialogClosingAttached="dialogHost_OnDialogClosing"
+
+                                        HorizontalAlignment="Center" VerticalAlignment="Center"
+                                        CloseOnClickAway="True">
+                                        <materialDesign:DialogHost.DialogContent>
+
+                                            <ItemsControl ItemsSource="{Binding SecondarySwatches}"
+                                                          DataContext="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}"
+                                                          ItemTemplate="{StaticResource SwatchAccentTemplate}">
+                                                <ItemsControl.ItemsPanel>
+                                                    <ItemsPanelTemplate>
+                                                        <WrapPanel />
+                                                    </ItemsPanelTemplate>
+                                                </ItemsControl.ItemsPanel>
+                                            </ItemsControl>
+
+                                        </materialDesign:DialogHost.DialogContent>
+
+                                        <Button Background="{DynamicResource SecondaryAccentBrush}"
+                                                Foreground="{DynamicResource SecondaryAccentForegroundBrush}"
+                                                BorderBrush="{x:Null}"
+                                                Command="{x:Static materialDesign:DialogHost.OpenDialogCommand}"
+                                                Content="Accent" />
+                                    </materialDesign:DialogHost>
+                                </StackPanel>
                             </StackPanel>
 
 
@@ -146,7 +238,7 @@
                                 <StackPanel Orientation="Horizontal">
                                     <TextBlock Text="Files" FontSize="15" FontWeight="Bold" Margin="0,30,0,0" />
                                     <Button
-                                        Click="btn_Help_Files_Click"                                        
+                                        Click="btn_Help_Files_Click"
                                         Style="{StaticResource HelpButton}">
 
                                         <materialDesign:PackIcon
@@ -163,6 +255,28 @@
                                     <ScrollViewer HorizontalScrollBarVisibility="Disabled"
                                                   VerticalScrollBarVisibility="Hidden">
                                         <ListBox x:Name="list_MediaSources" ItemsSource="{Binding MediaSources}"
+                                                 MinWidth="300" />
+                                    </ScrollViewer>
+
+                                    <StackPanel Orientation="Horizontal" VerticalAlignment="Top">
+                                        <Button Click="btn_addMediaSource_Click"
+                                                Background="{DynamicResource PrimaryHueMidBrush}"
+                                                BorderBrush="{x:Null}">
+                                            <materialDesign:PackIcon Kind="Plus" />
+                                        </Button>
+                                        <Button Click="btn_deleteMediaSource_Click"
+                                                Background="{DynamicResource PrimaryHueMidBrush}"
+                                                BorderBrush="{x:Null}">
+                                            <materialDesign:PackIcon Kind="Minus" />
+                                        </Button>
+                                    </StackPanel>
+                                </StackPanel>
+
+                                <StackPanel Orientation="Horizontal">
+                                    <ScrollViewer HorizontalScrollBarVisibility="Disabled"
+                                                  VerticalScrollBarVisibility="Hidden">
+                                        <ListBox x:Name="list_SupportedFormats"
+                                                 ItemsSource="{Binding SupportedFormats}"
                                                  MinWidth="300" />
                                     </ScrollViewer>
 

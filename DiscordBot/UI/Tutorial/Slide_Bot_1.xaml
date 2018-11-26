@@ -16,8 +16,10 @@
             <TextBlock HorizontalAlignment="Stretch" VerticalAlignment="Center" Margin="32"
                        Style="{DynamicResource MaterialDesignHeadlineTextBlock}"
                        TextWrapping="Wrap">
-                This is the intro for creating the Bot.
+                Ask for open the page + ask for login with dc account.
             </TextBlock>
+
+           
             <Button Style="{DynamicResource MaterialDesignFloatingActionMiniButton}" 
                     Command="{x:Static materialDesign:Transitioner.MovePreviousCommand}"
                     HorizontalAlignment="Left"

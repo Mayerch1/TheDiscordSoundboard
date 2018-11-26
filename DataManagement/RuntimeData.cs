@@ -19,7 +19,7 @@ namespace DataManagement
         private const string playlistFile = "\\Playlist.xml";
         private const string historyFile = "\\History.xml";
         private const string videoHistoryFile = "\\VideoHistory.xml";
-        private readonly List<string> supportedFormatsBackup = new List<string> { "mp3", "wav", "asf", "wma", "wmv", "sami", "smi", "3g2", "3gp", "3pg2", "3pgg", "aac", "adts", "m4a", "m4v", "mov", "mp4" };
+        private readonly List<string> supportedFormatsBackup = new List<string> { "mp3", "wav", "mp4", "asf", "wma", "wmv", "sami", "smi", "3g2", "3gp", "3pg2", "3pgg", "aac", "adts", "m4a", "m4v", "mov"};
 
         #endregion constants
 

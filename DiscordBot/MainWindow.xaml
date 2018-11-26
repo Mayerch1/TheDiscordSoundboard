@@ -7,7 +7,7 @@
         xmlns:ui="clr-namespace:DiscordBot.UI"
         mc:Ignorable="d"
         Title="The Discord Soundboard" Height="767" Width="1335" Closing="MainWindow_Closing"
-        ResizeMode="CanResizeWithGrip"
+        WindowStyle="SingleBorderWindow"
         PreviewMouseDown="Window_PreviewMouseDown"
         SizeChanged="Window_SizeChanged"
         TextElement.Foreground="{DynamicResource MaterialDesignBody}"
@@ -15,7 +15,7 @@
         TextElement.FontWeight="Medium"
         TextElement.FontSize="14"
         FontFamily="pack://application:,,,/MaterialDesignThemes.Wpf;component/Resources/Roboto/#Roboto"
-        DataContext="{Binding RelativeSource={RelativeSource Self}}">
+        DataContext="{Binding RelativeSource={RelativeSource Self}}"  >
 
     <Window.Resources>
         <Storyboard x:Key="OpenMenu">
@@ -94,7 +94,7 @@
             <!-- channel selector-->
             <!-- is closed on startup-->
             <materialDesign:ColorZone x:Name="col_ChannelList" materialDesign:ShadowAssist.ShadowDepth="Depth1" materialDesign:ShadowAssist.ShadowEdges="All" Height="400" Width="250" CornerRadius="5" Background="{DynamicResource MaterialDesignPaper}">
-               
+
                 <DockPanel Margin="0,5,0,0">
                     <DockPanel DockPanel.Dock="Top" HorizontalAlignment="Stretch">
                         <TextBlock Margin="5" DockPanel.Dock="Left" Text="Permanent Selection" />
@@ -119,7 +119,7 @@
             </materialDesign:ColorZone>
         </Grid>
         <DockPanel LastChildFill="True" Grid.ZIndex="0">
-
+            
             <Grid DockPanel.Dock="Bottom" >
                 <StackPanel>
 
@@ -306,6 +306,37 @@
                     </Button>
                 </StackPanel>
             </Border>
+
+            <!--<Grid DockPanel.Dock="Top" Height="30">
+
+                <materialDesign:ColorZone HorizontalAlignment="Stretch" 
+                                          VerticalAlignment="Stretch" 
+                                          PreviewMouseDown="WindowHeader_OnPreviewMouseDown"/>
+
+
+
+
+
+
+                <StackPanel HorizontalAlignment="Right" Orientation="Horizontal">
+
+                    <Button Content="_" 
+                            Background="Red"                        
+                            VerticalAlignment="Stretch" 
+                            HorizontalAlignment="Right"
+                            BorderBrush="{x:Null}"
+                            Click="btn_Close_OnClick"/>
+                    <Button Content="x" 
+                            Background="Red"                        
+                            VerticalAlignment="Stretch" 
+                            HorizontalAlignment="Right"
+                            BorderBrush="{x:Null}"
+                            Click="btn_Close_OnClick"/>
+                </StackPanel>
+                
+
+            </Grid>-->
+
 
             <Border Height="60" DockPanel.Dock="Top">
                 <materialDesign:ColorZone Height="55" materialDesign:ShadowAssist.ShadowDepth="Depth1" materialDesign:ShadowAssist.ShadowEdges="Bottom" Background="{DynamicResource MaterialDesignPaper}">

@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using System.Windows.Interop;
 using System.Windows.Media.Animation;
 using System.Windows.Threading;
 using BotModule;
@@ -165,7 +166,7 @@ namespace DiscordBot
             //--------
             //self assign theme values
             //this will apply themes to the ui
-            
+
             Handle.Data.Persistent.IsDarkTheme = Handle.Data.Persistent.IsDarkTheme;
             Handle.Data.Persistent.PrimarySwatch = Handle.Data.Persistent.PrimarySwatch;
             Handle.Data.Persistent.SecondarySwatch = Handle.Data.Persistent.SecondarySwatch;
@@ -1069,6 +1070,7 @@ namespace DiscordBot
             {
                 initAsync();
                 initDelayedAsync();
+                btn_Settings_Click();
             };
         }
 
@@ -1095,9 +1097,12 @@ namespace DiscordBot
             ui.QueueVideo += Stream_Video_Queue;
             ui.EulaRejected += Stream_Eula_Rejected;
         }
-#endregion stuff related to dll
+        #endregion stuff related to dll
 
 
 #pragma warning restore CS1591
+        
+
+
     }
 }

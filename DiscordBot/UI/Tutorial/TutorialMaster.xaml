@@ -58,6 +58,8 @@
 
                 <local:Slide_Bot_5 />
 
+                <local:Slide_Bot_6/>
+
                 <local:Slide_EnterCredentials />
 
             </materialDesign:Transitioner>

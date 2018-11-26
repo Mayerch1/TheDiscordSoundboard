@@ -11,16 +11,16 @@
     <materialDesign:ColorZone Mode="Light" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
         <StackPanel VerticalAlignment="Center">
             <TextBlock>Welcome to The Discord Soundboard (TDS)!</TextBlock>
-            <TextBlock>Do you have already bot log-in credential?</TextBlock>
+            <TextBlock>Do you like to start the setup wizard?</TextBlock>
 
             <StackPanel Orientation="Horizontal">
                 <Button Style="{DynamicResource MaterialDesignFloatingActionButton}" Margin="64"
-                        Command="{x:Static materialDesign:Transitioner.MoveNextCommand}">
+                        Command="{x:Static materialDesign:Transitioner.MoveLastCommand}">
                     <materialDesign:PackIcon Kind="NoEntry" />
                 </Button>
 
                 <Button Style="{DynamicResource MaterialDesignFloatingActionButton}" Margin="64"
-                        Command="{x:Static materialDesign:Transitioner.MoveLastCommand}">
+                        Command="{x:Static materialDesign:Transitioner.MoveNextCommand}">
                     <materialDesign:PackIcon Kind="Check" />
                 </Button>
             </StackPanel>

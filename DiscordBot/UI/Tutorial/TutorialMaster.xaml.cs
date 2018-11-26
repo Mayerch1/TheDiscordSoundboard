@@ -37,7 +37,7 @@ namespace DiscordBot.UI.Tutorial
             if (sender is Transitioner element)
             {
 
-                var item = element.Items.CurrentItem;
+                var item = element.SelectedItem;
                 RegisterSlideEvents(item);
             }
             
