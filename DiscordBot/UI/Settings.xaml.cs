@@ -124,13 +124,13 @@ namespace DiscordBot.UI
 
         private void box_userName_TextChanged(object sender, TextChangedEventArgs e)
         {
-            var box = (TextBox)sender;
+            //var box = (TextBox)sender;
 
-            //replace all blancs
-            box.Text = box.Text.Replace(" ", String.Empty);
+            ////replace all blancs
+            //box.Text = box.Text.Replace(" ", String.Empty);
 
-            box.SelectionStart = box.Text.Length;
-            box.SelectionLength = 0;
+            //box.SelectionStart = box.Text.Length;
+            //box.SelectionLength = 0;
         }
 
         private void btn_addMediaSource_Click(object sender, RoutedEventArgs e)
