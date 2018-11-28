@@ -16,73 +16,86 @@
         </Style>
 
         <Storyboard x:Key="OpenTopSelectionBar">
-            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(FrameworkElement.Height)"
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(FrameworkElement.Width)"
                                            Storyboard.TargetName="col_TopSelectionBar">
-                <EasingDoubleKeyFrame KeyTime="00:00:00.15" Value="30" />
+                <EasingDoubleKeyFrame KeyTime="00:00:00.15" Value="425" />
             </DoubleAnimationUsingKeyFrames>
         </Storyboard>
         <Storyboard x:Key="CloseTopSelectionBar">
-            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(FrameworkElement.Height)"
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(FrameworkElement.Width)"
                                            Storyboard.TargetName="col_TopSelectionBar">
                 <EasingDoubleKeyFrame KeyTime="00:00:00.15" Value="0" />
             </DoubleAnimationUsingKeyFrames>
         </Storyboard>
     </UserControl.Resources>
 
-    <Grid>
+    <Grid >
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="120*" />
         </Grid.RowDefinitions>
 
-        <Grid Grid.Row="0">
-            <DockPanel LastChildFill="True">
-                <StackPanel DockPanel.Dock="Top" VerticalAlignment="Stretch">
-                    <materialDesign:ColorZone Background="#eaeaea" VerticalAlignment="Stretch"
-                                                  materialDesign:ShadowAssist.ShadowDepth="Depth1"
-                                                  materialDesign:ShadowAssist.ShadowEdges="Bottom,Top">
-                        <DockPanel LastChildFill="True" VerticalAlignment="Stretch">
-                            <materialDesign:PackIcon Kind="Magnify" Height="20" Width="20"
+        <Grid Grid.Row="0"/>
+        <DockPanel LastChildFill="True">
+
+
+            <materialDesign:ColorZone x:Name="col_TopSelectionBar" Width="0"
+                                              Background="{x:Null}" 
+                                              DockPanel.Dock="Right"
+                                              VerticalAlignment="Center">
+
+                <DockPanel LastChildFill="False">
+                    <Button Click="btn_addMultipleToQueue_Clicked" Background="{DynamicResource PrimaryHueMidBrush}" BorderBrush="{x:Null}" Padding="10" Margin="5,0,5,0">
+                        <StackPanel Orientation="Horizontal">
+                            <materialDesign:PackIcon Kind="Plus" Height="20" Width="20"
+                                                             VerticalAlignment="Center" Margin="0,0,5,0" />
+                            <TextBlock Text="Add selection to queue..." VerticalAlignment="Center" />
+                        </StackPanel>
+                    </Button>
+
+                    <Button x:Name="btn_addMultipleToPlaylist"
+                                Click="btn_addMultiple_Click" 
+                                Background="{DynamicResource PrimaryHueMidBrush}" 
+                                BorderBrush="{x:Null}"
+                                ContextMenuOpening="context_addMultiple_ContextMenuOpening"
+                                Padding="10">
+
+                        <StackPanel Orientation="Horizontal">
+
+                            <materialDesign:PackIcon Kind="PlaylistPlus" Height="20" Width="20"
+                                                             VerticalAlignment="Center" Margin="0,0,5,0" />
+                            <TextBlock Text="Add selection to playlist..." VerticalAlignment="Center" />
+                        </StackPanel>
+
+                        <Button.ContextMenu>
+                            <ContextMenu />
+                        </Button.ContextMenu>
+
+                    </Button>
+                </DockPanel>
+            </materialDesign:ColorZone>
+
+            <StackPanel DockPanel.Dock="Left" VerticalAlignment="Stretch">
+                <materialDesign:ColorZone Background="{DynamicResource MaterialDesignTextFieldBoxBackground}" VerticalAlignment="Stretch"
+                                              CornerRadius="9"
+                                              Margin="5,4,4,5"
+                                              Height="30">
+
+                    <DockPanel LastChildFill="True" VerticalAlignment="Stretch">
+                        <materialDesign:PackIcon Kind="Magnify" Height="20" Width="20"
                                                          VerticalAlignment="Center" Margin="10,0,10,0"
-                                                         Foreground="Gray" />
-                            <TextBox x:Name="box_Filter" TextChanged="box_Search_TextChanged"
+                                                         Foreground="{DynamicResource MaterialDesignBody}" />
+
+                        <TextBox x:Name="box_Filter" TextChanged="box_Search_TextChanged"
                                          materialDesign:HintAssist.Hint="Search"
                                          materialDesign:TextFieldAssist.DecorationVisibility="Hidden"
                                          BorderThickness="0" VerticalAlignment="Center" 
-                                         Foreground="Gray"/>
-                        </DockPanel>
-                    </materialDesign:ColorZone>
-                </StackPanel>
-
-                <materialDesign:ColorZone x:Name="col_TopSelectionBar" Height="0"
-                                              materialDesign:ShadowAssist.ShadowDepth="Depth1"
-                                              materialDesign:ShadowAssist.ShadowEdges="Bottom" Background="#eaeaea"
-                                              MaxWidth="2000" MinWidth="600">
-                    <DockPanel LastChildFill="False">
-
-                        <Button Click="btn_addMultipleToQueue_Clicked" Background="Gray" BorderBrush="Gray">
-                            <StackPanel Orientation="Horizontal">
-                                <materialDesign:PackIcon Kind="Plus" Height="20" Width="20"
-                                                             VerticalAlignment="Center" Margin="5" Foreground="#333333" />
-                                <TextBlock Text="Add selection to queue..." VerticalAlignment="Center" />
-                            </StackPanel>
-                        </Button>
-
-                        <Button x:Name="btn_addMultipleToPlaylist" Click="btn_addMultiple_Click" Background="Gray"
-                                    BorderBrush="Gray" ContextMenuOpening="context_addMultiple_ContextMenuOpening">
-                            <StackPanel Orientation="Horizontal">
-                                <materialDesign:PackIcon Kind="PlaylistPlus" Height="20" Width="20"
-                                                             VerticalAlignment="Center" Margin="5" Foreground="#333333" />
-                                <TextBlock Text="Add selection to playlist..." VerticalAlignment="Center" />
-                            </StackPanel>
-                            <Button.ContextMenu>
-                                <ContextMenu />
-                            </Button.ContextMenu>
-                        </Button>
+                                         Foreground="{DynamicResource MaterialDesignBody}"/>
                     </DockPanel>
                 </materialDesign:ColorZone>
-            </DockPanel>
-        </Grid>
+            </StackPanel>
+        </DockPanel>
+
 
         <Grid Grid.Row="1" Margin="0,2,0,0"  MaxWidth="1800" MinWidth="600">
             <ListBox x:Name="list_All" ItemsSource="{Binding FilteredFiles}" SelectionMode="Extended"
@@ -93,11 +106,12 @@
 
                         <materialDesign:ColorZone Background="{x:Null}" Name="Grid_Title">
 
-                            <Grid Tag="{Binding Id}"
+                            <Grid     Tag="{Binding Id}" 
+                                      Margin="10,0,10,0"
+                                      Height="50"
                                       MouseLeftButtonDown="stack_list_MouseLeftButtonDown"
                                       ContextMenuOpening="context_addSingle_ContextMenuOpening"
-                                      Margin="10,0,10,0"
-                                      Height="50">
+                                      Background="Transparent">
 
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="60" />
@@ -111,6 +125,8 @@
                                     <ContextMenu />
                                 </Grid.ContextMenu>
 
+
+                                <materialDesign:ColorZone></materialDesign:ColorZone>
                                 <Grid Grid.Column="0">
 
                                     <Button
@@ -146,9 +162,11 @@
                                     </Button>
                                 </Grid>
 
-                                <Grid Grid.Column="1" VerticalAlignment="Center">
-                                    <Label Content="{Binding Name}" />
-                                </Grid>
+                                
+                                    <Grid Grid.Column="1" VerticalAlignment="Center">
+                                        <Label Content="{Binding Name}" />
+                                    </Grid>
+                       
 
                                 <Grid Grid.Column="2" VerticalAlignment="Center">
                                     <Label Content="{Binding Author}" />

@@ -15,7 +15,7 @@
 
         <Style TargetType="ListBoxItem" BasedOn="{StaticResource {x:Type ListBoxItem}}">
             <Setter Property="Padding" Value="0" />
-            <Setter Property="FontSize" Value="13" />
+            <Setter Property="FontSize" Value="14" />
             <Setter Property="FontFamily" Value="Segoe UI" />
         </Style>
 
@@ -23,7 +23,7 @@
         <!-- Template for recommendation and history listBox -->
         <DataTemplate x:Key="VideoListTemplate">
             <DockPanel Tag="{Binding Url}"
-                       MouseLeftButtonDown="list_History_MouseLeftButtonDown">
+                       MouseLeftButtonDown="list_History_MouseLeftButtonDown" Background="Transparent">
 
                 <DockPanel.ContextMenu>
                     <ContextMenu>

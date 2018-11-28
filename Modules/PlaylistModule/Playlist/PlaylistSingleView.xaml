@@ -57,7 +57,7 @@
                     </materialDesign:ColorZone>
 
                     <StackPanel VerticalAlignment="Stretch">
-                        <materialDesign:ColorZone Background="#eaeaea" VerticalAlignment="Stretch"
+                    <materialDesign:ColorZone Background="{DynamicResource MaterialDesignTextFieldBoxBackground}" VerticalAlignment="Stretch"
                                                   materialDesign:ShadowAssist.ShadowDepth="Depth1"
                                                   materialDesign:ShadowAssist.ShadowEdges="Bottom,Top">
                             <DockPanel LastChildFill="True" VerticalAlignment="Stretch">
@@ -109,7 +109,8 @@
                                 <Grid Tag="{Binding Id}"
                                       MouseLeftButtonDown="stack_list_MouseLeftButtonDown"
                                       Margin="10,0,10,0"
-                                      Height="50">
+                                      Height="50"
+                                      Background="Transparent">
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="60" />
                                         <ColumnDefinition Width="3*" />
