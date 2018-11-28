@@ -9,7 +9,10 @@
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid>
         <StackPanel>
-            <TextBlock>Show invitation screen and ask to invite the bot</TextBlock>
+            <TextBlock>
+                Select the server you want the bot to join and authorize the action by clicking the button on the bottom right.
+                If your server is not listed, you most likely do not have permissions to add a bot to this server.
+            </TextBlock>
             <Image Source="/res/Tutorial/create_7.png" Width="400" Height="450"/>
         
         <StackPanel Orientation="Horizontal" Grid.Row="1" Grid.ColumnSpan="2" Margin="16" HorizontalAlignment="Right">

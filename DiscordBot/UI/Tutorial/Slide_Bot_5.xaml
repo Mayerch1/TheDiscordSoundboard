@@ -16,16 +16,31 @@
             <ColumnDefinition Width="Auto"/>
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
+        
+
         <materialDesign:Transitioner Name="Transitioner" Grid.Column="1" SelectedIndex="0" DefaultTransitionOrigin="1, 1">
             <Border Background="#009688">
+                <StackPanel>
                 <Image Source="/res/Tutorial/create_5.png" Width="450" Height="450"/>
+                <TextBlock>
+                    Now switch to the "OAuth2" tab on the left sidebar.
+                </TextBlock>
+                </StackPanel>
             </Border>
             <materialDesign:TransitionerSlide TransitionOrigin="0.25, 0.25">
                 <materialDesign:TransitionerSlide.BackwardWipe>
                     <materialDesign:CircleWipe/>
                 </materialDesign:TransitionerSlide.BackwardWipe>
                 <Border Background="#E64A19">
-                    <Image Source="/res/Tutorial/create_6.png" Width="450" Height="450"/>
+                    <StackPanel>
+                        <Image Source="/res/Tutorial/create_6.png" Width="450" Height="450"/>
+                        <TextBlock>
+                            1. Select "bot" as scope of the application.
+                            2. Select "Connect", "Speak" and "View Channels" from the permission list.
+                            3. Copy and/or open the link between the scope and permission settings.
+                        </TextBlock>
+                    </StackPanel>
+                    
                 </Border>
 
             </materialDesign:TransitionerSlide>

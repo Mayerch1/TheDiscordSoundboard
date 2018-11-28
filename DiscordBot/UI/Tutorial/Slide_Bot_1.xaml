@@ -16,9 +16,11 @@
             <TextBlock HorizontalAlignment="Stretch" VerticalAlignment="Center" Margin="32"
                        Style="{DynamicResource MaterialDesignHeadlineTextBlock}"
                        TextWrapping="Wrap">
-                Ask for open the page + ask for login with dc account.
             </TextBlock>
 
+            <TextBlock Grid.Row="0">
+                Please open the Discord Developer Portal and login with your an confirmed Discord Account. (possibly screenshot to be added)
+            </TextBlock>
            
             <Button Style="{DynamicResource MaterialDesignFloatingActionMiniButton}" 
                     Command="{x:Static materialDesign:Transitioner.MovePreviousCommand}"

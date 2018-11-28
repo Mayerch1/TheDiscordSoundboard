@@ -17,6 +17,9 @@
             <TextBlock Style="{DynamicResource MaterialDesignHeadlineTextBlock}" TextWrapping="Wrap">Select Bot + add Bot</TextBlock>
             <TextBlock Style="{DynamicResource MaterialDesignTitleTextBlock}" TextWrapping="Wrap" Grid.Row="1">Idk</TextBlock>
             <Image Source="/res/Tutorial/create_3.png" Width="150" Height="150"/>
+            <TextBlock>
+                Switch to the "Bot" tab on the left sidebar and make the application a bot, by clicking the "Add Bot" button.
+            </TextBlock>
             <StackPanel Orientation="Horizontal" Grid.Row="2">
                 <Button Style="{DynamicResource MaterialDesignFloatingActionMiniButton}" 
                     Command="{x:Static materialDesign:Transitioner.MovePreviousCommand}"
