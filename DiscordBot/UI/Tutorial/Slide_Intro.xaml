@@ -9,18 +9,20 @@
              d:DesignHeight="300" d:DesignWidth="300"
              >
     <materialDesign:ColorZone Mode="Light" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
-        <StackPanel VerticalAlignment="Center">
-            <TextBlock>Welcome to The Discord Soundboard (TDS)!</TextBlock>
-            <TextBlock>Do you like to start the setup wizard?</TextBlock>
+        <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
+            <TextBlock HorizontalAlignment="Center">Welcome to The Discord Soundboard (TDS)!</TextBlock>
+            <TextBlock HorizontalAlignment="Center">Do you like to start the setup wizard?</TextBlock>
 
             <StackPanel Orientation="Horizontal">
                 <Button Style="{DynamicResource MaterialDesignFloatingActionButton}" Margin="64"
-                        Command="{x:Static materialDesign:Transitioner.MoveLastCommand}">
+                        Command="{x:Static materialDesign:Transitioner.MoveLastCommand}"
+                        HorizontalAlignment="Center">
                     <materialDesign:PackIcon Kind="NoEntry" />
                 </Button>
 
                 <Button Style="{DynamicResource MaterialDesignFloatingActionButton}" Margin="64"
-                        Command="{x:Static materialDesign:Transitioner.MoveNextCommand}">
+                        Command="{x:Static materialDesign:Transitioner.MoveNextCommand}"
+                        HorizontalAlignment="Center">
                     <materialDesign:PackIcon Kind="Check" />
                 </Button>
             </StackPanel>

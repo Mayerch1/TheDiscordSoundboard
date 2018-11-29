@@ -36,65 +36,66 @@
         </Grid.RowDefinitions>
 
         <Grid Grid.Row="0"/>
-        <DockPanel LastChildFill="True">
+
+            <DockPanel LastChildFill="True">
 
 
-            <materialDesign:ColorZone x:Name="col_TopSelectionBar" Width="0"
-                                              Background="{x:Null}" 
-                                              DockPanel.Dock="Right"
-                                              VerticalAlignment="Center">
+                <materialDesign:ColorZone x:Name="col_TopSelectionBar" Width="0"
+                                                      Background="{x:Null}" 
+                                                      DockPanel.Dock="Right"
+                                                      VerticalAlignment="Center">
 
-                <DockPanel LastChildFill="False">
-                    <Button Click="btn_addMultipleToQueue_Clicked" Background="{DynamicResource PrimaryHueMidBrush}" BorderBrush="{x:Null}" Padding="10" Margin="5,0,5,0">
-                        <StackPanel Orientation="Horizontal">
-                            <materialDesign:PackIcon Kind="Plus" Height="20" Width="20"
-                                                             VerticalAlignment="Center" Margin="0,0,5,0" />
-                            <TextBlock Text="Add selection to queue..." VerticalAlignment="Center" />
-                        </StackPanel>
-                    </Button>
+                    <DockPanel LastChildFill="False">
+                        <Button Click="btn_addMultipleToQueue_Clicked" Background="{DynamicResource PrimaryHueMidBrush}" BorderBrush="{x:Null}" Padding="10" Margin="5,0,5,0">
+                            <StackPanel Orientation="Horizontal">
+                                <materialDesign:PackIcon Kind="Plus" Height="20" Width="20"
+                                                                     VerticalAlignment="Center" Margin="0,0,5,0" />
+                                <TextBlock Text="Add selection to queue..." VerticalAlignment="Center" />
+                            </StackPanel>
+                        </Button>
 
-                    <Button x:Name="btn_addMultipleToPlaylist"
-                                Click="btn_addMultiple_Click" 
-                                Background="{DynamicResource PrimaryHueMidBrush}" 
-                                BorderBrush="{x:Null}"
-                                ContextMenuOpening="context_addMultiple_ContextMenuOpening"
-                                Padding="10">
+                        <Button x:Name="btn_addMultipleToPlaylist"
+                                        Click="btn_addMultiple_Click" 
+                                        Background="{DynamicResource PrimaryHueMidBrush}" 
+                                        BorderBrush="{x:Null}"
+                                        ContextMenuOpening="context_addMultiple_ContextMenuOpening"
+                                        Padding="10">
 
-                        <StackPanel Orientation="Horizontal">
+                            <StackPanel Orientation="Horizontal">
 
-                            <materialDesign:PackIcon Kind="PlaylistPlus" Height="20" Width="20"
-                                                             VerticalAlignment="Center" Margin="0,0,5,0" />
-                            <TextBlock Text="Add selection to playlist..." VerticalAlignment="Center" />
-                        </StackPanel>
+                                <materialDesign:PackIcon Kind="PlaylistPlus" Height="20" Width="20"
+                                                                     VerticalAlignment="Center" Margin="0,0,5,0" />
+                                <TextBlock Text="Add selection to playlist..." VerticalAlignment="Center" />
+                            </StackPanel>
 
-                        <Button.ContextMenu>
-                            <ContextMenu />
-                        </Button.ContextMenu>
+                            <Button.ContextMenu>
+                                <ContextMenu />
+                            </Button.ContextMenu>
 
-                    </Button>
-                </DockPanel>
-            </materialDesign:ColorZone>
-
-            <StackPanel DockPanel.Dock="Left" VerticalAlignment="Stretch">
-                <materialDesign:ColorZone Background="{DynamicResource MaterialDesignTextFieldBoxBackground}" VerticalAlignment="Stretch"
-                                              CornerRadius="9"
-                                              Margin="5,4,4,5"
-                                              Height="30">
-
-                    <DockPanel LastChildFill="True" VerticalAlignment="Stretch">
-                        <materialDesign:PackIcon Kind="Magnify" Height="20" Width="20"
-                                                         VerticalAlignment="Center" Margin="10,0,10,0"
-                                                         Foreground="{DynamicResource MaterialDesignBody}" />
-
-                        <TextBox x:Name="box_Filter" TextChanged="box_Search_TextChanged"
-                                         materialDesign:HintAssist.Hint="Search"
-                                         materialDesign:TextFieldAssist.DecorationVisibility="Hidden"
-                                         BorderThickness="0" VerticalAlignment="Center" 
-                                         Foreground="{DynamicResource MaterialDesignBody}"/>
+                        </Button>
                     </DockPanel>
                 </materialDesign:ColorZone>
-            </StackPanel>
-        </DockPanel>
+
+                <StackPanel DockPanel.Dock="Left" VerticalAlignment="Stretch">
+                    <materialDesign:ColorZone Background="{DynamicResource MaterialDesignTextFieldBoxBackground}" VerticalAlignment="Stretch"
+                                                      CornerRadius="9"
+                                                      Margin="5,4,4,5"
+                                                      Height="30">
+
+                        <DockPanel LastChildFill="True" VerticalAlignment="Stretch">
+                            <materialDesign:PackIcon Kind="Magnify" Height="20" Width="20"
+                                                                 VerticalAlignment="Center" Margin="10,0,10,0"
+                                                                 Foreground="{DynamicResource MaterialDesignBody}" />
+
+                            <TextBox x:Name="box_Filter" TextChanged="box_Search_TextChanged"
+                                                 materialDesign:HintAssist.Hint="Search"
+                                                 materialDesign:TextFieldAssist.DecorationVisibility="Hidden"
+                                                 BorderThickness="0" VerticalAlignment="Center" 
+                                                 Foreground="{DynamicResource MaterialDesignBody}"/>
+                        </DockPanel>
+                    </materialDesign:ColorZone>
+                </StackPanel>
+            </DockPanel>
 
 
         <Grid Grid.Row="1" Margin="0,2,0,0"  MaxWidth="1800" MinWidth="600">

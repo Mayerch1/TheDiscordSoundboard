@@ -15,12 +15,7 @@
         </ResourceDictionary>
     </UserControl.Resources>
     <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="256" />
-        </Grid.RowDefinitions>
-              
+
             <!-- the transitioner will manage your transitions. notice how SelectedIndex is set to zero: the first slide (instead of the default of -1) -->
             <materialDesign:Transitioner SelectedIndex="0" AutoApplyTransitionOrigins="True" SelectionChanged="Selector_OnSelectionChanged">
 
