@@ -174,6 +174,42 @@ namespace DiscordBot.UI
             }
         }
 
+        private void btn_addSupportedFormat_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+
+
+        private void btn_deleteSupportedFormat_Click(object sender, RoutedEventArgs e)
+        {
+            if (list_SupportedFormats.SelectedItems.Count > 0)
+            {
+                string sPath = list_SupportedFormats.SelectedItem.ToString();
+
+                int index = Handle.Data.Persistent.SupportedFormats.IndexOf(sPath);
+
+                if (index >= 0)
+                {
+                    Handle.Data.Persistent.SupportedFormats.RemoveAt(index);
+                }
+            }
+        }
+        private void btn_SupportedFormatAdded_Click(object sender, RoutedEventArgs e)
+        {
+            var extensions = box_supportedFile.Text;
+
+            extensions = extensions.Replace(" ", "");
+
+            var extArr = extensions.Split(';');
+
+            foreach (var element in extArr)
+            {
+                if (!Handle.Data.Persistent.SupportedFormats.Contains(element))
+                    Handle.Data.Persistent.SupportedFormats.Add(element);
+            }
+        }
+
         public event PropertyChangedEventHandler PropertyChanged;
 
         private void OnPropertyChanged(string info)
@@ -185,12 +221,13 @@ namespace DiscordBot.UI
         private void Settings_OnPreviewMouseDown(object sender, MouseButtonEventArgs e)
         {
             //only close dialog, if click was outside of the dialog     
-            if(!dialogHost_Primary.IsMouseOver && !dialogHost_Accent.IsMouseOver)
+            if(!dialogHost_Primary.IsMouseOver && !dialogHost_Accent.IsMouseOver && !dialogHost_SupportedFormat.IsMouseOver)
                 DialogHost.CloseDialogCommand.Execute(null, null);                      
             e.Handled = false;
         }
 
-       
+
+        
     }
 
 #pragma warning restore CS1591

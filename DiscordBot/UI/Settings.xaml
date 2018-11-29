@@ -179,9 +179,10 @@
 
                                 <StackPanel Orientation="Horizontal" Margin="0,20,0,0">
                                     <!-- dialog host for primary colors-->
-                                    <materialDesign:DialogHost x:Name="dialogHost_Primary" materialDesign:DialogHost.DialogClosingAttached="dialogHost_OnDialogClosing"
-                                        HorizontalAlignment="Center" VerticalAlignment="Center"
-                                        CloseOnClickAway="True">
+                                    <materialDesign:DialogHost x:Name="dialogHost_Primary"
+                                                               materialDesign:DialogHost.DialogClosingAttached="dialogHost_OnDialogClosing"
+                                                               HorizontalAlignment="Center" VerticalAlignment="Center"
+                                                               CloseOnClickAway="True">
                                         <materialDesign:DialogHost.DialogContent>
 
                                             <ItemsControl ItemsSource="{Binding PrimarySwatches}"
@@ -204,10 +205,11 @@
                                     </materialDesign:DialogHost>
 
                                     <!-- dialog host for accent colors-->
-                                    <materialDesign:DialogHost x:Name="dialogHost_Accent" materialDesign:DialogHost.DialogClosingAttached="dialogHost_OnDialogClosing"
+                                    <materialDesign:DialogHost x:Name="dialogHost_Accent"
+                                                               materialDesign:DialogHost.DialogClosingAttached="dialogHost_OnDialogClosing"
 
-                                        HorizontalAlignment="Center" VerticalAlignment="Center"
-                                        CloseOnClickAway="True">
+                                                               HorizontalAlignment="Center" VerticalAlignment="Center"
+                                                               CloseOnClickAway="True">
                                         <materialDesign:DialogHost.DialogContent>
 
                                             <ItemsControl ItemsSource="{Binding SecondarySwatches}"
@@ -272,27 +274,90 @@
                                     </StackPanel>
                                 </StackPanel>
 
-                                <StackPanel Orientation="Horizontal">
-                                    <ScrollViewer HorizontalScrollBarVisibility="Disabled"
-                                                  VerticalScrollBarVisibility="Hidden">
-                                        <ListBox x:Name="list_SupportedFormats"
-                                                 ItemsSource="{Binding SupportedFormats}"
-                                                 MinWidth="300" />
-                                    </ScrollViewer>
+                                <DockPanel Margin="0,15,0,0">
+                                    <Expander HorizontalAlignment="Left"
+                                              Header="Supported File Extensions">
+
+                                        <ScrollViewer HorizontalScrollBarVisibility="Disabled"
+                                                      VerticalScrollBarVisibility="Hidden">
+                                            <ListBox x:Name="list_SupportedFormats"
+                                                     ItemsSource="{Binding SupportedFormats}"
+                                                     MinWidth="300" />
+                                        </ScrollViewer>
+                                    </Expander>
 
                                     <StackPanel Orientation="Horizontal" VerticalAlignment="Top">
-                                        <Button Click="btn_addMediaSource_Click"
-                                                Background="{DynamicResource PrimaryHueMidBrush}"
-                                                BorderBrush="{x:Null}">
-                                            <materialDesign:PackIcon Kind="Plus" />
-                                        </Button>
-                                        <Button Click="btn_deleteMediaSource_Click"
+                                        <!-- dialog for adding extensions -->
+                                        <materialDesign:DialogHost x:Name="dialogHost_SupportedFormat"
+                                                                   materialDesign:DialogHost.DialogClosingAttached="dialogHost_OnDialogClosing"
+                                                                   HorizontalAlignment="Center"
+                                                                   VerticalAlignment="Center"
+                                                                   CloseOnClickAway="True">
+                                            <materialDesign:DialogHost.DialogContent>
+                                                <!-- textblock with accept and cancel buttons -->
+                                                <StackPanel
+                                                    Margin="16">
+                                                    <TextBlock>
+                                                        Add a new extension.
+                                                    </TextBlock>
+                                                    <TextBox
+                                                        Margin="0 8 0 0"
+                                                        HorizontalAlignment="Stretch"
+                                                        x:Name="box_supportedFile"
+                                                        materialDesign:HintAssist.Hint="mp3;mp4" />
+                                                    <StackPanel
+                                                        Orientation="Horizontal"
+                                                        HorizontalAlignment="Right">
+                                                        <Button
+                                                            Style="{StaticResource MaterialDesignFlatButton}"
+                                                            IsCancel="True"
+                                                            Margin="0 8 8 0"
+                                                            Command="materialDesign:DialogHost.CloseDialogCommand">
+                                                            <Button.CommandParameter>
+                                                                <system:Boolean
+                                                                    xmlns:system="clr-namespace:System;assembly=mscorlib">
+                                                                    False
+                                                                </system:Boolean>
+                                                            </Button.CommandParameter>
+                                                            CANCEL
+                                                        </Button>
+                                                        <Button
+                                                            Style="{StaticResource MaterialDesignFlatButton}"
+                                                            IsDefault="True"
+                                                            Margin="0 8 8 0"
+                                                            Command="materialDesign:DialogHost.CloseDialogCommand"
+                                                            Click="btn_SupportedFormatAdded_Click">
+                                                            
+                                                            <Button.CommandParameter>
+                                                                <system:Boolean
+                                                                    xmlns:system="clr-namespace:System;assembly=mscorlib">
+                                                                    True
+                                                                </system:Boolean>
+                                                            </Button.CommandParameter>
+                                                            ACCEPT
+                                                        </Button>
+                                                    </StackPanel>
+                                                </StackPanel>
+                                            </materialDesign:DialogHost.DialogContent>
+
+                                            <!-- button to open the dialog -->
+                                            <Button Click="btn_addSupportedFormat_Click"
+                                                    Command="{x:Static materialDesign:DialogHost.OpenDialogCommand}"
+                                                    Background="{DynamicResource PrimaryHueMidBrush}"
+                                                    BorderBrush="{x:Null}">
+                                                <materialDesign:PackIcon Kind="Plus" />
+                                            </Button>
+
+                                            <!-- button to remove selected entry -->
+                                        </materialDesign:DialogHost>
+                                        <Button Click="btn_deleteSupportedFormat_Click"
                                                 Background="{DynamicResource PrimaryHueMidBrush}"
                                                 BorderBrush="{x:Null}">
                                             <materialDesign:PackIcon Kind="Minus" />
                                         </Button>
                                     </StackPanel>
-                                </StackPanel>
+
+                                </DockPanel>
                             </StackPanel>
                         </StackPanel>
                     </Grid>
