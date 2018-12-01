@@ -1099,10 +1099,54 @@ namespace DiscordBot
         }
         #endregion stuff related to dll
 
+        #region window header
+        public const int WM_NCLBUTTONDOWN = 0xA1;
+        public const int HT_CAPTION = 0x2;
+
+        [DllImport("user32.dll")]
+        public static extern int SendMessage(IntPtr hWnd, int Msg, int wParam, int lParam);
+        [DllImport("user32.dll")]
+        public static extern bool ReleaseCapture();
+        private void WindowHeader_PreviewMouseDown(object sender, MouseButtonEventArgs e)
+        {
+            if (e.ButtonState == MouseButtonState.Pressed)
+            {
+                ReleaseCapture();
+                SendMessage(new WindowInteropHelper(Application.Current.MainWindow).Handle, WM_NCLBUTTONDOWN,
+                    HT_CAPTION, 0);
+            }
+        }
+
+        private void btn_Close_OnClick(object sender, RoutedEventArgs e)
+        {     
+            this.Close();
+        }
+
+        private void btn_ToggleWindow_OnClick(object sender, RoutedEventArgs e)
+        {
+            Window w = Application.Current.MainWindow;
+            switch (w.WindowState)
+            {
+                case WindowState.Maximized:
+                    w.WindowState = WindowState.Normal;
+                    //TODO: change icon
+                    break;
+                case WindowState.Normal:
+                    w.WindowState = WindowState.Maximized;
+                    //TODO: change icon
+                    break;
+            }
+        }
+        private void btn_Minimize_OnClick(object sender, RoutedEventArgs e)
+        {
+            if (Application.Current.MainWindow != null)
+                Application.Current.MainWindow.WindowState = WindowState.Minimized;
+        }
+        #endregion window header
+
+
 
 #pragma warning restore CS1591
-        
-
-
     }
+
 }
