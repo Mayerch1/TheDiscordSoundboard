@@ -7,129 +7,54 @@
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300"
              Background="{DynamicResource MaterialDesignPaper}">
-    
-    <Grid HorizontalAlignment="Center" Width="418" >
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
-        </Grid.RowDefinitions>
-        <TextBlock>
-            1. Copy the Bot Token by clicking the "Copy" Button and paste the Token in the Textbox below. 
-            Make shure to keep the token private. If anyone gets acess to this token, return to the page and regenerate it.
+    <materialDesign:ColorZone Mode="PrimaryLight" VerticalAlignment="Stretch" HorizontalAlignment="Stretch"
+                              VerticalContentAlignment="Stretch">
 
-            2. Uncheck the "Public Bot" point to prevent others from adding your bot to their servers.
+        <Grid VerticalAlignment="Center" HorizontalAlignment="Center">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="2*" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
 
-        </TextBlock>
-        <materialDesign:TransitioningContent OpeningEffect="{materialDesign:TransitionEffect SlideInFromRight, Duration=0:0:1.2}">
-            <materialDesign:ColorZone Mode="PrimaryMid" materialDesign:ShadowAssist.ShadowDepth="Depth3" Margin="4">
-                <StackPanel Margin="16" Orientation="Horizontal">
-                    <materialDesign:PackIcon Kind="Account" Height="32" Width="32" />
-                    <TextBlock Style="{DynamicResource MaterialDesignHeadlineTextBlock}" Margin="16 0 0 0">Ask to copy token and enter below</TextBlock>
-                    <Image Source="/res/Tutorial/create_4.png" Width="150" Height="150"/>
-                </StackPanel>
-            </materialDesign:ColorZone>
-        </materialDesign:TransitioningContent>
-        <ItemsControl Grid.Row="1">
-            <ItemsControl.ItemsPanel>
-                <ItemsPanelTemplate>
-                    <UniformGrid Columns="4" />
-                </ItemsPanelTemplate>
-            </ItemsControl.ItemsPanel>
-            <ItemsControl.Resources>
-                <Style TargetType="{x:Type materialDesign:ColorZone}" BasedOn="{StaticResource {x:Type materialDesign:ColorZone}}">
-                    <Setter Property="Width" Value="96" />
-                    <Setter Property="Height" Value="96" />
-                    <Setter Property="Margin" Value="4" />
-                    <Setter Property="Mode" Value="PrimaryLight" />
-                </Style>
-            </ItemsControl.Resources>
-            <materialDesign:TransitioningContent OpeningEffect="{materialDesign:TransitionEffect ExpandIn}">
-                <materialDesign:ColorZone>
-                    <materialDesign:PackIcon Kind="Phone" VerticalAlignment="Center" HorizontalAlignment="Center" />
-                </materialDesign:ColorZone>
-            </materialDesign:TransitioningContent>
+            <StackPanel Grid.Row="0" HorizontalAlignment="Stretch" >
+                <TextBlock HorizontalAlignment="Stretch" VerticalAlignment="Center" Margin="15,32,15,32"
+                           Style="{DynamicResource MaterialDesignHeadlineTextBlock}"
+                           TextWrapping="Wrap">
+                    Make it private, copy your token and enter it below.
+                </TextBlock>
 
-            <materialDesign:TransitioningContent OpeningEffectsOffset="{materialDesign:IndexedItemOffsetMultiplier 0:0:0.05}">
-                <materialDesign:TransitioningContent.OpeningEffects>
-                    <materialDesign:TransitionEffect Kind="ExpandIn" />
-                </materialDesign:TransitioningContent.OpeningEffects>
-                <materialDesign:ColorZone>
-                    <materialDesign:PackIcon Kind="Phone" VerticalAlignment="Center" HorizontalAlignment="Center" />
-                </materialDesign:ColorZone>
-            </materialDesign:TransitioningContent>
+                <materialDesign:TransitioningContent OpeningEffect="{materialDesign:TransitionEffect SlideInFromRight, Duration=0:0:1.2}">
+                    <Image Source="/res/Tutorial/create_4.png" Width="400"/>
+                </materialDesign:TransitioningContent>
 
-            <materialDesign:TransitioningContent OpeningEffectsOffset="{materialDesign:IndexedItemOffsetMultiplier 0:0:0.05}">
-                <materialDesign:TransitioningContent.OpeningEffects>
-                    <materialDesign:TransitionEffect Kind="ExpandIn" />
-                </materialDesign:TransitioningContent.OpeningEffects>
-                <materialDesign:ColorZone>
-                    <materialDesign:PackIcon Kind="Phone" VerticalAlignment="Center" HorizontalAlignment="Center" />
-                </materialDesign:ColorZone>
-            </materialDesign:TransitioningContent>
+                <TextBlock Margin="15">
+                    1. Copy the Bot Token by clicking the "Copy" Button <LineBreak/>
+                    2. Paste it into the textbox below. <LineBreak/> 
+                    Make sure to keep the token private. If anyone gets access to this token, return to the page and regenerate it.<LineBreak/>
 
-            <materialDesign:TransitioningContent OpeningEffectsOffset="{materialDesign:IndexedItemOffsetMultiplier 0:0:0.05}">
-                <materialDesign:TransitioningContent.OpeningEffects>
-                    <materialDesign:TransitionEffect Kind="ExpandIn" />
-                </materialDesign:TransitioningContent.OpeningEffects>
-                <materialDesign:ColorZone>
-                    <materialDesign:PackIcon Kind="Phone" VerticalAlignment="Center" HorizontalAlignment="Center" />
-                </materialDesign:ColorZone>
-            </materialDesign:TransitioningContent>
+                    3. Uncheck the "Public Bot" point to prevent others from adding your bot to their servers
+                </TextBlock>
 
-            <materialDesign:TransitioningContent OpeningEffectsOffset="{materialDesign:IndexedItemOffsetMultiplier 0:0:0.05}">
-                <materialDesign:TransitioningContent.OpeningEffects>
-                    <materialDesign:TransitionEffect Kind="ExpandIn" />
-                </materialDesign:TransitioningContent.OpeningEffects>
-                <materialDesign:ColorZone>
-                    <materialDesign:PackIcon Kind="Phone" VerticalAlignment="Center" HorizontalAlignment="Center" />
-                </materialDesign:ColorZone>
-            </materialDesign:TransitioningContent>
+                <TextBox x:Name="box_Token" materialDesign:HintAssist.Hint="Token"/>
+            </StackPanel>
 
-            <materialDesign:TransitioningContent OpeningEffectsOffset="{materialDesign:IndexedItemOffsetMultiplier 0:0:0.05}">
-                <materialDesign:TransitioningContent.OpeningEffects>
-                    <materialDesign:TransitionEffect Kind="ExpandIn" />
-                </materialDesign:TransitioningContent.OpeningEffects>
-                <materialDesign:ColorZone>
-                    <materialDesign:PackIcon Kind="Phone" VerticalAlignment="Center" HorizontalAlignment="Center" />
-                </materialDesign:ColorZone>
-            </materialDesign:TransitioningContent>
 
-            <materialDesign:TransitioningContent OpeningEffectsOffset="{materialDesign:IndexedItemOffsetMultiplier 0:0:0.05}">
-                <materialDesign:TransitioningContent.OpeningEffects>
-                    <materialDesign:TransitionEffect Kind="ExpandIn" />
-                </materialDesign:TransitioningContent.OpeningEffects>
-                <materialDesign:ColorZone>
-                    <materialDesign:PackIcon Kind="Phone" VerticalAlignment="Center" HorizontalAlignment="Center" />
-                </materialDesign:ColorZone>
-            </materialDesign:TransitioningContent>
+            <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Right">
+                <Button Style="{DynamicResource MaterialDesignFloatingActionMiniButton}"
+                        Command="{x:Static materialDesign:Transitioner.MovePreviousCommand}"
+                        HorizontalAlignment="Right"
+                        Margin="10">
+                    <materialDesign:PackIcon Kind="StepBackward" />
+                </Button>
+                <Button Style="{DynamicResource MaterialDesignFloatingActionAccentButton}"
+                        Command="{x:Static materialDesign:Transitioner.MoveNextCommand}"
+                        HorizontalAlignment="Right"
+                        Margin="10"
+                        Click="btn_Next_Click">
+                    <materialDesign:PackIcon Kind="StepForward" />
+                </Button>
+            </StackPanel>
+        </Grid>
+    </materialDesign:ColorZone>
 
-            <materialDesign:TransitioningContent  OpeningEffectsOffset="{materialDesign:IndexedItemOffsetMultiplier 0:0:0.05}">
-                <materialDesign:TransitioningContent.OpeningEffects>
-                    <materialDesign:TransitionEffect Kind="ExpandIn" />
-                </materialDesign:TransitioningContent.OpeningEffects>
-                <materialDesign:ColorZone>
-                    <materialDesign:PackIcon Kind="Phone" VerticalAlignment="Center" HorizontalAlignment="Center" />
-                </materialDesign:ColorZone>
-            </materialDesign:TransitioningContent>
-
-        </ItemsControl>
-
-        <Image Source="/res/Tutorial/create_4.png" Width="150" Height="150"/>
-
-        <StackPanel Orientation="Horizontal" Grid.Row="2" HorizontalAlignment="Right">
-            <Button Style="{DynamicResource MaterialDesignFloatingActionMiniButton}" 
-                    Command="{x:Static materialDesign:Transitioner.MovePreviousCommand}"
-                    VerticalAlignment="Center" HorizontalAlignment="Left" 
-                    Margin="16">
-                <materialDesign:PackIcon Kind="StepBackward" />
-            </Button>
-            <Button Style="{DynamicResource MaterialDesignFloatingActionAccentButton}"                     
-                    Command="{x:Static materialDesign:Transitioner.MoveNextCommand}"
-                    VerticalAlignment="Top"
-                    Margin="16">
-                <materialDesign:PackIcon Kind="StepForward" />
-            </Button>
-        </StackPanel>
-    </Grid>
 </UserControl>

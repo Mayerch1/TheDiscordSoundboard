@@ -7,7 +7,10 @@
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
-    <Grid>
+    <materialDesign:ColorZone Mode="PrimaryLight" VerticalAlignment="Stretch" HorizontalAlignment="Stretch"
+                              VerticalContentAlignment="Stretch">
+
+<Grid>
         <Grid.RowDefinitions>
             <RowDefinition />
             <RowDefinition />
@@ -17,13 +20,17 @@
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
         
+<!-- TODO move first and second below images, remove coloured border-->
+
 
         <materialDesign:Transitioner Name="Transitioner" Grid.Column="1" SelectedIndex="0" DefaultTransitionOrigin="1, 1">
             <Border Background="#009688">
-                <StackPanel>
-                <Image Source="/res/Tutorial/create_5.png" Width="450" Height="450"/>
-                <TextBlock>
-                    Now switch to the "OAuth2" tab on the left sidebar.
+                <StackPanel Orientation="Horizontal">
+                <Image Source="/res/Tutorial/create_5.png" Width="450"/>
+                    
+                <TextBlock Margin="15,50">
+                    1. Now switch to the "OAuth2" tab on the left sidebar. <LineBreak/>
+                    2. Select "bot" as scope of the application.
                 </TextBlock>
                 </StackPanel>
             </Border>
@@ -32,11 +39,12 @@
                     <materialDesign:CircleWipe/>
                 </materialDesign:TransitionerSlide.BackwardWipe>
                 <Border Background="#E64A19">
-                    <StackPanel>
-                        <Image Source="/res/Tutorial/create_6.png" Width="450" Height="450"/>
-                        <TextBlock>
-                            1. Select "bot" as scope of the application.
-                            2. Select "Connect", "Speak" and "View Channels" from the permission list.
+                    <StackPanel Orientation="Horizontal">
+                        <Image Source="/res/Tutorial/create_6.png" Width="450"/>
+                            <TextBlock Margin="15,50">                           
+                            2. Select <LineBreak/>
+                            "Connect", "Speak" and "View Channels" <LineBreak/>
+                            from the permission list. <LineBreak/> <LineBreak/>
                             3. Copy and/or open the link between the scope and permission settings.
                         </TextBlock>
                     </StackPanel>
@@ -49,17 +57,23 @@
             <Button Click="FirstSlideButton_OnClick">First</Button>
             <Button Click="SecondSlideButton_OnClick" Margin="0 16 0 0">Second</Button>
         </StackPanel>
-        <StackPanel Orientation="Horizontal" Grid.Row="1" Grid.ColumnSpan="2" Margin="16" HorizontalAlignment="Right">
-            <Button Style="{DynamicResource MaterialDesignFloatingActionMiniButton}" 
-                    Command="{x:Static materialDesign:Transitioner.MovePreviousCommand}"
-                    >
-                <materialDesign:PackIcon Kind="StepBackward" />
-            </Button>
-            <Button Style="{DynamicResource MaterialDesignFloatingActionMiniButton}"                     
-                    Command="{x:Static materialDesign:Transitioner.MoveNextCommand}"
-                    Margin="16 0 0 0">
-                <materialDesign:PackIcon Kind="StepForward" />
-            </Button>
-        </StackPanel>
-    </Grid>
+
+
+    <StackPanel Grid.Row="1" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right">
+        <Button Style="{DynamicResource MaterialDesignFloatingActionMiniButton}"
+                Command="{x:Static materialDesign:Transitioner.MovePreviousCommand}"
+                HorizontalAlignment="Right"
+                Margin="10">
+            <materialDesign:PackIcon Kind="StepBackward" />
+        </Button>
+        <Button Style="{DynamicResource MaterialDesignFloatingActionAccentButton}"
+                Command="{x:Static materialDesign:Transitioner.MoveNextCommand}"
+                HorizontalAlignment="Right"
+                Margin="10">
+            <materialDesign:PackIcon Kind="StepForward" />
+        </Button>
+    </StackPanel>
+        </Grid>
+
+</materialDesign:ColorZone>
 </UserControl>

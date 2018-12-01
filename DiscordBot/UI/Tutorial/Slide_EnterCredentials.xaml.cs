@@ -28,12 +28,13 @@ namespace DiscordBot.UI.Tutorial
         public Slide_EnterCredentials()
         {
             InitializeComponent();
+            box_Token.Text = Handle.Token;
         }
 
         private void btn_Accept(object sender, RoutedEventArgs e)
         {
             Handle.Data.Persistent.ClientName = box_Username.Text;
-            Handle.Data.Persistent.Token = box_Token.Text;
+            Handle.Token = box_Token.Text;
             FinishedSetup(true);
         }
 

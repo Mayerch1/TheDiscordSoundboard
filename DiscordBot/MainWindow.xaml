@@ -7,10 +7,10 @@
         xmlns:ui="clr-namespace:DiscordBot.UI"
         mc:Ignorable="d"
         Title="The Discord Soundboard" Height="767" Width="1335" Closing="MainWindow_Closing"
-        WindowStyle="None"
+        WindowStyle="SingleBorderWindow"
         ResizeMode="CanResizeWithGrip"
-        AllowsTransparency="True"
         PreviewMouseDown="Window_PreviewMouseDown"
+        StateChanged="MainWindow_OnStateChanged"
         SizeChanged="Window_SizeChanged"
         TextElement.Foreground="{DynamicResource MaterialDesignBody}"
         Background="{DynamicResource MaterialDesignPaper}"
@@ -18,6 +18,11 @@
         TextElement.FontSize="14"
         FontFamily="pack://application:,,,/MaterialDesignThemes.Wpf;component/Resources/Roboto/#Roboto"
         DataContext="{Binding RelativeSource={RelativeSource Self}}"  >
+
+    <WindowChrome.WindowChrome>
+        <!-- remove window border -->
+        <WindowChrome GlassFrameThickness="0" CornerRadius="0" CaptionHeight="0" UseAeroCaptionButtons="False" ResizeBorderThickness="3"/>
+    </WindowChrome.WindowChrome>
 
     <Window.Resources>
         <Storyboard x:Key="OpenMenu">

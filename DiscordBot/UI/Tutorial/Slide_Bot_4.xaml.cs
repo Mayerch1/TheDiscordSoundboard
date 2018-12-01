@@ -25,6 +25,13 @@ namespace DiscordBot.UI.Tutorial
         {
             InitializeComponent();
         }
+
+        private void btn_Next_Click(object sender, RoutedEventArgs e)
+        {
+            //save token
+            if (!String.IsNullOrWhiteSpace(box_Token.Text))
+                Handle.Token = box_Token.Text;
+        }
     }
 #pragma warning restore CS1591
 }

@@ -7,30 +7,41 @@
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
-    <materialDesign:ColorZone Mode="Dark" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
-        <Grid Margin="64">
+    <materialDesign:ColorZone Mode="PrimaryLight" VerticalAlignment="Stretch" HorizontalAlignment="Stretch"
+                              VerticalContentAlignment="Stretch">
+
+        <Grid VerticalAlignment="Center" HorizontalAlignment="Center">
             <Grid.RowDefinitions>
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
+                <RowDefinition Height="2*" />
+                <RowDefinition Height="*" />
             </Grid.RowDefinitions>
-            <TextBlock Style="{DynamicResource MaterialDesignHeadlineTextBlock}" TextWrapping="Wrap">Select Bot + add Bot</TextBlock>
-            <TextBlock Style="{DynamicResource MaterialDesignTitleTextBlock}" TextWrapping="Wrap" Grid.Row="1">Idk</TextBlock>
-            <Image Source="/res/Tutorial/create_3.png" Width="150" Height="150"/>
-            <TextBlock>
-                Switch to the "Bot" tab on the left sidebar and make the application a bot, by clicking the "Add Bot" button.
-            </TextBlock>
-            <StackPanel Orientation="Horizontal" Grid.Row="2">
-                <Button Style="{DynamicResource MaterialDesignFloatingActionMiniButton}" 
-                    Command="{x:Static materialDesign:Transitioner.MovePreviousCommand}"
-                    VerticalAlignment="Center" HorizontalAlignment="Left" 
-                    Margin="16">
+
+            <StackPanel Grid.Row="0" HorizontalAlignment="Stretch" >
+                <TextBlock HorizontalAlignment="Stretch" VerticalAlignment="Center" Margin="15,32,15,32"
+                           Style="{DynamicResource MaterialDesignHeadlineTextBlock}"
+                           TextWrapping="Wrap">
+                    Now you need to transform the Application to a Bot.
+                </TextBlock>
+                
+                <Image Source="/res/Tutorial/create_3.png" Width="900"/>
+                <TextBlock Margin="15">
+                    1. Switch to the "Bot" tab on the left sidebar. <LineBreak/>
+                    2. Click the "Add Bot" button.
+                </TextBlock>
+            </StackPanel>
+            
+
+            <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Right">
+                <Button Style="{DynamicResource MaterialDesignFloatingActionMiniButton}"
+                        Command="{x:Static materialDesign:Transitioner.MovePreviousCommand}"
+                        HorizontalAlignment="Right"
+                        Margin="10">
                     <materialDesign:PackIcon Kind="StepBackward" />
                 </Button>
-                <Button Style="{DynamicResource MaterialDesignFloatingActionAccentButton}"                     
-                    Command="{x:Static materialDesign:Transitioner.MoveNextCommand}"
-                    VerticalAlignment="Top"
-                    Margin="16">
+                <Button Style="{DynamicResource MaterialDesignFloatingActionAccentButton}"
+                        Command="{x:Static materialDesign:Transitioner.MoveNextCommand}"
+                        HorizontalAlignment="Right"
+                        Margin="10">
                     <materialDesign:PackIcon Kind="StepForward" />
                 </Button>
             </StackPanel>

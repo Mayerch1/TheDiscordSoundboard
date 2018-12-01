@@ -65,7 +65,7 @@
 
 
     <Grid>
-        <ScrollViewer>
+        <ScrollViewer PreviewMouseWheel="Settings_OnPreviewMouseWheel">
 
             <StackPanel Orientation="Vertical">
 
@@ -278,12 +278,11 @@
                                     <Expander HorizontalAlignment="Left"
                                               Header="Supported File Extensions">
 
-                                        <ScrollViewer HorizontalScrollBarVisibility="Disabled"
-                                                      VerticalScrollBarVisibility="Hidden">
+                                      
                                             <ListBox x:Name="list_SupportedFormats"
                                                      ItemsSource="{Binding SupportedFormats}"
                                                      MinWidth="300" />
-                                        </ScrollViewer>
+                                        
                                     </Expander>
 
                                     <StackPanel Orientation="Horizontal" VerticalAlignment="Top">

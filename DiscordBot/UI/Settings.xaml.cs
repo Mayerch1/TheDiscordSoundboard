@@ -32,6 +32,7 @@ namespace DiscordBot.UI
                 OnPropertyChanged("PrimarySwatches");
             }
         }
+
         private ObservableCollection<Swatch> secondarySwatches;
 
         public ObservableCollection<Swatch> SecondarySwatches
@@ -50,13 +51,12 @@ namespace DiscordBot.UI
         public Settings()
         {
             PrimarySwatches = new ObservableCollection<Swatch>(new SwatchesProvider().Swatches);
-            SecondarySwatches = new ObservableCollection<Swatch>((new SwatchesProvider().Swatches).Where(x=> x.AccentExemplarHue!=null));
+            SecondarySwatches =
+                new ObservableCollection<Swatch>(
+                    (new SwatchesProvider().Swatches).Where(x => x.AccentExemplarHue != null));
 
             InitializeComponent();
             this.DataContext = Handle.Data.Persistent;
-
-            
-          
         }
 
         /// <summary>
@@ -66,9 +66,9 @@ namespace DiscordBot.UI
         /// <param name="e"></param>
         private void box_token_TextChanged(object sender, TextChangedEventArgs e)
         {
-            Handle.Token = ((TextBox)sender).Text;
+            Handle.Token = ((TextBox) sender).Text;
         }
-   
+
         private void btn_Help_Application_Click(object sender, RoutedEventArgs e)
         {
             openHelpPage("Settings#Application");
@@ -78,6 +78,7 @@ namespace DiscordBot.UI
         {
             openHelpPage("Settings#Files");
         }
+
         private void btn_Help_Appearance_Click(object sender, RoutedEventArgs e)
         {
             openHelpPage("Settings#Appearance");
@@ -88,7 +89,7 @@ namespace DiscordBot.UI
             System.Diagnostics.Process.Start(DataManagement.PersistentData.gitCompleteUrl + "wiki/" + page);
         }
 
-        
+
         private void btn_PrimarySwatch_Click(object sender, RoutedEventArgs e)
         {
             if (sender is Button btn)
@@ -99,6 +100,7 @@ namespace DiscordBot.UI
                 }
             }
         }
+
         private void btn_AccentSwatch_Click(object sender, RoutedEventArgs e)
         {
             if (sender is Button btn)
@@ -175,10 +177,7 @@ namespace DiscordBot.UI
         }
 
         private void btn_addSupportedFormat_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
-
+        { }
 
 
         private void btn_deleteSupportedFormat_Click(object sender, RoutedEventArgs e)
@@ -195,6 +194,7 @@ namespace DiscordBot.UI
                 }
             }
         }
+
         private void btn_SupportedFormatAdded_Click(object sender, RoutedEventArgs e)
         {
             var extensions = box_supportedFile.Text;
@@ -205,7 +205,7 @@ namespace DiscordBot.UI
 
             foreach (var element in extArr)
             {
-                if (!Handle.Data.Persistent.SupportedFormats.Contains(element))
+                if (!String.IsNullOrWhiteSpace(element) && !Handle.Data.Persistent.SupportedFormats.Contains(element))
                     Handle.Data.Persistent.SupportedFormats.Add(element);
             }
         }
@@ -218,16 +218,25 @@ namespace DiscordBot.UI
 
             handler?.Invoke(this, new PropertyChangedEventArgs(info));
         }
+
         private void Settings_OnPreviewMouseDown(object sender, MouseButtonEventArgs e)
         {
             //only close dialog, if click was outside of the dialog     
-            if(!dialogHost_Primary.IsMouseOver && !dialogHost_Accent.IsMouseOver && !dialogHost_SupportedFormat.IsMouseOver)
-                DialogHost.CloseDialogCommand.Execute(null, null);                      
+            if (!dialogHost_Primary.IsMouseOver && !dialogHost_Accent.IsMouseOver &&
+                !dialogHost_SupportedFormat.IsMouseOver)
+                DialogHost.CloseDialogCommand.Execute(null, null);
             e.Handled = false;
         }
 
 
-        
+        private void Settings_OnPreviewMouseWheel(object sender, MouseWheelEventArgs e)
+        {
+            //intercept ScrollViewer of Main Scroller
+            //prevent lists from capturing mouse wheel
+            ScrollViewer scv = (ScrollViewer) sender;
+            scv.ScrollToVerticalOffset(scv.VerticalOffset - e.Delta/5);
+            e.Handled = true;
+        }
     }
 
 #pragma warning restore CS1591

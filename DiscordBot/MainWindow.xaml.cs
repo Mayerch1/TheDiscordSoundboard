@@ -1142,11 +1142,16 @@ namespace DiscordBot
             if (Application.Current.MainWindow != null)
                 Application.Current.MainWindow.WindowState = WindowState.Minimized;
         }
+        private void MainWindow_OnStateChanged(object sender, EventArgs e)
+        {
+            Console.WriteLine(e);
+        }
         #endregion window header
 
 
 
 #pragma warning restore CS1591
+
     }
 
 }

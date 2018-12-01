@@ -6,35 +6,46 @@
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
+
     <materialDesign:ColorZone Mode="PrimaryLight" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" VerticalContentAlignment="Stretch">
+
         <Grid VerticalAlignment="Center" HorizontalAlignment="Center"
               MaxWidth="600">
             <Grid.RowDefinitions>
-                <RowDefinition />
-                <RowDefinition />                
+                <RowDefinition Height="2*"/>
+                <RowDefinition Height="*"/>                
             </Grid.RowDefinitions>
-            <TextBlock HorizontalAlignment="Stretch" VerticalAlignment="Center" Margin="32"
-                       Style="{DynamicResource MaterialDesignHeadlineTextBlock}"
-                       TextWrapping="Wrap">
-            </TextBlock>
-
-            <TextBlock Grid.Row="0">
-                Please open the Discord Developer Portal and login with your an confirmed Discord Account. (possibly screenshot to be added)
-            </TextBlock>
            
-            <Button Style="{DynamicResource MaterialDesignFloatingActionMiniButton}" 
-                    Command="{x:Static materialDesign:Transitioner.MovePreviousCommand}"
-                    HorizontalAlignment="Left"
-                    Grid.Row="1">
-                <materialDesign:PackIcon Kind="StepBackward" />
-            </Button>
-            <Button Style="{DynamicResource MaterialDesignFloatingActionAccentButton}"                     
-                    Command="{x:Static materialDesign:Transitioner.MoveNextCommand}"
-                    HorizontalAlignment="Right"
-                    Grid.Row="1"
-                    >
-                <materialDesign:PackIcon Kind="StepForward" />
-            </Button>
+
+            <StackPanel Grid.Row="0">
+                <TextBlock HorizontalAlignment="Stretch" VerticalAlignment="Center" Margin="15,32,15,32"
+                           Style="{DynamicResource MaterialDesignHeadlineTextBlock}"
+                           TextWrapping="Wrap">
+                    First, you need to create your personal bot.
+                </TextBlock>
+                <TextBlock Margin="15">
+                    Login on the Developer Portal with an confirmed Discord Account. <LineBreak/>
+                    You can use the link below.
+                </TextBlock>
+                <Button Width="120"  Margin="15" Content="Open Portal" Click="btn_OpenPortal_Click"/>
+            </StackPanel>
+
+
+            <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Right">
+                <Button Style="{DynamicResource MaterialDesignFloatingActionMiniButton}"
+                        Command="{x:Static materialDesign:Transitioner.MovePreviousCommand}"
+                        HorizontalAlignment="Right"
+                        Margin="10">
+                    <materialDesign:PackIcon Kind="StepBackward" />
+                </Button>
+                <Button Style="{DynamicResource MaterialDesignFloatingActionAccentButton}"
+                        Command="{x:Static materialDesign:Transitioner.MoveNextCommand}"
+                        HorizontalAlignment="Right"
+                        Margin="10">
+                    <materialDesign:PackIcon Kind="StepForward" />
+                </Button>
+            </StackPanel>
+
         </Grid>                
     </materialDesign:ColorZone>
 </UserControl>
