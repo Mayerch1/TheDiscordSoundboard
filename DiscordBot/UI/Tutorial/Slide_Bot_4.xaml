@@ -10,36 +10,49 @@
     <materialDesign:ColorZone Mode="PrimaryLight" VerticalAlignment="Stretch" HorizontalAlignment="Stretch"
                               VerticalContentAlignment="Stretch">
 
-        <Grid VerticalAlignment="Center" HorizontalAlignment="Center">
+        <Grid VerticalAlignment="Stretch" HorizontalAlignment="Stretch" MaxWidth="1500" MaxHeight="800">
             <Grid.RowDefinitions>
-                <RowDefinition Height="2*" />
-                <RowDefinition Height="*" />
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
 
-            <StackPanel Grid.Row="0" HorizontalAlignment="Stretch" >
-                <TextBlock HorizontalAlignment="Stretch" VerticalAlignment="Center" Margin="15,32,15,32"
-                           Style="{DynamicResource MaterialDesignHeadlineTextBlock}"
-                           TextWrapping="Wrap">
-                    Make it private, copy your token and enter it below.
-                </TextBlock>
+            <TextBlock Grid.Row="0" HorizontalAlignment="Stretch" VerticalAlignment="Center" Margin="0,0,0,32"
+                       Style="{DynamicResource MaterialDesignHeadlineTextBlock}"
+                       TextWrapping="Wrap">
+                Make it private, copy your token and enter it below.
+            </TextBlock>
 
-                <materialDesign:TransitioningContent OpeningEffect="{materialDesign:TransitionEffect SlideInFromRight, Duration=0:0:1.2}">
-                    <Image Source="/res/Tutorial/create_4.png" Width="400"/>
-                </materialDesign:TransitioningContent>
 
-                <TextBlock Margin="15">
-                    1. Copy the Bot Token by clicking the "Copy" Button <LineBreak/>
-                    2. Paste it into the textbox below. <LineBreak/> 
+            <Grid Grid.Row="1">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="2*"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                
+                <Image HorizontalAlignment="Left"  Source="/res/Tutorial/create_4.png"/>
+              
+
+                <TextBlock Grid.Row="1" HorizontalAlignment="Left" Margin="0,50,0,0">
+                    1. Uncheck the "Public Bot" point to prevent others from adding your bot to their servers <LineBreak/>
+                    2. Copy the Bot Token by clicking the "Copy" Button <LineBreak/>
+                    3. Paste it into the textbox below. <LineBreak/> <LineBreak/>
                     Make sure to keep the token private. If anyone gets access to this token, return to the page and regenerate it.<LineBreak/>
-
-                    3. Uncheck the "Public Bot" point to prevent others from adding your bot to their servers
                 </TextBlock>
 
-                <TextBox x:Name="box_Token" materialDesign:HintAssist.Hint="Token"/>
-            </StackPanel>
+                <TextBox Grid.RowSpan="2" Grid.Column="1" 
+                         x:Name="box_Token" 
+                         materialDesign:HintAssist.Hint="Token"
+                         VerticalAlignment="Center"/>
 
+            </Grid>
 
-            <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Right">
+            <StackPanel Margin="15" Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right">
                 <Button Style="{DynamicResource MaterialDesignFloatingActionMiniButton}"
                         Command="{x:Static materialDesign:Transitioner.MovePreviousCommand}"
                         HorizontalAlignment="Right"

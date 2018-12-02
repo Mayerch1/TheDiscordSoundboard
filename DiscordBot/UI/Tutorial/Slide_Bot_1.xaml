@@ -9,29 +9,41 @@
 
     <materialDesign:ColorZone Mode="PrimaryLight" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" VerticalContentAlignment="Stretch">
 
-        <Grid VerticalAlignment="Center" HorizontalAlignment="Center"
-              MaxWidth="600">
+        <Grid VerticalAlignment="Stretch" HorizontalAlignment="Stretch" MaxWidth="1500" MaxHeight="800">
             <Grid.RowDefinitions>
-                <RowDefinition Height="2*"/>
-                <RowDefinition Height="*"/>                
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
+
+
+            <TextBlock Grid.Row="0" HorizontalAlignment="Stretch" VerticalAlignment="Center" Margin="0,0,0,32"
+                       Style="{DynamicResource MaterialDesignHeadlineTextBlock}"
+                       TextWrapping="Wrap">
+                First, you need to create your personal bot.
+            </TextBlock>
+
+
            
 
-            <StackPanel Grid.Row="0">
-                <TextBlock HorizontalAlignment="Stretch" VerticalAlignment="Center" Margin="15,32,15,32"
-                           Style="{DynamicResource MaterialDesignHeadlineTextBlock}"
-                           TextWrapping="Wrap">
-                    First, you need to create your personal bot.
-                </TextBlock>
-                <TextBlock Margin="15">
+
+                <StackPanel Grid.Row="1" Orientation="Vertical" VerticalAlignment="Center">
+                   
+                    <TextBlock Margin="15" HorizontalAlignment="Center">
                     Login on the Developer Portal with an confirmed Discord Account. <LineBreak/>
                     You can use the link below.
-                </TextBlock>
-                <Button Width="120"  Margin="15" Content="Open Portal" Click="btn_OpenPortal_Click"/>
-            </StackPanel>
+                    </TextBlock>
+                    <Button Width="120"  Margin="15" HorizontalAlignment="Center" Content="Open Portal" Click="btn_OpenPortal_Click"/>
+                </StackPanel>
 
 
-            <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Right">
+
+
+
+
+
+
+            <StackPanel Margin="15" Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right">
                 <Button Style="{DynamicResource MaterialDesignFloatingActionMiniButton}"
                         Command="{x:Static materialDesign:Transitioner.MovePreviousCommand}"
                         HorizontalAlignment="Right"

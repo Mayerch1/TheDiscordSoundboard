@@ -10,34 +10,39 @@
     <materialDesign:ColorZone Mode="PrimaryLight" VerticalAlignment="Stretch" HorizontalAlignment="Stretch"
                               VerticalContentAlignment="Stretch">
 
-        <Grid VerticalAlignment="Center" HorizontalAlignment="Center">
+        <Grid VerticalAlignment="Stretch" HorizontalAlignment="Stretch" MaxWidth="1500" MaxHeight="800">
             <Grid.RowDefinitions>
-                <RowDefinition Height="2*" />
-                <RowDefinition Height="*" />
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
 
-            <StackPanel Grid.Row="0" HorizontalAlignment="Stretch" >
-                <TextBlock HorizontalAlignment="Stretch" VerticalAlignment="Center" Margin="15,32,15,32"
+           
+                <TextBlock Grid.Row="0" HorizontalAlignment="Stretch" VerticalAlignment="Center" Margin="15,32,15,32"
                            Style="{DynamicResource MaterialDesignHeadlineTextBlock}"
                            TextWrapping="Wrap">
                     Invite tho Bot to your server.
                 </TextBlock>
 
-                <StackPanel Orientation="Horizontal">
-                    <Image Source="/res/Tutorial/create_7.png" Width="400"/>
 
-                    <TextBlock Margin="15">
+                <Grid Grid.Row="1">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="2*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+
+                    <Image Grid.Column="0" HorizontalAlignment="Left" Source="/res/Tutorial/create_7.png"/>
+
+                    <TextBlock Grid.Column="1" HorizontalAlignment="Left" Margin="0,0,0,0">
                         1. Select your Server. <LineBreak/>
                         2. Click the "Authorize" Button. <LineBreak/> <LineBreak/>
-                        If your server is not listed, you most likely do not have permissions to add a bot to this server.
+                        If your server is not listed, <LineBreak/> you do not have permissions to add a bot to this server.
                     </TextBlock>
-                </StackPanel>
-                
-                
-            </StackPanel>
 
+                </Grid>
 
-            <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Right">
+            <StackPanel Margin="15" Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right">
                 <Button Style="{DynamicResource MaterialDesignFloatingActionMiniButton}"
                         Command="{x:Static materialDesign:Transitioner.MovePreviousCommand}"
                         HorizontalAlignment="Right"
