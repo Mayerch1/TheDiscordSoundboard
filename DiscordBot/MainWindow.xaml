@@ -16,8 +16,8 @@
         Background="{DynamicResource MaterialDesignPaper}"
         TextElement.FontWeight="Medium"
         TextElement.FontSize="14"
-        FontFamily="pack://application:,,,/MaterialDesignThemes.Wpf;component/Resources/Roboto/#Roboto"
-        DataContext="{Binding RelativeSource={RelativeSource Self}}"  >
+        FontFamily="pack://application:,,,/MaterialDesignThemes.Wpf;component/ources/Roboto/#Roboto"
+        DataContext="{Binding RelativeSource={RelativeSource Self}}">
 
     <WindowChrome.WindowChrome>
         <!-- remove window border -->
@@ -314,59 +314,146 @@
                 </StackPanel>
             </Border>
 
-            <Grid DockPanel.Dock="Top" Height="30">
+            <Grid DockPanel.Dock="Top" Height="60">
 
                 <materialDesign:ColorZone HorizontalAlignment="Stretch" 
-                                          VerticalAlignment="Stretch" 
-                                          PreviewMouseDown="WindowHeader_PreviewMouseDown"/>
+                                          VerticalAlignment="Top" 
+                                          PreviewMouseDown="WindowHeader_PreviewMouseDown"
+                                          Height="55"
+                                          materialDesign:ShadowAssist.ShadowDepth="Depth1" materialDesign:ShadowAssist.ShadowEdges="Bottom" Background="{DynamicResource MaterialDesignPaper}"/>
 
-                <StackPanel HorizontalAlignment="Right" Orientation="Horizontal">
+
+
+                <StackPanel HorizontalAlignment="Right" Orientation="Horizontal" Height="55" VerticalAlignment="Top">
 
                     <!-- begin avatar button -->
                     <Button Grid.ZIndex="1"  HorizontalAlignment="Right" Margin="0,5,25,0"
                             x:Name="btn_Avatar"
-                            Style="{StaticResource MaterialDesignFloatingActionMiniLightButton}"
                             ToolTip="Select a channel"
                             BorderBrush="{DynamicResource PrimaryHueMidBrush}"
-                            Click="btn_Avatar_Click">
+                            Click="btn_Avatar_Click"
+                            VerticalAlignment="Center"
+                            Height="40"
+                            Width="200">
 
-                        <Button.Background>
-                            <ImageBrush ImageSource="{Binding ClientAvatar}" Stretch="Fill" TileMode="None" />
-                        </Button.Background>
+                        <Button.Template>
+                            <ControlTemplate>
+                                <Border CornerRadius="20" Background="{DynamicResource MaterialDesignTextFieldBoxBackground}">
+                                    
+                                    <StackPanel VerticalAlignment="Bottom" Orientation="Horizontal">
+                                        <Ellipse Height="40" Width="40">
+                                            <Ellipse.Fill>
+                                                <ImageBrush ImageSource="{Binding ClientAvatar}" Stretch="Fill"/>
+                                            </Ellipse.Fill>
+                                        </Ellipse>
+
+                                        <TextBlock Text="UserName#1234" VerticalAlignment="Center" Margin="10,0,0,0" Foreground="{DynamicResource MaterialDesignBody}"/>
+                                    </StackPanel>
+                                </Border>
+                            </ControlTemplate>
+                        </Button.Template>
+
                     </Button>
                     <!-- end avatar button -->
 
+                    <!-- begin window buttons -->
 
-                    <Button Content="_" 
-                                                   
-                            VerticalAlignment="Stretch" 
+                    <Button 
+
+                            materialDesign:ShadowAssist.ShadowDepth="Depth0"
+                            BorderThickness="0"
+                            VerticalAlignment="Top" 
                             HorizontalAlignment="Right"
                             BorderBrush="{x:Null}"
-                            Click="btn_Minimize_OnClick"/>
-                    <Button Content="∇" 
-                                                   
-                            VerticalAlignment="Stretch" 
+                            Click="btn_Minimize_OnClick"
+                            Foreground="{DynamicResource MaterialDesignBody}">
+
+                        <Button.Style>
+                            <Style TargetType="{x:Type Button}" BasedOn="{StaticResource {x:Type Button}}">
+                                <Style.Triggers>
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter Property="Background" Value="{DynamicResource MaterialDesignTextFieldBoxBackground}"/>
+                                    </Trigger>
+
+                                    <Trigger Property="IsMouseOver" Value="False">
+                                        <Setter Property="Background" Value="Transparent"/>
+                                    </Trigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Button.Style>
+
+                        <materialDesign:PackIcon Kind="WindowMinimize" />
+                    </Button>
+
+
+                    <Button 
+                            materialDesign:ShadowAssist.ShadowDepth="Depth0"
+                            BorderThickness="0"
+                            VerticalAlignment="Top" 
                             HorizontalAlignment="Right"
                             BorderBrush="{x:Null}"
-                            Click="btn_ToggleWindow_OnClick"/>
-                    <Button Content="x" 
-                            Background="Red"                        
-                            VerticalAlignment="Stretch" 
+                            Click="btn_ToggleWindow_OnClick"
+                            Foreground="{DynamicResource MaterialDesignBody}">
+
+
+
+
+                        <Button.Style>
+                            <Style TargetType="{x:Type Button}" BasedOn="{StaticResource {x:Type Button}}">
+
+                                <Style.Triggers>
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter Property="Background" Value="{DynamicResource MaterialDesignTextFieldBoxBackground}"/>
+                                    </Trigger>
+
+                                    <Trigger Property="IsMouseOver" Value="False">
+                                        <Setter Property="Background" Value="Transparent"/>
+                                    </Trigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Button.Style>
+
+                        <materialDesign:PackIcon Kind="WindowMaximize" />
+
+                    </Button>
+
+
+                    <Button                
+                            materialDesign:ShadowAssist.ShadowDepth="Depth0"
+                            BorderThickness="0"
+                            VerticalAlignment="Top" 
                             HorizontalAlignment="Right"
                             BorderBrush="{x:Null}"
-                            Click="btn_Close_OnClick"/>
+                            Click="btn_Close_OnClick"
+                            Foreground="{DynamicResource MaterialDesignBody}">
+
+                        
+                            
+                  
+                        
+                        
+                        <Button.Style>
+                            <Style TargetType="{x:Type Button}" BasedOn="{StaticResource {x:Type Button}}">
+   
+                                <Style.Triggers>
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter Property="Background" Value="Red"/>
+                                    </Trigger>
+
+                                    <Trigger Property="IsMouseOver" Value="False">
+                                        <Setter Property="Background" Value="Transparent"/>
+                                    </Trigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Button.Style>
+
+                            <materialDesign:PackIcon Kind="WindowClose" />
+                        
+                    </Button>
+                    <!-- begin window buttons -->
                 </StackPanel>
-
-
             </Grid>
 
-
-            <Border Height="60" DockPanel.Dock="Top">
-                <materialDesign:ColorZone Height="25" materialDesign:ShadowAssist.ShadowDepth="Depth1" materialDesign:ShadowAssist.ShadowEdges="Bottom" Background="{DynamicResource MaterialDesignPaper}">
-                <!-- empty border, to keep uniform separationline -->
-                    
-                </materialDesign:ColorZone>
-            </Border>
 
             <Border Background="{DynamicResource MaterialDesignPaper}" DockPanel.Dock="Right" materialDesign:ShadowAssist.ShadowDepth="Depth2" materialDesign:ShadowAssist.ShadowEdges="Top">
                 <!--Main Grid-->
