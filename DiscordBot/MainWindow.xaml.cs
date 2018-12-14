@@ -1109,7 +1109,9 @@ namespace DiscordBot
         public static extern bool ReleaseCapture();
         private void WindowHeader_PreviewMouseDown(object sender, MouseButtonEventArgs e)
         {
-            if (e.ButtonState == MouseButtonState.Pressed)
+
+            //deactivate for now
+            if (e.ButtonState == MouseButtonState.Pressed && 0==1)
             {
                 ReleaseCapture();
                 SendMessage(new WindowInteropHelper(Application.Current.MainWindow).Handle, WM_NCLBUTTONDOWN,
