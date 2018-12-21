@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.IO;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
@@ -9,6 +11,7 @@ using System.Windows.Controls.Primitives;
 using System.Windows.Input;
 using MaterialDesignColors;
 using MaterialDesignThemes.Wpf;
+using Util.IO;
 
 namespace DiscordBot.UI
 {
@@ -19,6 +22,12 @@ namespace DiscordBot.UI
     /// </summary>
     public partial class Settings : UserControl, INotifyPropertyChanged
     {
+        public delegate void RefreshModulesHandle();
+
+        public RefreshModulesHandle RefreshModules;
+
+
+
         private static bool isClickOnDialog = false;
 
         private ObservableCollection<Swatch> primarySwatches;
@@ -55,6 +64,10 @@ namespace DiscordBot.UI
                 new ObservableCollection<Swatch>(
                     (new SwatchesProvider().Swatches).Where(x => x.AccentExemplarHue != null));
 
+            //TODO: sort color 
+            //List<Swatch> yz = PrimarySwatches.OrderBy(cp => cp.ExemplarHue.Color).ToList();
+            //List<Swatch> zz = SecondarySwatches.OrderBy(cs => cs.ExemplarHue.Color).ToList();
+
             InitializeComponent();
             this.DataContext = Handle.Data.Persistent;
         }
@@ -82,6 +95,11 @@ namespace DiscordBot.UI
         private void btn_Help_Appearance_Click(object sender, RoutedEventArgs e)
         {
             openHelpPage("Settings#Appearance");
+        }
+
+        private void btn_Help_Modules_Click(object sender, RoutedEventArgs e)
+        {
+            openHelpPage("Settings#Modules");
         }
 
         private void openHelpPage(string page)
@@ -236,6 +254,25 @@ namespace DiscordBot.UI
             ScrollViewer scv = (ScrollViewer) sender;
             scv.ScrollToVerticalOffset(scv.VerticalOffset - e.Delta/5);
             e.Handled = true;
+        }
+
+        private void check_Module_Clicked(object sender, RoutedEventArgs e)
+        {
+            if (Handle.Data.Persistent.IsPlaylistModule)
+            {
+                if (!File.Exists("PlaylistModule.dll"))
+                    SnackbarManager.SnackbarMessage("Could not find Playlist Module");
+            }
+
+
+            if (Handle.Data.Persistent.IsStreamModule)
+            {
+                if (!File.Exists("StreamModule.dll"))
+                    SnackbarManager.SnackbarMessage("Could not find Stream Module");
+
+            }
+
+            RefreshModules?.Invoke();
         }
     }
 

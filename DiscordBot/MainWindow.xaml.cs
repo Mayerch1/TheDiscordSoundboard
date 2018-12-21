@@ -30,7 +30,7 @@ namespace DiscordBot
     ///  </summary>
     //blub
 
-    
+
     public partial class MainWindow : Window, INotifyPropertyChanged
     {
 #pragma warning disable CS1591
@@ -72,7 +72,8 @@ namespace DiscordBot
         }
 
 
-        private double LastVolume { get; set; }
+
+    private double LastVolume { get; set; }
 
         public double Volume
         {
@@ -136,7 +137,8 @@ namespace DiscordBot
         public string TitleTimeString => TimeSpan.FromSeconds(TitleTime).ToString(@"mm\:ss");
 
         public string ClientAvatar => Handle.Data.Persistent.ClientAvatar;
-
+        public string ClientName => Handle.Data.Persistent.ClientName;
+        
 
         private bool IsChannelListOpened { get; set; } = false;
 
@@ -165,7 +167,7 @@ namespace DiscordBot
 
             //--------
             //self assign theme values
-            //this will apply themes to the ui
+            //this will apply themes to the ui, as it triggers delegates/events
 
             Handle.Data.Persistent.IsDarkTheme = Handle.Data.Persistent.IsDarkTheme;
             Handle.Data.Persistent.PrimarySwatch = Handle.Data.Persistent.PrimarySwatch;
@@ -295,25 +297,43 @@ namespace DiscordBot
 
         private void SetDynamicMenu()
         {
-            //ButtonMode is already added, as its mandatory
-            var ButtonList = new List<Button>();
-          
-            //add search and playlist mode
-            if (File.Exists("PlaylistModule.dll"))
+            //remove all buttons from stackPanel
+            for (int i = (stackPanel_Menu.Children.Count - 1); i >= 0; i--)
             {
-                ButtonList.Add(getMenuButton("IconMagnify", "SEARCH", btn_Search_Click));
-                ButtonList.Add(getMenuButton("IconPlaylistPlay", "PLAYLISTS", btn_Playlist_Click));
+                //inverted for, because removing elements would change index of others
+                if (stackPanel_Menu.Children[i] is Button btn)
+                {
+                    stackPanel_Menu.Children.RemoveAt(i);
+                }
             }
 
+            //ButtonMode is already added, as its mandatory
+            var ButtonList = new List<Button>();
+
+            ButtonList.Add(getMenuButton(getIcon("IconInstantButton"), "SOUNDS", btn_Sounds_Click));
+          
+            //add search and playlist mode
+            if (Handle.Data.Persistent.IsPlaylistModule && File.Exists("PlaylistModule.dll"))
+            {
+                ButtonList.Add(getMenuButton(getIcon("IconMagnify"), "SEARCH", btn_Search_Click));
+                ButtonList.Add(getMenuButton(getIcon("IconPlaylistPlay"), "PLAYLISTS", btn_Playlist_Click));
+            }
+            else
+                LogManager.LogException(null, "DiscordBot/MainWindow", "Failed to locate dll PlaylistModule");
+            
+
             //add stream mode
-            if(File.Exists("StreamModule.dll"))
-                ButtonList.Add(getMenuButton("IconYoutubePlay", "STREAM", btn_Stream_Click));
+            if(Handle.Data.Persistent.IsStreamModule && File.Exists("StreamModule.dll"))
+                ButtonList.Add(getMenuButton(getIcon("IconYoutubePlay"), "STREAM", btn_Stream_Click));
+            else            
+                LogManager.LogException(null, "DiscordBot/MainWindow", "Failed to locate dll PlaylistModule");
+            
 
             //add settings mode
-            ButtonList.Add(getMenuButton("IconSettings", "SETTINGS", btn_Settings_Click));
+            ButtonList.Add(getMenuButton(getIcon("IconSettings"), "SETTINGS", btn_Settings_Click));
 
             //add about mode
-            ButtonList.Add(getMenuButton("IconInformation", "ABOUT", btn_About_Click));
+            ButtonList.Add(getMenuButton(getIcon("IconInformation"), "ABOUT", btn_About_Click));
 
                     
             foreach (var item in ButtonList)
@@ -322,7 +342,43 @@ namespace DiscordBot
             }
         }
 
-        private Button getMenuButton(string iconStr, string textStr, RoutedEventHandler handler)
+        private PackIcon getIcon(string iconStr)
+        {
+            var icon = new PackIcon();
+
+            switch (iconStr)
+            {
+                case "IconInstantButton":
+                    icon.Kind = PackIconKind.ArrowRightDropCircleOutline;
+                    break;
+                case "IconMagnify":
+                    icon.Kind = PackIconKind.Magnify;
+                    break;
+                case "IconPlaylistPlay":
+                    icon.Kind = PackIconKind.PlaylistPlay;
+                    break;
+                case "IconYoutubePlay":
+                    icon.Kind = PackIconKind.YoutubePlay;
+                    break;
+                case "IconSettings":
+                    icon.Kind = PackIconKind.Settings;
+                    break;
+                case "IconInformation":
+                    icon.Kind = PackIconKind.Information;
+                    break;
+
+            }
+
+            icon.Width = icon.Height = 35;
+            icon.HorizontalAlignment = HorizontalAlignment.Center;
+            icon.VerticalAlignment = VerticalAlignment.Center;
+
+
+            return icon;
+        }
+
+
+        private Button getMenuButton(PackIcon icon, string textStr, RoutedEventHandler handler)
         {
             //create button (with Style) and StackPanel
             var btn = new Button()
@@ -332,9 +388,9 @@ namespace DiscordBot
             var stack = new StackPanel()
             {
                 Orientation = Orientation.Horizontal,
-            };
+            };      
 
-            stack.Children.Add(FindResource(iconStr) as UIElement);
+            stack.Children.Add(icon);
 
             //create TextBlock with Style
             var menuTxt = new TextBlock()
@@ -352,6 +408,9 @@ namespace DiscordBot
 
             return btn;
         }
+
+        
+
 
 
         private void dispatcherTimer_Tick(object sender, EventArgs e)
@@ -856,8 +915,6 @@ namespace DiscordBot
             else
                 SnackbarManager.SnackbarMessage("Module not installed");
 
-
-
         }
 
         private void LoadPlaylistMode()
@@ -892,7 +949,12 @@ namespace DiscordBot
         {
             //settings are mandatory
             MainGrid.Children.Clear();
-            MainGrid.Children.Add(new UI.Settings());
+            var ui = new UI.Settings();
+
+            //reload sidebar, when modules are checked/unchecked
+            ui.RefreshModules += SetDynamicMenu;
+
+            MainGrid.Children.Add(ui);
         }
 
         private void btn_Sounds_Click(object sender, RoutedEventArgs e)
@@ -1097,6 +1159,7 @@ namespace DiscordBot
             ui.QueueVideo += Stream_Video_Queue;
             ui.EulaRejected += Stream_Eula_Rejected;
         }
+
         #endregion stuff related to dll
 
         #region window header
@@ -1111,7 +1174,7 @@ namespace DiscordBot
         {
 
             //deactivate for now
-            if (e.ButtonState == MouseButtonState.Pressed && 0==1)
+            if (e.ButtonState == MouseButtonState.Pressed && 0 == 1)
             {
                 ReleaseCapture();
                 SendMessage(new WindowInteropHelper(Application.Current.MainWindow).Handle, WM_NCLBUTTONDOWN,
@@ -1120,7 +1183,7 @@ namespace DiscordBot
         }
 
         private void btn_Close_OnClick(object sender, RoutedEventArgs e)
-        {     
+        {
             this.Close();
         }
 

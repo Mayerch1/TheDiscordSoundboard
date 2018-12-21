@@ -72,6 +72,11 @@ namespace DataManagement
         private ObservableCollection<Hotkey> hotkeyList = new ObservableCollection<Hotkey>();
         private ObservableCollection<string> supportedFormats = new ObservableCollection<string>();
 
+
+        private bool isBotModule = true;
+        private bool isPlaylistModule = true;
+        private bool isStreamModule = true;
+
         private bool isFirstStart = true;
         private bool isEulaAccepted = false;
 
@@ -116,7 +121,44 @@ namespace DataManagement
             }
         }
 
+        /// <summary>
+        /// determines, if BotModule will be loaded
+        /// </summary>
+        public bool IsBotModule
+        {
+            get => isBotModule;
+            set
+            {
+                isBotModule = value;
+                OnPropertyChanged("IsBotModule");
+            }
+        }
 
+        /// <summary>
+        /// determines, if PlaylistModule will be loaded
+        /// </summary>
+        public bool IsPlaylistModule
+        {
+            get => isPlaylistModule;
+            set
+            {
+                isPlaylistModule = value;
+                OnPropertyChanged("IsPlaylistModule");
+            }
+        }
+
+        /// <summary>
+        /// determines, if StreamModule will be loaded
+        /// </summary>
+        public bool IsStreamModule
+        {
+            get => isStreamModule;
+            set
+            {
+                isStreamModule = value;
+                OnPropertyChanged("IsStreamModule");
+            }
+        }
 
 
         /// <summary>

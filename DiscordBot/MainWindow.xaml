@@ -77,14 +77,19 @@
                                  Foreground="{DynamicResource SecondaryAccentBrush}" />
         <materialDesign:PackIcon x:Key="IconPlay" Kind="Play" />
         <materialDesign:PackIcon x:Key="IconPause" Kind="Pause" />
+
+        <!--<materialDesign:PackIcon x:Key="IconInstantButton" Kind="ArrowRightDropCircleOutline" Width="35" Height="35"
+                                 VerticalAlignment="Center" HorizontalAlignment="Center"/>
+
         <materialDesign:PackIcon x:Key="IconMagnify" Kind="Magnify" Width="35" Height="35" VerticalAlignment="Center" />
+
         <materialDesign:PackIcon x:Key="IconPlaylistPlay" Kind="PlaylistPlay" Width="35" Height="35"
                                  VerticalAlignment="Center" />
         <materialDesign:PackIcon x:Key="IconYoutubePlay" Kind="YoutubePlay" Width="35" Height="35"
                                  VerticalAlignment="Center" />
         <materialDesign:PackIcon x:Key="IconSettings" Kind="Settings" Width="35" Height="35" VerticalAlignment="Center" />
         <materialDesign:PackIcon x:Key="IconInformation" Kind="Information" Width="35" Height="35"
-                                 VerticalAlignment="Center" />
+                                 VerticalAlignment="Center" />-->
 
         <Style x:Key="MenuTextBlock" TargetType="TextBlock">
             <Setter Property="FontSize" Value="20" />
@@ -328,18 +333,10 @@
                                       Click="btn_ToggleMenu_Click" />
                     </materialDesign:ColorZone>
 
-
-                    <Button Height="75" Margin="0,20,0,0" Foreground="Black"
-                            Background="{DynamicResource PrimaryHueMidBrush}"
-                            BorderBrush="{DynamicResource PrimaryHueMidBrush}"
-                            materialDesign:ShadowAssist.ShadowDepth="Depth0" Click="btn_Sounds_Click"
-                            HorizontalContentAlignment="Left">
-                        <StackPanel Orientation="Horizontal">
-                            <materialDesign:PackIcon Kind="ArrowRightDropCircleOutline" Height="35" Width="35"
-                                                     VerticalAlignment="Center" />
-                            <TextBlock Text="SOUNDS" FontSize="20" Margin="10,0,0,0" VerticalAlignment="Center" />
-                        </StackPanel>
-                    </Button>
+                    <!-- do not add any Buttons here
+                        all buttons (or inherited) in this StackPanel are managed from code
+                        see MainWindow.xaml.cs-->
+                   
                 </StackPanel>
             </Border>
 
@@ -376,7 +373,7 @@
                                             </Ellipse.Fill>
                                         </Ellipse>
 
-                                        <TextBlock Text="UserName#1234" VerticalAlignment="Center" Margin="10,0,0,0" Foreground="{DynamicResource MaterialDesignBody}"/>
+                                        <TextBlock Text="{Binding ClientName}" VerticalAlignment="Center" Margin="10,0,0,0" Foreground="{DynamicResource MaterialDesignBody}"/>
                                     </StackPanel>
                                 </Border>
                             </ControlTemplate>
