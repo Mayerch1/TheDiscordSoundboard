@@ -70,7 +70,8 @@ namespace BotModule
 
         #region status fields
 
-        private bool isStreaming;
+        private bool isStreaming = false;
+        private bool isChannelConnected = false;
 
         #endregion status fields
 
@@ -87,12 +88,25 @@ namespace BotModule
         /// <summary>
         /// IsServerConnected property
         /// </summary>
-        public bool IsServerConnected { get; set; }
+        public bool IsServerConnected { get; private set; }
 
         /// <summary>
         /// IsChannelConnected property
         /// </summary>
-        public bool IsChannelConnected { get; set; }
+        /// TODO test implementation
+        public bool IsChannelConnected
+        {
+            get
+            {
+                //check if client is timed out
+                if (Client.ConnectionState != ConnectionState.Connected && isChannelConnected)
+                {
+                    isChannelConnected = false;
+                }
+                return isChannelConnected;
+            }
+            private set { isChannelConnected = value; }
+        }
 
         /// <summary>
         /// IsStreaming property, calls StreamStateChanged delegate
@@ -116,7 +130,7 @@ namespace BotModule
         /// <summary>
         /// IsBufferEmpty property
         /// </summary>
-        public bool IsBufferEmpty { get; set; }
+        public bool IsBufferEmpty { get; private set; }
 
         /// <summary>
         /// IsLoop property

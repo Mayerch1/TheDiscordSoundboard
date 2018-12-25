@@ -284,7 +284,7 @@ namespace BotModule
                     break;
 
                 case System.TimeoutException iEx:
-                    SnackbarManager.SnackbarMessage("Cannot join channel. Check permission");
+                    SnackbarManager.SnackbarMessage("Cannot join/get channel(s). Check permission");
                     Util.IO.LogManager.LogException(iEx, location, "No permission to join channel");
                     break;
 

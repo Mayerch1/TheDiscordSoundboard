@@ -59,7 +59,7 @@
             <Setter Property="BorderBrush" Value="{DynamicResource MaterialDesignPaper}" />
             <Setter Property="Foreground" Value="{DynamicResource MaterialDesignBody}" />
             <Setter Property="Margin" Value="0,20,0,0" />
-            <Setter Property="ToolTip" Value="Open the wiki-page" />
+            <Setter Property="ToolTip" Value="Open the wiki" />
         </Style>
     </UserControl.Resources>
 
@@ -237,6 +237,49 @@
 
 
                             <StackPanel Orientation="Vertical">
+                                <!-- Preferences -->
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="Preferences" FontSize="15" FontWeight="Bold" Margin="0,30,0,0" />
+                                    <Button
+                                        Click="btn_Help_Preferences_Click"
+
+                                        Style="{StaticResource HelpButton}">
+
+                                        <materialDesign:PackIcon
+
+                                            Kind="HelpCircleOutline"
+                                            Height="15"
+                                            Width="15" />
+                                    </Button>
+                                </StackPanel>
+
+                                <Separator Margin="0,5,0,0" />
+
+                                <StackPanel Orientation="Horizontal" Margin="5,5,0,0">
+                                    <TextBlock VerticalAlignment="Bottom">History Number</TextBlock>
+                                <Slider Minimum="1" Maximum="100"
+                                        Style="{StaticResource MaterialDesignDiscreteSlider}"
+                                        Margin="10,0,0,0"
+                                        ToolTip="Delete Old History"
+                                        Value="{Binding MaxHistoryLen}"
+                                        Width="280" />
+                                    </StackPanel>
+
+                                <StackPanel Orientation="Horizontal" Margin="5,5,0,0">
+                                    <TextBlock VerticalAlignment="Bottom">Video Histroy</TextBlock>
+                                <Slider Minimum="1" Maximum="100"
+                                        Style="{StaticResource MaterialDesignDiscreteSlider}"
+                                        Margin="10,0,0,0"
+                                        ToolTip="Delete Old History"
+                                        Value="{Binding MaxVideoHistoryLen}"
+                                        Width="280" />
+                                    </StackPanel>
+
+                            </StackPanel>
+
+                           
+
+                            <StackPanel Orientation="Vertical">
                                 <!-- Modules -->
 
                                 <StackPanel Orientation="Horizontal">
@@ -256,12 +299,15 @@
 
                                 <Separator Margin="0,5,0,0" />
 
-                             
-                                <CheckBox Content="Playlist Module" IsChecked="{Binding IsPlaylistModule}" Click="check_Module_Clicked" Style="{DynamicResource MaterialDesignCheckBox}" Margin="0,20,0,0"/>
-                                <CheckBox Content="Stream Module" IsChecked="{Binding IsStreamModule}" Click="check_Module_Clicked" Style="{DynamicResource MaterialDesignCheckBox}" Margin="0,10,0,0"/>
+
+                                <CheckBox Content="Playlist Module" IsChecked="{Binding IsPlaylistModule}"
+                                          Click="check_Module_Clicked" Style="{DynamicResource MaterialDesignCheckBox}"
+                                          Margin="0,20,0,0" />
+                                <CheckBox Content="Stream Module" IsChecked="{Binding IsStreamModule}"
+                                          Click="check_Module_Clicked" Style="{DynamicResource MaterialDesignCheckBox}"
+                                          Margin="0,10,0,0" />
 
 
-                             
                             </StackPanel>
 
                             <StackPanel Orientation="Vertical">
@@ -283,7 +329,7 @@
 
                                 <Separator Margin="0,5,0,20" />
 
-                                <StackPanel  Orientation="Horizontal">
+                                <StackPanel Orientation="Horizontal">
                                     <Expander HorizontalAlignment="Left"
                                               Header="Library Locations">
                                         <ListBox x:Name="list_MediaSources" ItemsSource="{Binding MediaSources}"
@@ -308,11 +354,11 @@
                                     <Expander HorizontalAlignment="Left"
                                               Header="Supported File Extensions">
 
-                                      
-                                            <ListBox x:Name="list_SupportedFormats"
-                                                     ItemsSource="{Binding SupportedFormats}"
-                                                     MinWidth="300" />
-                                        
+
+                                        <ListBox x:Name="list_SupportedFormats"
+                                                 ItemsSource="{Binding SupportedFormats}"
+                                                 MinWidth="300" />
+
                                     </Expander>
 
                                     <StackPanel Orientation="Horizontal" VerticalAlignment="Top">
@@ -356,7 +402,7 @@
                                                             Margin="0 8 8 0"
                                                             Command="materialDesign:DialogHost.CloseDialogCommand"
                                                             Click="btn_SupportedFormatAdded_Click">
-                                                            
+
                                                             <Button.CommandParameter>
                                                                 <system:Boolean
                                                                     xmlns:system="clr-namespace:System;assembly=mscorlib">

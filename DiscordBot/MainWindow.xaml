@@ -9,7 +9,6 @@
         Title="The Discord Soundboard" Height="767" Width="1335" Closing="MainWindow_Closing"
         ResizeMode="CanResizeWithGrip"
         PreviewMouseDown="Window_PreviewMouseDown"
-        StateChanged="MainWindow_OnStateChanged"
         SizeChanged="Window_SizeChanged"
         TextElement.Foreground="{DynamicResource MaterialDesignBody}"
         Background="{DynamicResource MaterialDesignPaper}"

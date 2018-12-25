@@ -59,18 +59,20 @@ namespace DiscordBot.UI
         /// </summary>
         public Settings()
         {
-            PrimarySwatches = new ObservableCollection<Swatch>(new SwatchesProvider().Swatches);
+            //get primary/secondary colors and sort both by sRGB values
+            PrimarySwatches = new ObservableCollection<Swatch>(new SwatchesProvider().Swatches.OrderBy(cP => cP.ExemplarHue.Color.ToString()));
             SecondarySwatches =
                 new ObservableCollection<Swatch>(
-                    (new SwatchesProvider().Swatches).Where(x => x.AccentExemplarHue != null));
+                    (new SwatchesProvider().Swatches).Where(x => x.AccentExemplarHue != null).OrderBy(cS=>cS.AccentExemplarHue.Color.ToString()));
 
-            //TODO: sort color 
-            //List<Swatch> yz = PrimarySwatches.OrderBy(cp => cp.ExemplarHue.Color).ToList();
-            //List<Swatch> zz = SecondarySwatches.OrderBy(cs => cs.ExemplarHue.Color).ToList();
 
             InitializeComponent();
             this.DataContext = Handle.Data.Persistent;
-        }
+
+         
+
+
+        }      
 
         /// <summary>
         /// eventhandler for changed text in the bot-token box
@@ -100,6 +102,10 @@ namespace DiscordBot.UI
         private void btn_Help_Modules_Click(object sender, RoutedEventArgs e)
         {
             openHelpPage("Settings#Modules");
+        }
+        private void btn_Help_Preferences_Click(object sender, RoutedEventArgs e)
+        {
+            openHelpPage("Settings#Preferences");
         }
 
         private void openHelpPage(string page)
