@@ -19,6 +19,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DiscordBot", "DiscordBot\Di
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataManagement", "DataManagement\DataManagement.csproj", "{6745405B-8A1D-423F-9D17-95BAD658DB18}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "YoutubeSearch", "YoutubeSearch\YoutubeSearch.csproj", "{DFECE3E8-99D9-4652-B486-BEA1010329BA}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -83,6 +85,14 @@ Global
 		{6745405B-8A1D-423F-9D17-95BAD658DB18}.Release|Any CPU.Build.0 = Release|Any CPU
 		{6745405B-8A1D-423F-9D17-95BAD658DB18}.Release|x64.ActiveCfg = Release|x64
 		{6745405B-8A1D-423F-9D17-95BAD658DB18}.Release|x64.Build.0 = Release|x64
+		{DFECE3E8-99D9-4652-B486-BEA1010329BA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DFECE3E8-99D9-4652-B486-BEA1010329BA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DFECE3E8-99D9-4652-B486-BEA1010329BA}.Debug|x64.ActiveCfg = Debug|x64
+		{DFECE3E8-99D9-4652-B486-BEA1010329BA}.Debug|x64.Build.0 = Debug|x64
+		{DFECE3E8-99D9-4652-B486-BEA1010329BA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DFECE3E8-99D9-4652-B486-BEA1010329BA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DFECE3E8-99D9-4652-B486-BEA1010329BA}.Release|x64.ActiveCfg = Release|x64
+		{DFECE3E8-99D9-4652-B486-BEA1010329BA}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

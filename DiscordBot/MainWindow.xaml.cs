@@ -12,6 +12,7 @@ using System.Windows.Interop;
 using System.Windows.Media.Animation;
 using System.Windows.Threading;
 using BotModule;
+using DataManagement;
 using DiscordBot.UI;
 using DiscordBot.UI.Tutorial;
 using GithubVersionChecker;
@@ -211,6 +212,25 @@ namespace DiscordBot
             }
             else
             {
+                switch (Handle.Data.Persistent.StartupPage)
+                {
+                    case PersistentData.Pages.Search:
+                        btn_Search_Click(null, null);
+                        break;
+                    case PersistentData.Pages.Playlist:
+                        btn_Playlist_Click(null, null);
+                        break;
+                    case PersistentData.Pages.Stream:
+                        btn_Stream_Click(null, null);
+                        break;
+                    case PersistentData.Pages.Settings:
+                        btn_Settings_Click();
+                        break;
+                    case PersistentData.Pages.About:
+                        btn_About_Click(null, null);
+                        break;
+                }
+
                 initAsync();
                 initDelayedAsync();
             }

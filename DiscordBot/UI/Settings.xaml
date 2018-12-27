@@ -137,7 +137,7 @@
                                     Width="450" />
 
                                 <StackPanel Orientation="Horizontal" Margin="5,5,0,0">
-                                    <TextBlock VerticalAlignment="Bottom">Volume Cap</TextBlock>
+                                    <TextBlock VerticalAlignment="Bottom" MinWidth="140">Volume Cap</TextBlock>
 
                                     <Slider Minimum="1" Maximum="100"
                                             Style="{StaticResource MaterialDesignDiscreteSlider}"
@@ -256,7 +256,22 @@
                                 <Separator Margin="0,5,0,0" />
 
                                 <StackPanel Orientation="Horizontal" Margin="5,5,0,0">
-                                    <TextBlock VerticalAlignment="Bottom">History Number</TextBlock>
+                                    <TextBlock VerticalAlignment="Bottom" MinWidth="160">Startup Page</TextBlock>
+                                    <ComboBox
+                                        Name="combo_startup"
+                                        SelectionChanged="combo_SelectionChanged">
+                                        <ComboBox.ItemsPanel>
+                                            <ItemsPanelTemplate>
+                                                <VirtualizingStackPanel />
+                                            </ItemsPanelTemplate>
+                                        </ComboBox.ItemsPanel>
+                                    </ComboBox>
+                                   
+                                </StackPanel>
+
+
+                                <StackPanel Orientation="Horizontal" Margin="5,5,0,0">
+                                    <TextBlock VerticalAlignment="Bottom" MinWidth="140">History Length</TextBlock>
                                 <Slider Minimum="1" Maximum="100"
                                         Style="{StaticResource MaterialDesignDiscreteSlider}"
                                         Margin="10,0,0,0"
@@ -266,7 +281,7 @@
                                     </StackPanel>
 
                                 <StackPanel Orientation="Horizontal" Margin="5,5,0,0">
-                                    <TextBlock VerticalAlignment="Bottom">Video Histroy</TextBlock>
+                                    <TextBlock VerticalAlignment="Bottom" MinWidth="140">Video History Length</TextBlock>
                                 <Slider Minimum="1" Maximum="100"
                                         Style="{StaticResource MaterialDesignDiscreteSlider}"
                                         Margin="10,0,0,0"
@@ -416,7 +431,7 @@
                                             </materialDesign:DialogHost.DialogContent>
 
                                             <!-- button to open the dialog -->
-                                            <Button Click="btn_addSupportedFormat_Click"
+                                            <Button 
                                                     Command="{x:Static materialDesign:DialogHost.OpenDialogCommand}"
                                                     Background="{DynamicResource PrimaryHueMidBrush}"
                                                     BorderBrush="{x:Null}">

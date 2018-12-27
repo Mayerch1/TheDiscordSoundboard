@@ -27,9 +27,6 @@ namespace DiscordBot.UI
         public RefreshModulesHandle RefreshModules;
 
 
-
-        private static bool isClickOnDialog = false;
-
         private ObservableCollection<Swatch> primarySwatches;
 
         public ObservableCollection<Swatch> PrimarySwatches
@@ -69,6 +66,7 @@ namespace DiscordBot.UI
             InitializeComponent();
             this.DataContext = Handle.Data.Persistent;
 
+            updateStartupCombo();
          
 
 
@@ -200,10 +198,6 @@ namespace DiscordBot.UI
             }
         }
 
-        private void btn_addSupportedFormat_Click(object sender, RoutedEventArgs e)
-        { }
-
-
         private void btn_deleteSupportedFormat_Click(object sender, RoutedEventArgs e)
         {
             if (list_SupportedFormats.SelectedItems.Count > 0)
@@ -279,6 +273,37 @@ namespace DiscordBot.UI
             }
 
             RefreshModules?.Invoke();
+            updateStartupCombo();
+        }
+
+        private void updateStartupCombo()
+        {
+            combo_startup.Items.Clear();
+
+            combo_startup.Items.Add(DataManagement.PersistentData.Pages.Buttons);
+
+            if (Handle.Data.Persistent.IsPlaylistModule)
+            {
+                combo_startup.Items.Add(DataManagement.PersistentData.Pages.Search);
+                combo_startup.Items.Add(DataManagement.PersistentData.Pages.Playlist);
+            }
+
+            if (Handle.Data.Persistent.IsStreamModule)
+                combo_startup.Items.Add(DataManagement.PersistentData.Pages.Stream);
+
+            combo_startup.Items.Add(DataManagement.PersistentData.Pages.Settings);
+            combo_startup.Items.Add(DataManagement.PersistentData.Pages.About);
+
+            combo_startup.SelectedItem = Handle.Data.Persistent.StartupPage;
+        }
+
+        private void combo_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (sender is ComboBox box && box.SelectedItem != null)
+            {
+                if (box.SelectedItem is DataManagement.PersistentData.Pages pg)
+                    Handle.Data.Persistent.StartupPage = pg;
+            }   
         }
     }
 
