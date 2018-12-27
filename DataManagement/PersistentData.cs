@@ -17,6 +17,9 @@ namespace DataManagement
     {
         #region consts
 
+        /// <summary>
+        /// complete url to discord page where the bot is created
+        /// </summary>
         public const string urlToBotRegister = "https://discordapp.com/login?redirect_to=%2Fdevelopers%2Fapplications%2Fme";
 
 
@@ -57,8 +60,13 @@ namespace DataManagement
         /// </summary>
         public const string version = "2.2.0";
 
-     
-        
+
+#pragma warning disable CS1591
+        /// <summary>
+        /// Enumerates all pages of the application
+        /// </summary>
+        public enum Pages { Buttons, Search, Playlist, Stream, Settings, About }
+#pragma warning restore CS1591
 
         #endregion consts
 
@@ -71,6 +79,12 @@ namespace DataManagement
         private ObservableCollection<FileData> playListIndex = new ObservableCollection<FileData>();
         private ObservableCollection<Hotkey> hotkeyList = new ObservableCollection<Hotkey>();
         private ObservableCollection<string> supportedFormats = new ObservableCollection<string>();
+
+
+        private bool isBotModule = true;
+        private bool isPlaylistModule = true;
+        private bool isStreamModule = true;
+        private Pages startupPage = Pages.Buttons;
 
         private bool isFirstStart = true;
         private bool isEulaAccepted = false;
@@ -116,8 +130,57 @@ namespace DataManagement
             }
         }
 
+        /// <summary>
+        /// determines, if BotModule will be loaded
+        /// </summary>
+        public bool IsBotModule
+        {
+            get => isBotModule;
+            set
+            {
+                isBotModule = value;
+                OnPropertyChanged("IsBotModule");
+            }
+        }
 
+        /// <summary>
+        /// determines, if PlaylistModule will be loaded
+        /// </summary>
+        public bool IsPlaylistModule
+        {
+            get => isPlaylistModule;
+            set
+            {
+                isPlaylistModule = value;
+                OnPropertyChanged("IsPlaylistModule");
+            }
+        }
 
+        /// <summary>
+        /// determines, if StreamModule will be loaded
+        /// </summary>
+        public bool IsStreamModule
+        {
+            get => isStreamModule;
+            set
+            {
+                isStreamModule = value;
+                OnPropertyChanged("IsStreamModule");
+            }
+        }
+
+        /// <summary>
+        /// The site which will be loaded on application startup
+        /// </summary>
+        public Pages StartupPage
+        {
+            get => startupPage;
+            set
+            {
+                startupPage = value;
+                OnPropertyChanged("StartupPage");
+            }
+        }
 
         /// <summary>
         /// IsFirstStart property
@@ -243,7 +306,9 @@ namespace DataManagement
         /// Token property
         /// </summary>
         public string Token { get => token;
-            set { token = value; OnPropertyChanged("Token"); if (ClientNameChanged != null) ClientNameChanged(value); } }
+            set { token = value; OnPropertyChanged("Token");
+                ClientNameChanged?.Invoke(value);
+            } }
 
         /// <summary>
         /// SelectedServerIndex
@@ -279,7 +344,9 @@ namespace DataManagement
         /// discord username in form of 'Name#1234'
         /// </value>
         public string ClientName { get => clientName;
-            set { clientName = value; OnPropertyChanged("ClientName"); if (ClientNameChanged != null) ClientNameChanged(value); } }
+            set { clientName = value; OnPropertyChanged("ClientName");
+                ClientNameChanged?.Invoke(value);
+            } }
 
       
         /// <summary>
@@ -407,10 +474,7 @@ namespace DataManagement
         private void OnPropertyChanged(string info)
         {
             PropertyChangedEventHandler handler = PropertyChanged;
-            if (handler != null)
-            {
-                handler(null, new PropertyChangedEventArgs(info));
-            }
+            handler?.Invoke(null, new PropertyChangedEventArgs(info));
         }
 
         #endregion events

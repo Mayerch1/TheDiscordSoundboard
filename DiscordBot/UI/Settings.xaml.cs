@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.IO;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
@@ -9,6 +11,7 @@ using System.Windows.Controls.Primitives;
 using System.Windows.Input;
 using MaterialDesignColors;
 using MaterialDesignThemes.Wpf;
+using Util.IO;
 
 namespace DiscordBot.UI
 {
@@ -19,7 +22,10 @@ namespace DiscordBot.UI
     /// </summary>
     public partial class Settings : UserControl, INotifyPropertyChanged
     {
-        private static bool isClickOnDialog = false;
+        public delegate void RefreshModulesHandle();
+
+        public RefreshModulesHandle RefreshModules;
+
 
         private ObservableCollection<Swatch> primarySwatches;
 
@@ -50,14 +56,21 @@ namespace DiscordBot.UI
         /// </summary>
         public Settings()
         {
-            PrimarySwatches = new ObservableCollection<Swatch>(new SwatchesProvider().Swatches);
+            //get primary/secondary colors and sort both by sRGB values
+            PrimarySwatches = new ObservableCollection<Swatch>(new SwatchesProvider().Swatches.OrderBy(cP => cP.ExemplarHue.Color.ToString()));
             SecondarySwatches =
                 new ObservableCollection<Swatch>(
-                    (new SwatchesProvider().Swatches).Where(x => x.AccentExemplarHue != null));
+                    (new SwatchesProvider().Swatches).Where(x => x.AccentExemplarHue != null).OrderBy(cS=>cS.AccentExemplarHue.Color.ToString()));
+
 
             InitializeComponent();
             this.DataContext = Handle.Data.Persistent;
-        }
+
+            updateStartupCombo();
+         
+
+
+        }      
 
         /// <summary>
         /// eventhandler for changed text in the bot-token box
@@ -82,6 +95,15 @@ namespace DiscordBot.UI
         private void btn_Help_Appearance_Click(object sender, RoutedEventArgs e)
         {
             openHelpPage("Settings#Appearance");
+        }
+
+        private void btn_Help_Modules_Click(object sender, RoutedEventArgs e)
+        {
+            openHelpPage("Settings#Modules");
+        }
+        private void btn_Help_Preferences_Click(object sender, RoutedEventArgs e)
+        {
+            openHelpPage("Settings#Preferences");
         }
 
         private void openHelpPage(string page)
@@ -176,10 +198,6 @@ namespace DiscordBot.UI
             }
         }
 
-        private void btn_addSupportedFormat_Click(object sender, RoutedEventArgs e)
-        { }
-
-
         private void btn_deleteSupportedFormat_Click(object sender, RoutedEventArgs e)
         {
             if (list_SupportedFormats.SelectedItems.Count > 0)
@@ -236,6 +254,56 @@ namespace DiscordBot.UI
             ScrollViewer scv = (ScrollViewer) sender;
             scv.ScrollToVerticalOffset(scv.VerticalOffset - e.Delta/5);
             e.Handled = true;
+        }
+
+        private void check_Module_Clicked(object sender, RoutedEventArgs e)
+        {
+            if (Handle.Data.Persistent.IsPlaylistModule)
+            {
+                if (!File.Exists("PlaylistModule.dll"))
+                    SnackbarManager.SnackbarMessage("Could not find Playlist Module");
+            }
+
+
+            if (Handle.Data.Persistent.IsStreamModule)
+            {
+                if (!File.Exists("StreamModule.dll"))
+                    SnackbarManager.SnackbarMessage("Could not find Stream Module");
+
+            }
+
+            RefreshModules?.Invoke();
+            updateStartupCombo();
+        }
+
+        private void updateStartupCombo()
+        {
+            combo_startup.Items.Clear();
+
+            combo_startup.Items.Add(DataManagement.PersistentData.Pages.Buttons);
+
+            if (Handle.Data.Persistent.IsPlaylistModule)
+            {
+                combo_startup.Items.Add(DataManagement.PersistentData.Pages.Search);
+                combo_startup.Items.Add(DataManagement.PersistentData.Pages.Playlist);
+            }
+
+            if (Handle.Data.Persistent.IsStreamModule)
+                combo_startup.Items.Add(DataManagement.PersistentData.Pages.Stream);
+
+            combo_startup.Items.Add(DataManagement.PersistentData.Pages.Settings);
+            combo_startup.Items.Add(DataManagement.PersistentData.Pages.About);
+
+            combo_startup.SelectedItem = Handle.Data.Persistent.StartupPage;
+        }
+
+        private void combo_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (sender is ComboBox box && box.SelectedItem != null)
+            {
+                if (box.SelectedItem is DataManagement.PersistentData.Pages pg)
+                    Handle.Data.Persistent.StartupPage = pg;
+            }   
         }
     }
 

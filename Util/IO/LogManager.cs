@@ -74,9 +74,16 @@ namespace Util.IO
             {
                 using (StreamWriter sw = File.AppendText(file))
                 {
-                    await sw.WriteLineAsync(date + " " + occurence + " " + info + " | " + ex.Message);
-                    if (vital)
-                        await sw.WriteLineAsync(ExceptionExtractor(ex, occurence, info));
+                    if (ex != null)
+                    {
+                        await sw.WriteLineAsync(date + " " + occurence + " " + info + " | " + ex.Message);
+                        if (vital)
+                            await sw.WriteLineAsync(ExceptionExtractor(ex, occurence, info));
+                    }
+                    else
+                    {
+                        await sw.WriteLineAsync(date + " " + occurence + " " + info);
+                    }
                 }
             }
             catch

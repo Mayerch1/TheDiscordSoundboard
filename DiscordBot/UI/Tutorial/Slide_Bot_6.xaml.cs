@@ -15,6 +15,7 @@ using System.Windows.Shapes;
 
 namespace DiscordBot.UI.Tutorial
 {
+#pragma warning disable CS1591
     /// <summary>
     /// Interaction logic for Slide_Bot_6.xaml
     /// </summary>
@@ -25,4 +26,5 @@ namespace DiscordBot.UI.Tutorial
             InitializeComponent();
         }
     }
+#pragma warning restore CS1591
 }
