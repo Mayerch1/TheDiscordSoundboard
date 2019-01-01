@@ -26,10 +26,7 @@ namespace DiscordBot.UI.Tutorial
             InitializeComponent();
         }
 
-        private void btn_OpenPortal_Click(object sender, RoutedEventArgs e)
-        {
-            System.Diagnostics.Process.Start("https://discordapp.com/login?redirect_to=%2Fdevelopers%2Fapplications%2Fme");
-        }
+     
     }
 #pragma warning restore CS1591
 }

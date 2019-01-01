@@ -220,8 +220,14 @@
     <Compile Include="UI\Settings.xaml.cs">
       <DependentUpon>Settings.xaml</DependentUpon>
     </Compile>
+    <Compile Include="UI\Tutorial\Slide_Bot_0.xaml.cs">
+      <DependentUpon>Slide_Bot_0.xaml</DependentUpon>
+    </Compile>
     <Compile Include="UI\Tutorial\Slide_Bot_6.xaml.cs">
       <DependentUpon>Slide_Bot_6.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\Tutorial\Slide_Bot_7.xaml.cs">
+      <DependentUpon>Slide_Bot_7.xaml</DependentUpon>
     </Compile>
     <Compile Include="UI\Tutorial\Slide_Intro.xaml.cs">
       <DependentUpon>Slide_Intro.xaml</DependentUpon>
@@ -279,7 +285,15 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="UI\Tutorial\Slide_Bot_0.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="UI\Tutorial\Slide_Bot_6.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\Tutorial\Slide_Bot_7.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

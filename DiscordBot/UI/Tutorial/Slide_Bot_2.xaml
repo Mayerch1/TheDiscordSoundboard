@@ -11,67 +11,27 @@
     <materialDesign:ColorZone Mode="PrimaryLight" VerticalAlignment="Stretch" HorizontalAlignment="Stretch"
                               VerticalContentAlignment="Stretch">
 
-        <Grid VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Margin="20">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="*"/>
-                <RowDefinition Height="Auto" />
-            </Grid.RowDefinitions>
+        <Grid VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Margin="0">
+            <Image Grid.Row="0" Grid.Column="0" HorizontalAlignment="Left" Source="/res/Tutorial/create_2.png" />
 
-
-            <TextBlock Grid.Row="0" HorizontalAlignment="Stretch" VerticalAlignment="Center" Margin="0,0,0,32"
-                       Style="{DynamicResource MaterialDesignHeadlineTextBlock}"
-                       TextWrapping="Wrap">
-                Create new application.
-            </TextBlock>
-
-
-            <Grid Grid.Row="1">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="2*"/>
-                    <ColumnDefinition Width="*"/>
-                </Grid.ColumnDefinitions>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="*"/>
-                    <RowDefinition Height="2*"/>
-                </Grid.RowDefinitions>
-
-
-               
-                <Image Grid.Row="0" Grid.Column="0" HorizontalAlignment="Left" Source="/res/Tutorial/create_1.png"  Margin="15"/>
-                <Image Grid.Row="1" Grid.Column="0" HorizontalAlignment="Left" Source="/res/Tutorial/create_2.png" Margin="15"/>
-                
-
-                <TextBlock Grid.Row="0" Grid.Column="1" HorizontalAlignment="Left" Margin="0,50,0,0">
-                    1. Create a new Application
-                </TextBlock>
-
-                <TextBlock Grid.Row="1" Grid.Column="1" HorizontalAlignment="Left" Margin="0,50,0,0">
-                    2. Choose a name for the bot and save the changes.
-                </TextBlock>
-
-            </Grid>
-
-
-
-
-
-            <StackPanel Margin="15" Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right">
+            <StackPanel Margin="15" 
+                        Orientation="Horizontal"
+                        HorizontalAlignment="Right"
+                        VerticalAlignment="Bottom">
                 <Button Style="{DynamicResource MaterialDesignFloatingActionMiniButton}"
-                    Command="{x:Static materialDesign:Transitioner.MovePreviousCommand}"
-                    HorizontalAlignment="Right"
-                    Margin="10">
+                        Command="{x:Static materialDesign:Transitioner.MovePreviousCommand}"
+                        HorizontalAlignment="Right"
+                        Margin="10">
                     <materialDesign:PackIcon Kind="StepBackward" />
                 </Button>
                 <Button Style="{DynamicResource MaterialDesignFloatingActionAccentButton}"
-                    Command="{x:Static materialDesign:Transitioner.MoveNextCommand}"
-                    HorizontalAlignment="Right"
-                    Margin="10">
+                        Command="{x:Static materialDesign:Transitioner.MoveNextCommand}"
+                        HorizontalAlignment="Right"
+                        Margin="10">
                     <materialDesign:PackIcon Kind="StepForward" />
                 </Button>
             </StackPanel>
 
-            
 
         </Grid>
     </materialDesign:ColorZone>

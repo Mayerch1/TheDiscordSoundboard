@@ -15,26 +15,18 @@ using System.Windows.Shapes;
 
 namespace DiscordBot.UI.Tutorial
 {
-#pragma warning disable CS1591
     /// <summary>
-    /// Interaction logic for Slide_Bot_5.xaml
+    /// Interaction logic for Slide_Bot_0.xaml
     /// </summary>
-    public partial class Slide_Bot_5 : UserControl
+    public partial class Slide_Bot_0 : UserControl
     {
-        public Slide_Bot_5()
+        public Slide_Bot_0()
         {
             InitializeComponent();
         }
-
-        //private void FirstSlideButton_OnClick(object sender, RoutedEventArgs e)
-        //{
-        //    Transitioner.SelectedIndex = 0;
-        //}
-
-        //private void SecondSlideButton_OnClick(object sender, RoutedEventArgs e)
-        //{
-        //    Transitioner.SelectedIndex = 1;
-        //}
+        private void btn_OpenPortal_Click(object sender, RoutedEventArgs e)
+        {
+            System.Diagnostics.Process.Start("https://discordapp.com/login?redirect_to=%2Fdevelopers%2Fapplications%2Fme");
+        }
     }
-#pragma warning restore CS1591
 }

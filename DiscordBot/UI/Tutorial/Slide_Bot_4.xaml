@@ -1,58 +1,32 @@
 ﻿<UserControl x:Class="DiscordBot.UI.Tutorial.Slide_Bot_4"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
-             mc:Ignorable="d" 
+             mc:Ignorable="d"
              d:DesignHeight="300" d:DesignWidth="300"
              Background="{DynamicResource MaterialDesignPaper}">
     <materialDesign:ColorZone Mode="PrimaryLight" VerticalAlignment="Stretch" HorizontalAlignment="Stretch"
                               VerticalContentAlignment="Stretch">
 
-        <Grid VerticalAlignment="Stretch" HorizontalAlignment="Stretch" MaxWidth="1500" MaxHeight="800">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="*"/>
-                <RowDefinition Height="Auto" />
-            </Grid.RowDefinitions>
+        <Grid VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Margin="0">
+            <Image Grid.Row="0" Grid.Column="0" HorizontalAlignment="Left" Source="/res/Tutorial/create_4.png" />
 
-            <TextBlock Grid.Row="0" HorizontalAlignment="Stretch" VerticalAlignment="Center" Margin="0,0,0,32"
-                       Style="{DynamicResource MaterialDesignHeadlineTextBlock}"
-                       TextWrapping="Wrap">
-                Make it private, copy your token and enter it below.
-            </TextBlock>
+            <StackPanel Margin="15"
+                        VerticalAlignment="Top"
+                        HorizontalAlignment="Right"
+                        Orientation="Vertical">
+                <Label Content="Enter your copied Token here" />
+                <TextBox x:Name="box_Token"
+                         MinWidth="300" />
+            </StackPanel>
 
 
-            <Grid Grid.Row="1">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="2*"/>
-                    <RowDefinition Height="*"/>
-                </Grid.RowDefinitions>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="*"/>
-                </Grid.ColumnDefinitions>
-
-                
-                <Image HorizontalAlignment="Left"  Source="/res/Tutorial/create_4.png"/>
-              
-
-                <TextBlock Grid.Row="1" HorizontalAlignment="Left" Margin="0,50,0,0">
-                    1. Uncheck the "Public Bot" point to prevent others from adding your bot to their servers <LineBreak/>
-                    2. Copy the Bot Token by clicking the "Copy" Button <LineBreak/>
-                    3. Paste it into the textbox below. <LineBreak/> <LineBreak/>
-                    Make sure to keep the token private. If anyone gets access to this token, return to the page and regenerate it.<LineBreak/>
-                </TextBlock>
-
-                <TextBox Grid.RowSpan="2" Grid.Column="1" 
-                         x:Name="box_Token" 
-                         materialDesign:HintAssist.Hint="Token"
-                         VerticalAlignment="Center"/>
-
-            </Grid>
-
-            <StackPanel Margin="15" Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right">
+            <StackPanel Margin="15"
+                        Orientation="Horizontal"
+                        HorizontalAlignment="Right"
+                        VerticalAlignment="Bottom">
                 <Button Style="{DynamicResource MaterialDesignFloatingActionMiniButton}"
                         Command="{x:Static materialDesign:Transitioner.MovePreviousCommand}"
                         HorizontalAlignment="Right"
@@ -61,12 +35,14 @@
                 </Button>
                 <Button Style="{DynamicResource MaterialDesignFloatingActionAccentButton}"
                         Command="{x:Static materialDesign:Transitioner.MoveNextCommand}"
+                        Click="btn_Next_Click"
                         HorizontalAlignment="Right"
-                        Margin="10"
-                        Click="btn_Next_Click">
+                        Margin="10">
                     <materialDesign:PackIcon Kind="StepForward" />
                 </Button>
             </StackPanel>
+
+
         </Grid>
     </materialDesign:ColorZone>
 
