@@ -203,12 +203,8 @@ namespace DiscordBot
                 Handle.Data.Persistent.IsFirstStart = false;
 
                 //register events, this will trigger initialization after completed setup
-                var ui = new TutorialMaster();
-                registerTutorialEvents(ui);
-
-                //start tutorial
-                MainGrid.Children.Clear();
-                MainGrid.Children.Add(ui);
+                OpenTutorial();
+              
             }
             else
             {
@@ -973,7 +969,18 @@ namespace DiscordBot
 
             //reload sidebar, when modules are checked/unchecked
             ui.RefreshModules += SetDynamicMenu;
+            ui.OpenTutorial += OpenTutorial;
 
+            MainGrid.Children.Add(ui);
+        }
+
+        private void OpenTutorial()
+        {
+            var ui = new TutorialMaster();
+            registerTutorialEvents(ui);
+
+            //start tutorial
+            MainGrid.Children.Clear();
             MainGrid.Children.Add(ui);
         }
 

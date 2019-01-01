@@ -26,6 +26,11 @@ namespace DiscordBot.UI
 
         public RefreshModulesHandle RefreshModules;
 
+        public delegate void OpenTutorialHandle();
+
+        public OpenTutorialHandle OpenTutorial;
+
+
 
         private ObservableCollection<Swatch> primarySwatches;
 
@@ -104,6 +109,11 @@ namespace DiscordBot.UI
         private void btn_Help_Preferences_Click(object sender, RoutedEventArgs e)
         {
             openHelpPage("Settings#Preferences");
+        }
+
+        private void btn_OpenTutorial_Click(object sender, RoutedEventArgs e)
+        {
+           OpenTutorial?.Invoke();
         }
 
         private void openHelpPage(string page)

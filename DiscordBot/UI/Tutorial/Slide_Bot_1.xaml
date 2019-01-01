@@ -39,10 +39,6 @@
 
 
 
-
-
-
-
             <StackPanel Margin="15" Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right">
                 <Button Style="{DynamicResource MaterialDesignFloatingActionMiniButton}"
                         Command="{x:Static materialDesign:Transitioner.MovePreviousCommand}"
