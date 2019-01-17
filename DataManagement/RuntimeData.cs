@@ -19,6 +19,7 @@ namespace DataManagement
         private const string playlistFile = "\\Playlist.xml";
         private const string historyFile = "\\History.xml";
         private const string videoHistoryFile = "\\VideoHistory.xml";
+        private const string moduleStatesFile = "\\ModuleStates.xml";
         private readonly List<string> supportedFormatsBackup = new List<string> { "mp3", "wav", "mp4", "asf", "wma", "wmv", "sami", "smi", "3g2", "3gp", "3pg2", "3pgg", "aac", "adts", "m4a", "m4v", "mov"};
 
         #endregion constants
@@ -31,6 +32,7 @@ namespace DataManagement
         private ObservableCollection<Playlist> playlists = new ObservableCollection<Playlist>();
         private History history = new History();
         private VideoHistory videoHistory = new VideoHistory();
+        private ModuleManager moduleStates = new ModuleManager();
         private bool isPlaylistPlaying = false;
 
         #endregion fields
@@ -72,7 +74,20 @@ namespace DataManagement
                 videoHistory = value;
                 OnPropertyChanged("VideoHistory");
             }
-        }     
+        }
+
+        /// <summary>
+        /// ModuleStates of all available Modules (and static pages).
+        /// </summary>
+        public ModuleManager ModuleStates
+        {
+            get => moduleStates;
+            set
+            {
+                moduleStates = value;
+                OnPropertyChanged("ModuleStates");
+            }
+        }
 
         /// <summary>
         /// IsPlaylistPlaying property
@@ -202,7 +217,11 @@ namespace DataManagement
 
             if((VideoHistory = (VideoHistory)loadObject(VideoHistory, videoHistoryFile)) == null)
                 VideoHistory = new VideoHistory();
-            
+
+            //this Module will be treated on MainWindow constructor due to unique RoutedEventArgs ptr
+            ModuleStates = (ModuleManager)loadObject(ModuleStates, moduleStatesFile);
+
+
         }
 
         /// <summary>
@@ -269,13 +288,14 @@ namespace DataManagement
         /// </summary>
         public void saveAll()
         {
-     
             cleanBtnList();
+
             saveObject(Persistent, saveFile);
             saveObject(Files, fileFile);
             saveObject(Playlists, playlistFile);
             saveObject(History, historyFile);
             saveObject(VideoHistory, videoHistoryFile);
+            saveObject(ModuleStates, moduleStatesFile);
         }
 
         /// <summary>

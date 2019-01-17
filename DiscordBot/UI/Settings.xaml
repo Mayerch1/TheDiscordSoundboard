@@ -294,7 +294,7 @@
 
                            
 
-                            <StackPanel Orientation="Vertical">
+                            <StackPanel Orientation="Vertical" x:Name="Stack_ModuleSelector">
                                 <!-- Modules -->
 
                                 <StackPanel Orientation="Horizontal">
@@ -312,16 +312,10 @@
                                     </Button>
                                 </StackPanel>
 
-                                <Separator Margin="0,5,0,0" />
+                                <Separator Margin="0,5,0, 10" />
 
-
-                                <CheckBox Content="Playlist Module" IsChecked="{Binding IsPlaylistModule}"
-                                          Click="check_Module_Clicked" Style="{DynamicResource MaterialDesignCheckBox}"
-                                          Margin="0,20,0,0" />
-                                <CheckBox Content="Stream Module" IsChecked="{Binding IsStreamModule}"
-                                          Click="check_Module_Clicked" Style="{DynamicResource MaterialDesignCheckBox}"
-                                          Margin="0,10,0,0" />
-
+                                <!--SPACER-->
+                               <!-- checkboxes for modules are added here with code-->
 
                             </StackPanel>
 

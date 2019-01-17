@@ -72,7 +72,7 @@ namespace DiscordBot.UI
             this.DataContext = Handle.Data.Persistent;
 
             updateStartupCombo();
-         
+            updateModuleSelector();
 
 
         }      
@@ -146,6 +146,7 @@ namespace DiscordBot.UI
 
         private void dialogHost_OnDialogClosing(object sender, DialogClosingEventArgs eventArgs)
         {
+            //DO NOT REMOVE
             //this is needed, to call CloseDialogCommand.Execute(null, null) from code
             Console.WriteLine("SAMPLE 1: Closing dialog with parameter: " + (eventArgs.Parameter ?? ""));
 
@@ -266,20 +267,12 @@ namespace DiscordBot.UI
             e.Handled = true;
         }
 
-        private void check_Module_Clicked(object sender, RoutedEventArgs e)
+        private void module_checkForPresent()
         {
-            if (Handle.Data.Persistent.IsPlaylistModule)
+            foreach (var Module in Handle.Data.ModuleStates.Modules)
             {
-                if (!File.Exists("PlaylistModule.dll"))
-                    SnackbarManager.SnackbarMessage("Could not find Playlist Module");
-            }
-
-
-            if (Handle.Data.Persistent.IsStreamModule)
-            {
-                if (!File.Exists("StreamModule.dll"))
-                    SnackbarManager.SnackbarMessage("Could not find Stream Module");
-
+                if (!String.IsNullOrEmpty(Module.Dll) && !File.Exists(Module.Dll))
+                    SnackbarManager.SnackbarMessage("Could not find " + Module.Dll);
             }
 
             RefreshModules?.Invoke();
@@ -290,30 +283,80 @@ namespace DiscordBot.UI
         {
             combo_startup.Items.Clear();
 
-            combo_startup.Items.Add(DataManagement.PersistentData.Pages.Buttons);
-
-            if (Handle.Data.Persistent.IsPlaylistModule)
+            foreach (var Module in Handle.Data.ModuleStates.Modules)
             {
-                combo_startup.Items.Add(DataManagement.PersistentData.Pages.Search);
-                combo_startup.Items.Add(DataManagement.PersistentData.Pages.Playlist);
-            }
-
-            if (Handle.Data.Persistent.IsStreamModule)
-                combo_startup.Items.Add(DataManagement.PersistentData.Pages.Stream);
-
-            combo_startup.Items.Add(DataManagement.PersistentData.Pages.Settings);
-            combo_startup.Items.Add(DataManagement.PersistentData.Pages.About);
-
-            combo_startup.SelectedItem = Handle.Data.Persistent.StartupPage;
+                foreach (var func in Module.Functions)
+                {
+                    if (func.IsEnabled)
+                        combo_startup.Items.Add(func);
+                    if (func.ID == Handle.Data.ModuleStates.AutostartId)
+                        combo_startup.SelectedItem = func;
+                }
+            }     
         }
 
         private void combo_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (sender is ComboBox box && box.SelectedItem != null)
             {
-                if (box.SelectedItem is DataManagement.PersistentData.Pages pg)
-                    Handle.Data.Persistent.StartupPage = pg;
+                if (box.SelectedItem is DataManagement.Func fc)
+                    Handle.Data.ModuleStates.AutostartId = fc.ID;            
             }   
+        }
+
+        private void updateModuleSelector()
+        {
+            foreach (var Module in Handle.Data.ModuleStates.Modules)
+            {
+                //create new checkbox for disabling modules
+                if (!String.IsNullOrEmpty(Module.Dll))
+                {
+                    CheckBox box = new CheckBox();
+
+                    box.Click += check_Module_Clicked;
+                    box.Content = Module.Dll.Substring(0, Module.Dll.LastIndexOf('.'));
+                    box.Tag = Module.ModId;
+                    box.IsChecked = Module.IsModEnabled;
+
+                    Thickness margin = new Thickness();
+                    margin.Top = 10;
+                    box.Margin = margin;
+
+                    Stack_ModuleSelector.Children.Add(box);
+                }
+            }
+        }
+
+        private void check_Module_Clicked(object sender, RoutedEventArgs e)
+        {
+            if (sender is CheckBox box)
+            {
+                //search for changed module
+                if (box.Tag is int tag)
+                {
+                    foreach (var Module in Handle.Data.ModuleStates.Modules)
+                    {
+                        if (tag == Module.ModId)
+                        {
+                            if (box.IsChecked != null)
+                            {
+                                //change enabled mode of module
+                                Module.IsModEnabled = box.IsChecked.Value;
+                                //iterate through every function of module
+                                foreach (var func in Module.Functions)
+                                {
+                                        func.IsEnabled = Module.IsModEnabled;
+                                }
+
+                                break;
+                            }                         
+                        }
+                    }
+                } 
+                module_checkForPresent();
+            }
+
+
         }
     }
 

@@ -61,13 +61,6 @@ namespace DataManagement
         public const string version = "2.2.0";
 
 
-#pragma warning disable CS1591
-        /// <summary>
-        /// Enumerates all pages of the application
-        /// </summary>
-        public enum Pages { Buttons, Search, Playlist, Stream, Settings, About }
-#pragma warning restore CS1591
-
         #endregion consts
 
         #region persistend fields
@@ -84,7 +77,6 @@ namespace DataManagement
         private bool isBotModule = true;
         private bool isPlaylistModule = true;
         private bool isStreamModule = true;
-        private Pages startupPage = Pages.Buttons;
 
         private bool isFirstStart = true;
         private bool isEulaAccepted = false;
@@ -169,18 +161,7 @@ namespace DataManagement
             }
         }
 
-        /// <summary>
-        /// The site which will be loaded on application startup
-        /// </summary>
-        public Pages StartupPage
-        {
-            get => startupPage;
-            set
-            {
-                startupPage = value;
-                OnPropertyChanged("StartupPage");
-            }
-        }
+ 
 
         /// <summary>
         /// IsFirstStart property
