@@ -18,6 +18,8 @@ namespace DiscordBot.UI.Tutorial
     /// <summary>
     /// Interaction logic for Slide_Bot_0.xaml
     /// </summary>
+
+#pragma warning disable CS1591
     public partial class Slide_Bot_0 : UserControl
     {
         public Slide_Bot_0()
@@ -29,4 +31,5 @@ namespace DiscordBot.UI.Tutorial
             System.Diagnostics.Process.Start("https://discordapp.com/login?redirect_to=%2Fdevelopers%2Fapplications%2Fme");
         }
     }
+#pragma warning restore CS1591
 }

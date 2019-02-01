@@ -18,6 +18,8 @@ namespace DiscordBot.UI.Tutorial
     /// <summary>
     /// Interaction logic for Slide_Bot_7.xaml
     /// </summary>
+
+#pragma warning disable CS1591
     public partial class Slide_Bot_7 : UserControl
     {
         public Slide_Bot_7()
@@ -25,4 +27,5 @@ namespace DiscordBot.UI.Tutorial
             InitializeComponent();
         }
     }
+#pragma warning restore CS1591
 }

@@ -56,6 +56,7 @@ namespace DiscordBot
         private LoopState loopStatus = LoopState.LoopNone;
         private SnackbarMessageQueue snackbarMessageQueue = new SnackbarMessageQueue(TimeSpan.FromMilliseconds(3500));
         private DispatcherTimer resizeTimer = new DispatcherTimer();
+        private string currentSongName = "";
 
         #endregion fields
 
@@ -68,6 +69,16 @@ namespace DiscordBot
             {
                 snackbarMessageQueue = value;
                 OnPropertyChanged("SnackbarMessageQueue");
+            }
+        }
+
+        public string CurrentSongName
+        {
+            get => currentSongName;
+            set
+            {
+                currentSongName = value;
+                OnPropertyChanged("CurrentSongName");
             }
         }
 
@@ -213,12 +224,14 @@ namespace DiscordBot
                 {
                     foreach (var func in Module.Functions)
                     {
-                        if(func.ID == Handle.Data.ModuleStates.AutostartId)
+                        if (func.ID == Handle.Data.ModuleStates.AutostartId)
+                        {
                             func.Handler?.Invoke(null, null);
+                            break;
+                        }
                     }
-
                 }
-                
+
                 initAsync();
                 initDelayedAsync();
             }
@@ -283,37 +296,59 @@ namespace DiscordBot
 
         private void assignHandleToModules()
         {
+            //-------------------
+            //IN CASE OF CHANGE:
+            // for adding new Modules or Function
+            // 3 Steps required
+            // All Settings and Sidebars are managed by the program
+            //--------------------
+
+            //-------STEP 1/3-----
+            // update the version number for the Modules
+            // can be any higher integer number than the current
+            //-------------------
+            const int version = 0;
+
             //create entire class and default modules
-            if (Handle.Data.ModuleStates == null)
+            if (Handle.Data.ModuleStates == null || Handle.Data.ModuleStates.Version < version)
             {
                 Handle.Data.ModuleStates = new DataManagement.ModuleManager();
+                Handle.Data.ModuleStates.Version = version;
+
                 Handle.Data.ModuleStates.Modules = new DataManagement.Module[]
                 {
                     //mandatory
-                    new Module(0, "",
+                    new Module(0, "Instant Buttons", "",
                         new DataManagement.Func[]
                         {
                             new DataManagement.Func(0, "SOUNDS", PackIconKind.ArrowRightDropCircleOutline)
-                        }),
+                        }, true, true),
 
-                    //optional
-                    new Module(2, "PlaylistModule.dll",
+                    //optional Modules
+                    new Module(2, "Playlist Module", "PlaylistModule.dll",
                         new DataManagement.Func[]
                         {
                             new DataManagement.Func(3, "SEARCH", PackIconKind.Magnify),
                             new DataManagement.Func(4, "PLAYLIST", PackIconKind.PlaylistPlay)
                         }),
-                    new Module(3, "StreamModule.dll",
+                    new Module(3, "Stream Module", "StreamModule.dll",
                         new DataManagement.Func[]
                             {new DataManagement.Func(5, "STREAM", PackIconKind.YoutubePlay)}),
 
+                    //---------STEP 2/3-------
+                    // add new Modules or new Functions here
+                    // ID should be unique to all functions in all Modules
+                    // ModId should be unique to other modules, but can be the same as function id
+                    // Not removable module has dll name "" (empty string)
+                    //------------------------
+
                     //mandatory
-                    new Module(1, "",
+                    new Module(1, "Settings", "",
                         new DataManagement.Func[]
                         {
                             new DataManagement.Func(1, "SETTINGS", PackIconKind.Settings),
                             new DataManagement.Func(2, "ABOUT", PackIconKind.Information)
-                        })
+                        }, true, true)
                 };
             }
 
@@ -328,6 +363,10 @@ namespace DiscordBot
                     {
                         switch (func.ID)
                         {
+                            //--------STEP 3/3---------
+                            // add function handle for new Function
+                            // func.ID represents id of the function
+                            //-------------------------
                             case 0:
                                 func.Handler = btn_Sounds_Click;
                                 break;
@@ -347,7 +386,8 @@ namespace DiscordBot
                                 func.Handler = btn_Stream_Click;
                                 break;
                             default:
-                                Util.IO.LogManager.LogException(null, "Main/MainWindow", "Wrong Module ID. Fix or delete\"ModuleStates.xml\"", true);
+                                Util.IO.LogManager.LogException(null, "Main/MainWindow",
+                                    "Wrong Module ID. Fix or delete\"ModuleStates.xml\"", true);
                                 break;
                         }
                     }
@@ -399,7 +439,7 @@ namespace DiscordBot
             //load all Modules marked in ModuleManager class
             foreach (var Module in Handle.Data.ModuleStates.Modules)
             {
-                if (String.IsNullOrEmpty(Module.Dll) || File.Exists(Module.Dll))
+                if (Module.IsModEnabled && (String.IsNullOrEmpty(Module.Dll) || File.Exists(Module.Dll)))
                 {
                     foreach (var func in Module.Functions)
                     {
@@ -427,8 +467,7 @@ namespace DiscordBot
             icon.Width = 35;
             icon.HorizontalAlignment = HorizontalAlignment.Center;
             icon.VerticalAlignment = VerticalAlignment.Center;
-                
-          
+
 
             //create button (with Style) and StackPanel
             var btn = new Button()
@@ -728,13 +767,27 @@ namespace DiscordBot
 
         #region BotPlayDelegates
 
+        private void triggerMasterReplay(BotData data, bool isInstant, bool disableHistory = false,
+            bool isDiscord = true)
+        {
+            if (!isDiscord)
+                return;
+
+            if (isInstant)
+            {
+                //interrupt any stream
+                triggerInstantReplay(data, disableHistory);
+            }
+            else
+            {
+                triggerQueueReplay(data, disableHistory);
+            }
+        }
+
+
         private void btn_InstantButton_Clicked(int btnListIndex, bool isInstant)
         {
-            //play as priority or as queue
-            if (isInstant)
-                triggerInstantReplay(new DataManagement.BotData(Handle.Data.Persistent.BtnList[btnListIndex]));
-            else
-                triggerQueueReplay(new DataManagement.BotData(Handle.Data.Persistent.BtnList[btnListIndex]));
+            triggerMasterReplay(new DataManagement.BotData(Handle.Data.Persistent.BtnList[btnListIndex]), isInstant);
         }
 
         private void List_Item_Play(uint index, bool isPriority = true)
@@ -746,30 +799,24 @@ namespace DiscordBot
                 {
                     //create ButtonData to feed to bot
                     DataManagement.BotData data = new DataManagement.BotData(file.Name, file.Path);
-
-                    if (isPriority)
-                        //interrupt current stream
-                        triggerInstantReplay(data);
-                    else
-
-                        triggerQueueReplay(data);
+                    triggerMasterReplay(data, isPriority);
                 }
             }
         }
 
         private void Playlist_SingleFile_Play(DataManagement.FileData file)
         {
-            triggerQueueReplay(new DataManagement.BotData(file.Name, file.Path));
+            triggerMasterReplay(new DataManagement.BotData(file.Name, file.Path), false);
         }
 
         private void Stream_Video_Play(DataManagement.BotData data)
         {
-            triggerInstantReplay(data, true);
+            triggerMasterReplay(data, true, true);
         }
 
         private void Stream_Video_Queue(DataManagement.BotData data)
         {
-            triggerQueueReplay(data, true);
+            triggerMasterReplay(data, false, true);
         }
 
         private void Stream_Eula_Rejected()
@@ -795,8 +842,7 @@ namespace DiscordBot
 
             if (nextFile != null)
             {
-                triggerInstantReplay(new DataManagement.BotData(nextFile.Name,
-                    nextFile.Path));
+                triggerMasterReplay(new DataManagement.BotData(nextFile.Name, nextFile.Path), true);
                 Handle.Data.IsPlaylistPlaying = true;
             }
         }
@@ -846,11 +892,15 @@ namespace DiscordBot
                     Handle.Data.Persistent.MaxHistoryLen);
         }
 
-        private async void bot_streamState_Changed(bool newState)
+        private async void bot_streamState_Changed(bool newState, string songName)
         {
             //display pause icon, if bot is streaming
             if (newState /* is playing */)
+            {
                 btn_Play.Content = FindResource("IconPause");
+                //test if set properly
+                CurrentSongName = songName;
+            }
             else
             {
                 btn_Play.Content = FindResource("IconPlay");
@@ -876,7 +926,7 @@ namespace DiscordBot
                     if (nextFile != null)
                     {
                         //enqueue next file
-                        triggerQueueReplay(new DataManagement.BotData(nextFile.Name, nextFile.Path));
+                        triggerMasterReplay(new DataManagement.BotData(nextFile.Name, nextFile.Path), false);
 
                         Handle.Data.IsPlaylistPlaying = true;
                     }

@@ -127,14 +127,11 @@ namespace StreamModule
                 // getting the audio from yt is very slow,
                 // it's faster to download the vid, even on 10Mbit/s
                 //--------------------------
-
                 //get video file
                 var videos = await YouTube.Default.GetAllVideosAsync(url);
 
                 //get audios, only aac
-                var audios = videos.Where(v => v.AudioFormat != AudioFormat.Unknown && v.AudioFormat != AudioFormat.Vorbis).ToList();
-
-                
+                var audios = videos.Where(v => v.AudioFormat != AudioFormat.Unknown && v.AudioFormat != AudioFormat.Vorbis).ToList();               
 
                 //save audio into Video, only with audio
                 mpAudio = audios.FirstOrDefault(x => x.AudioBitrate > 0);

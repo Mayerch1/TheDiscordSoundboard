@@ -31,7 +31,6 @@ namespace DiscordBot.UI
         public OpenTutorialHandle OpenTutorial;
 
 
-
         private ObservableCollection<Swatch> primarySwatches;
 
         public ObservableCollection<Swatch> PrimarySwatches
@@ -62,10 +61,13 @@ namespace DiscordBot.UI
         public Settings()
         {
             //get primary/secondary colors and sort both by sRGB values
-            PrimarySwatches = new ObservableCollection<Swatch>(new SwatchesProvider().Swatches.OrderBy(cP => cP.ExemplarHue.Color.ToString()));
+            PrimarySwatches =
+                new ObservableCollection<Swatch>(
+                    new SwatchesProvider().Swatches.OrderBy(cP => cP.ExemplarHue.Color.ToString()));
             SecondarySwatches =
                 new ObservableCollection<Swatch>(
-                    (new SwatchesProvider().Swatches).Where(x => x.AccentExemplarHue != null).OrderBy(cS=>cS.AccentExemplarHue.Color.ToString()));
+                    (new SwatchesProvider().Swatches).Where(x => x.AccentExemplarHue != null)
+                    .OrderBy(cS => cS.AccentExemplarHue.Color.ToString()));
 
 
             InitializeComponent();
@@ -73,9 +75,7 @@ namespace DiscordBot.UI
 
             updateStartupCombo();
             updateModuleSelector();
-
-
-        }      
+        }
 
         /// <summary>
         /// eventhandler for changed text in the bot-token box
@@ -106,14 +106,20 @@ namespace DiscordBot.UI
         {
             openHelpPage("Settings#Modules");
         }
+
         private void btn_Help_Preferences_Click(object sender, RoutedEventArgs e)
         {
             openHelpPage("Settings#Preferences");
         }
 
+        private void btn_Help_Setup_Click(object sender, RoutedEventArgs e)
+        {
+            openHelpPage("Settings#Setup");
+        }
+
         private void btn_OpenTutorial_Click(object sender, RoutedEventArgs e)
         {
-           OpenTutorial?.Invoke();
+            OpenTutorial?.Invoke();
         }
 
         private void openHelpPage(string page)
@@ -263,7 +269,7 @@ namespace DiscordBot.UI
             //intercept ScrollViewer of Main Scroller
             //prevent lists from capturing mouse wheel
             ScrollViewer scv = (ScrollViewer) sender;
-            scv.ScrollToVerticalOffset(scv.VerticalOffset - e.Delta/5);
+            scv.ScrollToVerticalOffset(scv.VerticalOffset - e.Delta / 5);
             e.Handled = true;
         }
 
@@ -285,14 +291,21 @@ namespace DiscordBot.UI
 
             foreach (var Module in Handle.Data.ModuleStates.Modules)
             {
-                foreach (var func in Module.Functions)
+                //only display activated module in startup selection
+                if (Module.IsModEnabled)
                 {
-                    if (func.IsEnabled)
-                        combo_startup.Items.Add(func);
-                    if (func.ID == Handle.Data.ModuleStates.AutostartId)
-                        combo_startup.SelectedItem = func;
+                    foreach (var func in Module.Functions)
+                    {
+                        //select the old startup
+                        if (func.IsEnabled)
+                        {
+                            combo_startup.Items.Add(func);
+                            if (func.ID == Handle.Data.ModuleStates.AutostartId)
+                                combo_startup.SelectedItem = func;
+                        }
+                    }
                 }
-            }     
+            }
         }
 
         private void combo_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -300,8 +313,8 @@ namespace DiscordBot.UI
             if (sender is ComboBox box && box.SelectedItem != null)
             {
                 if (box.SelectedItem is DataManagement.Func fc)
-                    Handle.Data.ModuleStates.AutostartId = fc.ID;            
-            }   
+                    Handle.Data.ModuleStates.AutostartId = fc.ID;
+            }
         }
 
         private void updateModuleSelector()
@@ -309,12 +322,16 @@ namespace DiscordBot.UI
             foreach (var Module in Handle.Data.ModuleStates.Modules)
             {
                 //create new checkbox for disabling modules
-                if (!String.IsNullOrEmpty(Module.Dll))
+                if (!Module.HideDisableFunction)
                 {
                     CheckBox box = new CheckBox();
 
                     box.Click += check_Module_Clicked;
-                    box.Content = Module.Dll.Substring(0, Module.Dll.LastIndexOf('.'));
+
+
+                    box.Content = Module.Name;
+
+
                     box.Tag = Module.ModId;
                     box.IsChecked = Module.IsModEnabled;
 
@@ -345,18 +362,17 @@ namespace DiscordBot.UI
                                 //iterate through every function of module
                                 foreach (var func in Module.Functions)
                                 {
-                                        func.IsEnabled = Module.IsModEnabled;
+                                    func.IsEnabled = Module.IsModEnabled;
                                 }
 
                                 break;
-                            }                         
+                            }
                         }
                     }
-                } 
+                }
+
                 module_checkForPresent();
             }
-
-
         }
     }
 
