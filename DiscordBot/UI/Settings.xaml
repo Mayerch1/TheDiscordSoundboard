@@ -294,7 +294,7 @@
 
                            
 
-                            <StackPanel Orientation="Vertical">
+                            <StackPanel Orientation="Vertical" x:Name="Stack_ModuleSelector">
                                 <!-- Modules -->
 
                                 <StackPanel Orientation="Horizontal">
@@ -312,16 +312,10 @@
                                     </Button>
                                 </StackPanel>
 
-                                <Separator Margin="0,5,0,0" />
+                                <Separator Margin="0,5,0, 10" />
 
-
-                                <CheckBox Content="Playlist Module" IsChecked="{Binding IsPlaylistModule}"
-                                          Click="check_Module_Clicked" Style="{DynamicResource MaterialDesignCheckBox}"
-                                          Margin="0,20,0,0" />
-                                <CheckBox Content="Stream Module" IsChecked="{Binding IsStreamModule}"
-                                          Click="check_Module_Clicked" Style="{DynamicResource MaterialDesignCheckBox}"
-                                          Margin="0,10,0,0" />
-
+                                <!--SPACER-->
+                               <!-- checkboxes for modules are added here with code-->
 
                             </StackPanel>
 
@@ -449,6 +443,34 @@
 
                                 </StackPanel>
                             </StackPanel>
+
+
+                            <StackPanel Orientation="Vertical">
+                                <!-- File related stuff-->
+
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="Setup" FontSize="15" FontWeight="Bold" Margin="0,30,0,0" />
+                                    <Button
+                                        Click="btn_Help_Setup_Click"
+                                        Style="{StaticResource HelpButton}">
+
+                                        <materialDesign:PackIcon
+
+                                            Kind="HelpCircleOutline"
+                                            Height="15"
+                                            Width="15" />
+                                    </Button>
+                                </StackPanel>
+
+                                <Separator Margin="0,5,0,20" />
+
+                                <Button Click="btn_OpenTutorial_Click"
+                                        Content="Open Introduction"
+                                        Margin="0,-11,0,0">
+                                </Button>
+                            </StackPanel>
+
+                           
                         </StackPanel>
                     </Grid>
                 </materialDesign:ColorZone>

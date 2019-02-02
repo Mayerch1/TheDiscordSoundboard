@@ -145,7 +145,7 @@
                 <StackPanel>
 
                     <materialDesign:ColorZone x:Name="col_LeftPanel" Background="{DynamicResource PrimaryHueMidBrush}"
-                                              Height="5" Width="70" HorizontalAlignment="Left"/>
+                                              Height="5" Width="70" HorizontalAlignment="Left" />
 
                     <materialDesign:ColorZone materialDesign:ShadowAssist.ShadowDepth="Depth2"
                                               materialDesign:ShadowAssist.ShadowEdges="Top" Height="75">
@@ -335,154 +335,79 @@
                     <!-- do not add any Buttons here
                         all buttons (or inherited) in this StackPanel are managed from code
                         see MainWindow.xaml.cs-->
-                   
+
                 </StackPanel>
             </Border>
 
             <Grid DockPanel.Dock="Top" Height="60">
 
-                <materialDesign:ColorZone HorizontalAlignment="Stretch" 
-                                          VerticalAlignment="Top" 
+                <materialDesign:ColorZone HorizontalAlignment="Stretch"
+                                          VerticalAlignment="Top"
                                           PreviewMouseDown="WindowHeader_PreviewMouseDown"
                                           Height="55"
-                                          materialDesign:ShadowAssist.ShadowDepth="Depth1" materialDesign:ShadowAssist.ShadowEdges="Bottom" Background="{DynamicResource MaterialDesignPaper}"/>
+                                          materialDesign:ShadowAssist.ShadowDepth="Depth1"
+                                          materialDesign:ShadowAssist.ShadowEdges="Bottom"
+                                          Background="{DynamicResource MaterialDesignPaper}" />
+
+
+                <DockPanel>
 
 
 
-                <StackPanel HorizontalAlignment="Right" Orientation="Horizontal" Height="55" VerticalAlignment="Top">
 
-                    <!-- begin avatar button -->
-                    <Button Grid.ZIndex="1" HorizontalAlignment="Right" Margin="0,5,25,0"
-                            x:Name="btn_Avatar"
-                            ToolTip="Select a channel"
-                            BorderBrush="{DynamicResource PrimaryHueMidBrush}"
-                            Click="btn_Avatar_Click"
-                            VerticalAlignment="Center"
-                            Height="40"
-                            Width="200">
+                    <StackPanel HorizontalAlignment="Right" Orientation="Horizontal" Height="55"
+                                VerticalAlignment="Top" DockPanel.Dock="Right">
 
-                        <Button.Template>
-                            <ControlTemplate>
-                                <Border CornerRadius="20" Background="{DynamicResource MaterialDesignTextFieldBoxBackground}">
-                                    
-                                    <StackPanel VerticalAlignment="Bottom" Orientation="Horizontal">
-                                        <Ellipse Height="40" Width="40">
-                                            <Ellipse.Fill>
-                                                <ImageBrush ImageSource="{Binding ClientAvatar}" Stretch="Fill"/>
-                                            </Ellipse.Fill>
-                                        </Ellipse>
+                        <!-- begin avatar button -->
+                        <Button Grid.ZIndex="1" HorizontalAlignment="Right" Margin="0,5,25,0"
+                                x:Name="btn_Avatar"
+                                ToolTip="Select a channel"
+                                BorderBrush="{DynamicResource PrimaryHueMidBrush}"
+                                Click="btn_Avatar_Click"
+                                VerticalAlignment="Center"
+                                Height="40"
+                                Width="200">
 
-                                        <TextBlock Text="{Binding ClientName}" VerticalAlignment="Center" Margin="10,0,0,0" Foreground="{DynamicResource MaterialDesignBody}"/>
-                                    </StackPanel>
-                                </Border>
-                            </ControlTemplate>
-                        </Button.Template>
+                            <Button.Template>
+                                <ControlTemplate>
+                                    <Border CornerRadius="20"
+                                            Background="{DynamicResource MaterialDesignTextFieldBoxBackground}">
 
-                    </Button>
+                                        <StackPanel VerticalAlignment="Bottom" Orientation="Horizontal">
+                                            <Ellipse Height="40" Width="40">
+                                                <Ellipse.Fill>
+                                                    <ImageBrush ImageSource="{Binding ClientAvatar}" Stretch="Fill" />
+                                                </Ellipse.Fill>
+                                            </Ellipse>
+
+                                            <TextBlock Text="{Binding ClientName}" VerticalAlignment="Center"
+                                                       Margin="10,0,0,0"
+                                                       Foreground="{DynamicResource MaterialDesignBody}" />
+                                        </StackPanel>
+                                    </Border>
+                                </ControlTemplate>
+                            </Button.Template>
+                            
+                        </Button>
+                    </StackPanel>
+
+                    <StackPanel HorizontalAlignment="Center" Orientation="Horizontal" Height="55"
+                                VerticalAlignment="Center" DockPanel.Dock="Left" Margin="5,0,10,0">
+                        <TextBlock VerticalAlignment="Center" FontSize="18" Text="{Binding CurrentSongName}"/>
+                    </StackPanel>
+                   
                     <!-- end avatar button -->
 
                     <!-- begin window buttons -->
 
-                    <!--
-                    <Button 
 
-                            materialDesign:ShadowAssist.ShadowDepth="Depth0"
-                            BorderThickness="0"
-                            VerticalAlignment="Top" 
-                            HorizontalAlignment="Right"
-                            BorderBrush="{x:Null}"
-                            Click="btn_Minimize_OnClick"
-                            Foreground="{DynamicResource MaterialDesignBody}">
-
-                        <Button.Style>
-                            <Style TargetType="{x:Type Button}" BasedOn="{StaticResource {x:Type Button}}">
-                                <Style.Triggers>
-                                    <Trigger Property="IsMouseOver" Value="True">
-                                        <Setter Property="Background" Value="{DynamicResource MaterialDesignTextFieldBoxBackground}"/>
-                                    </Trigger>
-
-                                    <Trigger Property="IsMouseOver" Value="False">
-                                        <Setter Property="Background" Value="Transparent"/>
-                                    </Trigger>
-                                </Style.Triggers>
-                            </Style>
-                        </Button.Style>
-
-                        <materialDesign:PackIcon Kind="WindowMinimize" />
-                    </Button>
-
-
-                    <Button 
-                            materialDesign:ShadowAssist.ShadowDepth="Depth0"
-                            BorderThickness="0"
-                            VerticalAlignment="Top" 
-                            HorizontalAlignment="Right"
-                            BorderBrush="{x:Null}"
-                            Click="btn_ToggleWindow_OnClick"
-                            Foreground="{DynamicResource MaterialDesignBody}">
-
-
-
-
-                        <Button.Style>
-                            <Style TargetType="{x:Type Button}" BasedOn="{StaticResource {x:Type Button}}">
-
-                                <Style.Triggers>
-                                    <Trigger Property="IsMouseOver" Value="True">
-                                        <Setter Property="Background" Value="{DynamicResource MaterialDesignTextFieldBoxBackground}"/>
-                                    </Trigger>
-
-                                    <Trigger Property="IsMouseOver" Value="False">
-                                        <Setter Property="Background" Value="Transparent"/>
-                                    </Trigger>
-                                </Style.Triggers>
-                            </Style>
-                        </Button.Style>
-
-                        <materialDesign:PackIcon Kind="WindowMaximize" />
-
-                    </Button>
-
-
-                    <Button                
-                            materialDesign:ShadowAssist.ShadowDepth="Depth0"
-                            BorderThickness="0"
-                            VerticalAlignment="Top" 
-                            HorizontalAlignment="Right"
-                            BorderBrush="{x:Null}"
-                            Click="btn_Close_OnClick"
-                            Foreground="{DynamicResource MaterialDesignBody}">
-
-                        
-                            
-                  
-                        
-                        
-                        <Button.Style>
-                            <Style TargetType="{x:Type Button}" BasedOn="{StaticResource {x:Type Button}}">
-   
-                                <Style.Triggers>
-                                    <Trigger Property="IsMouseOver" Value="True">
-                                        <Setter Property="Background" Value="Red"/>
-                                    </Trigger>
-
-                                    <Trigger Property="IsMouseOver" Value="False">
-                                        <Setter Property="Background" Value="Transparent"/>
-                                    </Trigger>
-                                </Style.Triggers>
-                            </Style>
-                        </Button.Style>
-
-                            <materialDesign:PackIcon Kind="WindowClose" />
-                        
-                    </Button>
-                    -->
                     <!-- begin window buttons -->
-                </StackPanel>
+                </DockPanel>
             </Grid>
 
 
-            <Border Background="{DynamicResource MaterialDesignPaper}" DockPanel.Dock="Right" materialDesign:ShadowAssist.ShadowDepth="Depth2" materialDesign:ShadowAssist.ShadowEdges="Top">
+            <Border Background="{DynamicResource MaterialDesignPaper}" DockPanel.Dock="Right"
+                    materialDesign:ShadowAssist.ShadowDepth="Depth2" materialDesign:ShadowAssist.ShadowEdges="Top">
                 <!--Main Grid-->
                 <Grid>
                     <Grid x:Name="MainGrid" Grid.ZIndex="0">

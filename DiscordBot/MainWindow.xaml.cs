@@ -2,21 +2,16 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
-using System.Linq;
-using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-using System.Windows.Interop;
 using System.Windows.Media.Animation;
 using System.Windows.Threading;
-using BotModule;
 using DataManagement;
 using DiscordBot.UI;
 using DiscordBot.UI.Tutorial;
 using GithubVersionChecker;
-using MaterialDesignColors;
 using MaterialDesignThemes.Wpf;
 using StreamModule;
 using PlaylistModule;
@@ -30,8 +25,6 @@ namespace DiscordBot
     ///  Interaction logic for MainWindow.xaml
     ///  </summary>
     //blub
-
-
     public partial class MainWindow : Window, INotifyPropertyChanged
     {
 #pragma warning disable CS1591
@@ -57,6 +50,7 @@ namespace DiscordBot
         private LoopState loopStatus = LoopState.LoopNone;
         private SnackbarMessageQueue snackbarMessageQueue = new SnackbarMessageQueue(TimeSpan.FromMilliseconds(3500));
         private DispatcherTimer resizeTimer = new DispatcherTimer();
+        private string currentSongName = "";
 
         #endregion fields
 
@@ -72,9 +66,18 @@ namespace DiscordBot
             }
         }
 
+        public string CurrentSongName
+        {
+            get => currentSongName;
+            set
+            {
+                currentSongName = value;
+                OnPropertyChanged("CurrentSongName");
+            }
+        }
 
 
-    private double LastVolume { get; set; }
+        private double LastVolume { get; set; }
 
         public double Volume
         {
@@ -139,7 +142,7 @@ namespace DiscordBot
 
         public string ClientAvatar => Handle.Data.Persistent.ClientAvatar;
         public string ClientName => Handle.Data.Persistent.ClientName;
-        
+
 
         private bool IsChannelListOpened { get; set; } = false;
 
@@ -148,12 +151,13 @@ namespace DiscordBot
         public MainWindow()
         {
             Util.IO.LogManager.InitLog();
+
             //load from properties, because library cannot access it
             try
             {
                 Handle.Data.Persistent.SettingsPath = Properties.Settings.Default.Path;
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 Handle.Data.Persistent.SettingsPath = null;
                 Util.IO.LogManager.LogException(ex, "DiscordBot/Main", "Could not load settings location", true);
@@ -162,6 +166,9 @@ namespace DiscordBot
             //test comment
             //need this, so other tasks will wait
             Handle.Data.loadAll();
+
+            //load/correct the Module data         
+            assignHandleToModules();
 
 
             InitializeComponent();
@@ -203,32 +210,20 @@ namespace DiscordBot
                 Handle.Data.Persistent.IsFirstStart = false;
 
                 //register events, this will trigger initialization after completed setup
-                var ui = new TutorialMaster();
-                registerTutorialEvents(ui);
-
-                //start tutorial
-                MainGrid.Children.Clear();
-                MainGrid.Children.Add(ui);
+                OpenTutorial();
             }
             else
             {
-                switch (Handle.Data.Persistent.StartupPage)
+                foreach (var Module in Handle.Data.ModuleStates.Modules)
                 {
-                    case PersistentData.Pages.Search:
-                        btn_Search_Click(null, null);
-                        break;
-                    case PersistentData.Pages.Playlist:
-                        btn_Playlist_Click(null, null);
-                        break;
-                    case PersistentData.Pages.Stream:
-                        btn_Stream_Click(null, null);
-                        break;
-                    case PersistentData.Pages.Settings:
-                        btn_Settings_Click();
-                        break;
-                    case PersistentData.Pages.About:
-                        btn_About_Click(null, null);
-                        break;
+                    foreach (var func in Module.Functions)
+                    {
+                        if (func.ID == Handle.Data.ModuleStates.AutostartId)
+                        {
+                            func.Handler?.Invoke(null, null);
+                            break;
+                        }
+                    }
                 }
 
                 initAsync();
@@ -265,10 +260,13 @@ namespace DiscordBot
         {
             try
             {
-                Properties.Settings.Default.Path = Handle.Data.Persistent.SettingsPath;              
+                Properties.Settings.Default.Path = Handle.Data.Persistent.SettingsPath;
                 Properties.Settings.Default.Save();
             }
-            catch {/* do nothing */}
+            catch
+            {
+                /* do nothing */
+            }
 
             if (!Handle.Data.Persistent.DontSave)
                 Handle.Data.saveAll();
@@ -276,7 +274,7 @@ namespace DiscordBot
             ImageManager.clearImageCache(Handle.Data.Playlists);
             if (File.Exists("StreamModule.dll"))
                 clearVideoCache();
-            
+
 
             //this will prevent the StreamState-changed handler from queueing the next song, when trying to disconnect
             Handle.Data.IsPlaylistPlaying = false;
@@ -285,9 +283,111 @@ namespace DiscordBot
 
         private void clearVideoCache()
         {
+            //separate Function in case of missing dll
             StreamModule.YTManager.clearVideoCache();
         }
 
+
+        private void assignHandleToModules()
+        {
+            //-------------------
+            //IN CASE OF CHANGE:
+            // for adding new Modules or Function
+            // 3 Steps required
+            // All Settings and Sidebars are managed by the program
+            //--------------------
+
+            //-------STEP 1/3-----
+            // update the version number for the Modules
+            // can be any higher integer number than the current
+            //-------------------
+            const int version = 0;
+
+            //create entire class and default modules
+            if (Handle.Data.ModuleStates == null || Handle.Data.ModuleStates.Version < version)
+            {
+                Handle.Data.ModuleStates = new DataManagement.ModuleManager();
+                Handle.Data.ModuleStates.Version = version;
+
+                Handle.Data.ModuleStates.Modules = new DataManagement.Module[]
+                {
+                    //mandatory
+                    new Module(0, "Instant Buttons", "",
+                        new DataManagement.Func[]
+                        {
+                            new DataManagement.Func(0, "SOUNDS", PackIconKind.ArrowRightDropCircleOutline)
+                        }, true, true),
+
+                    //optional Modules
+                    new Module(2, "Playlist Module", "PlaylistModule.dll",
+                        new DataManagement.Func[]
+                        {
+                            new DataManagement.Func(3, "SEARCH", PackIconKind.Magnify),
+                            new DataManagement.Func(4, "PLAYLIST", PackIconKind.PlaylistPlay)
+                        }),
+                    new Module(3, "Stream Module", "StreamModule.dll",
+                        new DataManagement.Func[]
+                            {new DataManagement.Func(5, "STREAM", PackIconKind.YoutubePlay)}),
+
+                    //---------STEP 2/3-------
+                    // add new Modules or new Functions here
+                    // ID should be unique to all functions in all Modules
+                    // ModId should be unique to other modules, but can be the same as function id
+                    // Not removable module has dll name "" (empty string)
+                    //------------------------
+
+                    //mandatory
+                    new Module(1, "Settings", "",
+                        new DataManagement.Func[]
+                        {
+                            new DataManagement.Func(1, "SETTINGS", PackIconKind.Settings),
+                            new DataManagement.Func(2, "ABOUT", PackIconKind.Information)
+                        }, true, true)
+                };
+            }
+
+
+            //assign handle to functions in any case
+            foreach (var Module in Handle.Data.ModuleStates.Modules)
+            {
+                foreach (var func in Module.Functions)
+                {
+                    //create new Handler, matching to corresponding function
+                    if (func.Handler == null)
+                    {
+                        switch (func.ID)
+                        {
+                            //--------STEP 3/3---------
+                            // add function handle for new Function
+                            // func.ID represents id of the function
+                            //-------------------------
+                            case 0:
+                                func.Handler = btn_Sounds_Click;
+                                break;
+                            case 1:
+                                func.Handler = btn_Settings_Click;
+                                break;
+                            case 2:
+                                func.Handler = btn_About_Click;
+                                break;
+                            case 3:
+                                func.Handler = btn_Search_Click;
+                                break;
+                            case 4:
+                                func.Handler = btn_Playlist_Click;
+                                break;
+                            case 5:
+                                func.Handler = btn_Stream_Click;
+                                break;
+                            default:
+                                Util.IO.LogManager.LogException(null, "Main/MainWindow",
+                                    "Wrong Module ID. Fix or delete\"ModuleStates.xml\"", true);
+                                break;
+                        }
+                    }
+                }
+            }
+        }
 
         private async void initAsync()
         {
@@ -296,7 +396,7 @@ namespace DiscordBot
             Handle.Volume = Handle.Data.Persistent.Volume;
             Handle.ChannelId = Handle.Data.Persistent.ChannelId;
 
-            await Handle.Bot.connectToServerAsync();                     
+            await Handle.Bot.connectToServerAsync();
         }
 
         private void initTimer()
@@ -305,13 +405,12 @@ namespace DiscordBot
             //ticks 4 times a second
             DispatcherTimer dispatcherTimer = new DispatcherTimer();
             dispatcherTimer.Tick += new EventHandler(dispatcherTimer_Tick);
-            dispatcherTimer.Interval = new TimeSpan(0, 0, 0, 0, 250);           
+            dispatcherTimer.Interval = new TimeSpan(0, 0, 0, 0, 250);
             dispatcherTimer.Start();
             //-------------------
             //timer for resizing
             resizeTimer.Tick += new EventHandler(Window_ResizingDone);
             resizeTimer.Interval = new TimeSpan(0, 0, 0, 0, 75);
-            
         }
 
 
@@ -330,76 +429,40 @@ namespace DiscordBot
             //ButtonMode is already added, as its mandatory
             var ButtonList = new List<Button>();
 
-            ButtonList.Add(getMenuButton(getIcon("IconInstantButton"), "SOUNDS", btn_Sounds_Click));
-          
-            //add search and playlist mode
-            if (Handle.Data.Persistent.IsPlaylistModule && File.Exists("PlaylistModule.dll"))
+
+            //load all Modules marked in ModuleManager class
+            foreach (var Module in Handle.Data.ModuleStates.Modules)
             {
-                ButtonList.Add(getMenuButton(getIcon("IconMagnify"), "SEARCH", btn_Search_Click));
-                ButtonList.Add(getMenuButton(getIcon("IconPlaylistPlay"), "PLAYLISTS", btn_Playlist_Click));
+                if (Module.IsModEnabled && (String.IsNullOrEmpty(Module.Dll) || File.Exists(Module.Dll)))
+                {
+                    foreach (var func in Module.Functions)
+                    {
+                        if (func.IsEnabled)
+                        {
+                            ButtonList.Add(getMenuButton(func.IconKind, func.Name, func.Handler));
+                        }
+                    }
+                }
             }
-            else
-                LogManager.LogException(null, "DiscordBot/MainWindow", "Failed to locate dll PlaylistModule");
-            
 
-            //add stream mode
-            if(Handle.Data.Persistent.IsStreamModule && File.Exists("StreamModule.dll"))
-                ButtonList.Add(getMenuButton(getIcon("IconYoutubePlay"), "STREAM", btn_Stream_Click));
-            else            
-                LogManager.LogException(null, "DiscordBot/MainWindow", "Failed to locate dll PlaylistModule");
-            
 
-            //add settings mode
-            ButtonList.Add(getMenuButton(getIcon("IconSettings"), "SETTINGS", btn_Settings_Click));
-
-            //add about mode
-            ButtonList.Add(getMenuButton(getIcon("IconInformation"), "ABOUT", btn_About_Click));
-
-                    
             foreach (var item in ButtonList)
             {
                 stackPanel_Menu.Children.Add(item);
             }
         }
 
-        private PackIcon getIcon(string iconStr)
+
+        private Button getMenuButton(PackIconKind iconKind, string textStr, RoutedEventHandler handler)
         {
             var icon = new PackIcon();
-
-            switch (iconStr)
-            {
-                case "IconInstantButton":
-                    icon.Kind = PackIconKind.ArrowRightDropCircleOutline;
-                    break;
-                case "IconMagnify":
-                    icon.Kind = PackIconKind.Magnify;
-                    break;
-                case "IconPlaylistPlay":
-                    icon.Kind = PackIconKind.PlaylistPlay;
-                    break;
-                case "IconYoutubePlay":
-                    icon.Kind = PackIconKind.YoutubePlay;
-                    break;
-                case "IconSettings":
-                    icon.Kind = PackIconKind.Settings;
-                    break;
-                case "IconInformation":
-                    icon.Kind = PackIconKind.Information;
-                    break;
-
-            }
-
-            icon.Width = icon.Height = 35;
+            icon.Kind = iconKind;
+            icon.Height = 35;
+            icon.Width = 35;
             icon.HorizontalAlignment = HorizontalAlignment.Center;
             icon.VerticalAlignment = VerticalAlignment.Center;
 
 
-            return icon;
-        }
-
-
-        private Button getMenuButton(PackIcon icon, string textStr, RoutedEventHandler handler)
-        {
             //create button (with Style) and StackPanel
             var btn = new Button()
             {
@@ -408,7 +471,7 @@ namespace DiscordBot
             var stack = new StackPanel()
             {
                 Orientation = Orientation.Horizontal,
-            };      
+            };
 
             stack.Children.Add(icon);
 
@@ -421,7 +484,7 @@ namespace DiscordBot
 
             //add TextBlock, then add StackPanel to Button
             stack.Children.Add(menuTxt);
-          
+
             btn.Content = stack;
 
             btn.Click += handler;
@@ -429,13 +492,9 @@ namespace DiscordBot
             return btn;
         }
 
-        
-
-
 
         private void dispatcherTimer_Tick(object sender, EventArgs e)
         {
-            
             //tell ui that positioning properties have changed
             if (Handle.Bot.IsStreaming)
             {
@@ -452,7 +511,8 @@ namespace DiscordBot
             await Task.Delay(2500);
 
             //search for updates on github/releases
-            var git = new GithubVersionChecker.GithubUpdateChecker(DataManagement.PersistentData.gitAuthor, DataManagement.PersistentData.gitRepo);
+            var git = new GithubVersionChecker.GithubUpdateChecker(DataManagement.PersistentData.gitAuthor,
+                DataManagement.PersistentData.gitRepo);
             if (await git.CheckForUpdateAsync(DataManagement.PersistentData.version, VersionChange.Revision))
             {
                 SnackbarManager.SnackbarMessage("A newer version is available", SnackbarManager.SnackbarAction.Update);
@@ -470,7 +530,7 @@ namespace DiscordBot
 
             var palette = new PaletteHelper().QueryPalette();
 
-            var x = new MaterialDesignColors.SwatchesProvider();   
+            var x = new MaterialDesignColors.SwatchesProvider();
         }
 
         private async void initChannelList()
@@ -586,9 +646,7 @@ namespace DiscordBot
 
         #region event stuff
 
-        
-
-         //call only once
+        //call only once
         private void registerEvents()
         {
             //event to resolve new clientName into clientId
@@ -597,7 +655,7 @@ namespace DiscordBot
             //universal SnackbarWarning
             SnackbarManager.SnackbarMessage += SnackbarMessage_Show;
 
-            
+
             //hotkey stuff
             IO.HotkeyManager.RegisteredHotkeyPressed += Hotkey_Pressed;
 
@@ -630,7 +688,6 @@ namespace DiscordBot
             };
         }
 
-    
 
         private void ToggleHotkey(bool isEnabled)
         {
@@ -645,7 +702,7 @@ namespace DiscordBot
 
         private void Hotkey_Pressed(IntPtr lParam)
         {
-            Console.WriteLine("Hotkey pressed: " + lParam.ToString("x"));
+            //Console.WriteLine("Hotkey pressed: " + lParam.ToString("x"));
 
             //spereate keyCodes from lParam
             uint keyCode = (((uint) lParam >> 16) & 0xFFFF);
@@ -704,15 +761,27 @@ namespace DiscordBot
 
         #region BotPlayDelegates
 
+        private void triggerMasterReplay(BotData data, bool isInstant, bool disableHistory = false,
+            bool isDiscord = true)
+        {
+            if (!isDiscord)
+                return;
+
+            if (isInstant)
+            {
+                //interrupt any stream
+                triggerInstantReplay(data, disableHistory);
+            }
+            else
+            {
+                triggerQueueReplay(data, disableHistory);
+            }
+        }
+
+
         private void btn_InstantButton_Clicked(int btnListIndex, bool isInstant)
         {
-        
-            //play as priority or as queue
-            if(isInstant)
-            triggerInstantReplay(new DataManagement.BotData(Handle.Data.Persistent.BtnList[btnListIndex]));
-            else
-            triggerQueueReplay(new DataManagement.BotData(Handle.Data.Persistent.BtnList[btnListIndex]));
-                       
+            triggerMasterReplay(new DataManagement.BotData(Handle.Data.Persistent.BtnList[btnListIndex]), isInstant);
         }
 
         private void List_Item_Play(uint index, bool isPriority = true)
@@ -724,30 +793,24 @@ namespace DiscordBot
                 {
                     //create ButtonData to feed to bot
                     DataManagement.BotData data = new DataManagement.BotData(file.Name, file.Path);
-
-                    if (isPriority)
-                        //interrupt current stream
-                        triggerInstantReplay(data);
-                    else
-
-                        triggerQueueReplay(data);
+                    triggerMasterReplay(data, isPriority);
                 }
             }
         }
 
         private void Playlist_SingleFile_Play(DataManagement.FileData file)
         {
-            triggerQueueReplay(new DataManagement.BotData(file.Name, file.Path));
+            triggerMasterReplay(new DataManagement.BotData(file.Name, file.Path), false);
         }
 
         private void Stream_Video_Play(DataManagement.BotData data)
         {
-            triggerInstantReplay(data, true);
+            triggerMasterReplay(data, true, true);
         }
 
         private void Stream_Video_Queue(DataManagement.BotData data)
         {
-            triggerQueueReplay(data, true);
+            triggerMasterReplay(data, false, true);
         }
 
         private void Stream_Eula_Rejected()
@@ -773,8 +836,7 @@ namespace DiscordBot
 
             if (nextFile != null)
             {
-                triggerInstantReplay(new DataManagement.BotData(nextFile.Name,
-                    nextFile.Path));
+                triggerMasterReplay(new DataManagement.BotData(nextFile.Name, nextFile.Path), true);
                 Handle.Data.IsPlaylistPlaying = true;
             }
         }
@@ -789,7 +851,6 @@ namespace DiscordBot
         {
             await triggerBotQueueReplay(data, disableHistory);
         }
-
 
 
         private async Task triggerBotInstantReplay(DataManagement.BotData data, bool disableHistory)
@@ -821,14 +882,19 @@ namespace DiscordBot
         private void addTitleToHistory(DataManagement.BotData title)
         {
             if (File.Exists(title.filePath))
-                Handle.Data.History.addTitle(FileWatcher.getAllFileInfo(title.filePath), Handle.Data.Persistent.MaxHistoryLen);
+                Handle.Data.History.addTitle(FileWatcher.getAllFileInfo(title.filePath),
+                    Handle.Data.Persistent.MaxHistoryLen);
         }
 
-        private async void bot_streamState_Changed(bool newState)
+        private async void bot_streamState_Changed(bool newState, string songName)
         {
             //display pause icon, if bot is streaming
             if (newState /* is playing */)
+            {
                 btn_Play.Content = FindResource("IconPause");
+                //test if set properly
+                CurrentSongName = songName;
+            }
             else
             {
                 btn_Play.Content = FindResource("IconPlay");
@@ -854,7 +920,7 @@ namespace DiscordBot
                     if (nextFile != null)
                     {
                         //enqueue next file
-                        triggerQueueReplay(new DataManagement.BotData(nextFile.Name, nextFile.Path));
+                        triggerMasterReplay(new DataManagement.BotData(nextFile.Name, nextFile.Path), false);
 
                         Handle.Data.IsPlaylistPlaying = true;
                     }
@@ -882,7 +948,7 @@ namespace DiscordBot
                 //move to back, than skip one forward, 
                 //this will skip the current track and start at t-1
                 Misc.PlaylistManager.SkipBackwards();
-                Handle.Bot.skipTrack();               
+                Handle.Bot.skipTrack();
             }
             else
                 //skip to beginning of track
@@ -934,7 +1000,6 @@ namespace DiscordBot
                 LoadPlaylistMode();
             else
                 SnackbarManager.SnackbarMessage("Module not installed");
-
         }
 
         private void LoadPlaylistMode()
@@ -951,7 +1016,6 @@ namespace DiscordBot
                 LoadStreamMode();
             else
                 SnackbarManager.SnackbarMessage("Module not installed");
-
         }
 
         private void LoadStreamMode()
@@ -963,7 +1027,7 @@ namespace DiscordBot
             registerStreamEvents(streamUI);
             MainGrid.Children.Add(streamUI);
         }
-       
+
 
         private void btn_Settings_Click()
         {
@@ -973,7 +1037,18 @@ namespace DiscordBot
 
             //reload sidebar, when modules are checked/unchecked
             ui.RefreshModules += SetDynamicMenu;
+            ui.OpenTutorial += OpenTutorial;
 
+            MainGrid.Children.Add(ui);
+        }
+
+        private void OpenTutorial()
+        {
+            var ui = new TutorialMaster();
+            registerTutorialEvents(ui);
+
+            //start tutorial
+            MainGrid.Children.Clear();
             MainGrid.Children.Add(ui);
         }
 
@@ -1183,6 +1258,7 @@ namespace DiscordBot
         #endregion stuff related to dll
 
         #region window header
+
         //public const int WM_NCLBUTTONDOWN = 0xA1;
         //public const int HT_CAPTION = 0x2;
 
@@ -1232,12 +1308,10 @@ namespace DiscordBot
         //{
         //    Console.WriteLine(e);
         //}
+
         #endregion window header
 
 
-
 #pragma warning restore CS1591
-
     }
-
 }

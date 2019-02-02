@@ -35,13 +35,13 @@
                     Command="{x:Static materialDesign:Transitioner.MoveLastCommand}"
                     HorizontalAlignment="Left"
                     Grid.Row="1">
-                <materialDesign:PackIcon Kind="NoEntry" />
+                <materialDesign:PackIcon Kind="Close" />
             </Button>
             <Button Style="{DynamicResource MaterialDesignFloatingActionAccentButton}"                     
                     Command="{x:Static materialDesign:Transitioner.MoveNextCommand}"
                     HorizontalAlignment="Right"
                     Grid.Row="1">
-                <materialDesign:PackIcon Kind="StepForward" />
+                <materialDesign:PackIcon Kind="Tick" />
             </Button>
 
         </Grid>

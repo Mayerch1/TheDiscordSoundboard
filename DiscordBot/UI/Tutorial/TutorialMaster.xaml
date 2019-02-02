@@ -26,14 +26,14 @@
                 <local:Slide_Intro />
             </materialDesign:TransitionerSlide>
 
+            <local:Slide_Bot_0/>
+
             <!-- but you can use bare xaml too -->
             <local:Slide_Bot_1 />
 
 
             <local:Slide_Bot_2 />
 
-
-            <!-- now we are going to slide this in by combining some extra effects.  the inner content slides in, so we'll set the outer background and clip, to keep things nice -->
 
             <local:Slide_Bot_3 />
 
@@ -44,6 +44,8 @@
 
 
             <local:Slide_Bot_6 />
+
+            <local:Slide_Bot_7/>
 
 
             <local:Slide_EnterCredentials />

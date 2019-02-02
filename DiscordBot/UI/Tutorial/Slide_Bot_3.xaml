@@ -9,42 +9,15 @@
              d:DesignHeight="300" d:DesignWidth="300">
 
     <materialDesign:ColorZone Mode="PrimaryLight" VerticalAlignment="Stretch" HorizontalAlignment="Stretch"
-                              VerticalContentAlignment="Stretch" >
+                              VerticalContentAlignment="Stretch">
 
-        <Grid VerticalAlignment="Stretch" HorizontalAlignment="Stretch" MaxWidth="1500" MaxHeight="800">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="*"/>
-                <RowDefinition Height="Auto" />
-            </Grid.RowDefinitions>
+        <Grid VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Margin="0">
+            <Image Grid.Row="0" Grid.Column="0" HorizontalAlignment="Left" Source="/res/Tutorial/create_3.png" />
 
-            <TextBlock Grid.Row="0" HorizontalAlignment="Stretch" VerticalAlignment="Center" Margin="0,0,0,32"
-                       Style="{DynamicResource MaterialDesignHeadlineTextBlock}"
-                       TextWrapping="Wrap">
-                Now you need to transform the Application to a Bot.
-            </TextBlock>
-
-
-            <Grid Grid.Row="1">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="2*"/>
-                    <RowDefinition Height="*"/>
-                </Grid.RowDefinitions>
-
-
-                <Image Grid.Row="0" HorizontalAlignment="Left" Source="/res/Tutorial/create_3.png"/>
-
-                <TextBlock Grid.Row="1" HorizontalAlignment="Left" Margin="0,50,0,0">
-                    1. Switch to the "Bot" tab on the left sidebar. <LineBreak/>
-                    2. Click the "Add Bot" button.
-                </TextBlock>
-
-            </Grid>
-
-
-            
-
-            <StackPanel Margin="15" Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right">
+            <StackPanel Margin="15" 
+                        Orientation="Horizontal"
+                        HorizontalAlignment="Right"
+                        VerticalAlignment="Bottom">
                 <Button Style="{DynamicResource MaterialDesignFloatingActionMiniButton}"
                         Command="{x:Static materialDesign:Transitioner.MovePreviousCommand}"
                         HorizontalAlignment="Right"
@@ -58,6 +31,8 @@
                     <materialDesign:PackIcon Kind="StepForward" />
                 </Button>
             </StackPanel>
+
+
         </Grid>
     </materialDesign:ColorZone>
 </UserControl>

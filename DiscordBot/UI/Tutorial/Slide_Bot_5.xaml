@@ -10,107 +10,28 @@
     <materialDesign:ColorZone Mode="PrimaryLight" VerticalAlignment="Stretch" HorizontalAlignment="Stretch"
                               VerticalContentAlignment="Stretch">
 
-        <Grid VerticalAlignment="Stretch" HorizontalAlignment="Stretch" MaxWidth="1500" MaxHeight="800">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="*" />
-                <RowDefinition Height="Auto" />
-            </Grid.RowDefinitions>
+        <Grid VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Margin="0">
+            <Image Grid.Row="0" Grid.Column="0" HorizontalAlignment="Left" Source="/res/Tutorial/create_5.png" />
 
-            <TextBlock Grid.Row="0" HorizontalAlignment="Stretch" VerticalAlignment="Center" Margin="0,0,0,32"
-                       Style="{DynamicResource MaterialDesignHeadlineTextBlock}"
-                       TextWrapping="Wrap">
-                Now you need to transform the Application to a Bot.
-            </TextBlock>
-
-
-            <materialDesign:Transitioner Name="Transitioner" Grid.Row="1" SelectedIndex="0"
-                                         DefaultTransitionOrigin="1, 1">
-
-
-
-                <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="2*"/>
-                        <ColumnDefinition Width="*"/>
-                    </Grid.ColumnDefinitions>
-
-
-                    <Image Grid.Column="0" HorizontalAlignment="Left" Source="/res/Tutorial/create_5.png"/>
-
-                    <TextBlock Grid.Column="1" HorizontalAlignment="Left" Margin="50,50,0,0">
-                        1. Switch to the "OAuth2" tab on the left sidebar. <LineBreak />
-                        2. Select "bot" as scope of the application.
-                    </TextBlock>
-
-                </Grid>
-
-            
-                <materialDesign:TransitionerSlide TransitionOrigin="0.25, 0.25">
-                    <materialDesign:TransitionerSlide.BackwardWipe>
-                        <materialDesign:CircleWipe />
-                    </materialDesign:TransitionerSlide.BackwardWipe>
-
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="2*"/>
-                            <ColumnDefinition Width="*"/>
-                        </Grid.ColumnDefinitions>
-
-
-                        <Image Grid.Column="0" HorizontalAlignment="Left" Source="/res/Tutorial/create_6.png"/>
-
-                        <TextBlock Grid.Column="1" HorizontalAlignment="Left" Margin="50,50,0,0">
-                            3. Select <LineBreak />
-                            "Connect", "Speak" and "View Channels" <LineBreak />
-                            from the permission list. <LineBreak /> <LineBreak />
-                            4. Copy and/or open the link between the scope and permission settings.
-                        </TextBlock>
-
-                    </Grid>
-
-                </materialDesign:TransitionerSlide>
-
-
-
-            </materialDesign:Transitioner>
-            
-
-
-            <StackPanel Grid.Row="2">
-
-                <StackPanel Margin="0,0,25,0" Orientation="Horizontal" HorizontalAlignment="Right">
-                    <Button Style="{DynamicResource MaterialDesignFloatingActionMiniButton}"
-                            Click="FirstSlideButton_OnClick"
-                            HorizontalAlignment="Right" 
-                            Content="1"
-                            Margin="10,10,3,-5"/>
-
-                    <Button Style="{DynamicResource MaterialDesignFloatingActionMiniButton}"
-                            Click="SecondSlideButton_OnClick"
-                            HorizontalAlignment="Right"
-                            Content="2"
-                            Margin="3,10,10,-5"/>
-                                        
-                </StackPanel>
-
-
-                <StackPanel Margin="15" Orientation="Horizontal" HorizontalAlignment="Right">
-                    <Button Style="{DynamicResource MaterialDesignFloatingActionMiniButton}"
-                            Command="{x:Static materialDesign:Transitioner.MovePreviousCommand}"
-                            HorizontalAlignment="Right"
-                            Margin="10">
-                        <materialDesign:PackIcon Kind="StepBackward" />
-                    </Button>
-                    <Button Style="{DynamicResource MaterialDesignFloatingActionAccentButton}"
-                            Command="{x:Static materialDesign:Transitioner.MoveNextCommand}"
-                            HorizontalAlignment="Right"
-                            Margin="10">
-                        <materialDesign:PackIcon Kind="StepForward" />
-                    </Button>
-                </StackPanel>
+            <StackPanel Margin="15" 
+                        Orientation="Horizontal"
+                        HorizontalAlignment="Right"
+                        VerticalAlignment="Bottom">
+                <Button Style="{DynamicResource MaterialDesignFloatingActionMiniButton}"
+                        Command="{x:Static materialDesign:Transitioner.MovePreviousCommand}"
+                        HorizontalAlignment="Right"
+                        Margin="10">
+                    <materialDesign:PackIcon Kind="StepBackward" />
+                </Button>
+                <Button Style="{DynamicResource MaterialDesignFloatingActionAccentButton}"
+                        Command="{x:Static materialDesign:Transitioner.MoveNextCommand}"
+                        HorizontalAlignment="Right"
+                        Margin="10">
+                    <materialDesign:PackIcon Kind="StepForward" />
+                </Button>
             </StackPanel>
-        </Grid>
 
+
+        </Grid>
     </materialDesign:ColorZone>
 </UserControl>

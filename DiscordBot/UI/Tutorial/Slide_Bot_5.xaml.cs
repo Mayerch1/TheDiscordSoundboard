@@ -26,15 +26,15 @@ namespace DiscordBot.UI.Tutorial
             InitializeComponent();
         }
 
-        private void FirstSlideButton_OnClick(object sender, RoutedEventArgs e)
-        {
-            Transitioner.SelectedIndex = 0;
-        }
+        //private void FirstSlideButton_OnClick(object sender, RoutedEventArgs e)
+        //{
+        //    Transitioner.SelectedIndex = 0;
+        //}
 
-        private void SecondSlideButton_OnClick(object sender, RoutedEventArgs e)
-        {
-            Transitioner.SelectedIndex = 1;
-        }
+        //private void SecondSlideButton_OnClick(object sender, RoutedEventArgs e)
+        //{
+        //    Transitioner.SelectedIndex = 1;
+        //}
     }
 #pragma warning restore CS1591
 }

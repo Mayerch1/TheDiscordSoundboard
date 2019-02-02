@@ -37,7 +37,8 @@ namespace BotModule
         /// StreamStateHandler delegate
         /// </summary>
         /// <param name="newState">new Streaming state</param>
-        public delegate void StreamStateHandler(bool newState);
+        /// <param name="songName">Name of the current Song</param>
+        public delegate void StreamStateHandler(bool newState, string songName);
 
         /// <summary>
         /// StreamStateChanged filed
@@ -72,6 +73,7 @@ namespace BotModule
 
         private bool isStreaming = false;
         private bool isChannelConnected = false;
+        private string currentSong = "";
 
         #endregion status fields
 
@@ -114,7 +116,7 @@ namespace BotModule
         public bool IsStreaming
         {
             get { return isStreaming; }
-            private set { if (value != isStreaming) { isStreaming = value; StreamStateChanged(isStreaming); } }
+            private set { if (value != isStreaming) { isStreaming = value; StreamStateChanged(isStreaming, currentSong); } }
         }
 
         /// <summary>
@@ -344,6 +346,9 @@ namespace BotModule
             IsBufferEmpty = false;
 
             loadOverrideSettings(data);
+
+            //set name of loaded song
+            currentSong = data.name;
         }
 
         /// <summary>

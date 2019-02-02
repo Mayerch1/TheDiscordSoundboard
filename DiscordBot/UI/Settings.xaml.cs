@@ -26,6 +26,10 @@ namespace DiscordBot.UI
 
         public RefreshModulesHandle RefreshModules;
 
+        public delegate void OpenTutorialHandle();
+
+        public OpenTutorialHandle OpenTutorial;
+
 
         private ObservableCollection<Swatch> primarySwatches;
 
@@ -57,20 +61,21 @@ namespace DiscordBot.UI
         public Settings()
         {
             //get primary/secondary colors and sort both by sRGB values
-            PrimarySwatches = new ObservableCollection<Swatch>(new SwatchesProvider().Swatches.OrderBy(cP => cP.ExemplarHue.Color.ToString()));
+            PrimarySwatches =
+                new ObservableCollection<Swatch>(
+                    new SwatchesProvider().Swatches.OrderBy(cP => cP.ExemplarHue.Color.ToString()));
             SecondarySwatches =
                 new ObservableCollection<Swatch>(
-                    (new SwatchesProvider().Swatches).Where(x => x.AccentExemplarHue != null).OrderBy(cS=>cS.AccentExemplarHue.Color.ToString()));
+                    (new SwatchesProvider().Swatches).Where(x => x.AccentExemplarHue != null)
+                    .OrderBy(cS => cS.AccentExemplarHue.Color.ToString()));
 
 
             InitializeComponent();
             this.DataContext = Handle.Data.Persistent;
 
             updateStartupCombo();
-         
-
-
-        }      
+            updateModuleSelector();
+        }
 
         /// <summary>
         /// eventhandler for changed text in the bot-token box
@@ -101,9 +106,20 @@ namespace DiscordBot.UI
         {
             openHelpPage("Settings#Modules");
         }
+
         private void btn_Help_Preferences_Click(object sender, RoutedEventArgs e)
         {
             openHelpPage("Settings#Preferences");
+        }
+
+        private void btn_Help_Setup_Click(object sender, RoutedEventArgs e)
+        {
+            openHelpPage("Settings#Setup");
+        }
+
+        private void btn_OpenTutorial_Click(object sender, RoutedEventArgs e)
+        {
+            OpenTutorial?.Invoke();
         }
 
         private void openHelpPage(string page)
@@ -136,6 +152,7 @@ namespace DiscordBot.UI
 
         private void dialogHost_OnDialogClosing(object sender, DialogClosingEventArgs eventArgs)
         {
+            //DO NOT REMOVE
             //this is needed, to call CloseDialogCommand.Execute(null, null) from code
             Console.WriteLine("SAMPLE 1: Closing dialog with parameter: " + (eventArgs.Parameter ?? ""));
 
@@ -252,24 +269,16 @@ namespace DiscordBot.UI
             //intercept ScrollViewer of Main Scroller
             //prevent lists from capturing mouse wheel
             ScrollViewer scv = (ScrollViewer) sender;
-            scv.ScrollToVerticalOffset(scv.VerticalOffset - e.Delta/5);
+            scv.ScrollToVerticalOffset(scv.VerticalOffset - e.Delta / 5);
             e.Handled = true;
         }
 
-        private void check_Module_Clicked(object sender, RoutedEventArgs e)
+        private void module_checkForPresent()
         {
-            if (Handle.Data.Persistent.IsPlaylistModule)
+            foreach (var Module in Handle.Data.ModuleStates.Modules)
             {
-                if (!File.Exists("PlaylistModule.dll"))
-                    SnackbarManager.SnackbarMessage("Could not find Playlist Module");
-            }
-
-
-            if (Handle.Data.Persistent.IsStreamModule)
-            {
-                if (!File.Exists("StreamModule.dll"))
-                    SnackbarManager.SnackbarMessage("Could not find Stream Module");
-
+                if (!String.IsNullOrEmpty(Module.Dll) && !File.Exists(Module.Dll))
+                    SnackbarManager.SnackbarMessage("Could not find " + Module.Dll);
             }
 
             RefreshModules?.Invoke();
@@ -280,30 +289,90 @@ namespace DiscordBot.UI
         {
             combo_startup.Items.Clear();
 
-            combo_startup.Items.Add(DataManagement.PersistentData.Pages.Buttons);
-
-            if (Handle.Data.Persistent.IsPlaylistModule)
+            foreach (var Module in Handle.Data.ModuleStates.Modules)
             {
-                combo_startup.Items.Add(DataManagement.PersistentData.Pages.Search);
-                combo_startup.Items.Add(DataManagement.PersistentData.Pages.Playlist);
+                //only display activated module in startup selection
+                if (Module.IsModEnabled)
+                {
+                    foreach (var func in Module.Functions)
+                    {
+                        //select the old startup
+                        if (func.IsEnabled)
+                        {
+                            combo_startup.Items.Add(func);
+                            if (func.ID == Handle.Data.ModuleStates.AutostartId)
+                                combo_startup.SelectedItem = func;
+                        }
+                    }
+                }
             }
-
-            if (Handle.Data.Persistent.IsStreamModule)
-                combo_startup.Items.Add(DataManagement.PersistentData.Pages.Stream);
-
-            combo_startup.Items.Add(DataManagement.PersistentData.Pages.Settings);
-            combo_startup.Items.Add(DataManagement.PersistentData.Pages.About);
-
-            combo_startup.SelectedItem = Handle.Data.Persistent.StartupPage;
         }
 
         private void combo_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (sender is ComboBox box && box.SelectedItem != null)
             {
-                if (box.SelectedItem is DataManagement.PersistentData.Pages pg)
-                    Handle.Data.Persistent.StartupPage = pg;
-            }   
+                if (box.SelectedItem is DataManagement.Func fc)
+                    Handle.Data.ModuleStates.AutostartId = fc.ID;
+            }
+        }
+
+        private void updateModuleSelector()
+        {
+            foreach (var Module in Handle.Data.ModuleStates.Modules)
+            {
+                //create new checkbox for disabling modules
+                if (!Module.HideDisableFunction)
+                {
+                    CheckBox box = new CheckBox();
+
+                    box.Click += check_Module_Clicked;
+
+
+                    box.Content = Module.Name;
+
+
+                    box.Tag = Module.ModId;
+                    box.IsChecked = Module.IsModEnabled;
+
+                    Thickness margin = new Thickness();
+                    margin.Top = 10;
+                    box.Margin = margin;
+
+                    Stack_ModuleSelector.Children.Add(box);
+                }
+            }
+        }
+
+        private void check_Module_Clicked(object sender, RoutedEventArgs e)
+        {
+            if (sender is CheckBox box)
+            {
+                //search for changed module
+                if (box.Tag is int tag)
+                {
+                    foreach (var Module in Handle.Data.ModuleStates.Modules)
+                    {
+                        if (tag == Module.ModId)
+                        {
+                            if (box.IsChecked != null)
+                            {
+                                //change enabled mode of module
+                                Module.IsModEnabled = box.IsChecked.Value;
+                                //iterate through every function of module
+                                foreach (var func in Module.Functions)
+                                {
+                                    func.IsEnabled = Module.IsModEnabled;
+                                }
+
+                                break;
+                            }
+                        }
+                    }
+                }
+
+                module_checkForPresent();
+            }
         }
     }
 
