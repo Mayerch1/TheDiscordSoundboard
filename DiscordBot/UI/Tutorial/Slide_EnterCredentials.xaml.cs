@@ -29,6 +29,7 @@ namespace DiscordBot.UI.Tutorial
         {
             InitializeComponent();
             box_Token.Text = Handle.Token;
+            box_Username.Text = Handle.Data.Persistent.ClientName;
         }
 
         private void btn_Accept(object sender, RoutedEventArgs e)

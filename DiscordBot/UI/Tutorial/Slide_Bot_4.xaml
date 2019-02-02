@@ -11,19 +11,31 @@
                               VerticalContentAlignment="Stretch">
 
         <Grid VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Margin="0">
-            <Image Grid.Row="0" Grid.Column="0" HorizontalAlignment="Left" Source="/res/Tutorial/create_4.png" />
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
 
-            <StackPanel Margin="15"
-                        VerticalAlignment="Top"
-                        HorizontalAlignment="Right"
-                        Orientation="Vertical">
-                <Label Content="Enter your copied Token here" />
-                <TextBox x:Name="box_Token"
-                         MinWidth="300" />
+
+            <Image Grid.Column="0" HorizontalAlignment="Left" Source="/res/Tutorial/create_4.png" />
+
+            <StackPanel Grid.Column="1" Orientation="Vertical">
+                <StackPanel Margin="15"
+                            VerticalAlignment="Top"
+                            HorizontalAlignment="Right"
+                            Orientation="Vertical">
+                    <Label Content="Enter your copied Token here" />
+                    <TextBox x:Name="box_Token"
+                             MinWidth="300" />
+                </StackPanel>
+
+
+                <Image HorizontalAlignment="Right" Source="/res/Tutorial/create_token.png" />
+
             </StackPanel>
 
-
-            <StackPanel Margin="15"
+            <StackPanel Grid.Column="1"
+                        Margin="15"
                         Orientation="Horizontal"
                         HorizontalAlignment="Right"
                         VerticalAlignment="Bottom">
