@@ -34,10 +34,18 @@ namespace DataManagement
         private VideoHistory videoHistory = new VideoHistory();
         private ModuleManager moduleStates = new ModuleManager();
         private bool isPlaylistPlaying = false;
+        private float pitch = 1.0f;
 
         #endregion fields
 
         #region properties
+
+        public float Pitch
+        {
+            get => pitch;
+            set => pitch = value;
+        }
+
 
         /// <summary>
         /// Persistent property (class)

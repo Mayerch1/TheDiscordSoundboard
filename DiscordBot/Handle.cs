@@ -11,6 +11,9 @@ namespace DiscordBot
     /// </summary>
     public static class Handle
     {
+        
+
+
         /// <summary>
         /// Data class, handles and contains runtime + persistent Data
         /// </summary>
@@ -38,10 +41,13 @@ namespace DiscordBot
         /// </param>
         public static async void ClientName_Changed(string newName)
         {
-            var id = await BotMisc.resolveUserName(newName);
+            if (!String.IsNullOrWhiteSpace(newName))
+            {
+                var id = await BotMisc.resolveUserName(newName);
 
-            if (id > 0)
-                Data.Persistent.ClientId = id;
+                if (id > 0)
+                    Data.Persistent.ClientId = id;
+            }
         }
 
         #endregion events   
@@ -53,7 +59,7 @@ namespace DiscordBot
         /// </summary>
         public static float Volume
         {
-            get { return Data.Persistent.Volume; }
+            get => Data.Persistent.Volume;
             set
             {
                 Bot.Volume = value;
@@ -62,11 +68,26 @@ namespace DiscordBot
         }
 
         /// <summary>
+        /// sync property for pitch
+        /// </summary>
+        public static float Pitch
+        {
+            //pitch is volatile
+            get => Data.Pitch;
+            //pitch will not be saved
+            set
+            {
+                Bot.Pitch = value;
+                Data.Pitch = value;
+            }
+        }
+
+        /// <summary>
         /// property for Token, synced
         /// </summary>
         public static string Token
         {
-            get { return Data.Persistent.Token; }
+            get => Data.Persistent.Token;
             set
             {
                 Bot.Token = value;
@@ -79,7 +100,7 @@ namespace DiscordBot
         /// </summary>
         public static ulong ChannelId
         {
-            get { return Data.Persistent.ChannelId; }
+            get => Data.Persistent.ChannelId;
             set
             {
                 Bot.ChannelId = value;
@@ -92,7 +113,7 @@ namespace DiscordBot
         /// </summary>
         public static ulong ClientId
         {
-            get { return Data.Persistent.ClientId; }
+            get => Data.Persistent.ClientId;
             set
             {
                 Bot.ClientId = value;
@@ -105,7 +126,7 @@ namespace DiscordBot
         /// </summary>
         public static string ClientName
         {
-            get { return Data.Persistent.ClientName; }
+            get => Data.Persistent.ClientName;
             set
             {
                 //set clientId, by resolving userName

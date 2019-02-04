@@ -122,6 +122,7 @@ namespace BotModule
             {
                 if (!await connectToChannelAsync())
                     return;
+                    
             }
 
             try
@@ -218,7 +219,8 @@ namespace BotModule
 
                 if (client == null)
                 {
-                    Util.IO.SnackbarManager.SnackbarMessage("Cannot find specified owner.");
+                    Util.IO.SnackbarManager.SnackbarMessage("Cannot find specified owner. Please Retry");
+                    Util.IO.LogManager.LogException(null, "BotModule/BotHandler", "User not in channel or invalid username/-id");
                     return false;
                 }
             }
@@ -377,7 +379,7 @@ namespace BotModule
         {
             foreach (var server in clientList)
             {
-                //iterate through connected clints
+                //iterate through connected clients
                 foreach (var client in server)
                 {
                     if (client.Id == ClientId)

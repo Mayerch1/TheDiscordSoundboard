@@ -8,12 +8,12 @@
         mc:Ignorable="d"
         Title="The Discord Soundboard" Height="767" Width="1335" Closing="MainWindow_Closing"
         ResizeMode="CanResizeWithGrip"
-        PreviewMouseDown="Window_PreviewMouseDown"
         SizeChanged="Window_SizeChanged"
         TextElement.Foreground="{DynamicResource MaterialDesignBody}"
         Background="{DynamicResource MaterialDesignPaper}"
         TextElement.FontWeight="Medium"
         TextElement.FontSize="14"
+        PreviewMouseDown="Window_PreviewMouseDown"
         FontFamily="pack://application:,,,/MaterialDesignThemes.Wpf;component/Resources/Roboto/#Roboto"
         DataContext="{Binding RelativeSource={RelativeSource Self}}">
 
@@ -76,19 +76,6 @@
                                  Foreground="{DynamicResource SecondaryAccentBrush}" />
         <materialDesign:PackIcon x:Key="IconPlay" Kind="Play" />
         <materialDesign:PackIcon x:Key="IconPause" Kind="Pause" />
-
-        <!--<materialDesign:PackIcon x:Key="IconInstantButton" Kind="ArrowRightDropCircleOutline" Width="35" Height="35"
-                                 VerticalAlignment="Center" HorizontalAlignment="Center"/>
-
-        <materialDesign:PackIcon x:Key="IconMagnify" Kind="Magnify" Width="35" Height="35" VerticalAlignment="Center" />
-
-        <materialDesign:PackIcon x:Key="IconPlaylistPlay" Kind="PlaylistPlay" Width="35" Height="35"
-                                 VerticalAlignment="Center" />
-        <materialDesign:PackIcon x:Key="IconYoutubePlay" Kind="YoutubePlay" Width="35" Height="35"
-                                 VerticalAlignment="Center" />
-        <materialDesign:PackIcon x:Key="IconSettings" Kind="Settings" Width="35" Height="35" VerticalAlignment="Center" />
-        <materialDesign:PackIcon x:Key="IconInformation" Kind="Information" Width="35" Height="35"
-                                 VerticalAlignment="Center" />-->
 
         <Style x:Key="MenuTextBlock" TargetType="TextBlock">
             <Setter Property="FontSize" Value="20" />
@@ -281,6 +268,7 @@
                                             Width="21" />
                                     </ToggleButton>
 
+
                                     <Button x:Name="btn_Volume" HorizontalAlignment="Center"
                                             Click="btn_Volume_Click"
                                             materialDesign:ShadowAssist.ShadowDepth="Depth0"
@@ -306,7 +294,67 @@
                                             Minimum="0"
                                             Maximum="100"
                                             Value="{Binding Volume}"
-                                            Width="150" />
+                                            Width="150"
+                                            ToolTip="Volume" />
+
+
+                                    <StackPanel Orientation="Horizontal" Margin="0,20,0,0" x:Name="stack_OtherSliders">
+                                        <!-- dialog host for primary colors-->
+                                        <materialDesign:DialogHost x:Name="dialogHost_OtherControls"
+                                                                   materialDesign:DialogHost.DialogClosingAttached="dialogHost_OnDialogClosing"
+                                                                   HorizontalAlignment="Center"
+                                                                   VerticalAlignment="Center"
+                                                                   CloseOnClickAway="True">
+                                            <materialDesign:DialogHost.DialogContent>
+
+                                                <StackPanel Orientation="Horizontal" Margin="5">
+
+                                                    <!-- test slider for pitch -->
+
+                                                    <Button HorizontalAlignment="Center"
+                                                            Click="btn_PitchReset_Click"
+                                                            materialDesign:ShadowAssist.ShadowDepth="Depth0"
+                                                            Background="{x:Null}"
+                                                            BorderBrush="{x:Null}"
+                                                            Foreground="{DynamicResource MaterialDesignBody}"
+                                                            Style="{StaticResource MaterialDesignFloatingActionMiniLightButton}"
+                                                            ToolTip="Reset">
+
+                                                        <materialDesign:PackIcon
+                                                            Margin="5,0,5,0"
+                                                            Kind="Waves"
+                                                            Height="24"
+                                                            Width="24" />
+                                                    </Button>
+
+                                                    <Slider VerticalAlignment="Center"
+
+                                                            Foreground="{DynamicResource PrimaryHueMidBrush}"
+                                                            Margin="5,0,0,0"
+                                                            TickFrequency="5"
+                                                            Orientation="Horizontal"
+                                                            Minimum="0.1"
+                                                            Maximum="2"
+                                                            ValueChanged="Slider_ValueChanged" 
+                                                            Value="{Binding LivePitch}"
+                                                            Width="150"
+                                                            ToolTip="Pitch" />
+
+                                                    <!-- end test slider for pitch -->
+                                                </StackPanel>
+
+                                            </materialDesign:DialogHost.DialogContent>
+
+                                            <Button Margin="5,0,0,15"
+                                                    VerticalAlignment="Center"
+                                                    Foreground="{DynamicResource MaterialDesignBody}"
+                                                    Style="{StaticResource MaterialDesignFlatButton}"
+                                                    Command="{x:Static materialDesign:DialogHost.OpenDialogCommand}"
+                                                    ToolTip="Others">
+                                                <materialDesign:PackIcon Kind="ChevronUp" />
+                                            </Button>
+                                        </materialDesign:DialogHost>
+                                    </StackPanel>
                                 </StackPanel>
                             </Grid>
                         </Grid>
@@ -333,7 +381,7 @@
                     </materialDesign:ColorZone>
 
                     <!-- do not add any Buttons here
-                        all buttons (or inherited) in this StackPanel are managed from code
+                        all buttons (or other controls) in this StackPanel are managed from code.
                         see MainWindow.xaml.cs-->
 
                 </StackPanel>
@@ -343,7 +391,6 @@
 
                 <materialDesign:ColorZone HorizontalAlignment="Stretch"
                                           VerticalAlignment="Top"
-                                          PreviewMouseDown="WindowHeader_PreviewMouseDown"
                                           Height="55"
                                           materialDesign:ShadowAssist.ShadowDepth="Depth1"
                                           materialDesign:ShadowAssist.ShadowEdges="Bottom"
@@ -351,8 +398,6 @@
 
 
                 <DockPanel>
-
-
 
 
                     <StackPanel HorizontalAlignment="Right" Orientation="Horizontal" Height="55"
@@ -387,15 +432,15 @@
                                     </Border>
                                 </ControlTemplate>
                             </Button.Template>
-                            
+
                         </Button>
                     </StackPanel>
 
                     <StackPanel HorizontalAlignment="Center" Orientation="Horizontal" Height="55"
                                 VerticalAlignment="Center" DockPanel.Dock="Left" Margin="5,0,10,0">
-                        <TextBlock VerticalAlignment="Center" FontSize="18" Text="{Binding CurrentSongName}"/>
+                        <TextBlock VerticalAlignment="Center" FontSize="18" Text="{Binding CurrentSongName}" />
                     </StackPanel>
-                   
+
                     <!-- end avatar button -->
 
                     <!-- begin window buttons -->

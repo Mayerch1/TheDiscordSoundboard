@@ -61,10 +61,10 @@ namespace Util.IO
         /// <summary>
         /// writes a specific Exception into the log
         /// </summary>
-        /// <param name="ex">Exception to be logged</param>
+        /// <param name="ex">Exception to be logged. Can be null</param>
         /// <param name="occurence">String for Module and Class of occurence</param>
-        /// <param name="info">Descriptive descriptive of error or error circumstances</param>
-        /// <param name="vital">a vital exception will log more information like stack trace</param>
+        /// <param name="info">Description of error/error-circumstances</param>
+        /// <param name="vital">a vital exception will log more information, e.g. stack trace</param>
         public static async void LogException(Exception ex, string occurence, string info, bool vital = false)
         {
             string date = "[" + DateTime.Now.ToString("HH:mm:ss") + "]";
@@ -87,7 +87,7 @@ namespace Util.IO
                 }
             }
             catch
-            {/*putting a log here would probably cause endless loop*/ }
+            {/*putting a log here would cause endless loop*/ }
         }
 
 

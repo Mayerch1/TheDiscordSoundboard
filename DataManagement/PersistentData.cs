@@ -309,6 +309,7 @@ namespace DataManagement
         public float Volume { get => volume;
             set { volume = value; OnPropertyChanged("Volume"); } }
 
+
         /// <summary>
         /// VolumeCap property
         /// </summary>

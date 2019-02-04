@@ -50,7 +50,9 @@ namespace DiscordBot
         private LoopState loopStatus = LoopState.LoopNone;
         private SnackbarMessageQueue snackbarMessageQueue = new SnackbarMessageQueue(TimeSpan.FromMilliseconds(3500));
         private DispatcherTimer resizeTimer = new DispatcherTimer();
+        private DispatcherTimer pitchTimer = new DispatcherTimer();
         private string currentSongName = "";
+        private double livePitch = 1.0f;
 
         #endregion fields
 
@@ -77,6 +79,8 @@ namespace DiscordBot
         }
 
 
+
+
         private double LastVolume { get; set; }
 
         public double Volume
@@ -88,6 +92,16 @@ namespace DiscordBot
                 Handle.Volume = ((float) value / 100) * (Handle.Data.Persistent.VolumeCap / 100.0f);
                 setVolumeIcon();
                 OnPropertyChanged("Volume");
+            }
+        }
+
+        public double LivePitch
+        {
+            get => livePitch;
+            set
+            {
+                livePitch = value;
+                OnPropertyChanged("LivePitch");
             }
         }
 
@@ -200,6 +214,7 @@ namespace DiscordBot
             //ui
             setVolumeIcon();
             btn_Repeat.Content = FindResource("IconRepeatOff");
+            LivePitch = Handle.Pitch;
 
 
             initHotkeys();
@@ -411,6 +426,10 @@ namespace DiscordBot
             //timer for resizing
             resizeTimer.Tick += new EventHandler(Window_ResizingDone);
             resizeTimer.Interval = new TimeSpan(0, 0, 0, 0, 75);
+
+            //for change of pitch
+            pitchTimer.Tick += new EventHandler(Pitch_SetValue);
+            pitchTimer.Interval = new TimeSpan(0,0,0,0,75);
         }
 
 
@@ -518,6 +537,8 @@ namespace DiscordBot
                 SnackbarManager.SnackbarMessage("A newer version is available", SnackbarManager.SnackbarAction.Update);
             }
 
+            
+            Handle.ClientName_Changed(Handle.ClientName);
 
             //resolve user to get avatar-url
             var client = Handle.BotMisc.extractClient(await Handle.Bot.getAllClients(true), Handle.ClientId);
@@ -981,6 +1002,28 @@ namespace DiscordBot
             }
         }
 
+        private void btn_PitchReset_Click(object sender, RoutedEventArgs e)
+        {
+                LivePitch = (float)1.0f;
+            Handle.Pitch = (float) 1.0f;
+        }
+
+        private void Slider_ValueChanged(object sender, EventArgs e)
+        {
+            //restart timer, to delay
+            pitchTimer.Stop();
+            pitchTimer.Start();
+
+        }
+
+        private void Pitch_SetValue(object sender, EventArgs e)
+        {
+            pitchTimer.Stop();
+            Handle.Pitch = (float)LivePitch;
+
+            Console.WriteLine(@"Set Pitch to " + Handle.Pitch);
+        }
+
         private void btn_About_Click(object sender, RoutedEventArgs e)
         {
             //About is mandatory
@@ -1174,6 +1217,18 @@ namespace DiscordBot
             }
         }
 
+        private void dialogHost_OnDialogClosing(object sender, DialogClosingEventArgs eventArgs)
+        {
+            //DO NOT REMOVE
+            //this is needed, to call CloseDialogCommand.Execute(null, null) from code
+            Console.WriteLine("SAMPLE 1: Closing dialog with parameter: " + (eventArgs.Parameter ?? ""));
+
+            //you can cancel the dialog close:
+            //eventArgs.Cancel();
+
+            if (!Equals(eventArgs.Parameter, true)) return;
+        }
+
         private void Window_PreviewMouseDown(object sender, MouseButtonEventArgs e)
         {
             //collapse channel popup
@@ -1181,6 +1236,16 @@ namespace DiscordBot
             {
                 btn_Avatar_Click(null, null);
             }
+
+          
+                //only close dialog, if click was outside of the dialog     
+            if (!dialogHost_OtherControls.IsMouseOver)
+            {
+                DialogHost.CloseDialogCommand.Execute(null, null);
+                e.Handled = false;
+            }
+
+
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
@@ -1256,62 +1321,9 @@ namespace DiscordBot
         }
 
         #endregion stuff related to dll
-
-        #region window header
-
-        //public const int WM_NCLBUTTONDOWN = 0xA1;
-        //public const int HT_CAPTION = 0x2;
-
-        //[DllImport("user32.dll")]
-        //public static extern int SendMessage(IntPtr hWnd, int Msg, int wParam, int lParam);
-        //[DllImport("user32.dll")]
-        //public static extern bool ReleaseCapture();
-        private void WindowHeader_PreviewMouseDown(object sender, MouseButtonEventArgs e)
-        {
-            //deactivate for now
-
-            //    
-            //    if (e.ButtonState == MouseButtonState.Pressed)
-            //    {
-            //        ReleaseCapture();
-            //        SendMessage(new WindowInteropHelper(Application.Current.MainWindow).Handle, WM_NCLBUTTONDOWN,
-            //            HT_CAPTION, 0);
-            //    }
-        }
-
-        //private void btn_Close_OnClick(object sender, RoutedEventArgs e)
-        //{
-        //    this.Close();
-        //}
-
-        //private void btn_ToggleWindow_OnClick(object sender, RoutedEventArgs e)
-        //{
-        //    Window w = Application.Current.MainWindow;
-        //    switch (w.WindowState)
-        //    {
-        //        case WindowState.Maximized:
-        //            w.WindowState = WindowState.Normal;
-        //            
-        //            break;
-        //        case WindowState.Normal:
-        //            w.WindowState = WindowState.Maximized;
-        //           //change icon
-        //            break;
-        //    }
-        //}
-        //private void btn_Minimize_OnClick(object sender, RoutedEventArgs e)
-        //{
-        //    if (Application.Current.MainWindow != null)
-        //        Application.Current.MainWindow.WindowState = WindowState.Minimized;
-        //}
-        //private void MainWindow_OnStateChanged(object sender, EventArgs e)
-        //{
-        //    Console.WriteLine(e);
-        //}
-
-        #endregion window header
-
-
 #pragma warning restore CS1591
+
+
+       
     }
 }

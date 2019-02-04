@@ -7,6 +7,8 @@ using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
 using DataManagement;
+using NAudio.Dsp;
+using NAudio.Wave.SampleProviders;
 
 namespace BotModule
 {
@@ -74,6 +76,8 @@ namespace BotModule
         private bool isStreaming = false;
         private bool isChannelConnected = false;
         private string currentSong = "";
+        private float pitch = 1.0f;
+        private bool isEarrape = false;
 
         #endregion status fields
 
@@ -86,6 +90,22 @@ namespace BotModule
         /// 1.0 is 100%, 10.0 is static noise
         /// </remarks>
         public float Volume { get; set; }
+
+        /// <summary>
+        /// Pitch property
+        /// </summary>
+        /// <remarks>
+        /// 0.0 is default and will not change pitch
+        /// </remarks>
+        public float Pitch
+        {
+            get => pitch;
+            set
+            {
+                pitch = value;
+                PitchChanged(value);
+            }
+        }
 
         /// <summary>
         /// IsServerConnected property
@@ -155,7 +175,13 @@ namespace BotModule
         /// <summary>
         /// IsEarrape property
         /// </summary>
-        public bool IsEarrape { get; set; } = false;
+        public bool IsEarrape {
+            get => isEarrape;
+            set
+            {
+                isEarrape = value;
+                EarrapeChanged(value);
+            } }
 
         private bool CanSeek { get; set; } = true;
 
@@ -178,6 +204,8 @@ namespace BotModule
         private MediaFoundationResampler ActiveResampler { get; set; }
 
         private MediaFoundationResampler NormalResampler { get; set; }
+        private MediaFoundationResampler SourceResampler { get; set; }
+
         private MediaFoundationResampler BoostResampler { get; set; }
         private WaveFormat OutFormat { get; set; }
 
@@ -246,6 +274,28 @@ namespace BotModule
         {
             if (IsStreaming)
                 SkipTracks += 1;
+        }
+
+
+        private void PitchChanged(float val)
+        {
+            if (SourceResampler != null)
+            {
+                NormalResampler?.Dispose();
+
+                var pSampler = new SmbPitchShiftingSampleProvider(SourceResampler.ToSampleProvider());
+                pSampler.PitchFactor = val;
+                NormalResampler = new MediaFoundationResampler(pSampler.ToWaveProvider(), OutFormat);
+            }
+        }
+
+        private void EarrapeChanged(bool val)
+        {
+            //will play the boosted version, ignores pitch
+            if (val)
+                ActiveResampler = BoostResampler;
+            else
+                ActiveResampler = NormalResampler;
         }
 
         /// <summary>
@@ -328,13 +378,21 @@ namespace BotModule
                 //set non seekable bool
                 //CanSeek = data.stream.CanSeek;
             }
-            NormalResampler = new MediaFoundationResampler(Reader, OutFormat);
+
+            //create source and finally used resampler
+            SourceResampler = new MediaFoundationResampler(Reader, OutFormat);
+
+            //apply pitch to the resampler, will also set NormalResampler
+            PitchChanged(Pitch);
+
+
 
             /*
              * Generate one normal resampler,
              * Generate one boosted resampler,
              * in applyVolume() the matching resampler is assigned to activeResampler
              */
+
 
             var volumeSampler = new VolumeWaveProvider16(NormalResampler);
             //this means 10,000%
@@ -345,6 +403,7 @@ namespace BotModule
 
             IsBufferEmpty = false;
 
+            //will apply Earrape and loop
             loadOverrideSettings(data);
 
             //set name of loaded song
