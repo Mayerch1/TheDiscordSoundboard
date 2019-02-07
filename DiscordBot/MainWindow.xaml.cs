@@ -49,8 +49,6 @@ namespace DiscordBot
 
         private LoopState loopStatus = LoopState.LoopNone;
         private SnackbarMessageQueue snackbarMessageQueue = new SnackbarMessageQueue(TimeSpan.FromMilliseconds(3500));
-        private DispatcherTimer resizeTimer = new DispatcherTimer();
-        private DispatcherTimer pitchTimer = new DispatcherTimer();
         private string currentSongName = "";
         private double livePitch = 1.0f;
 
@@ -213,7 +211,10 @@ namespace DiscordBot
 
             //ui
             setVolumeIcon();
-            btn_Repeat.Content = FindResource("IconRepeatOff");
+
+            if (btn_Repeat.Content is PackIcon ic)
+                ic.Kind = PackIconKind.RepeatOff;
+            
             LivePitch = Handle.Pitch;
 
 
@@ -422,14 +423,6 @@ namespace DiscordBot
             dispatcherTimer.Tick += new EventHandler(dispatcherTimer_Tick);
             dispatcherTimer.Interval = new TimeSpan(0, 0, 0, 0, 250);
             dispatcherTimer.Start();
-            //-------------------
-            //timer for resizing
-            resizeTimer.Tick += new EventHandler(Window_ResizingDone);
-            resizeTimer.Interval = new TimeSpan(0, 0, 0, 0, 75);
-
-            //for change of pitch
-            pitchTimer.Tick += new EventHandler(Pitch_SetValue);
-            pitchTimer.Interval = new TimeSpan(0,0,0,0,75);
         }
 
 
@@ -565,21 +558,24 @@ namespace DiscordBot
 
         private void setVolumeIcon()
         {
-            if (Volume == 0)
+            if (btn_Volume.Content is PackIcon ic)
             {
-                btn_Volume.Content = FindResource("IconMuteVolume");
-            }
-            else if (Volume > 0 && Volume < 10)
-            {
-                btn_Volume.Content = FindResource("IconLowVolume");
-            }
-            else if (Volume >= 10 && Volume < 44)
-            {
-                btn_Volume.Content = FindResource("IconMediumVolume");
-            }
-            else
-            {
-                btn_Volume.Content = FindResource("IconHighVolume");
+                if (Volume == 0)
+                {
+                    ic.Kind = PackIconKind.VolumeMute;
+                }
+                else if (Volume > 0 && Volume < 10)
+                {
+                    ic.Kind = PackIconKind.VolumeLow;
+                }
+                else if (Volume >= 10 && Volume < 44)
+                {
+                    ic.Kind = PackIconKind.VolumeMedium;
+                }
+                else
+                {
+                    ic.Kind = PackIconKind.VolumeHigh;
+                }
             }
         }
 
@@ -629,18 +625,24 @@ namespace DiscordBot
                 Handle.Bot.IsLoop = false;
             }
 
-            //set icon, based on loopstate
-            if (nextState == LoopState.LoopAll)
-                btn_Repeat.Content = FindResource("IconRepeatAll");
-            else if (nextState == LoopState.LoopOne && IsLoopForcedByBot)
+
+            if (btn_Repeat.Content is PackIcon ic)
             {
-                //show different icon for bot override
-                btn_Repeat.Content = FindResource("IconRepeatOnce");
+
+
+                //set icon, based on loopstate
+                if (nextState == LoopState.LoopAll)
+                    ic.Kind = PackIconKind.Repeat;
+                else if (nextState == LoopState.LoopOne && IsLoopForcedByBot)
+                {
+                    //show different icon for bot override
+                    ic.Kind = PackIconKind.RepeatOnce;
+                }
+                else if (nextState == LoopState.LoopOne)
+                    ic.Kind = PackIconKind.RepeatOnce;
+                else if (nextState == LoopState.LoopNone)
+                    ic.Kind = PackIconKind.RepeatOff;
             }
-            else if (nextState == LoopState.LoopOne)
-                btn_Repeat.Content = FindResource("IconRepeatOnce");
-            else if (nextState == LoopState.LoopNone)
-                btn_Repeat.Content = FindResource("IconRepeatOff");
 
             LoopStatus = nextState;
         }
@@ -912,13 +914,15 @@ namespace DiscordBot
             //display pause icon, if bot is streaming
             if (newState /* is playing */)
             {
-                btn_Play.Content = FindResource("IconPause");
+                if (btn_Play.Content is PackIcon ic)
+                    ic.Kind = PackIconKind.Pause;
                 //test if set properly
                 CurrentSongName = songName;
             }
             else
             {
-                btn_Play.Content = FindResource("IconPlay");
+                if (btn_Play.Content is PackIcon ic)
+                    ic.Kind = PackIconKind.Play;
 
 
                 //take next title in playlist
@@ -1007,22 +1011,15 @@ namespace DiscordBot
                 LivePitch = (float)1.0f;
             Handle.Pitch = (float) 1.0f;
         }
-
-        private void Slider_ValueChanged(object sender, EventArgs e)
+        
+        private void Slider_DelayedValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
-            //restart timer, to delay
-            pitchTimer.Stop();
-            pitchTimer.Start();
-
-        }
-
-        private void Pitch_SetValue(object sender, EventArgs e)
-        {
-            pitchTimer.Stop();
-            Handle.Pitch = (float)LivePitch;
-
+            //is NewValue is the same as LivePitch
+            Handle.Pitch = (float) e.NewValue;
+           
             Console.WriteLine(@"Set Pitch to " + Handle.Pitch);
         }
+
 
         private void btn_About_Click(object sender, RoutedEventArgs e)
         {
@@ -1255,30 +1252,6 @@ namespace DiscordBot
             PropertyChangedEventHandler handler = PropertyChanged;
 
             handler?.Invoke(this, new PropertyChangedEventArgs(info));
-        }
-
-        private void Window_SizeChanged(object sender, SizeChangedEventArgs e)
-        {
-            resizeTimer.Stop();
-            resizeTimer.Start();
-            MainGrid.Width = MainGrid.ActualWidth;
-            MainGrid.Height = MainGrid.ActualHeight;
-            MainGrid.VerticalAlignment = VerticalAlignment.Top;
-            MainGrid.HorizontalAlignment = HorizontalAlignment.Left;
-        }
-
-        /// <summary>
-        /// gets called when a specific time after last resizing
-        /// </summary>
-        /// <param name="sender">Sender</param>
-        /// <param name="e">Event Argument</param>
-        private void Window_ResizingDone(object sender, EventArgs e)
-        {
-            resizeTimer.Stop();
-            MainGrid.Width = Double.NaN;
-            MainGrid.Height = Double.NaN;
-            MainGrid.VerticalAlignment = VerticalAlignment.Stretch;
-            MainGrid.HorizontalAlignment = HorizontalAlignment.Stretch;
         }
 
         #endregion event stuff

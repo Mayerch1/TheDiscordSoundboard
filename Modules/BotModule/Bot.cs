@@ -125,6 +125,7 @@ namespace BotModule
                 {
                     isChannelConnected = false;
                 }
+
                 return isChannelConnected;
             }
             private set { isChannelConnected = value; }
@@ -136,18 +137,39 @@ namespace BotModule
         public bool IsStreaming
         {
             get { return isStreaming; }
-            private set { if (value != isStreaming) { isStreaming = value; StreamStateChanged(isStreaming, currentSong); } }
+            private set
+            {
+                if (value != isStreaming)
+                {
+                    isStreaming = value;
+                    StreamStateChanged(isStreaming, currentSong);
+                }
+            }
         }
 
         /// <summary>
         /// CurrentTime property
         /// </summary>
-        public TimeSpan CurrentTime { get { if (Reader != null) return Reader.CurrentTime; else return TimeSpan.Zero; } }
+        public TimeSpan CurrentTime
+        {
+            get
+            {
+                if (Reader != null) return Reader.CurrentTime;
+                else return TimeSpan.Zero;
+            }
+        }
 
         /// <summary>
         /// TitleLength property
         /// </summary>
-        public TimeSpan TitleLenght { get { if (Reader != null) return Reader.TotalTime; else return TimeSpan.Zero; } }
+        public TimeSpan TitleLenght
+        {
+            get
+            {
+                if (Reader != null) return Reader.TotalTime;
+                else return TimeSpan.Zero;
+            }
+        }
 
         /// <summary>
         /// IsBufferEmpty property
@@ -175,13 +197,15 @@ namespace BotModule
         /// <summary>
         /// IsEarrape property
         /// </summary>
-        public bool IsEarrape {
+        public bool IsEarrape
+        {
             get => isEarrape;
             set
             {
                 isEarrape = value;
                 EarrapeChanged(value);
-            } }
+            }
+        }
 
         private bool CanSeek { get; set; } = true;
 
@@ -281,7 +305,7 @@ namespace BotModule
         {
             if (SourceResampler != null)
             {
-                NormalResampler?.Dispose();
+                NormalResampler = null;
 
                 var pSampler = new SmbPitchShiftingSampleProvider(SourceResampler.ToSampleProvider());
                 pSampler.PitchFactor = val;
@@ -333,7 +357,8 @@ namespace BotModule
         protected async Task setGameState(string msg, string streamUrl = "", bool isStreaming = false)
         {
             if (!IsServerConnected)
-                throw new BotException(BotException.type.connection, "Not connected to the Servers, while Setting GameState", BotException.connectionError.NoServer);
+                throw new BotException(BotException.type.connection,
+                    "Not connected to the Servers, while Setting GameState", BotException.connectionError.NoServer);
 
             StreamType type = StreamType.NotStreaming;
             if (isStreaming)
@@ -364,17 +389,16 @@ namespace BotModule
             if (data.filePath != null)
             {
                 Reader = new MediaFoundationReader(data.filePath);
-                
+
                 //set seekable
                 CanSeek = true;
             }
             else if (data.stream != null)
             {
-
                 return;
 
                 //Reader = new StreamMediaFoundationReader(data.stream);
-               // Reader = new StreamMediaFoundationReader(data.stream);
+                // Reader = new StreamMediaFoundationReader(data.stream);
                 //set non seekable bool
                 //CanSeek = data.stream.CanSeek;
             }
@@ -384,7 +408,6 @@ namespace BotModule
 
             //apply pitch to the resampler, will also set NormalResampler
             PitchChanged(Pitch);
-
 
 
             /*
@@ -424,9 +447,12 @@ namespace BotModule
             if (!IsChannelConnected)
             {
                 if (!IsServerConnected)
-                    throw new BotException(BotException.type.connection, "Not connected to Server, while trying to start stream", BotException.connectionError.NoServer);
+                    throw new BotException(BotException.type.connection,
+                        "Not connected to Server, while trying to start stream", BotException.connectionError.NoServer);
                 else
-                    throw new BotException(BotException.type.connection, "Not connected to a channel, while trying to start stream", BotException.connectionError.NoChannel);
+                    throw new BotException(BotException.type.connection,
+                        "Not connected to a channel, while trying to start stream",
+                        BotException.connectionError.NoChannel);
             }
 
             if (!IsStreaming && IsServerConnected && AudioCl != null)
@@ -448,6 +474,7 @@ namespace BotModule
                 IsStreaming = true;
                 IsPause = false;
 
+
                 //repeat, read new block into buffer -> stream buffer
                 while ((byteCount = ActiveResampler.Read(buffer, 0, blockSize)) > 0)
                 {
@@ -466,6 +493,7 @@ namespace BotModule
 
                     await stream.WriteAsync(buffer, 0, blockSize);
                 }
+
 
                 IsStreaming = false;
 
@@ -551,18 +579,18 @@ namespace BotModule
                 {
                     //convert a byte-Pair into one char (with 2 bytes)
 
-                    short bytePair = (short)((buffer[i + 1] & 0xFF) << 8 | (buffer[i] & 0xFF));
+                    short bytePair = (short) ((buffer[i + 1] & 0xFF) << 8 | (buffer[i] & 0xFF));
 
                     //float floatPair = bytePair * Volume;
 
                     var customVol = Volume;
                     var overOne = Volume - 1;
 
-                    bytePair = (short)(bytePair * customVol);
+                    bytePair = (short) (bytePair * customVol);
 
                     //convert char back to 2 bytes
-                    buffer[i] = (byte)bytePair;
-                    buffer[i + 1] = (byte)(bytePair >> 8);
+                    buffer[i] = (byte) bytePair;
+                    buffer[i + 1] = (byte) (bytePair >> 8);
                 }
             }
         }
@@ -602,10 +630,12 @@ namespace BotModule
 
             if (!IsServerConnected)
             {
-                throw new BotException(BotException.type.connection, "Not connected to the servers, while trying to connect to a channel", BotException.connectionError.NoServer);
+                throw new BotException(BotException.type.connection,
+                    "Not connected to the servers, while trying to connect to a channel",
+                    BotException.connectionError.NoServer);
             }
 
-            AudioCl = await ((ISocketAudioChannel)Client.GetChannel(channelId)).ConnectAsync();
+            AudioCl = await ((ISocketAudioChannel) Client.GetChannel(channelId)).ConnectAsync();
 
             IsChannelConnected = true;
         }
@@ -636,7 +666,6 @@ namespace BotModule
         /// </summary>
         /// <returns>Task</returns>
         /// <see cref="disconnectFromChannelAsync()"/>
-
         public async Task disconnectFromServerAsync()
         {
             if (!IsServerConnected)
@@ -684,7 +713,9 @@ namespace BotModule
         protected List<List<SocketVoiceChannel>> getAllChannels()
         {
             if (!IsServerConnected)
-                throw new BotException(BotException.type.connection, "Not connectet to the servers, while trying to get channel list", BotException.connectionError.NoServer);
+                throw new BotException(BotException.type.connection,
+                    "Not connectet to the servers, while trying to get channel list",
+                    BotException.connectionError.NoServer);
 
             List<List<SocketVoiceChannel>> guildList = new List<List<SocketVoiceChannel>>();
 
@@ -702,6 +733,7 @@ namespace BotModule
                 {
                     subList.Add(vElement);
                 }
+
                 guildList.Add(subList);
             }
 
@@ -717,7 +749,9 @@ namespace BotModule
         protected List<List<SocketGuildUser>> getAllClients(bool acceptOffline)
         {
             if (!IsServerConnected)
-                throw new BotException(BotException.type.connection, "Not connectet to the servers, while trying to get clint list", BotException.connectionError.NoServer);
+                throw new BotException(BotException.type.connection,
+                    "Not connectet to the servers, while trying to get clint list",
+                    BotException.connectionError.NoServer);
 
             List<List<SocketGuildUser>> guildList = new List<List<SocketGuildUser>>();
 
@@ -732,6 +766,7 @@ namespace BotModule
                     if (singleUser.VoiceChannel != null || acceptOffline)
                         subList.Add(singleUser);
                 }
+
                 guildList.Add(subList);
             }
 

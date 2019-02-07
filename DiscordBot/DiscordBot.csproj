@@ -206,6 +206,8 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="UI\DelayedContentResizeGrid.cs" />
+    <Compile Include="UI\DelayedSlider.cs" />
     <Compile Include="Misc\BotMisc.cs" />
     <Compile Include="Misc\ChannelListManager.cs" />
     <Compile Include="Misc\PlaylistManager.cs" />

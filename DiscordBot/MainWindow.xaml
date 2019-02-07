@@ -8,7 +8,6 @@
         mc:Ignorable="d"
         Title="The Discord Soundboard" Height="767" Width="1335" Closing="MainWindow_Closing"
         ResizeMode="CanResizeWithGrip"
-        SizeChanged="Window_SizeChanged"
         TextElement.Foreground="{DynamicResource MaterialDesignBody}"
         Background="{DynamicResource MaterialDesignPaper}"
         TextElement.FontWeight="Medium"
@@ -64,18 +63,6 @@
                 <EasingDoubleKeyFrame KeyTime="0" Value="0" />
             </DoubleAnimationUsingKeyFrames>
         </Storyboard>
-
-        <materialDesign:PackIcon x:Key="IconMuteVolume" Margin="5,0,5,0" Kind="VolumeMute" Height="24" Width="24" />
-        <materialDesign:PackIcon x:Key="IconLowVolume" Margin="5,0,5,0" Kind="VolumeLow" Height="24" Width="24" />
-        <materialDesign:PackIcon x:Key="IconMediumVolume" Margin="5,0,5,0" Kind="VolumeMedium" Height="24" Width="24" />
-        <materialDesign:PackIcon x:Key="IconHighVolume" Margin="5,0,5,0" Kind="VolumeHigh" Height="24" Width="24" />
-        <materialDesign:PackIcon x:Key="IconRepeatOnce" Kind="RepeatOnce" Height="21" Width="21"
-                                 Foreground="{DynamicResource SecondaryAccentBrush}" />
-        <materialDesign:PackIcon x:Key="IconRepeatOff" Kind="RepeatOff" Height="21" Width="21" />
-        <materialDesign:PackIcon x:Key="IconRepeatAll" Kind="Repeat" Height="21" Width="21"
-                                 Foreground="{DynamicResource SecondaryAccentBrush}" />
-        <materialDesign:PackIcon x:Key="IconPlay" Kind="Play" />
-        <materialDesign:PackIcon x:Key="IconPause" Kind="Pause" />
 
         <Style x:Key="MenuTextBlock" TargetType="TextBlock">
             <Setter Property="FontSize" Value="20" />
@@ -280,7 +267,7 @@
 
                                         <materialDesign:PackIcon
                                             Margin="5,0,5,0"
-                                            Kind="VolumeMute"
+                                            Kind="VolumeMute"                                          
                                             Height="24"
                                             Width="24" />
                                     </Button>
@@ -327,18 +314,19 @@
                                                             Width="24" />
                                                     </Button>
 
-                                                    <Slider VerticalAlignment="Center"
-
-                                                            Foreground="{DynamicResource PrimaryHueMidBrush}"
-                                                            Margin="5,0,0,0"
-                                                            TickFrequency="5"
-                                                            Orientation="Horizontal"
-                                                            Minimum="0.1"
-                                                            Maximum="2"
-                                                            ValueChanged="Slider_ValueChanged" 
-                                                            Value="{Binding LivePitch}"
-                                                            Width="150"
-                                                            ToolTip="Pitch" />
+                                                    <ui:DelayedSlider VerticalAlignment="Center"
+                                                                      Style="{DynamicResource MaterialDesignSlider}"
+                                                                      Foreground="{DynamicResource PrimaryHueMidBrush}"
+                                                                      Margin="5,0,0,0"
+                                                                      TickFrequency="5"
+                                                                      Orientation="Horizontal"
+                                                                      Minimum="0.1"
+                                                                      Maximum="2"
+                                                                      
+                                                                        DelayedValueChanged="Slider_DelayedValueChanged"
+                                                                      Value="{Binding LivePitch}"
+                                                                      Width="150"
+                                                                      ToolTip="Pitch" />
 
                                                     <!-- end test slider for pitch -->
                                                 </StackPanel>
@@ -454,7 +442,7 @@
             <Border Background="{DynamicResource MaterialDesignPaper}" DockPanel.Dock="Right"
                     materialDesign:ShadowAssist.ShadowDepth="Depth2" materialDesign:ShadowAssist.ShadowEdges="Top">
                 <!--Main Grid-->
-                <Grid>
+                <ui:DelayedContentResizeGrid>
                     <Grid x:Name="MainGrid" Grid.ZIndex="0">
                         <ui:ButtonUI x:Name="ButtonUI" />
                     </Grid>
@@ -465,7 +453,7 @@
                             MessageQueue="{Binding SnackbarMessageQueue}" />
                         <!--<ui:Snackbar x:Name="SnackbarMain"/>-->
                     </Grid>
-                </Grid>
+                </ui:DelayedContentResizeGrid>
             </Border>
         </DockPanel>
     </Grid>
