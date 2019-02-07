@@ -19,7 +19,8 @@
 
             <TextBlock Grid.Row="0" HorizontalAlignment="Stretch" VerticalAlignment="Center" Margin="0,0,0,32"
                        Style="{DynamicResource MaterialDesignHeadlineTextBlock}"
-                       TextWrapping="Wrap">
+                       TextWrapping="Wrap"
+                       FontWeight="Bold">
                 First, you need to create your personal bot.
             </TextBlock>
 
@@ -43,7 +44,8 @@
                 <Button Style="{DynamicResource MaterialDesignFloatingActionMiniButton}"
                         Command="{x:Static materialDesign:Transitioner.MovePreviousCommand}"
                         HorizontalAlignment="Right"
-                        Margin="10">
+                        Margin="10"
+                        >
                     <materialDesign:PackIcon Kind="StepBackward" />
                 </Button>
                 <Button Style="{DynamicResource MaterialDesignFloatingActionAccentButton}"
