@@ -8,90 +8,87 @@
         mc:Ignorable="d"
         Title="The Discord Soundboard" Height="767" Width="1335" Closing="MainWindow_Closing"
         ResizeMode="CanResizeWithGrip"
+        TextElement.Foreground="{DynamicResource MaterialDesignBody}"
+        Background="{DynamicResource MaterialDesignPaper}"
+        TextElement.FontWeight="Medium"
+        TextElement.FontSize="14"
         PreviewMouseDown="Window_PreviewMouseDown"
-        SizeChanged="Window_SizeChanged"
+        FontFamily="pack://application:,,,/MaterialDesignThemes.Wpf;component/Resources/Roboto/#Roboto"
         DataContext="{Binding RelativeSource={RelativeSource Self}}">
 
     <Window.Resources>
         <Storyboard x:Key="OpenMenu">
-            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(FrameworkElement.Width)" Storyboard.TargetName="brd_LeftPanel">
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(FrameworkElement.Width)"
+                                           Storyboard.TargetName="brd_LeftPanel">
 
                 <EasingDoubleKeyFrame KeyTime="0" Value="200" />
             </DoubleAnimationUsingKeyFrames>
-            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(FrameworkElement.Width)" Storyboard.TargetName="col_LeftPanel">
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(FrameworkElement.Width)"
+                                           Storyboard.TargetName="col_LeftPanel">
 
                 <EasingDoubleKeyFrame KeyTime="0" Value="200" />
             </DoubleAnimationUsingKeyFrames>
         </Storyboard>
         <Storyboard x:Key="CloseMenu">
-            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(FrameworkElement.Width)" Storyboard.TargetName="brd_LeftPanel">
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(FrameworkElement.Width)"
+                                           Storyboard.TargetName="brd_LeftPanel">
 
                 <EasingDoubleKeyFrame KeyTime="0" Value="70" />
             </DoubleAnimationUsingKeyFrames>
-            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(FrameworkElement.Width)" Storyboard.TargetName="col_LeftPanel">
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(FrameworkElement.Width)"
+                                           Storyboard.TargetName="col_LeftPanel">
 
                 <EasingDoubleKeyFrame KeyTime="0" Value="70" />
             </DoubleAnimationUsingKeyFrames>
         </Storyboard>
 
         <Storyboard x:Key="OpenChannelList">
-            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(FrameworkElement.Width)" Storyboard.TargetName="grd_ChannelList">
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(FrameworkElement.Width)"
+                                           Storyboard.TargetName="grd_ChannelList">
                 <EasingDoubleKeyFrame KeyTime="0" Value="250" />
             </DoubleAnimationUsingKeyFrames>
-            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(FrameworkElement.Height)" Storyboard.TargetName="grd_ChannelList">
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(FrameworkElement.Height)"
+                                           Storyboard.TargetName="grd_ChannelList">
                 <EasingDoubleKeyFrame KeyTime="0" Value="400" />
             </DoubleAnimationUsingKeyFrames>
         </Storyboard>
         <Storyboard x:Key="CloseChannelList">
-            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(FrameworkElement.Width)" Storyboard.TargetName="grd_ChannelList">
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(FrameworkElement.Width)"
+                                           Storyboard.TargetName="grd_ChannelList">
 
                 <EasingDoubleKeyFrame KeyTime="0" Value="0" />
             </DoubleAnimationUsingKeyFrames>
-            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(FrameworkElement.Height)" Storyboard.TargetName="grd_ChannelList">
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(FrameworkElement.Height)"
+                                           Storyboard.TargetName="grd_ChannelList">
                 <EasingDoubleKeyFrame KeyTime="0" Value="0" />
             </DoubleAnimationUsingKeyFrames>
         </Storyboard>
 
-        <materialDesign:PackIcon x:Key="IconMuteVolume" Margin="5,0,5,0" Kind="VolumeMute" Height="24" Width="24" />
-        <materialDesign:PackIcon x:Key="IconLowVolume" Margin="5,0,5,0" Kind="VolumeLow" Height="24" Width="24" />
-        <materialDesign:PackIcon x:Key="IconMediumVolume" Margin="5,0,5,0" Kind="VolumeMedium" Height="24" Width="24" />
-        <materialDesign:PackIcon x:Key="IconHighVolume"  Margin="5,0,5,0" Kind="VolumeHigh" Height="24" Width="24" />
-        <materialDesign:PackIcon x:Key="IconRepeatOnce" Kind="RepeatOnce" Height="21" Width="21" />
-        <materialDesign:PackIcon x:Key="IconRepeatOff" Kind="RepeatOff" Height="21" Width="21" />
-        <materialDesign:PackIcon x:Key="IconRepeatAll" Kind="Repeat" Height="21" Width="21" />
-        <materialDesign:PackIcon x:Key="IconPlay" Kind="Play" />
-        <materialDesign:PackIcon x:Key="IconPause" Kind="Pause" />
-        <materialDesign:PackIcon x:Key="IconMagnify" Kind="Magnify" Width ="35" Height="35" VerticalAlignment="Center"/>
-        <materialDesign:PackIcon x:Key="IconPlaylistPlay" Kind="PlaylistPlay" Width ="35" Height="35" VerticalAlignment="Center"/>
-        <materialDesign:PackIcon x:Key="IconYoutubePlay" Kind="YoutubePlay" Width ="35" Height="35" VerticalAlignment="Center"/>
-        <materialDesign:PackIcon x:Key="IconSettings" Kind="Settings" Width ="35" Height="35" VerticalAlignment="Center"/>
-        <materialDesign:PackIcon x:Key="IconInformation" Kind="Information" Width ="35" Height="35" VerticalAlignment="Center"/>
-
         <Style x:Key="MenuTextBlock" TargetType="TextBlock">
-            <Setter Property="FontSize" Value="20"/>
-            <Setter Property="Margin" Value="10,0,0,0"/>
-            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="FontSize" Value="20" />
+            <Setter Property="Margin" Value="10,0,0,0" />
+            <Setter Property="VerticalAlignment" Value="Center" />
         </Style>
 
         <Style x:Key="MenuButton" TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
-            <Setter Property="Height" Value="75"/>
-            <Setter Property="Margin" Value="0,0,0,0"/>
-            <Setter Property="Foreground" Value="Black"/>
-            <Setter Property="Background" Value="{StaticResource PrimaryForegroundBrush}"/>
-            <Setter Property="BorderBrush" Value="{StaticResource PrimaryForegroundBrush}"/>
-            <Setter Property="materialDesign:ShadowAssist.ShadowDepth" Value="Depth0"/>
-            <Setter Property="HorizontalContentAlignment" Value="Left"/>
+            <Setter Property="Height" Value="75" />
+            <Setter Property="Margin" Value="0,0,0,0" />
+            <Setter Property="Foreground" Value="Black" />
+            <Setter Property="Background" Value="{DynamicResource PrimaryHueMidBrush}" />
+            <Setter Property="BorderBrush" Value="{x:Null}" />
+            <Setter Property="materialDesign:ShadowAssist.ShadowDepth" Value="Depth0" />
+            <Setter Property="HorizontalContentAlignment" Value="Left" />
         </Style>
 
     </Window.Resources>
     <Grid>
-        <Grid x:Name="grd_ChannelList" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="0,60,20,0" Width="0" Height="0" Grid.ZIndex="1">
+        <Grid x:Name="grd_ChannelList" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="0,60,20,0" Width="0"
+              Height="0" Grid.ZIndex="2">
             <!-- channel selector-->
             <!-- is closed on startup-->
-            <materialDesign:ColorZone x:Name="col_ChannelList" materialDesign:ShadowAssist.ShadowDepth="Depth1" materialDesign:ShadowAssist.ShadowEdges="All" Height="400" Width="250" CornerRadius="5">
-                <materialDesign:ColorZone.Background>
-                    <SolidColorBrush Color="White" Opacity="1" />
-                </materialDesign:ColorZone.Background>
+            <materialDesign:ColorZone x:Name="col_ChannelList" materialDesign:ShadowAssist.ShadowDepth="Depth2"
+                                      materialDesign:ShadowAssist.ShadowEdges="All" Height="400" Width="250"
+                                      CornerRadius="5" Background="{DynamicResource MaterialDesignPaper}">
 
                 <DockPanel Margin="0,5,0,0">
                     <DockPanel DockPanel.Dock="Top" HorizontalAlignment="Stretch">
@@ -108,9 +105,9 @@
                     <Separator Background="#eaeaea" />
 
                     <ScrollViewer
-                    PreviewMouseWheel="scroll_channelList_PreviewMouseWheel"
-                    HorizontalScrollBarVisibility="Hidden"
-                    VerticalScrollBarVisibility="Hidden" ScrollChanged="scroll_channelList_ScrollChanged">
+                        PreviewMouseWheel="scroll_channelList_PreviewMouseWheel"
+                        HorizontalScrollBarVisibility="Hidden"
+                        VerticalScrollBarVisibility="Hidden" ScrollChanged="scroll_channelList_ScrollChanged">
                         <TreeView x:Name="tree_channelList" SelectedItemChanged="tree_channelList_SelectedItemChanged" />
                     </ScrollViewer>
                 </DockPanel>
@@ -118,14 +115,16 @@
         </Grid>
         <DockPanel LastChildFill="True" Grid.ZIndex="0">
 
-            <Grid DockPanel.Dock="Bottom" Background="{StaticResource PrimaryBackgroundBrush}">
+            <Grid DockPanel.Dock="Bottom">
                 <StackPanel>
 
-                    <materialDesign:ColorZone x:Name="col_LeftPanel"  Background="{StaticResource PrimaryForegroundBrush}" Height="5" Width="70" HorizontalAlignment="Left" />
+                    <materialDesign:ColorZone x:Name="col_LeftPanel" Background="{DynamicResource PrimaryHueMidBrush}"
+                                              Height="5" Width="70" HorizontalAlignment="Left" />
 
-                    <materialDesign:ColorZone materialDesign:ShadowAssist.ShadowDepth="Depth2" materialDesign:ShadowAssist.ShadowEdges="Top" Height="75">
+                    <materialDesign:ColorZone materialDesign:ShadowAssist.ShadowDepth="Depth2"
+                                              materialDesign:ShadowAssist.ShadowEdges="Top" Height="75">
 
-                        <Grid Background="{StaticResource PrimaryBackgroundBrush}" DockPanel.Dock="Bottom">
+                        <Grid Background="{DynamicResource MaterialDesignPaper}" DockPanel.Dock="Bottom">
 
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="2*" />
@@ -133,61 +132,67 @@
                                 <ColumnDefinition Width="2*" />
                             </Grid.ColumnDefinitions>
 
-                            <Grid Grid.Column="0" HorizontalAlignment="Left" Margin="20,0,20,0" MaxWidth="300" MinWidth="100">
+                            <Grid Grid.Column="0" HorizontalAlignment="Left" Margin="20,0,20,0" MaxWidth="300"
+                                  MinWidth="100">
                                 <!--Left Box-->
                                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
 
                                     <Button x:Name="btn_Previous"
-                                    Click="btn_Previous_Click"
-                                    materialDesign:ShadowAssist.ShadowDepth="Depth0"
-                                    Background="{StaticResource PrimaryBackgroundBrush}"
-                                    BorderBrush="{StaticResource PrimaryBackgroundBrush}"
-                                    Style="{StaticResource MaterialDesignFloatingActionMiniLightButton}"
-                                    ToolTip="Pervious"
-                                    HorizontalAlignment="Left">
+                                            Click="btn_Previous_Click"
+                                            materialDesign:ShadowAssist.ShadowDepth="Depth0"
+                                            Background="{x:Null}"
+                                            BorderBrush="{x:Null}"
+                                            Foreground="{DynamicResource MaterialDesignBody}"
+                                            Style="{StaticResource MaterialDesignFloatingActionMiniLightButton}"
+                                            ToolTip="Pervious"
+                                            HorizontalAlignment="Left">
 
                                         <materialDesign:PackIcon
-                                      materialDesign:ShadowAssist.ShadowDepth="Depth0"
-                                      Kind="SkipPrevious"
-                                      Height="24"
-                                      Width="24" />
+                                            materialDesign:ShadowAssist.ShadowDepth="Depth0"
+                                            Kind="SkipPrevious"
+                                            Height="24"
+                                            Width="24" />
                                     </Button>
 
                                     <Button x:Name="btn_Play"
-                                   Background="{StaticResource PrimaryForegroundBrush}"
-                                    Margin="10,0,10,0"
-                                    BorderBrush="{StaticResource PrimaryAccentBrush}"
-                                    Style="{StaticResource MaterialDesignFloatingActionButton}"
-                                    Click="btn_Play_Click"
-                                      Content="{materialDesign:PackIcon Play}" />
+                                            Background="{DynamicResource PrimaryHueMidBrush}"
+                                            Margin="10,0,10,0"
+                                            BorderBrush="{DynamicResource PrimaryHueMidBrush}"
+                                            Foreground="{DynamicResource PrimaryHueMidForegroundBrush}"
+                                            Style="{StaticResource MaterialDesignFloatingActionButton}"
+                                            Click="btn_Play_Click"
+                                            Content="{materialDesign:PackIcon Play}" />
 
                                     <Button x:Name="btn_Next"
-                                    Click="btn_Next_Click"
-                                    materialDesign:ShadowAssist.ShadowDepth="Depth0"
-                                    Background="{StaticResource PrimaryBackgroundBrush}"
-                                    BorderBrush="{StaticResource PrimaryBackgroundBrush}"
-                                    Style="{DynamicResource MaterialDesignFloatingActionMiniLightButton}"
+                                            Click="btn_Next_Click"
+                                            materialDesign:ShadowAssist.ShadowDepth="Depth0"
+                                            Background="{x:Null}"
+                                            BorderBrush="{x:Null}"
+                                            Foreground="{DynamicResource MaterialDesignBody}"
+                                            Style="{DynamicResource MaterialDesignFloatingActionMiniLightButton}"
                                             ToolTip="Next">
 
                                         <materialDesign:PackIcon
 
-                                          Kind="SkipNext"
-                                          Height="24"
-                                          Width="24" />
+                                            Kind="SkipNext"
+                                            Height="24"
+                                            Width="24" />
                                     </Button>
 
                                     <Button x:Name="btn_Repeat" HorizontalAlignment="Right"
-                                        Click="btn_Repeat_Click"
-                                      Style="{StaticResource MaterialDesignFloatingActionMiniLightButton}"
-                                      ToolTip="Repeat"
-                                        Background="White"
-                                        BorderBrush="White"
-                                        materialDesign:ShadowAssist.ShadowDepth="Depth0">
+                                            Click="btn_Repeat_Click"
+
+                                            Style="{StaticResource MaterialDesignFloatingActionMiniLightButton}"
+                                            ToolTip="Repeat"
+                                            Background="{x:Null}"
+                                            BorderBrush="{x:Null}"
+                                            Foreground="{DynamicResource MaterialDesignBody}"
+                                            materialDesign:ShadowAssist.ShadowDepth="Depth0">
 
                                         <materialDesign:PackIcon
-                                        Kind="RepeatOnce"
-                                        Height="21"
-                                        Width="21" />
+                                            Kind="RepeatOnce"
+                                            Height="21"
+                                            Width="21" />
                                     </Button>
                                 </StackPanel>
                             </Grid>
@@ -203,14 +208,15 @@
 
                                     <Grid Grid.Column="0">
 
-                                        <TextBlock Text="{Binding TitleTimeString}" VerticalAlignment="Center" HorizontalAlignment="Center" />
+                                        <TextBlock Text="{Binding TitleTimeString}" VerticalAlignment="Center"
+                                                   HorizontalAlignment="Center" />
                                     </Grid>
 
                                     <Grid Grid.Column="1">
                                         <Slider VerticalAlignment="Center"
 
                                                 x:Name="timeBar"
-                                                Foreground="{StaticResource PrimaryAccentBrush}"
+                                                Foreground="{DynamicResource PrimaryHueMidBrush}"
                                                 Margin="0,0,0,0"
                                                 TickFrequency="1"
                                                 Orientation="Horizontal"
@@ -221,14 +227,15 @@
                                                 MinWidth="40"
                                                 ToolTipService.ToolTip="{Binding Path=Value, ElementName=timeBar, StringFormat='HH:mm'}">
                                             <Slider.ToolTip>
-                                                <ToolTip Content="{Binding TitleTimeString}"/>
+                                                <ToolTip Content="{Binding TitleTimeString}" />
                                             </Slider.ToolTip>
 
                                         </Slider>
                                     </Grid>
 
                                     <Grid Grid.Column="2">
-                                        <TextBlock Text="{Binding TotalTimeString}"  VerticalAlignment="Center" HorizontalAlignment="Center" />
+                                        <TextBlock Text="{Binding TotalTimeString}" VerticalAlignment="Center"
+                                                   HorizontalAlignment="Center" />
                                     </Grid>
                                 </Grid>
                             </Grid>
@@ -238,41 +245,104 @@
                                 <StackPanel Orientation="Horizontal">
 
                                     <ToggleButton x:Name="btn_Earrape" HorizontalAlignment="Left"
-                                       Click="btn_Earrape_Click"
-                                        Style="{StaticResource MaterialDesignFlatToggleButton}"
-                                        ToolTip="Boost">
+                                                  Click="btn_Earrape_Click"
+                                                  Style="{StaticResource MaterialDesignFlatToggleButton}"
+                                                  ToolTip="Boost">
 
                                         <materialDesign:PackIcon
-                                        Kind="Nuke"
-                                        Height="21"
-                                        Width="21" />
+                                            Kind="Nuke"
+                                            Height="21"
+                                            Width="21" />
                                     </ToggleButton>
 
-                                    <Button x:Name ="btn_Volume" HorizontalAlignment="Center"
-                                    Click="btn_Volume_Click"
-                                    materialDesign:ShadowAssist.ShadowDepth="Depth0"
-                                    Background="{StaticResource PrimaryBackgroundBrush}"
-                                    BorderBrush="{StaticResource PrimaryBackgroundBrush}"
-                                    Style="{StaticResource MaterialDesignFloatingActionMiniLightButton}"
-                                    ToolTip="Mute">
+
+                                    <Button x:Name="btn_Volume" HorizontalAlignment="Center"
+                                            Click="btn_Volume_Click"
+                                            materialDesign:ShadowAssist.ShadowDepth="Depth0"
+                                            Background="{x:Null}"
+                                            BorderBrush="{x:Null}"
+                                            Foreground="{DynamicResource MaterialDesignBody}"
+                                            Style="{StaticResource MaterialDesignFloatingActionMiniLightButton}"
+                                            ToolTip="Mute">
 
                                         <materialDesign:PackIcon
-                                          Margin="5,0,5,0"
-                                          Kind="VolumeMute"
-                                          Height="24"
-                                          Width="24" />
+                                            Margin="5,0,5,0"
+                                            Kind="VolumeMute"                                          
+                                            Height="24"
+                                            Width="24" />
                                     </Button>
 
                                     <Slider VerticalAlignment="Center"
 
-                                        Foreground="{StaticResource PrimaryAccentBrush}"
-                                        Margin="5,0,0,0"
-                                        TickFrequency="5"
-                                        Orientation="Horizontal"
-                                        Minimum="0"
-                                        Maximum="100"
-                                        Value="{Binding Volume}"
-                                        Width="150" />
+                                            Foreground="{DynamicResource PrimaryHueMidBrush}"
+                                            Margin="5,0,0,0"
+                                            TickFrequency="5"
+                                            Orientation="Horizontal"
+                                            Minimum="0"
+                                            Maximum="100"
+                                            Value="{Binding Volume}"
+                                            Width="150"
+                                            ToolTip="Volume" />
+
+
+                                    <StackPanel Orientation="Horizontal" Margin="0,20,0,0" x:Name="stack_OtherSliders">
+                                        <!-- dialog host for primary colors-->
+                                        <materialDesign:DialogHost x:Name="dialogHost_OtherControls"
+                                                                   materialDesign:DialogHost.DialogClosingAttached="dialogHost_OnDialogClosing"
+                                                                   HorizontalAlignment="Center"
+                                                                   VerticalAlignment="Center"
+                                                                   CloseOnClickAway="True">
+                                            <materialDesign:DialogHost.DialogContent>
+
+                                                <StackPanel Orientation="Horizontal" Margin="5">
+
+                                                    <!-- test slider for pitch -->
+
+                                                    <Button HorizontalAlignment="Center"
+                                                            Click="btn_PitchReset_Click"
+                                                            materialDesign:ShadowAssist.ShadowDepth="Depth0"
+                                                            Background="{x:Null}"
+                                                            BorderBrush="{x:Null}"
+                                                            Foreground="{DynamicResource MaterialDesignBody}"
+                                                            Style="{StaticResource MaterialDesignFloatingActionMiniLightButton}"
+                                                            ToolTip="Reset">
+
+                                                        <materialDesign:PackIcon
+                                                            Margin="5,0,5,0"
+                                                            Kind="Waves"
+                                                            Height="24"
+                                                            Width="24" />
+                                                    </Button>
+
+                                                    <ui:DelayedSlider VerticalAlignment="Center"
+                                                                      Style="{DynamicResource MaterialDesignSlider}"
+                                                                      Foreground="{DynamicResource PrimaryHueMidBrush}"
+                                                                      Margin="5,0,0,0"
+                                                                      TickFrequency="5"
+                                                                      Orientation="Horizontal"
+                                                                      Minimum="0.1"
+                                                                      Maximum="2"
+                                                                      
+                                                                        DelayedValueChanged="Slider_DelayedValueChanged"
+                                                                      Value="{Binding LivePitch}"
+                                                                      Width="150"
+                                                                      ToolTip="Pitch" />
+
+                                                    <!-- end test slider for pitch -->
+                                                </StackPanel>
+
+                                            </materialDesign:DialogHost.DialogContent>
+
+                                            <Button Margin="5,0,0,15"
+                                                    VerticalAlignment="Center"
+                                                    Foreground="{DynamicResource MaterialDesignBody}"
+                                                    Style="{StaticResource MaterialDesignFlatButton}"
+                                                    Command="{x:Static materialDesign:DialogHost.OpenDialogCommand}"
+                                                    ToolTip="Others">
+                                                <materialDesign:PackIcon Kind="ChevronUp" />
+                                            </Button>
+                                        </materialDesign:DialogHost>
+                                    </StackPanel>
                                 </StackPanel>
                             </Grid>
                         </Grid>
@@ -280,55 +350,110 @@
                 </StackPanel>
             </Grid>
 
-            <Border Width="70" x:Name="brd_LeftPanel" Background="{StaticResource PrimaryForegroundBrush}" DockPanel.Dock="Left">
+            <Border Width="70" x:Name="brd_LeftPanel" Background="{DynamicResource PrimaryHueMidBrush}"
+                    DockPanel.Dock="Left">
                 <!--Left Panel-->
                 <StackPanel Orientation="Vertical" x:Name="stackPanel_Menu">
-                    <materialDesign:ColorZone Background="{StaticResource PrimaryForegroundBrush}" VerticalAlignment="Top" materialDesign:ShadowAssist.ShadowEdges="Bottom" materialDesign:ShadowAssist.ShadowDepth="Depth2" Height="55" HorizontalContentAlignment="Left">
+                    <materialDesign:ColorZone Background="{DynamicResource PrimaryHueMidBrush}" VerticalAlignment="Top"
+                                              materialDesign:ShadowAssist.ShadowEdges="Bottom"
+                                              materialDesign:ShadowAssist.ShadowDepth="Depth2" Height="55"
+                                              HorizontalContentAlignment="Left">
 
                         <!--Header Left-->
-                        <ToggleButton  Style="{DynamicResource MaterialDesignHamburgerToggleButton}" x:Name="btn_ToggleMenu" Height="50" Margin="14,5,5,5" Foreground="Black" Background="{StaticResource PrimaryForegroundBrush}" BorderBrush="{StaticResource PrimaryForegroundBrush}" materialDesign:ShadowAssist.ShadowDepth="Depth0" VerticalAlignment="Center" Click="btn_ToggleMenu_Click" />
+                        <ToggleButton Style="{DynamicResource MaterialDesignHamburgerToggleButton}"
+                                      x:Name="btn_ToggleMenu" Height="50" Margin="14,5,5,5" Foreground="Black"
+                                      Background="{DynamicResource PrimaryHueMidBrush}"
+                                      BorderBrush="{DynamicResource PrimaryHueMidBrush}"
+                                      materialDesign:ShadowAssist.ShadowDepth="Depth0" VerticalAlignment="Center"
+                                      Click="btn_ToggleMenu_Click" />
                     </materialDesign:ColorZone>
 
+                    <!-- do not add any Buttons here
+                        all buttons (or other controls) in this StackPanel are managed from code.
+                        see MainWindow.xaml.cs-->
 
-                    <Button Height="75" Margin="0,20,0,0" Foreground="Black" Background="{StaticResource PrimaryForegroundBrush}" BorderBrush="{StaticResource PrimaryForegroundBrush}" materialDesign:ShadowAssist.ShadowDepth="Depth0" Click="btn_Sounds_Click"  HorizontalContentAlignment="Left">
-                        <StackPanel Orientation="Horizontal">
-                            <materialDesign:PackIcon Kind="ArrowRightDropCircleOutline" Height="35" Width="35" VerticalAlignment="Center" />
-                            <TextBlock Text="SOUNDS" FontSize="20"  Margin="10,0,0,0" VerticalAlignment="Center" />
-                        </StackPanel>
-                    </Button>
                 </StackPanel>
             </Border>
 
-            <Border Height="60" DockPanel.Dock="Top" Background="{StaticResource PrimaryBackgroundBrush}">
-                <materialDesign:ColorZone Height="55" materialDesign:ShadowAssist.ShadowDepth="Depth1" materialDesign:ShadowAssist.ShadowEdges="Bottom" Background="{StaticResource PrimaryBackgroundBrush}">
+            <Grid DockPanel.Dock="Top" Height="60">
 
-                    <Button HorizontalAlignment="Right" Margin="0,0,20,0"
-                        x:Name="btn_Avatar"
-                        Style="{StaticResource MaterialDesignFloatingActionMiniLightButton}"
-                        ToolTip="Select a channel"
-                        BorderBrush="{StaticResource PrimaryAccentBrush}"
-                        Click="btn_Avatar_Click">
+                <materialDesign:ColorZone HorizontalAlignment="Stretch"
+                                          VerticalAlignment="Top"
+                                          Height="55"
+                                          materialDesign:ShadowAssist.ShadowDepth="Depth1"
+                                          materialDesign:ShadowAssist.ShadowEdges="Bottom"
+                                          Background="{DynamicResource MaterialDesignPaper}" />
 
-                        <Button.Background>
-                            <ImageBrush ImageSource="{Binding ClientAvatar}" Stretch="Fill" TileMode="None" />
-                        </Button.Background>
-                    </Button>
-                </materialDesign:ColorZone>
-            </Border>
 
-            <Border Background="{StaticResource PrimaryBackgroundBrush}" DockPanel.Dock="Right" materialDesign:ShadowAssist.ShadowDepth="Depth2" materialDesign:ShadowAssist.ShadowEdges="Top">
+                <DockPanel>
+
+
+                    <StackPanel HorizontalAlignment="Right" Orientation="Horizontal" Height="55"
+                                VerticalAlignment="Top" DockPanel.Dock="Right">
+
+                        <!-- begin avatar button -->
+                        <Button Grid.ZIndex="1" HorizontalAlignment="Right" Margin="0,5,25,0"
+                                x:Name="btn_Avatar"
+                                ToolTip="Select a channel"
+                                BorderBrush="{DynamicResource PrimaryHueMidBrush}"
+                                Click="btn_Avatar_Click"
+                                VerticalAlignment="Center"
+                                Height="40"
+                                Width="200">
+
+                            <Button.Template>
+                                <ControlTemplate>
+                                    <Border CornerRadius="20"
+                                            Background="{DynamicResource MaterialDesignTextFieldBoxBackground}">
+
+                                        <StackPanel VerticalAlignment="Bottom" Orientation="Horizontal">
+                                            <Ellipse Height="40" Width="40">
+                                                <Ellipse.Fill>
+                                                    <ImageBrush ImageSource="{Binding ClientAvatar}" Stretch="Fill" />
+                                                </Ellipse.Fill>
+                                            </Ellipse>
+
+                                            <TextBlock Text="{Binding ClientName}" VerticalAlignment="Center"
+                                                       Margin="10,0,0,0"
+                                                       Foreground="{DynamicResource MaterialDesignBody}" />
+                                        </StackPanel>
+                                    </Border>
+                                </ControlTemplate>
+                            </Button.Template>
+
+                        </Button>
+                    </StackPanel>
+
+                    <StackPanel HorizontalAlignment="Center" Orientation="Horizontal" Height="55"
+                                VerticalAlignment="Center" DockPanel.Dock="Left" Margin="5,0,10,0">
+                        <TextBlock VerticalAlignment="Center" FontSize="18" Text="{Binding CurrentSongName}" />
+                    </StackPanel>
+
+                    <!-- end avatar button -->
+
+                    <!-- begin window buttons -->
+
+
+                    <!-- begin window buttons -->
+                </DockPanel>
+            </Grid>
+
+
+            <Border Background="{DynamicResource MaterialDesignPaper}" DockPanel.Dock="Right"
+                    materialDesign:ShadowAssist.ShadowDepth="Depth2" materialDesign:ShadowAssist.ShadowEdges="Top">
                 <!--Main Grid-->
-                <Grid>
+                <ui:DelayedContentResizeGrid>
                     <Grid x:Name="MainGrid" Grid.ZIndex="0">
                         <ui:ButtonUI x:Name="ButtonUI" />
                     </Grid>
 
                     <Grid VerticalAlignment="Bottom" HorizontalAlignment="Center" Height="50" Grid.ZIndex="2">
-                        <materialDesign:Snackbar DataContext="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}"  
-                                                 MessageQueue="{Binding SnackbarMessageQueue}"/>
+                        <materialDesign:Snackbar
+                            DataContext="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}}"
+                            MessageQueue="{Binding SnackbarMessageQueue}" />
                         <!--<ui:Snackbar x:Name="SnackbarMain"/>-->
                     </Grid>
-                </Grid>
+                </ui:DelayedContentResizeGrid>
             </Border>
         </DockPanel>
     </Grid>

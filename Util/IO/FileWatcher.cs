@@ -33,7 +33,7 @@ namespace Util.IO
 
             string format = path.Substring(path.LastIndexOf('.') + 1);
 
-            foreach (var testFormat in Data.Persistent.supportedFormats)
+            foreach (var testFormat in Data.Persistent.SupportedFormats)
                 if (testFormat == format)
                     return true;
 

@@ -6,94 +6,111 @@
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              xmlns:dd="urn:gong-wpf-dragdrop"
              mc:Ignorable="d"
+
              d:DesignHeight="300" d:DesignWidth="300" AllowDrop="True">
 
     <UserControl.Resources>
         <Style TargetType="ListBoxItem" BasedOn="{StaticResource {x:Type ListBoxItem}}">
             <Setter Property="Padding" Value="0" />
-            <Setter Property="FontSize" Value="13" />
+            <Setter Property="FontSize" Value="14" />
             <Setter Property="FontFamily" Value="Segoe UI" />
         </Style>
 
         <Storyboard x:Key="OpenTopSelectionBar">
-            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(FrameworkElement.Height)"
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(FrameworkElement.Width)"
                                            Storyboard.TargetName="col_TopSelectionBar">
-                <EasingDoubleKeyFrame KeyTime="00:00:00.15" Value="30" />
+                <EasingDoubleKeyFrame KeyTime="00:00:00.15" Value="220" />
             </DoubleAnimationUsingKeyFrames>
         </Storyboard>
         <Storyboard x:Key="CloseTopSelectionBar">
-            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(FrameworkElement.Height)"
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(FrameworkElement.Width)"
                                            Storyboard.TargetName="col_TopSelectionBar">
                 <EasingDoubleKeyFrame KeyTime="00:00:00.15" Value="0" />
             </DoubleAnimationUsingKeyFrames>
         </Storyboard>
     </UserControl.Resources>
 
-    <materialDesign:ColorZone Style="{StaticResource FloatingSection}">
+    
         <Grid>
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
                 <RowDefinition Height="120*" />
-            </Grid.RowDefinitions>
+        </Grid.RowDefinitions>
 
             <Grid Grid.Row="0">
-                <StackPanel>
-                    <materialDesign:ColorZone Height="35" materialDesign:ShadowAssist.ShadowDepth="Depth1"
-                                              materialDesign:ShadowAssist.ShadowEdges="Bottom" Background="White"
-                                              HorizontalAlignment="Stretch" Margin="0,5,0,5">
-                        <DockPanel LastChildFill="True">
-                            <Button Background="Gray" BorderBrush="Gray" Click="btn_editList_Click" Height="30"
+                
+
+                <materialDesign:ColorZone Height="45" materialDesign:ShadowAssist.ShadowDepth="Depth1"
+                                              materialDesign:ShadowAssist.ShadowEdges="Bottom"
+                                              HorizontalAlignment="Stretch" Margin="0,5,0,5"
+                                              Background="{DynamicResource MaterialDesignPaper}">
+                    <DockPanel LastChildFill="True" Margin="0,0,0,5">
+                        <Button Background="Gray" BorderBrush="Gray" Click="btn_editList_Click" Height="30"
                                     Width="30" DockPanel.Dock="Right"
                                     Style="{StaticResource MaterialDesignFloatingActionMiniLightButton}"
-                                    Margin="10,0,10,5">
-                                <materialDesign:PackIcon Kind="Pencil" Height="20" Width="20" />
-                            </Button>
-                            <TextBlock DataContext="{Binding Playlist}" Text="{Binding Name}" DockPanel.Dock="Left"
+                                    Margin="10,0,10,5"
+                                    VerticalAlignment="Center">
+                            <materialDesign:PackIcon Kind="Pencil" Height="20" Width="20" />
+                        </Button>
+                        <TextBlock DataContext="{Binding Playlist}" Text="{Binding Name}" DockPanel.Dock="Left" VerticalAlignment="Center"
                                        FontSize="20" FontWeight="Bold" Margin="10,0,0,0" />
-                        </DockPanel>
-                    </materialDesign:ColorZone>
+                    </DockPanel>
+                </materialDesign:ColorZone>
+        </Grid>
 
-                    <StackPanel VerticalAlignment="Stretch">
-                        <materialDesign:ColorZone Background="#eaeaea" VerticalAlignment="Stretch"
-                                                  materialDesign:ShadowAssist.ShadowDepth="Depth1"
-                                                  materialDesign:ShadowAssist.ShadowEdges="Bottom,Top">
-                            <DockPanel LastChildFill="True" VerticalAlignment="Stretch">
-                                <materialDesign:PackIcon Kind="Magnify" Height="20" Width="20"
-                                                         VerticalAlignment="Center" Margin="10,0,10,0"
-                                                         Foreground="Gray" />
-                                <TextBox x:Name="box_Filter" TextChanged="box_Search_TextChanged"
-                                         materialDesign:HintAssist.Hint="Search"
-                                         materialDesign:TextFieldAssist.DecorationVisibility="Hidden"
-                                         BorderThickness="0" VerticalAlignment="Center" />
-                            </DockPanel>
+            <Grid Grid.Row="1">
+            <DockPanel LastChildFill="True">
+
+                <materialDesign:ColorZone x:Name="col_TopSelectionBar" Width="0"
+                                                      Background="{x:Null}" 
+                                                      DockPanel.Dock="Right"
+                                                      VerticalAlignment="Center"> 
+
+                    <DockPanel LastChildFill="False">
+                        <Button Click="addMultipleToQueue_Click" Background="{DynamicResource PrimaryHueMidBrush}" BorderBrush="{x:Null}" Padding="10" Margin="5,0,5,0">
+                            <StackPanel Orientation="Horizontal">
+                                <materialDesign:PackIcon Kind="Plus" Height="20" Width="20"
+                                                                     VerticalAlignment="Center" Margin="0,0,5,0" />
+                                <TextBlock Text="Add selection to queue..." VerticalAlignment="Center" />
+                            </StackPanel>
+                        </Button>
+                    </DockPanel>
+                </materialDesign:ColorZone>
+
+
+
+
+                <StackPanel DockPanel.Dock="Left" VerticalAlignment="Stretch">
+                    <materialDesign:ColorZone Background="{DynamicResource MaterialDesignTextFieldBoxBackground}" VerticalAlignment="Stretch"
+                                                      CornerRadius="9"
+                                                      Margin="5,4,4,5"
+                                                      Height="30">
+
+                        <DockPanel LastChildFill="True" VerticalAlignment="Stretch">
+                            <materialDesign:PackIcon Kind="Magnify" Height="20" Width="20"
+                                                                 VerticalAlignment="Center" Margin="10,0,10,0"
+                                                                 Foreground="{DynamicResource MaterialDesignBody}" />
+
+                            <TextBox x:Name="box_Filter" TextChanged="box_Search_TextChanged"
+                                                 materialDesign:HintAssist.Hint="Search"
+                                                 materialDesign:TextFieldAssist.DecorationVisibility="Hidden"
+                                                 BorderThickness="0" VerticalAlignment="Center" 
+                                                 Foreground="{DynamicResource MaterialDesignBody}"/>
+                        </DockPanel>
+            
                         </materialDesign:ColorZone>
                     </StackPanel>
 
-                    <materialDesign:ColorZone x:Name="col_TopSelectionBar" Height="0"
-                                              materialDesign:ShadowAssist.ShadowDepth="Depth1"
-                                              materialDesign:ShadowAssist.ShadowEdges="Bottom" Background="#eaeaea"
-                                              MaxWidth="2000" MinWidth="300">
-                        <DockPanel LastChildFill="False">
-
-                            <Button Click="addMultipleToQueue_Click" Background="Gray" BorderBrush="Gray">
-                                <StackPanel Orientation="Horizontal">
-                                    <materialDesign:PackIcon Kind="Plus" Height="20" Width="20"
-                                                             VerticalAlignment="Center" Margin="5" Foreground="#333333" />
-                                    <TextBlock Text="Add selection to queue..." VerticalAlignment="Center" />
-                                </StackPanel>
-                            </Button>
-                        </DockPanel>
-                    </materialDesign:ColorZone>
-
-                    <materialDesign:ColorZone Background="{StaticResource PrimaryBackgroundBrush}"
-                                              materialDesign:ShadowAssist.ShadowDepth="Depth2"
-                                              materialDesign:ShadowAssist.ShadowEdges="All" Height="Auto" />
-                </StackPanel>
+            </DockPanel>   
+       
             </Grid>
-            <Grid Grid.Row="1" Margin="0,0,0,0" MaxWidth="2000" MinWidth="600">
+            
+            <Grid Grid.Row="2" Margin="0,2,0,0" MaxWidth="1800" MinWidth="600">
                 <ListBox x:Name="list_All" ItemsSource="{Binding FilteredFiles}" SelectionMode="Extended"
                          KeyDown="stack_list_KeyDown" HorizontalContentAlignment="Stretch"
                          SelectionChanged="list_All_SelectionChanged"
+                         MinHeight="50"
                          dd:DragDrop.IsDragSource="True"
                          dd:DragDrop.IsDropTarget="True"
                          dd:DragDrop.DropHandler="{Binding}">
@@ -104,7 +121,8 @@
                                 <Grid Tag="{Binding Id}"
                                       MouseLeftButtonDown="stack_list_MouseLeftButtonDown"
                                       Margin="10,0,10,0"
-                                      Height="50">
+                                      Height="50"
+                                      Background="Transparent">
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="60" />
                                         <ColumnDefinition Width="3*" />
@@ -206,5 +224,5 @@
                 </ListBox>
             </Grid>
         </Grid>
-    </materialDesign:ColorZone>
+    
 </UserControl>

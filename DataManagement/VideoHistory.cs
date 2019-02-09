@@ -13,7 +13,6 @@ namespace DataManagement
     /// </summary>
     public class VideoHistory: INotifyPropertyChanged
     {
-        private const int maxHistoryLen = 25;
 
         /// <summary>
         /// default constructor
@@ -26,7 +25,8 @@ namespace DataManagement
         /// adds video to history, respects maxHistoryLen
         /// </summary>
         /// <param name="vid"></param>
-        public void addVideo(VideoData vid)
+        /// /// <param name="maxLen">max. number of files in list</param>
+        public void addVideo(VideoData vid, int maxLen)
         {
             //see if video was already played
             var oldVid = videos.FirstOrDefault(x => x.Url == vid.Url);
@@ -43,7 +43,7 @@ namespace DataManagement
             
 
             //delete videos above limit
-            while(videos.Count > maxHistoryLen)
+            while(videos.Count > maxLen)
                 videos.RemoveAt(videos.Count-1);
         }
 

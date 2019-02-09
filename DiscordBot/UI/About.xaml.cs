@@ -19,7 +19,7 @@ namespace DiscordBot.UI
 
         private void btn_Donate_Click(object sender, RoutedEventArgs e)
         {
-            System.Diagnostics.Process.Start("https://www.paypal.me/CJMayer/4,99");
+            System.Diagnostics.Process.Start("https://www.paypal.me/CJMayer/2,99");
         }
 
         private void btn_license_Click(object sender, RoutedEventArgs e)

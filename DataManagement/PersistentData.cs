@@ -2,7 +2,10 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Linq;
 using System.Xml.Serialization;
+using MaterialDesignColors;
+using MaterialDesignThemes.Wpf;
 
 namespace DataManagement
 {
@@ -15,17 +18,27 @@ namespace DataManagement
         #region consts
 
         /// <summary>
-        /// minVisibleButtons field
+        /// complete url to discord page where the bot is created
         /// </summary>
-        /// <remarks>
-        /// the count of buttons which are shown, even if there are less buttons used
-        /// </remarks>
-        public const int minVisibleButtons = 35;
+        public const string urlToBotRegister = "https://discordapp.com/login?redirect_to=%2Fdevelopers%2Fapplications%2Fme";
+
 
         /// <summary>
-        /// this is the url pointing at the git repository of this project. It is mainly referenced for help buttons
+        /// complete url to git Repository
         /// </summary>
-        public const string urlToGitRepo = "https://github.com/mayerch1/TheDiscordSoundboard/";
+        public const string gitCompleteUrl = "https://github.com/Mayerch1/TheDiscordSoundboard/";
+
+
+        /// <summary>
+        /// this is the Name of the Github repository
+        /// </summary>
+        public const string gitRepo = "TheDiscordSoundboard";
+        /// <summary>
+        /// this is the account name of the repository owner
+        /// </summary>
+        public const string gitAuthor = "mayerch1";
+
+  
 
         /// <summary>
         /// default folder to create, e.g. in Appdata
@@ -47,20 +60,23 @@ namespace DataManagement
         /// </summary>
         public const string version = "2.2.0";
 
-        /// <summary>
-        /// a list with all supported formats (only ending)
-        /// </summary>
-        [XmlIgnore]
-        public readonly List<string> supportedFormats = new List<string> { "mp3", "wav", "asf", "wma", "wmv", "sami", "smi", "3g2", "3gp", "3pg2", "3pgg", "aac", "adts", "m4a", "m4v", "mov", "mp4" };
 
         #endregion consts
 
         #region persistend fields
 
+        private bool dontSave = false;
+
         private ObservableCollection<ButtonData> btnList = new ObservableCollection<ButtonData>();
         private ObservableCollection<string> mediaSources = new ObservableCollection<string>();
         private ObservableCollection<FileData> playListIndex = new ObservableCollection<FileData>();
         private ObservableCollection<Hotkey> hotkeyList = new ObservableCollection<Hotkey>();
+        private ObservableCollection<string> supportedFormats = new ObservableCollection<string>();
+
+
+        private bool isBotModule = true;
+        private bool isPlaylistModule = true;
+        private bool isStreamModule = true;
 
         private bool isFirstStart = true;
         private bool isEulaAccepted = false;
@@ -69,17 +85,21 @@ namespace DataManagement
         private int highestButtonToSave = -1;
         private ulong clientId;
         private string clientName;
-        private bool isDarkTheme = false;
         private ulong channelId = 0;
         private string clientAvatar;
         private string token = null;
         private int selectedServerIndex = 0;
         private bool alwaysCacheVideo = true;
 
-        private bool ignoreFileWarning = false;
-        private bool ignoreTokenWarning = false;
-        private bool ignoreChannelWarning = false;
-        private bool ignoreClientWarning = false;
+
+        private bool isDarkTheme = false;
+        private string primarySwatch = null;
+        private string secondarySwatch = null;
+
+
+        private int minVisibleButtons = 35;
+        private int maxHistoryLen = 50;
+        private int maxVideoHistoryLen = 25;
 
         private float volume = 0.5f;
         private int volumeCap = 30;
@@ -87,6 +107,61 @@ namespace DataManagement
         #endregion persistend fields
 
         #region persistend properties
+
+
+        /// <summary>
+        /// For debugging, will not save any changes
+        /// </summary>
+        public bool DontSave
+        {
+            get => dontSave;
+            set
+            {
+                dontSave = value;
+                OnPropertyChanged("DontSave");
+            }
+        }
+
+        /// <summary>
+        /// determines, if BotModule will be loaded
+        /// </summary>
+        public bool IsBotModule
+        {
+            get => isBotModule;
+            set
+            {
+                isBotModule = value;
+                OnPropertyChanged("IsBotModule");
+            }
+        }
+
+        /// <summary>
+        /// determines, if PlaylistModule will be loaded
+        /// </summary>
+        public bool IsPlaylistModule
+        {
+            get => isPlaylistModule;
+            set
+            {
+                isPlaylistModule = value;
+                OnPropertyChanged("IsPlaylistModule");
+            }
+        }
+
+        /// <summary>
+        /// determines, if StreamModule will be loaded
+        /// </summary>
+        public bool IsStreamModule
+        {
+            get => isStreamModule;
+            set
+            {
+                isStreamModule = value;
+                OnPropertyChanged("IsStreamModule");
+            }
+        }
+
+ 
 
         /// <summary>
         /// IsFirstStart property
@@ -155,14 +230,66 @@ namespace DataManagement
         /// IsDarkTheme property
         /// </summary>
         public bool IsDarkTheme { get => isDarkTheme;
-            set { isDarkTheme = value; OnPropertyChanged("IsDarkTheme"); } }
+            set { isDarkTheme = value; new PaletteHelper().SetLightDark(value);  OnPropertyChanged("IsDarkTheme"); } }
+
+
+        /// <summary>
+        /// this is the main color scheme
+        /// </summary>
+        public string PrimarySwatch
+        {
+            get => primarySwatch;
+            set
+            {
+                if (!String.IsNullOrWhiteSpace(value))
+                {
+                    //find swatch in table
+                    var newSwatch = new MaterialDesignColors.SwatchesProvider().Swatches.FirstOrDefault(sw => sw.Name == value);
+
+                    if (newSwatch != null)
+                    {
+                        //replace old primary swatch
+                        new PaletteHelper().ReplacePrimaryColor(newSwatch);
+                        primarySwatch = value;
+                        OnPropertyChanged("PrimarySwatch");
+                    }                 
+                }
+            }
+        }
+
+        /// <summary>
+        /// this is the secondary color scheme
+        /// </summary>
+        public string SecondarySwatch
+        {
+            get => secondarySwatch;
+            set
+            {
+                if (!String.IsNullOrWhiteSpace(value))
+                {
+                    //find swatch in table of defaults
+                    var newSwatch = new MaterialDesignColors.SwatchesProvider().Swatches.FirstOrDefault(sw => sw.Name == value);
+
+                    if (newSwatch != null)
+                    {
+                        //replace old primary swatch
+                        new PaletteHelper().ReplaceAccentColor(newSwatch);
+                        secondarySwatch = value;
+                        OnPropertyChanged("SecondarySwatch");
+                    }                                    
+                }
+            }
+        }
+   
 
         //raise ClientNameChanged to check for client names, if old Token was not able to do so
         /// <summary>
         /// Token property
         /// </summary>
         public string Token { get => token;
-            set { token = value; OnPropertyChanged("Token"); if (ClientNameChanged != null) ClientNameChanged(value); } }
+            set { token = value; OnPropertyChanged("Token");
+                ClientNameChanged?.Invoke(value);
+            } }
 
         /// <summary>
         /// SelectedServerIndex
@@ -182,6 +309,7 @@ namespace DataManagement
         public float Volume { get => volume;
             set { volume = value; OnPropertyChanged("Volume"); } }
 
+
         /// <summary>
         /// VolumeCap property
         /// </summary>
@@ -198,33 +326,11 @@ namespace DataManagement
         /// discord username in form of 'Name#1234'
         /// </value>
         public string ClientName { get => clientName;
-            set { clientName = value; OnPropertyChanged("ClientName"); if (ClientNameChanged != null) ClientNameChanged(value); } }
+            set { clientName = value; OnPropertyChanged("ClientName");
+                ClientNameChanged?.Invoke(value);
+            } }
 
-        /// <summary>
-        /// IgnoreFileWarning property
-        /// </summary>
-        public bool IgnoreFileWarning { get => ignoreFileWarning;
-            set { ignoreFileWarning = value; OnPropertyChanged("IgnoreFileWarning"); } }
-
-        /// <summary>
-        /// IgnoreTokenWarning property
-        /// </summary>
-        public bool IgnoreTokenWarning { get => ignoreTokenWarning;
-            set { ignoreTokenWarning = value; OnPropertyChanged("IgnoreTokenWarning"); } }
-
-        /// <summary>
-        /// IgnoreChannelWarning property
-        /// </summary>
-        public bool IgnoreChannelWarning { get => ignoreChannelWarning;
-            set { ignoreChannelWarning = value; OnPropertyChanged("IgnoreChannelWarning"); } }
-
-        /// <summary>
-        /// IgnoreClientWarning property
-        /// </summary>
-        public bool IgnoreClientWarning { get => ignoreClientWarning;
-            set { ignoreClientWarning = value; OnPropertyChanged("IgnoreClientWarning"); } }
-
-
+      
         /// <summary>
         /// Do not use Videostream, instead cache each video
         /// </summary>
@@ -232,6 +338,49 @@ namespace DataManagement
         {
             get => alwaysCacheVideo;
             set { alwaysCacheVideo = value; OnPropertyChanged("AlwaysCacheVideo"); } }
+
+   
+        /// <summary>
+        /// minVisibleButtons Property
+        /// </summary>
+        /// <remarks>
+        /// the count of buttons which are shown, even if there are less buttons used
+        /// </remarks>
+        public int MinVisibleButtons
+        {
+            get => minVisibleButtons;
+            set
+            {
+                minVisibleButtons = value;
+                OnPropertyChanged("MinVisibleButtons");
+            }
+        }
+
+        /// <summary>
+        /// Max entries in file history
+        /// </summary>
+        public int MaxHistoryLen
+        {
+            get => maxHistoryLen;
+            set
+            {
+                maxHistoryLen = value;
+                OnPropertyChanged("MaxHistoryLen");
+            }
+        }
+
+        /// <summary>
+        /// Max entries in video history
+        /// </summary>
+        public int MaxVideoHistoryLen
+        {
+            get => maxVideoHistoryLen;
+            set
+            {
+                maxVideoHistoryLen = value;
+                OnPropertyChanged("MaxVideoHistoryLen");
+            }
+        }
 
 
         /// <summary>
@@ -242,6 +391,22 @@ namespace DataManagement
         /// </value>
         public ObservableCollection<string> MediaSources { get => mediaSources;
             set { mediaSources = value; OnPropertyChanged("MediaSources"); } }
+
+
+
+        /// <summary>
+        /// a list with all supported formats (only file ending, without .)
+        /// </summary>
+        public ObservableCollection<string> SupportedFormats
+        {
+            get => supportedFormats;
+            set
+            {
+                supportedFormats = value;
+                OnPropertyChanged("SupportedFormats");
+            }
+        }
+
 
         /// <summary>
         ///name and directory of each playlist, used for loading the files
@@ -291,10 +456,7 @@ namespace DataManagement
         private void OnPropertyChanged(string info)
         {
             PropertyChangedEventHandler handler = PropertyChanged;
-            if (handler != null)
-            {
-                handler(null, new PropertyChangedEventArgs(info));
-            }
+            handler?.Invoke(null, new PropertyChangedEventArgs(info));
         }
 
         #endregion events

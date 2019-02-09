@@ -1,4 +1,5 @@
-﻿using System;
+﻿
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Discord.WebSocket;
@@ -121,6 +122,7 @@ namespace BotModule
             {
                 if (!await connectToChannelAsync())
                     return;
+                    
             }
 
             try
@@ -217,7 +219,8 @@ namespace BotModule
 
                 if (client == null)
                 {
-                    Util.IO.SnackbarManager.SnackbarMessage("Cannot find specified owner.");
+                    Util.IO.SnackbarManager.SnackbarMessage("Cannot find specified owner. Please Retry");
+                    Util.IO.LogManager.LogException(null, "BotModule/BotHandler", "User not in channel or invalid username/-id");
                     return false;
                 }
             }
@@ -284,8 +287,8 @@ namespace BotModule
                     break;
 
                 case System.TimeoutException iEx:
-                    SnackbarManager.SnackbarMessage("Cannot join channel. Check permission");
-                    Util.IO.LogManager.LogException(iEx, location, "No permission to join channel");
+                    SnackbarManager.SnackbarMessage("Cannot get channel(s). Check permission");
+                    Util.IO.LogManager.LogException(iEx, location, "No permission to join/download channel");
                     break;
 
                 case TaskCanceledException iEx:
@@ -376,7 +379,7 @@ namespace BotModule
         {
             foreach (var server in clientList)
             {
-                //iterate through connected clints
+                //iterate through connected clients
                 foreach (var client in server)
                 {
                     if (client.Id == ClientId)

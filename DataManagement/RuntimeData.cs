@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 
@@ -18,6 +19,8 @@ namespace DataManagement
         private const string playlistFile = "\\Playlist.xml";
         private const string historyFile = "\\History.xml";
         private const string videoHistoryFile = "\\VideoHistory.xml";
+        private const string moduleStatesFile = "\\ModuleStates.xml";
+        private readonly List<string> supportedFormatsBackup = new List<string> { "mp3", "wav", "mp4", "asf", "wma", "wmv", "sami", "smi", "3g2", "3gp", "3pg2", "3pgg", "aac", "adts", "m4a", "m4v", "mov"};
 
         #endregion constants
 
@@ -29,11 +32,20 @@ namespace DataManagement
         private ObservableCollection<Playlist> playlists = new ObservableCollection<Playlist>();
         private History history = new History();
         private VideoHistory videoHistory = new VideoHistory();
+        private ModuleManager moduleStates = new ModuleManager();
         private bool isPlaylistPlaying = false;
+        private float pitch = 1.0f;
 
         #endregion fields
 
         #region properties
+
+        public float Pitch
+        {
+            get => pitch;
+            set => pitch = value;
+        }
+
 
         /// <summary>
         /// Persistent property (class)
@@ -70,7 +82,20 @@ namespace DataManagement
                 videoHistory = value;
                 OnPropertyChanged("VideoHistory");
             }
-        }     
+        }
+
+        /// <summary>
+        /// ModuleStates of all available Modules (and static pages).
+        /// </summary>
+        public ModuleManager ModuleStates
+        {
+            get => moduleStates;
+            set
+            {
+                moduleStates = value;
+                OnPropertyChanged("ModuleStates");
+            }
+        }
 
         /// <summary>
         /// IsPlaylistPlaying property
@@ -130,10 +155,10 @@ namespace DataManagement
             cleanBtnList();
 
             //upsize again, if list is to short to display
-            if (Persistent.BtnList.Count < PersistentData.minVisibleButtons || Persistent.BtnList.Count < (Persistent.HighestButtonToSave + 2))
+            if (Persistent.BtnList.Count < Persistent.MinVisibleButtons || Persistent.BtnList.Count < (Persistent.HighestButtonToSave + 2))
             {
                 //use highest from both if values above (short if)
-                int highestBtn = PersistentData.minVisibleButtons > (Persistent.HighestButtonToSave + 2) ? PersistentData.minVisibleButtons : (Persistent.HighestButtonToSave + 2);
+                int highestBtn = Persistent.MinVisibleButtons > (Persistent.HighestButtonToSave + 2) ? Persistent.MinVisibleButtons : (Persistent.HighestButtonToSave + 2);
 
                 for (int i = Persistent.BtnList.Count; i < highestBtn; i++)
                 {
@@ -172,6 +197,7 @@ namespace DataManagement
             if (String.IsNullOrWhiteSpace(Persistent.SettingsPath))
                 Persistent.SettingsPath = System.Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + applicationDirectory;
 
+
             if ((Persistent = (PersistentData)loadObject(Persistent, saveFile)) == null)
             {
                 //create new one, old one was overwirtten with =null
@@ -180,6 +206,11 @@ namespace DataManagement
                 Persistent.SettingsPath = System.Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + applicationDirectory;
                 loadDefaultValues();
             }
+            if (Persistent.SupportedFormats.Count == 0)
+                Persistent.SupportedFormats = new ObservableCollection<string>(supportedFormatsBackup);
+
+
+
             //normalize btn
             resizeBtnList();
 
@@ -194,7 +225,11 @@ namespace DataManagement
 
             if((VideoHistory = (VideoHistory)loadObject(VideoHistory, videoHistoryFile)) == null)
                 VideoHistory = new VideoHistory();
-            
+
+            //this Module will be treated on MainWindow constructor due to unique RoutedEventArgs ptr
+            ModuleStates = (ModuleManager)loadObject(ModuleStates, moduleStatesFile);
+
+
         }
 
         /// <summary>
@@ -235,12 +270,12 @@ namespace DataManagement
         private void loadDefaultValues()
         {
             //init the visible Buttons
-            for (int i = 0; i < PersistentData.minVisibleButtons; i++)
+            for (int i = 0; i < Persistent.MinVisibleButtons; i++)
             {
                 Persistent.BtnList.Add(mkDefaultButtonData());
             }
             //init media sources
-            Persistent.MediaSources.Add(Environment.GetFolderPath(Environment.SpecialFolder.MyMusic));
+            Persistent.MediaSources.Add(Environment.GetFolderPath(Environment.SpecialFolder.MyMusic));           
         }
 
         /// <summary>
@@ -261,13 +296,14 @@ namespace DataManagement
         /// </summary>
         public void saveAll()
         {
-     
             cleanBtnList();
+
             saveObject(Persistent, saveFile);
             saveObject(Files, fileFile);
             saveObject(Playlists, playlistFile);
             saveObject(History, historyFile);
             saveObject(VideoHistory, videoHistoryFile);
+            saveObject(ModuleStates, moduleStatesFile);
         }
 
         /// <summary>

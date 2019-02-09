@@ -1,11 +1,12 @@
-﻿namespace DataManagement
+﻿using System.Linq;
+
+namespace DataManagement
 {
     /// <summary>
     /// extends Playlist to manage History with maximum amount of titles
     /// </summary>
     public class History : Playlist
     {
-        private const int maxHistoryLen = 50;
 
         /// <summary>
         /// Default constructor of history
@@ -16,13 +17,21 @@
         /// add Title to history, removes any title above max Length of history
         /// </summary>
         /// <param name="title"></param>
-        public void addTitle(FileData title)
+        /// <param name="maxLen">max. number of files in list</param>
+        public void addTitle(FileData title, int maxLen)
         {
-            base.Tracks.Insert(0, title);
-            while (base.Tracks.Count > maxHistoryLen)
+            var oldFile = base.Tracks.FirstOrDefault(f => f.Path == title.Path);
+
+            if (oldFile != null)
             {
-                base.Tracks.RemoveAt(base.Tracks.Count - 1);
+                base.Tracks.Remove(oldFile);
             }
+
+            base.Tracks.Insert(0, title);
+
+            while (base.Tracks.Count > maxLen)
+                base.Tracks.RemoveAt(base.Tracks.Count - 1);
+            
         }
     }
 }

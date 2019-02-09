@@ -206,6 +206,8 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="UI\DelayedContentResizeGrid.cs" />
+    <Compile Include="UI\DelayedSlider.cs" />
     <Compile Include="Misc\BotMisc.cs" />
     <Compile Include="Misc\ChannelListManager.cs" />
     <Compile Include="Misc\PlaylistManager.cs" />
@@ -220,7 +222,39 @@
     <Compile Include="UI\Settings.xaml.cs">
       <DependentUpon>Settings.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Misc\UpdateChecker.cs" />
+    <Compile Include="UI\Tutorial\Slide_Bot_0.xaml.cs">
+      <DependentUpon>Slide_Bot_0.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\Tutorial\Slide_Bot_6.xaml.cs">
+      <DependentUpon>Slide_Bot_6.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\Tutorial\Slide_Bot_7.xaml.cs">
+      <DependentUpon>Slide_Bot_7.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\Tutorial\Slide_Intro.xaml.cs">
+      <DependentUpon>Slide_Intro.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\Tutorial\Slide_Bot_1.xaml.cs">
+      <DependentUpon>Slide_Bot_1.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\Tutorial\Slide_Bot_2.xaml.cs">
+      <DependentUpon>Slide_Bot_2.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\Tutorial\Slide_Bot_3.xaml.cs">
+      <DependentUpon>Slide_Bot_3.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\Tutorial\Slide_Bot_4.xaml.cs">
+      <DependentUpon>Slide_Bot_4.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\Tutorial\Slide_Bot_5.xaml.cs">
+      <DependentUpon>Slide_Bot_5.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\Tutorial\Slide_EnterCredentials.xaml.cs">
+      <DependentUpon>Slide_EnterCredentials.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\Tutorial\TutorialMaster.xaml.cs">
+      <DependentUpon>TutorialMaster.xaml</DependentUpon>
+    </Compile>
     <Page Include="UI\About.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -250,6 +284,50 @@
       <SubType>Code</SubType>
     </Compile>
     <Page Include="UI\Settings.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\Tutorial\Slide_Bot_0.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\Tutorial\Slide_Bot_6.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\Tutorial\Slide_Bot_7.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\Tutorial\Slide_Intro.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="UI\Tutorial\Slide_Bot_1.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="UI\Tutorial\Slide_Bot_2.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="UI\Tutorial\Slide_Bot_3.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="UI\Tutorial\Slide_Bot_4.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="UI\Tutorial\Slide_Bot_5.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="UI\Tutorial\Slide_EnterCredentials.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="UI\Tutorial\TutorialMaster.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -313,6 +391,10 @@
       <Project>{6745405b-8a1d-423f-9d17-95bad658db18}</Project>
       <Name>DataManagement</Name>
     </ProjectReference>
+    <ProjectReference Include="..\GithubVersionChecker\GithubVersionChecker.csproj">
+      <Project>{bf622e71-acb5-401d-8ae2-4abace38ae00}</Project>
+      <Name>GithubVersionChecker</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Modules\BotModule\BotModule.csproj">
       <Project>{f05a9a53-0213-4334-82e4-36d922c23127}</Project>
       <Name>BotModule</Name>
@@ -340,6 +422,18 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="res\thumbnail_default.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="res\Tutorial\create_1.png" />
+    <Resource Include="res\Tutorial\create_2.png" />
+    <Resource Include="res\Tutorial\create_3.png" />
+    <Resource Include="res\Tutorial\create_4.png" />
+    <Resource Include="res\Tutorial\create_5.png" />
+    <Resource Include="res\Tutorial\create_6.png" />
+    <Resource Include="res\Tutorial\create_7.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="res\Tutorial\create_token.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\NETStandard.Library.2.0.3\build\netstandard2.0\NETStandard.Library.targets" Condition="Exists('..\packages\NETStandard.Library.2.0.3\build\netstandard2.0\NETStandard.Library.targets')" />

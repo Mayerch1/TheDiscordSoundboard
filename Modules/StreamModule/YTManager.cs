@@ -60,9 +60,15 @@ namespace StreamModule
         /// <returns>null if no url was entered</returns>
         public static string getIdFromUrl(string url)
         {
-            if ((url.Contains("https://") || url.Contains("http://")) && url.Contains("="))
+            if (url.Contains("https://") || url.Contains("http://"))
             {
-                return url.Substring(url.LastIndexOf('=') + 1);
+                const string delimiter = "watch?v=";
+                const string shortDelimiter = ".be/";
+
+                if(url.Contains(delimiter))
+                    return url.Substring(url.LastIndexOf(delimiter) + delimiter.Length);
+                else if (url.Contains(shortDelimiter))
+                    return url.Substring(url.LastIndexOf(shortDelimiter) + shortDelimiter.Length);
             }
 
             return null;         
@@ -121,14 +127,11 @@ namespace StreamModule
                 // getting the audio from yt is very slow,
                 // it's faster to download the vid, even on 10Mbit/s
                 //--------------------------
-
                 //get video file
                 var videos = await YouTube.Default.GetAllVideosAsync(url);
 
                 //get audios, only aac
-                var audios = videos.Where(v => v.AudioFormat != AudioFormat.Unknown && v.AudioFormat != AudioFormat.Vorbis).ToList();
-
-                
+                var audios = videos.Where(v => v.AudioFormat != AudioFormat.Unknown && v.AudioFormat != AudioFormat.Vorbis).ToList();               
 
                 //save audio into Video, only with audio
                 mpAudio = audios.FirstOrDefault(x => x.AudioBitrate > 0);
@@ -211,7 +214,7 @@ namespace StreamModule
                 SnackbarManager.SnackbarMessage("File too large");
                 Console.WriteLine(@"File " + name + @" is to large to save");
             }
-            catch (System.IO.IOException ex)
+            catch (System.IO.IOException)
             {
                 //return old file
                 if (File.Exists(location))

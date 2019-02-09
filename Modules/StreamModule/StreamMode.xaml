@@ -6,6 +6,7 @@
              xmlns:local="clr-namespace:StreamModule"
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              mc:Ignorable="d"
+            
              d:DesignHeight="450" d:DesignWidth="800"
              DataContext="{Binding RelativeSource={RelativeSource Self}}">
 
@@ -14,7 +15,7 @@
 
         <Style TargetType="ListBoxItem" BasedOn="{StaticResource {x:Type ListBoxItem}}">
             <Setter Property="Padding" Value="0" />
-            <Setter Property="FontSize" Value="13" />
+            <Setter Property="FontSize" Value="14" />
             <Setter Property="FontFamily" Value="Segoe UI" />
         </Style>
 
@@ -22,7 +23,7 @@
         <!-- Template for recommendation and history listBox -->
         <DataTemplate x:Key="VideoListTemplate">
             <DockPanel Tag="{Binding Url}"
-                       MouseLeftButtonDown="list_History_MouseLeftButtonDown">
+                       MouseLeftButtonDown="list_History_MouseLeftButtonDown" Background="Transparent">
 
                 <DockPanel.ContextMenu>
                     <ContextMenu>
@@ -55,7 +56,7 @@
     </UserControl.Resources>
 
 
-    <Grid Margin="5,5,0,0">
+    <Grid Margin="15,5,0,0">
         <Grid Grid.ZIndex="1">
             <materialDesign:Card x:Name="loadProgress"
                                  UniformCornerRadius="14" Visibility="Collapsed"
@@ -77,8 +78,8 @@
 
             <Grid Grid.Column="0">
                 <DockPanel LastChildFill="True">
-                    <materialDesign:ColorZone Style="{StaticResource FloatingSection}" DockPanel.Dock="Top">
-                        <DockPanel VerticalAlignment="Top" LastChildFill="True" Margin="5,5,0,5">
+                    
+                        <DockPanel VerticalAlignment="Top" LastChildFill="True" Margin="5,5,0,10" DockPanel.Dock="Top">
 
                             <Grid Height="Auto" Width="Auto" Margin="0,0,30,0" DockPanel.Dock="Left">
 
@@ -101,7 +102,8 @@
                                 <Button Click="btn_Stream_Click"
                                         DockPanel.Dock="Right"
                                         Height="Auto" Width="Auto" Margin="20"
-                                        Background="{StaticResource PrimaryForegroundBrush}"
+                                        Background="{DynamicResource PrimaryHueMidBrush}"
+                                        Foreground="{DynamicResource PrimaryHueMidForegroundBrush}"
                                         BorderBrush="{x:Null}">
                                     <materialDesign:PackIcon Kind="ArrowRight" Height="30" Width="30" Margin="5" />
                                     <Button.ContextMenu>
@@ -128,53 +130,42 @@
 
 
                         </DockPanel>
-                    </materialDesign:ColorZone>
 
 
-                    <materialDesign:ColorZone Style="{StaticResource FloatingSection}" DockPanel.Dock="Bottom"
-                                              VerticalAlignment="Stretch">
-                        <DockPanel LastChildFill="True">
-                            <TextBlock Text="Recommendations:" FontSize="16" Margin="5" DockPanel.Dock="Top" />
 
-                            <Separator Background="LightGray" DockPanel.Dock="Top"/>
+                    <DockPanel LastChildFill="True"  DockPanel.Dock="Bottom" VerticalAlignment="Stretch">
+                        <TextBlock Text="Recommendations:" FontSize="16" Margin="5" DockPanel.Dock="Top" />
+
+                        <Separator Background="LightGray" DockPanel.Dock="Top"/>
 
 
-                            <ScrollViewer PreviewMouseWheel="Recommended_OnPreviewMouseWheel">
-                                <ListBox
+                        <ScrollViewer PreviewMouseWheel="Recommended_OnPreviewMouseWheel">
+                            <ListBox
                                     DataContext="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}"
                                     ItemsSource="{Binding Suggestions}"
                                     HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch"
                                     ItemTemplate="{StaticResource VideoListTemplate}" />
 
-                            </ScrollViewer>
-                        </DockPanel>
-                    </materialDesign:ColorZone>
+                        </ScrollViewer>
+                    </DockPanel>
                 </DockPanel>
             </Grid>
 
-            <Grid Grid.Column="1">
+            <Grid Grid.Column="1" Margin="15,0,0,0">
                 <!--history-->
-                <materialDesign:ColorZone Style="{StaticResource FloatingSection}" VerticalAlignment="Stretch">
-                    <DockPanel LastChildFill="True">
 
-                    
-                    
+                <DockPanel LastChildFill="True" VerticalAlignment="Stretch">
 
-                        <TextBlock Text="History:" FontSize="16" Margin="5" DockPanel.Dock="Top"/>
+                    <TextBlock Text="History:" FontSize="16" Margin="5" DockPanel.Dock="Top"/>
 
-                        <Separator Background="LightGray" DockPanel.Dock="Top"/>
+                    <Separator Background="LightGray" DockPanel.Dock="Top"/>
 
-
-
-                        <ScrollViewer PreviewMouseWheel="Recommended_OnPreviewMouseWheel">
-                            <ListBox x:Name="list_History" ItemsSource="{Binding Videos}"
+                    <ScrollViewer PreviewMouseWheel="Recommended_OnPreviewMouseWheel">
+                        <ListBox x:Name="list_History" ItemsSource="{Binding Videos}"
                                      HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch"
                                      ItemTemplate="{StaticResource VideoListTemplate}" />
-                        </ScrollViewer>
-
-
-                    </DockPanel>
-                </materialDesign:ColorZone>
+                    </ScrollViewer>
+                </DockPanel>
             </Grid>
         </Grid>
     </Grid>

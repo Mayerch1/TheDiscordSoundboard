@@ -144,13 +144,13 @@ namespace StreamModule
         private void StartStream(BotData data)
         {
             PlayVideo(data);
-            Data.VideoHistory.addVideo(new VideoData(Url, Title, ImageUri, Duration));
+            Data.VideoHistory.addVideo(new VideoData(Url, Title, ImageUri, Duration), Data.Persistent.MaxVideoHistoryLen);
         }
 
         private void QueueStream(BotData data)
         {
             QueueVideo(data);
-            Data.VideoHistory.addVideo(new VideoData(Url, Title, ImageUri, Duration));
+            Data.VideoHistory.addVideo(new VideoData(Url, Title, ImageUri, Duration), Data.Persistent.MaxVideoHistoryLen);
         }
 
 
