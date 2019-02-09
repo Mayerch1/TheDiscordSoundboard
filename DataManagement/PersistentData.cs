@@ -58,7 +58,7 @@ namespace DataManagement
         /// <summary>
         /// version of this build, refers to the github release number
         /// </summary>
-        public const string version = "2.2.0";
+        public const string version = "2.3.0";
 
 
         #endregion consts
