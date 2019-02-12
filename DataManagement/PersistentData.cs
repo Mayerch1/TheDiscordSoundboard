@@ -55,10 +55,25 @@ namespace DataManagement
         /// </summary>
         public const string videoCacheFolder = "Videos";
 
+
+        /// <summary>
+        /// path to the binary of the youtube-dl
+        /// </summary>
+        public const string youtubeDLPath = "youtube-dl.exe";
+
+
         /// <summary>
         /// version of this build, refers to the github release number
         /// </summary>
         public const string version = "2.3.0";
+
+
+        public const double defaultBtnWidth = 171;
+        public const double defaultBtnHeight = 80;
+        public const int defaultMinVisBtn = 35;
+        public const int defaultMaxHistoryLen = 50;
+        public const int defaultMaxVidHistoryLen = 25;
+
 
 
         #endregion consts
@@ -80,6 +95,9 @@ namespace DataManagement
 
         private bool isFirstStart = true;
         private bool isEulaAccepted = false;
+
+        private double btnWidth = 171;
+        private double btnHeight = 80;
 
         private string settingsPath;
         private int highestButtonToSave = -1;
@@ -122,6 +140,35 @@ namespace DataManagement
             }
         }
 
+
+        /// <summary>
+        /// width of each Instantbutton
+        /// </summary>
+        public double BtnWidth  
+        {
+            get => btnWidth;
+            set
+            {
+                btnWidth= value;
+                ButtonData.Width = value;
+                OnPropertyChanged("BtnWidth");
+            }
+        }
+
+        /// <summary>
+        /// height of each Instantbutton
+        /// </summary>
+        public double BtnHeight
+        {
+            get => btnHeight;
+            set
+            {
+                btnHeight = value;
+                ButtonData.Height = value;
+                OnPropertyChanged("BtnHeight");
+            }
+        }   
+        
         /// <summary>
         /// determines, if BotModule will be loaded
         /// </summary>

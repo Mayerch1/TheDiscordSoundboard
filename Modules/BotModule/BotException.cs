@@ -1,8 +1,11 @@
-﻿namespace BotModule
+﻿using System;
+
+namespace BotModule
 {
     /// <summary>
     /// Class for custom bot exception
     /// </summary>
+    [Serializable]
     internal class BotException : System.Exception
     {
         /// <summary>

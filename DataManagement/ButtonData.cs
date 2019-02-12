@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel;
+using System.Xml.Serialization;
 
 namespace DataManagement
 {
@@ -42,7 +43,6 @@ namespace DataManagement
         #endregion constructors
 
         #region saved fields
-
         private string name = null;
         private string file = null;
         private bool isEarrape = false;
@@ -54,6 +54,15 @@ namespace DataManagement
         #endregion saved fields
 
         #region propertys
+
+        //no OnPropertyChanged,
+        //as change of value is only possible when not loaded (in settings)
+        [XmlIgnore]
+        public static double Width { get; set; }
+
+        [XmlIgnore]
+        public static double Height { get; set; }
+           
 
         /// <summary>
         /// Name property

@@ -30,6 +30,8 @@ namespace DiscordBot.UI
 
             this.DataContext = Handle.Data.Persistent;
             btnControl.ItemsSource = Handle.Data.Persistent.BtnList;
+
+            var x = btnControl.Items;
         }
 
         private void btn_Instant_Click(object sender, RoutedEventArgs e)

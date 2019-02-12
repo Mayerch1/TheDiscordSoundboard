@@ -374,6 +374,31 @@ namespace DiscordBot.UI
                 module_checkForPresent();
             }
         }
+
+        private void slider_MinVisBtn_Reset(object sender, MouseButtonEventArgs e)
+        {
+            Handle.Data.Persistent.MinVisibleButtons = DataManagement.PersistentData.defaultMinVisBtn;
+        }
+
+        private void slider_BtnHeight_Reset(object sender, MouseButtonEventArgs e)
+        {
+            Handle.Data.Persistent.BtnHeight = DataManagement.PersistentData.defaultBtnHeight;
+        }
+
+        private void slider_BtnWidth_Reset(object sender, MouseButtonEventArgs e)
+        {
+            Handle.Data.Persistent.BtnWidth = DataManagement.PersistentData.defaultBtnWidth;
+        }
+
+        private void slider_VidHistoryLen_Reset(object sender, MouseButtonEventArgs e)
+        {
+            Handle.Data.Persistent.MaxVideoHistoryLen = DataManagement.PersistentData.defaultMaxVidHistoryLen;
+        }
+
+        private void slider_HistoryLen_Reset(object sender, MouseButtonEventArgs e)
+        {
+            Handle.Data.Persistent.MaxHistoryLen = DataManagement.PersistentData.defaultMaxHistoryLen;
+        }
     }
 
 #pragma warning restore CS1591

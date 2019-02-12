@@ -24,7 +24,7 @@
 
         <ScrollViewer>
 
-            <ItemsControl x:Name="btnControl" Margin="15,15,0,15">
+            <ItemsControl x:Name="btnControl" Margin="15,15,0,15" Grid.IsSharedSizeScope="True">
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
 
@@ -34,9 +34,9 @@
 
                             <materialDesign:Flipper.FrontContent>
 
-                                <Grid Name="Test">
+                                <Grid Name="ButtonGrd">
 
-                                    <Button Height="80" Width="171" Tag="{Binding ID}" Foreground="#939393" Content="{Binding Name}" Click="btn_Instant_Click" BorderBrush="{x:Null}" BorderThickness="0" Background="{x:Null}">
+                                    <Button x:Name="btn_Instant" Height="{Binding Width}" Width="{Binding Height}" Tag="{Binding ID}" Foreground="#939393" Content="{Binding Name}" Click="btn_Instant_Click" BorderBrush="{x:Null}" BorderThickness="0" Background="{x:Null}">
 
 
                                         <Button.ContextMenu>
@@ -51,7 +51,7 @@
                                             <Style TargetType="{x:Type Button}" BasedOn="{StaticResource MaterialDesignRaisedDarkButton}">
                                                 <Style.Triggers>
 
-                                                    <DataTrigger Binding="{Binding IsMouseOver, ElementName=Test}" Value="True">
+                                                    <DataTrigger Binding="{Binding IsMouseOver, ElementName=ButtonGrd}" Value="True">
                                                         <Setter Property="Foreground" Value="Red" />
                                                     </DataTrigger>
                                                 </Style.Triggers>
@@ -71,7 +71,7 @@
 
                                                 <Style.Triggers>
 
-                                                    <DataTrigger Binding="{Binding IsMouseOver, ElementName=Test}" Value="True">
+                                                    <DataTrigger Binding="{Binding IsMouseOver, ElementName=ButtonGrd}" Value="True">
                                                         <Setter Property="Visibility" Value="Visible" />
                                                     </DataTrigger>
                                                 </Style.Triggers>
