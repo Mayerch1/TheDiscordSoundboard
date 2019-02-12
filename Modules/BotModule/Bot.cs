@@ -360,9 +360,9 @@ namespace BotModule
                 throw new BotException(BotException.type.connection,
                     "Not connected to the Servers, while Setting GameState", BotException.connectionError.NoServer);
 
-            StreamType type = StreamType.NotStreaming;
+            ActivityType type = ActivityType.Watching;
             if (isStreaming)
-                type = StreamType.Twitch;
+                type = ActivityType.Streaming;
 
             if (streamUrl == "")
                 await Client.SetGameAsync(msg, streamUrl, type);
@@ -380,28 +380,25 @@ namespace BotModule
         /// <param name="data">BotData object</param>
         private void getStream(BotData data)
         {
-            //return if nothing to stream
-            if (!File.Exists(data.filePath) && data.stream == null)
-                return;
-
-            OutFormat = new WaveFormat(sampleRate, bitDepth, channelCount);
-
-            if (data.filePath != null)
+            //see if file or uri was provided
+            if (!String.IsNullOrWhiteSpace(data.uri))
+            {               
+                Reader = new MediaFoundationReader(data.uri);                     
+            }
+            else if (File.Exists(data.filePath))
             {
                 Reader = new MediaFoundationReader(data.filePath);
-
+                
                 //set seekable
                 CanSeek = true;
             }
-            else if (data.stream != null)
-            {
+            else
                 return;
 
-                //Reader = new StreamMediaFoundationReader(data.stream);
-                // Reader = new StreamMediaFoundationReader(data.stream);
-                //set non seekable bool
-                //CanSeek = data.stream.CanSeek;
-            }
+            CanSeek = Reader.CanSeek;
+            
+            OutFormat = new WaveFormat(sampleRate, bitDepth, channelCount);
+
 
             //create source and finally used resampler
             SourceResampler = new MediaFoundationResampler(Reader, OutFormat);
@@ -409,13 +406,11 @@ namespace BotModule
             //apply pitch to the resampler, will also set NormalResampler
             PitchChanged(Pitch);
 
-
             /*
              * Generate one normal resampler,
              * Generate one boosted resampler,
              * in applyVolume() the matching resampler is assigned to activeResampler
              */
-
 
             var volumeSampler = new VolumeWaveProvider16(NormalResampler);
             //this means 10,000%
@@ -612,6 +607,7 @@ namespace BotModule
             Client = new DiscordSocketClient();
 
             await Client.LoginAsync(TokenType.Bot, token);
+            
 
             await Client.StartAsync();
 
@@ -634,8 +630,8 @@ namespace BotModule
                     "Not connected to the servers, while trying to connect to a channel",
                     BotException.connectionError.NoServer);
             }
-
-            AudioCl = await ((ISocketAudioChannel) Client.GetChannel(channelId)).ConnectAsync();
+           
+            AudioCl = await ((ISocketAudioChannel) Client.GetChannel(channelId)).ConnectAsync(true);
 
             IsChannelConnected = true;
         }
