@@ -8,17 +8,11 @@
              d:DesignHeight="300" d:DesignWidth="300">
 
     <materialDesign:ColorZone Mode="PrimaryLight" VerticalAlignment="Stretch" HorizontalAlignment="Stretch"
-                              VerticalContentAlignment="Stretch" CornerRadius="100" Margin="10,5,10,5">
+                              VerticalContentAlignment="Stretch">
 
         <Grid VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Margin="0">
-            <materialDesign:ColorZone>
-                <materialDesign:ColorZone.Background>
-                    <ImageBrush ImageSource="/res/Tutorial/create_1.png"/>
+            <Image Grid.Row="0" Grid.Column="0" HorizontalAlignment="Left" Source="/res/Tutorial/create_1.png" />
 
-                </materialDesign:ColorZone.Background>
-                
-            </materialDesign:ColorZone>
-           
             <StackPanel Margin="15" 
                         Orientation="Horizontal"
                         HorizontalAlignment="Right"

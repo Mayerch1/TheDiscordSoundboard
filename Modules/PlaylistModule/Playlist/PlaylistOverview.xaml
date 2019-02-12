@@ -43,7 +43,9 @@
     <Grid>
         <DockPanel LastChildFill="True">
             <materialDesign:ColorZone  VerticalAlignment="Stretch" DockPanel.Dock="Left">
-                <StackPanel Orientation="Vertical">
+                <ScrollViewer VerticalScrollBarVisibility="Hidden">
+                    <StackPanel Orientation="Vertical">
+                    <!-- Create a playlist Button -->
                     <Button Style="{StaticResource CardButtonStyle}" Margin="14" Click="btn_playlistAdd_Click">
                         <Button.Template>
                             <ControlTemplate>
@@ -60,6 +62,7 @@
                             </ControlTemplate>
                         </Button.Template>
                     </Button>
+                    <!-- History Button -->
                     <Button Style="{StaticResource CardButtonStyle}" Margin="14" Click="btn_showHistory_Click" DataContext="{Binding History}">
                         <Button.Template>
                             <ControlTemplate>
@@ -77,6 +80,7 @@
                         </Button.Template>
                     </Button>
                 </StackPanel>
+                    </ScrollViewer>
             </materialDesign:ColorZone>
 
             
