@@ -7,7 +7,7 @@
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
-    <materialDesign:ColorZone Mode="PrimaryLight" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" VerticalContentAlignment="Stretch">
+    <materialDesign:ColorZone Mode="PrimaryLight" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" VerticalContentAlignment="Stretch" CornerRadius="5" Margin="10,5,10,5">
 
         <Grid VerticalAlignment="Stretch" HorizontalAlignment="Stretch" MaxWidth="1500" MaxHeight="800">
             <Grid.RowDefinitions>
@@ -17,11 +17,12 @@
             </Grid.RowDefinitions>
 
 
-            <TextBlock Grid.Row="0" HorizontalAlignment="Stretch" VerticalAlignment="Center" Margin="0,0,0,32"
+            <TextBlock Grid.Row="0" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="5"
                        Style="{DynamicResource MaterialDesignHeadlineTextBlock}"
                        TextWrapping="Wrap"
-                       FontWeight="Bold">
-                First, you need to create your personal bot.
+                       
+                       >
+                     The first thing you have to do is to create your bot
             </TextBlock>
 
 
