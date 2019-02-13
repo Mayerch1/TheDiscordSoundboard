@@ -36,12 +36,12 @@
 
                                 <Grid Name="ButtonGrd">
 
-                                    <Button x:Name="btn_Instant" Height="{Binding Width}" Width="{Binding Height}" Tag="{Binding ID}" Foreground="#939393" Content="{Binding Name}" Click="btn_Instant_Click" BorderBrush="{x:Null}" BorderThickness="0" Background="{x:Null}">
+                                    <Button x:Name="btn_Instant" Height="{Binding Height}" Width="{Binding Width}" Tag="{Binding ID}" Foreground="#939393" Content="{Binding Name}" Click="btn_Instant_Click" BorderBrush="{x:Null}" BorderThickness="0" Background="{x:Null}">
 
 
                                         <Button.ContextMenu>
                                             <ContextMenu>
-                                                <MenuItem Header="Add to Queue" 
+                                                <MenuItem Header="Add to BotQueue" 
                                                           Tag="{Binding ID}"
                                                           Click="btn_Queue_Click"/>
                                             </ContextMenu>

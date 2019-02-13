@@ -8,7 +8,6 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Web;
-using NYoutubeDL;
 using Util.IO;
 using VideoLibrary;
 using YoutubeSearch;
@@ -23,10 +22,6 @@ namespace StreamModule
         private const string imageUrl = "https://img.youtube.com/vi/";
 
         private const string thumbnailQuality = "/sddefault.jpg";
-
-        private static YoutubeDL ytDl = new YoutubeDL();
-        private static string nextLocation = "";
-
 
         /// <summary>
         /// deletes all cached videos

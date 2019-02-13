@@ -16,9 +16,19 @@ namespace StreamModule
     /// </summary>
     public static class DownloadManager
     {
+        /// <summary>
+        /// Result of a Caching progress
+        /// </summary>
         public struct CacheResult
         {
+            /// <summary>
+            /// uri to video
+            /// </summary>
             public string uri;
+
+            /// <summary>
+            /// location on disk
+            /// </summary>
             public string location;
         }
 
@@ -28,7 +38,6 @@ namespace StreamModule
 
         private static string dlUri = null;
         private static Video ytVid = null;
-      
 
 
         /// <summary>
@@ -68,7 +77,6 @@ namespace StreamModule
         /// </summary>
         /// <param name="url">url to video</param>
         /// <param name="title">title of video</param>
-        /// <param name="progressUpdater">progress will be reported into this function</param>
         /// <returns></returns>
         public static async Task<CacheResult> cacheVideoAsync(string url, string title)
         {
@@ -95,7 +103,7 @@ namespace StreamModule
                 }
                 else if (dlUri != null)
                 {
-                   result.uri = await Task.Run(getMiscUri);                  
+                    result.uri = await Task.Run(getMiscUri);
                     result.location = "";
                 }
 
@@ -136,6 +144,7 @@ namespace StreamModule
         }
 
 
+#pragma warning disable CS1998
         private static async Task<string> getMiscUri()
         {
             string arg = "--get-url " + dlUri;
@@ -166,5 +175,6 @@ namespace StreamModule
 
             return "";
         }
+#pragma warning restore CS1998
     }
 }
