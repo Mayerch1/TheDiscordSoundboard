@@ -378,26 +378,61 @@ namespace DiscordBot.UI
         private void slider_MinVisBtn_Reset(object sender, MouseButtonEventArgs e)
         {
             Handle.Data.Persistent.MinVisibleButtons = DataManagement.PersistentData.defaultMinVisBtn;
+            if (sender is TextBlock box && box.Parent is StackPanel panel)
+            {
+                if (panel.Children.Count >= 2 && panel.Children[1] is Slider sl)
+                {
+                    sl.Value = Handle.Data.Persistent.MinVisibleButtons;
+                }
+            }
         }
 
         private void slider_BtnHeight_Reset(object sender, MouseButtonEventArgs e)
         {
             Handle.Data.Persistent.BtnHeight = DataManagement.PersistentData.defaultBtnHeight;
+            if (sender is TextBlock box && box.Parent is StackPanel panel)
+            {
+                if (panel.Children.Count >= 2 && panel.Children[1] is Slider sl)
+                {
+                    sl.Value = Handle.Data.Persistent.BtnHeight;
+                }
+            }
         }
 
         private void slider_BtnWidth_Reset(object sender, MouseButtonEventArgs e)
         {
             Handle.Data.Persistent.BtnWidth = DataManagement.PersistentData.defaultBtnWidth;
+            if (sender is TextBlock box && box.Parent is StackPanel panel)
+            {
+                if (panel.Children.Count >= 2 && panel.Children[1] is Slider sl)
+                {
+                    sl.Value = Handle.Data.Persistent.BtnWidth;
+                }
+            }
         }
 
         private void slider_VidHistoryLen_Reset(object sender, MouseButtonEventArgs e)
         {
             Handle.Data.Persistent.MaxVideoHistoryLen = DataManagement.PersistentData.defaultMaxVidHistoryLen;
+            if (sender is TextBlock box && box.Parent is StackPanel panel)
+            {
+                if (panel.Children.Count >= 2 && panel.Children[1] is Slider sl)
+                {
+                    sl.Value = Handle.Data.Persistent.MaxVideoHistoryLen;
+                }
+            }
         }
 
         private void slider_HistoryLen_Reset(object sender, MouseButtonEventArgs e)
         {
             Handle.Data.Persistent.MaxHistoryLen = DataManagement.PersistentData.defaultMaxHistoryLen;
+            if (sender is TextBlock box && box.Parent is StackPanel panel)
+            {
+                if (panel.Children.Count >= 2 && panel.Children[1] is Slider sl)
+                {
+                    sl.Value = Handle.Data.Persistent.MaxHistoryLen;
+                }
+            }
         }
     }
 

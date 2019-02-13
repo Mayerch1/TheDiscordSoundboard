@@ -265,14 +265,18 @@ namespace StreamModule
 
             card_downProgress.Visibility = Visibility.Collapsed;
 
+            if (!String.IsNullOrWhiteSpace(result.location) || !String.IsNullOrWhiteSpace(result.uri))
+            {
+                BotData data = new BotData(Title, result.location, result.uri);
 
-            BotData data = new BotData(Title, result.location, result.uri);
 
-
-            if (IsQueue)
-                QueueStream(data);
+                if (IsQueue)
+                    QueueStream(data);
+                else
+                    StartStream(data);
+            }
             else
-                StartStream(data);
+                SnackbarManager.SnackbarMessage("Source not supported");
         }
 
         #region events

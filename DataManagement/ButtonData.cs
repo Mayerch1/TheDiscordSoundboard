@@ -57,9 +57,15 @@ namespace DataManagement
 
         //no OnPropertyChanged,
         //as change of value is only possible when not loaded (in settings)
+        /// <summary>
+        /// Width of a single Button
+        /// </summary>
         [XmlIgnore]
         public static double Width { get; set; }
 
+        /// <summary>
+        /// Height of a single Button
+        /// </summary>
         [XmlIgnore]
         public static double Height { get; set; }
            

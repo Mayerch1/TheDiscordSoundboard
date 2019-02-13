@@ -115,7 +115,6 @@ namespace BotModule
         /// <summary>
         /// IsChannelConnected property
         /// </summary>
-        /// TODO test implementation
         public bool IsChannelConnected
         {
             get

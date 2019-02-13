@@ -262,6 +262,7 @@
                                         Name="combo_startup"
                                         SelectionChanged="combo_SelectionChanged">
                                         <ComboBox.ItemsPanel>
+                                            <!-- set by code -->
                                             <ItemsPanelTemplate>
                                                 <VirtualizingStackPanel />
                                             </ItemsPanelTemplate>
@@ -272,29 +273,29 @@
 
 
                                 <StackPanel Orientation="Horizontal" Margin="5,5,0,0">
-                                    <TextBlock VerticalAlignment="Bottom" MinWidth="140">Button Width</TextBlock>
+                                    <TextBlock VerticalAlignment="Bottom" MinWidth="140" MouseDown="slider_BtnWidth_Reset">Button Width</TextBlock>
                                     <Slider Minimum="50" Maximum="500"
                                             Style="{StaticResource MaterialDesignDiscreteSlider}"
                                             Margin="10,0,0,0"
                                             ToolTip="Width of Button"
-                                            Value="{Binding BtnHeight}"
+                                            Value="{Binding BtnWidth}"
                                             Width="280"
                                             MouseDoubleClick="slider_BtnWidth_Reset" />
                                 </StackPanel>
 
                                 <StackPanel Orientation="Horizontal" Margin="5,5,0,0">
-                                    <TextBlock VerticalAlignment="Bottom" MinWidth="140">Button Height</TextBlock>
+                                    <TextBlock VerticalAlignment="Bottom" MinWidth="140" MouseDown="slider_BtnHeight_Reset">Button Height</TextBlock>
                                     <Slider Minimum="25" Maximum="500"
                                             Style="{StaticResource MaterialDesignDiscreteSlider}"
                                             Margin="10,0,0,0"
                                             ToolTip="Height of Button"
-                                            Value="{Binding BtnWidth}"
+                                            Value="{Binding BtnHeight}"
                                             Width="280"
                                             MouseDoubleClick="slider_BtnHeight_Reset" />
                                 </StackPanel>
 
                                 <StackPanel Orientation="Horizontal" Margin="5,5,0,0">
-                                    <TextBlock VerticalAlignment="Bottom" MinWidth="140">Min. Visible Button</TextBlock>
+                                    <TextBlock VerticalAlignment="Bottom" MinWidth="140" MouseDown="slider_MinVisBtn_Reset">Min. Visible Button</TextBlock>
                                     <Slider Minimum="1" Maximum="150"
                                             Style="{StaticResource MaterialDesignDiscreteSlider}"
                                             Margin="10,0,0,0"
@@ -305,7 +306,7 @@
                                 </StackPanel>
 
                                 <StackPanel Orientation="Horizontal" Margin="5,0,0,0">
-                                    <TextBlock VerticalAlignment="Bottom" MinWidth="140">History Length</TextBlock>
+                                    <TextBlock VerticalAlignment="Bottom" MinWidth="140" MouseDown="slider_HistoryLen_Reset">History Length</TextBlock>
                                     <Slider Minimum="1" Maximum="100"
                                             Style="{StaticResource MaterialDesignDiscreteSlider}"
                                             Margin="10,0,0,0"
@@ -316,7 +317,7 @@
                                 </StackPanel>
 
                                 <StackPanel Orientation="Horizontal" Margin="5,5,0,0">
-                                    <TextBlock VerticalAlignment="Bottom" MinWidth="140">Video History Length</TextBlock>
+                                    <TextBlock VerticalAlignment="Bottom" MinWidth="140" MouseDown="slider_VidHistoryLen_Reset">Video History Length</TextBlock>
                                     <Slider Minimum="1" Maximum="100"
                                             Style="{StaticResource MaterialDesignDiscreteSlider}"
                                             Margin="10,0,0,0"
