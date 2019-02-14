@@ -96,10 +96,7 @@ namespace PlaylistModule.Playlist
                     //cache image
                     ImagePath = Util.IO.ImageManager.cacheImage(fileDialog.FileName);
                 }
-            }
-
-            //TODO: double click on image will most likely close the popup
-
+            }          
             this.StaysOpen = false;
         }
 

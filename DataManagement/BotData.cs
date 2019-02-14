@@ -13,11 +13,12 @@ namespace DataManagement
         {
         }
 
-        public BotData(string name, string filePath="", string uri = "")
+        public BotData(string name, string filePath, string uri="", string author="")
         {
             this.name = name;
             this.filePath = filePath;
             this.uri = uri;
+            this.author = author;
         }
 
         
@@ -29,6 +30,7 @@ namespace DataManagement
             isLoop = btn.IsLoop;
             id = btn.ID;
             uri = "";
+            author = btn.Author;
         }
 
         public string name = "";
@@ -37,6 +39,7 @@ namespace DataManagement
         public bool isEarrape = false;
         public bool isLoop = false;
         public int id = -1;
+        public string author = "";
     }
 
 #pragma warning restore CS1591

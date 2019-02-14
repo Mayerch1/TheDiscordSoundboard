@@ -134,6 +134,8 @@ namespace DataManagement
         private int maxHistoryLen = defaultMaxHistoryLen;
         private int maxVideoHistoryLen = defaultMaxVidHistoryLen;
 
+        private bool isFixedBtnRatio = false;
+
         private float volume = 0.5f;
         private int volumeCap = 30;
 
@@ -165,8 +167,8 @@ namespace DataManagement
             set
             {
                 btnWidth= value;
-                ButtonData.Width = value;
                 OnPropertyChanged("BtnWidth");
+                ButtonData.Width = value;           
             }
         }
 
@@ -179,8 +181,8 @@ namespace DataManagement
             set
             {
                 btnHeight = value;
-                ButtonData.Height = value;
                 OnPropertyChanged("BtnHeight");
+                ButtonData.Height = value;              
             }
         }   
         
@@ -441,6 +443,19 @@ namespace DataManagement
             {
                 maxVideoHistoryLen = value;
                 OnPropertyChanged("MaxVideoHistoryLen");
+            }
+        }
+
+        /// <summary>
+        /// Locks the width:height ratio of instant buttons
+        /// </summary>
+        public bool IsFixedBtnRatio
+        {
+            get => isFixedBtnRatio;
+            set
+            {
+                isFixedBtnRatio = value;
+                OnPropertyChanged("IsFixedBtnRatio");
             }
         }
 

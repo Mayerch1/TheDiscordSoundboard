@@ -818,7 +818,7 @@ namespace DiscordBot
                 if (file.Id == index)
                 {
                     //create ButtonData to feed to bot
-                    DataManagement.BotData data = new DataManagement.BotData(file.Name, file.Path);
+                    DataManagement.BotData data = new DataManagement.BotData(file.Name, file.Path, "",file.Author);
                     triggerMasterReplay(data, isPriority);
                 }
             }
@@ -826,7 +826,7 @@ namespace DiscordBot
 
         private void Playlist_SingleFile_Play(DataManagement.FileData file)
         {
-            triggerMasterReplay(new DataManagement.BotData(file.Name, file.Path), false);
+            triggerMasterReplay(new DataManagement.BotData(file.Name, file.Path, "",file.Author), false);
         }
 
         private void Stream_Video_Play(DataManagement.BotData data)
@@ -890,17 +890,13 @@ namespace DiscordBot
         }
 
 
-        [Obsolete("Use self implemented queue, as private queue of bot is hard to control")]
-        private async void triggerQueueReplay(DataManagement.BotData data, bool disableHistory = false)
-        {
-            await triggerBotQueueReplay(data, disableHistory);
-        }
-
+       
 
         private async Task triggerBotInstantReplay(DataManagement.BotData data, bool disableHistory)
         {
             //place song in front of queue
-            await Handle.Bot.enqueuePriorityAsync(data);
+            await Handle.Bot.loadFileAsync(data);
+
             if (!disableHistory)
                 addTitleToHistory(data);
             //start or skip current track
@@ -909,18 +905,7 @@ namespace DiscordBot
             else
                 Handle.Bot.skipTrack();
         }
-
-        [Obsolete("Use self implemented queue, as private queue of hard to control")]
-        private async Task triggerBotQueueReplay(DataManagement.BotData data, bool disableHistory)
-        {
-            await Handle.Bot.enqueueAsync(data);
-
-            if (!disableHistory)
-                addTitleToHistory(data);
-            //only resume, if not streaming + not in pause mode
-            if (!Handle.Bot.IsStreaming)
-                await Handle.Bot.resumeStream();
-        }
+    
 
         #endregion BotPlayDelegates
 
