@@ -73,8 +73,12 @@ namespace DiscordBot.UI
 
             if (openFileDialog.ShowDialog() == true && openFileDialog.CheckFileExists)
             {
+                var info = Util.IO.FileWatcher.getAllFileInfo(openFileDialog.FileName);
+
+
                 Handle.Data.Persistent.BtnList[index].Name = evaluateName(openFileDialog.FileName);
                 Handle.Data.Persistent.BtnList[index].File = openFileDialog.FileName;
+                Handle.Data.Persistent.BtnList[index].Author = info.Author;
             }
         }
 

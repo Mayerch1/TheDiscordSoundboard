@@ -434,6 +434,32 @@ namespace DiscordBot.UI
                 }
             }
         }
+
+        private void slider_BtnHeight_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            //TODO prevent stack overflow
+            //incr.button width (fixed ratio)
+            //if (Handle.Data.Persistent.IsFixedBtnRatio)
+            //{
+            //    var ratio = Handle.Data.Persistent.BtnWidth / Handle.Data.Persistent.BtnHeight;
+            //    var diff = e.NewValue - e.OldValue;
+                
+            //    slider_BtnWidth.Value += diff*ratio;
+            //}
+        }
+
+        private void slider_BtnWidth_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            //incr button height (fixed ratio)
+            //if (Handle.Data.Persistent.IsFixedBtnRatio)
+            //{
+            //    var ratio = Handle.Data.Persistent.BtnHeight / Handle.Data.Persistent.BtnWidth;
+            //    var diff = e.NewValue - e.OldValue;
+
+            //    slider_BtnHeight.Value += diff * ratio;
+            //}
+        }
+
     }
 
 #pragma warning restore CS1591

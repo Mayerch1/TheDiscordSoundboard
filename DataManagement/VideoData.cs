@@ -29,13 +29,15 @@ namespace DataManagement
         /// <param name="imageUrl">url to thumbnail</param>
         /// <param name="duration">duration of the video</param>
         /// <param name="description">video description</param>
-        public VideoData(string url, string title, string imageUrl, string duration = "", string description="")
+        /// <param name="author">Author or Uploader of Video</param>
+        public VideoData(string url, string title, string author, string imageUrl, string duration = "", string description="")
         {
             Title = title;
             Url = url;
             ImageUrl = imageUrl;
             Duration = duration;
             Description = description;
+            Author = author;
         }
 
         /// <summary>
@@ -49,6 +51,7 @@ namespace DataManagement
             ImageUrl = info.Thumbnail;
             Duration = info.Duration;
             Description = info.Description;
+            Author = info.Author;
 
         }
 
@@ -56,7 +59,8 @@ namespace DataManagement
         private string _url = "";
         private string _imageUrl = "";
         private string _description = "";
-        private string _duration;
+        private string _duration = "0:00";
+        private string _author = "";
 
          /// <summary>
          /// Title of video
@@ -106,6 +110,20 @@ namespace DataManagement
             {
                 _duration = value;
                 OnPropertyChanged("Duration");
+            }
+        }
+
+
+        /// <summary>
+        /// Author or uploader of video
+        /// </summary>
+        public string Author
+        {
+            get => _author;
+            set
+            {
+                _author = value;
+                OnPropertyChanged("Author");
             }
         }
 

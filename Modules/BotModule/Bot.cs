@@ -215,13 +215,6 @@ namespace BotModule
         private DiscordSocketClient Client { get; set; }
         private IAudioClient AudioCl { get; set; }
 
-        /// <summary>
-        /// queue of files which are going to be played
-        /// </summary>
-        /// <remarks>
-        /// Contains data representation of Buttons, to also store settings like a custom loop-state
-        /// </remarks>
-        private List<DataManagement.BotData> Queue { get; set; }
 
         private MediaFoundationReader Reader { get; set; }
         private MediaFoundationResampler ActiveResampler { get; set; }
@@ -239,7 +232,6 @@ namespace BotModule
         /// </summary>
         public Bot()
         {
-            Queue = new List<BotData>();
             IsStreaming = false;
             IsChannelConnected = false;
             IsServerConnected = false;
@@ -252,33 +244,13 @@ namespace BotModule
         /// enqueues a btn into the queue, if queue is empy directly gather stream
         /// </summary>
         /// <param name="data"></param>
-        protected void enqueueAsync(BotData data)
+        protected void loadFile(BotData data)
         {
-            if (!IsStreaming && IsBufferEmpty)
-            {
-                getStream(data);
-            }
-            else
-            {
-                Queue.Add(data);
-            }
-        }
+            //TODO consider awaiting the stopped stream
+            if (IsStreaming)
+                stopStreamAsync();
 
-        /// <summary>
-        /// enqueues a btn at the first position of the queue
-        /// </summary>
-        /// <param name="data"></param>
-        protected void enqueuePriorityAsync(BotData data)
-        {
-            if (!IsStreaming)
-            {
-                getStream(data);
-            }
-            else
-            {
-                //insert on first position
-                Queue.Insert(0, data);
-            }
+            getStream(data);
         }
 
         /// <summary>
@@ -381,13 +353,13 @@ namespace BotModule
         {
             //see if file or uri was provided
             if (!String.IsNullOrWhiteSpace(data.uri))
-            {               
-                Reader = new MediaFoundationReader(data.uri);                     
+            {
+                Reader = new MediaFoundationReader(data.uri);
             }
             else if (File.Exists(data.filePath))
             {
                 Reader = new MediaFoundationReader(data.filePath);
-                
+
                 //set seekable
                 CanSeek = true;
             }
@@ -395,7 +367,7 @@ namespace BotModule
                 return;
 
             CanSeek = Reader.CanSeek;
-            
+
             OutFormat = new WaveFormat(sampleRate, bitDepth, channelCount);
 
 
@@ -498,24 +470,6 @@ namespace BotModule
                     skipToTime(TimeSpan.Zero, true);
                     await startStreamAsync(stream);
                 }
-                //next file in queue
-                else if (Queue.Count > 0 && !IsToAbort)
-                {
-                    //skip one less
-                    if (SkipTracks > 0)
-                        --SkipTracks;
-
-                    //reset for next song
-                    if (IsLoop)
-                        LoopStateChanged(false);
-
-                    //queue must contain at least one item
-                    var nextTitle = Queue[0];
-                    Queue.RemoveAt(0);
-                    getStream(nextTitle);
-
-                    await startStreamAsync(stream);
-                }
                 //exit stream
                 else
                 {
@@ -571,14 +525,13 @@ namespace BotModule
                 ActiveResampler = NormalResampler;
                 for (int i = 0; i < buffer.Length; i += 2)
                 {
-                    //convert a byte-Pair into one char (with 2 bytes)
+                    //convert a byte-Pair into one word
 
                     short bytePair = (short) ((buffer[i + 1] & 0xFF) << 8 | (buffer[i] & 0xFF));
 
                     //float floatPair = bytePair * Volume;
 
                     var customVol = Volume;
-                    var overOne = Volume - 1;
 
                     bytePair = (short) (bytePair * customVol);
 
@@ -606,7 +559,7 @@ namespace BotModule
             Client = new DiscordSocketClient();
 
             await Client.LoginAsync(TokenType.Bot, token);
-            
+
 
             await Client.StartAsync();
 
@@ -629,7 +582,7 @@ namespace BotModule
                     "Not connected to the servers, while trying to connect to a channel",
                     BotException.connectionError.NoServer);
             }
-           
+
             AudioCl = await ((ISocketAudioChannel) Client.GetChannel(channelId)).ConnectAsync(true);
 
             IsChannelConnected = true;
@@ -670,7 +623,7 @@ namespace BotModule
 
             //wait until last packet is played
             while (IsChannelConnected)
-                await Task.Delay(10);
+                await Task.Delay(5);
 
             await Client.StopAsync();
             await Client.LogoutAsync();
@@ -691,7 +644,7 @@ namespace BotModule
 
             //wait until last package is played
             while (IsStreaming)
-                await Task.Delay(10);
+                await Task.Delay(5);
 
             //make shure to not block future streams
             IsToAbort = false;
