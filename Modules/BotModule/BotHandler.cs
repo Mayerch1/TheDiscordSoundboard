@@ -63,14 +63,14 @@ namespace BotModule
         /// <remarks>
         /// auto connects to Server, calls base
         /// </remarks>
-        public async Task loadFileAsync(BotData data)
+        public new async Task loadFileAsync(BotData data)
         {
             if (!await connectToServerAsync())
                 return;
 
             try
             {          
-                 base.loadFile(data);
+                 await base.loadFileAsync(data);
             }
             catch (Exception ex)
             {

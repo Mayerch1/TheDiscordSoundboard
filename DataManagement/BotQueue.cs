@@ -62,6 +62,7 @@ namespace DataManagement
         /// <summary>
         /// Gets the next item in the queue
         /// </summary>
+        /// <param name="isLoop">If LoopAll AND End of List -> returns index 0 of list</param>
         /// <returns>null if no item is queued</returns>
         public QueueItem? getNextItem(bool isLoop = false)
         {

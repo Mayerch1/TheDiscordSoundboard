@@ -40,7 +40,6 @@ namespace Util.IO
                 return lyricResult.Lyric;
             }
             return "";
-        }
-
+        }     
     }
 }
