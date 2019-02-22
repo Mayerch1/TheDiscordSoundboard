@@ -34,7 +34,6 @@ namespace DataManagement
         private History history = new History();
         private VideoHistory videoHistory = new VideoHistory();
         private ModuleManager moduleStates = new ModuleManager();
-        private bool isPlaylistPlaying = false;
         private float pitch = 1.0f;
 
         #endregion fields
@@ -108,11 +107,7 @@ namespace DataManagement
             }
         }
 
-        /// <summary>
-        /// IsPlaylistPlaying property
-        /// </summary>
-        public bool IsPlaylistPlaying { get => isPlaylistPlaying;
-            set { isPlaylistPlaying = value; OnPropertyChanged("IsPlaylistPlaying"); } }
+      
 
         #endregion properties
 

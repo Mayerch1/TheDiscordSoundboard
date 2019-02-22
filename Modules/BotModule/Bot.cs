@@ -36,6 +36,17 @@ namespace BotModule
         #region event Handlers
 
         /// <summary>
+        /// EndOfFileHandler delegate
+        /// </summary>
+        public delegate void EndOfFileHandler();
+
+        /// <summary>
+        /// EndOfFile field
+        /// </summary>
+        public EndOfFileHandler EndOfFile;
+
+
+        /// <summary>
         /// StreamStateHandler delegate
         /// </summary>
         /// <param name="newState">new Streaming state</param>
@@ -175,6 +186,7 @@ namespace BotModule
         /// </summary>
         public bool IsBufferEmpty { get; private set; }
 
+
         /// <summary>
         /// IsLoop property
         /// </summary>
@@ -244,11 +256,11 @@ namespace BotModule
         /// enqueues a btn into the queue, if queue is empy directly gather stream
         /// </summary>
         /// <param name="data"></param>
-        protected void loadFile(BotData data)
+        protected async Task loadFileAsync(BotData data)
         {
-            //TODO consider awaiting the stopped stream
+            //TODO consider not awaiting the stopped stream
             if (IsStreaming)
-                stopStreamAsync();
+                await stopStreamAsync();
 
             getStream(data);
         }
@@ -440,7 +452,6 @@ namespace BotModule
                 IsStreaming = true;
                 IsPause = false;
 
-
                 //repeat, read new block into buffer -> stream buffer
                 while ((byteCount = ActiveResampler.Read(buffer, 0, blockSize)) > 0)
                 {
@@ -479,8 +490,13 @@ namespace BotModule
                     //wait until last packages are played
                     await stream.FlushAsync();
 
+
                     stream.Close();
                     IsToAbort = false;
+
+                    //trigger end of file delegate, needed e.g. for playlist processing
+                    if (!IsPause)
+                        EndOfFile();
                 }
             }
         }
@@ -642,9 +658,13 @@ namespace BotModule
 
             IsToAbort = true;
 
+
             //wait until last package is played
             while (IsStreaming)
                 await Task.Delay(5);
+
+            //TODO flush stream at this point in execution
+
 
             //make shure to not block future streams
             IsToAbort = false;
