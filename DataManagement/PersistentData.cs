@@ -68,10 +68,25 @@ namespace DataManagement
         public const string version = "2.3.0";
 
 
+        /// <summary>
+        /// default value for BtnWidth
+        /// </summary>
         public const double defaultBtnWidth = 171;
+        /// <summary>
+        /// default value for BtnHeight
+        /// </summary>
         public const double defaultBtnHeight = 80;
+        /// <summary>
+        /// default value for MinVisibleButtons
+        /// </summary>
         public const int defaultMinVisBtn = 35;
+        /// <summary>
+        /// default value for MaxHistoryLen
+        /// </summary>
         public const int defaultMaxHistoryLen = 50;
+        /// <summary>
+        /// default value for MaxVideoHistoryLen
+        /// </summary>
         public const int defaultMaxVidHistoryLen = 25;
 
 
@@ -96,8 +111,8 @@ namespace DataManagement
         private bool isFirstStart = true;
         private bool isEulaAccepted = false;
 
-        private double btnWidth = 171;
-        private double btnHeight = 80;
+        private double btnWidth = defaultBtnWidth;
+        private double btnHeight =defaultBtnHeight;
 
         private string settingsPath;
         private int highestButtonToSave = -1;
@@ -107,7 +122,7 @@ namespace DataManagement
         private string clientAvatar;
         private string token = null;
         private int selectedServerIndex = 0;
-        private bool alwaysCacheVideo = true;
+        private bool alwaysCacheVideo = false;
 
 
         private bool isDarkTheme = false;
@@ -115,9 +130,11 @@ namespace DataManagement
         private string secondarySwatch = null;
 
 
-        private int minVisibleButtons = 35;
-        private int maxHistoryLen = 50;
-        private int maxVideoHistoryLen = 25;
+        private int minVisibleButtons = defaultMinVisBtn;
+        private int maxHistoryLen = defaultMaxHistoryLen;
+        private int maxVideoHistoryLen = defaultMaxVidHistoryLen;
+
+        private bool isFixedBtnRatio = false;
 
         private float volume = 0.5f;
         private int volumeCap = 30;
@@ -150,8 +167,8 @@ namespace DataManagement
             set
             {
                 btnWidth= value;
-                ButtonData.Width = value;
                 OnPropertyChanged("BtnWidth");
+                ButtonData.Width = value;           
             }
         }
 
@@ -164,8 +181,8 @@ namespace DataManagement
             set
             {
                 btnHeight = value;
-                ButtonData.Height = value;
                 OnPropertyChanged("BtnHeight");
+                ButtonData.Height = value;              
             }
         }   
         
@@ -426,6 +443,19 @@ namespace DataManagement
             {
                 maxVideoHistoryLen = value;
                 OnPropertyChanged("MaxVideoHistoryLen");
+            }
+        }
+
+        /// <summary>
+        /// Locks the width:height ratio of instant buttons
+        /// </summary>
+        public bool IsFixedBtnRatio
+        {
+            get => isFixedBtnRatio;
+            set
+            {
+                isFixedBtnRatio = value;
+                OnPropertyChanged("IsFixedBtnRatio");
             }
         }
 

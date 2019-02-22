@@ -9,6 +9,7 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Web;
 using NYoutubeDL;
+using NYoutubeDL.Models;
 using Util.IO;
 using VideoLibrary;
 using YoutubeSearch;
@@ -23,10 +24,6 @@ namespace StreamModule
         private const string imageUrl = "https://img.youtube.com/vi/";
 
         private const string thumbnailQuality = "/sddefault.jpg";
-
-        private static YoutubeDL ytDl = new YoutubeDL();
-        private static string nextLocation = "";
-
 
         /// <summary>
         /// deletes all cached videos
@@ -64,7 +61,7 @@ namespace StreamModule
         /// <returns>null if no url was entered</returns>
         public static string getIdFromUrl(string url)
         {
-            if (url.Contains("https://") || url.Contains("http://"))
+            if ((url.Contains("youtube") || url.Contains("youtu.be")) && url.Contains("https://") || url.Contains("http://"))
             {
                 const string delimiter = "watch?v=";
                 const string shortDelimiter = ".be/";
@@ -115,6 +112,24 @@ namespace StreamModule
                 : HttpUtility.ParseQueryString(iqs < args.Length - 1
                     ? args.Substring(iqs + 1)
                     : string.Empty)[key];
-        }       
+        }
+
+
+        /// <summary>
+        /// Gets general information about non-YT video
+        /// </summary>
+        /// <param name="url">url to video</param>
+        /// <returns>Title, Thumbnail-Uri, duration</returns>
+        public static async Task<DownloadInfo> GetGeneralInfoAsync(string url)
+        {
+            NYoutubeDL.YoutubeDL dl = new YoutubeDL();
+            dl.VideoUrl = url;
+
+            dl.RetrieveAllInfo = true;
+            await dl.PrepareDownloadAsync();
+            
+            return dl.Info;
+        }
+
     }
 }

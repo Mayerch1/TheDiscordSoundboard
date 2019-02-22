@@ -34,10 +34,12 @@ namespace DataManagement
         /// </summary>
         /// <param name="_name">name of file</param>
         /// <param name="_file">path to file</param>
-        public ButtonData(string _name, string _file)
+        /// <param name="_author">author of file</param>
+        public ButtonData(string _name, string _file, string _author="")
         {
             Name = _name;
             File = _file;
+            Author = _author;
         }
 
         #endregion constructors
@@ -45,6 +47,7 @@ namespace DataManagement
         #region saved fields
         private string name = null;
         private string file = null;
+        private string author = null;
         private bool isEarrape = false;
         private bool isLoop = false;
         private int iD;
@@ -57,9 +60,15 @@ namespace DataManagement
 
         //no OnPropertyChanged,
         //as change of value is only possible when not loaded (in settings)
+        /// <summary>
+        /// Width of a single Button
+        /// </summary>
         [XmlIgnore]
         public static double Width { get; set; }
 
+        /// <summary>
+        /// Height of a single Button
+        /// </summary>
         [XmlIgnore]
         public static double Height { get; set; }
            
@@ -68,6 +77,20 @@ namespace DataManagement
         /// Name property
         /// </summary>
         public string Name { get { return name; } set { name = value; OnPropertyChanged("Name"); } }
+
+
+        /// <summary>
+        /// Author of file
+        /// </summary>
+        public string Author
+        {
+            get => author;
+            set
+            {
+                author = value;
+                OnPropertyChanged("Author");
+            }
+        }
 
         /// <summary>
         /// File property

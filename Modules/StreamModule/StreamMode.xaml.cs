@@ -11,6 +11,7 @@ using System.Windows.Media.Imaging;
 using VideoLibrary;
 using YoutubeSearch;
 using DataManagement;
+using NYoutubeDL.Models;
 using Util.IO;
 
 namespace StreamModule
@@ -41,6 +42,7 @@ namespace StreamModule
         private string _title = "Video Title";
         private string _imageUri = "";
         private string _duration = "0:00";
+        private string _author = "";
         private RuntimeData _data;
 
 
@@ -116,6 +118,16 @@ namespace StreamModule
             }
         }
 
+        public string Author
+        {
+            get => _author;
+            set
+            {
+                _author = value;
+                OnPropertyChanged("Author");
+            }
+        }
+
 
         public StreamMode(DataManagement.RuntimeData dt)
         {
@@ -153,14 +165,14 @@ namespace StreamModule
         private void StartStream(BotData data)
         {
             PlayVideo(data);
-            Data.VideoHistory.addVideo(new VideoData(Url, Title, ImageUri, Duration),
+            Data.VideoHistory.addVideo(new VideoData(Url, Title, Author,ImageUri, Duration),
                 Data.Persistent.MaxVideoHistoryLen);
         }
 
         private void QueueStream(BotData data)
         {
             QueueVideo(data);
-            Data.VideoHistory.addVideo(new VideoData(Url, Title, ImageUri, Duration),
+            Data.VideoHistory.addVideo(new VideoData(Url, Title, Author,ImageUri, Duration),
                 Data.Persistent.MaxVideoHistoryLen);
         }
 
@@ -184,6 +196,7 @@ namespace StreamModule
                             ImageUri = videoInfo.Thumbnail;
                             Title = videoInfo.Title;
                             Duration = videoInfo.Duration;
+                            Author = videoInfo.Author;
                         }
                     }
                     catch
@@ -197,12 +210,22 @@ namespace StreamModule
                 }
                 else
                 {
-                    //TODO get proper title
-                    var domain = url.Substring(url.IndexOf('/') + 2);
-                    var path = domain.Substring(domain.IndexOf('/')+1);
+                    var info = await YTManager.GetGeneralInfoAsync(url);
 
-                    Title = path;
-                    ImageUri = "/res/thumbnail_default.png";             
+                    Title = info.Title;
+
+                    if (info is VideoDownloadInfo vInfo)
+                    {
+                        ImageUri = vInfo.Thumbnail;
+                        Author = vInfo.Uploader;
+
+                        if (vInfo.Duration.HasValue && vInfo.Duration.Value < TimeSpan.MaxValue.TotalSeconds)
+                        {
+                            TimeSpan t = TimeSpan.FromSeconds(vInfo.Duration.Value);
+                            Duration = t.ToString(@"mm\:ss");
+                        }
+
+                    }
                 }         
             }
         }
@@ -265,14 +288,18 @@ namespace StreamModule
 
             card_downProgress.Visibility = Visibility.Collapsed;
 
+            if (!String.IsNullOrWhiteSpace(result.location) || !String.IsNullOrWhiteSpace(result.uri))
+            {
+                BotData data = new BotData(Title, result.location, result.uri, Author);
 
-            BotData data = new BotData(Title, result.location, result.uri);
 
-
-            if (IsQueue)
-                QueueStream(data);
+                if (IsQueue)
+                    QueueStream(data);
+                else
+                    StartStream(data);
+            }
             else
-                StartStream(data);
+                SnackbarManager.SnackbarMessage("Source not supported");
         }
 
         #region events

@@ -76,6 +76,7 @@
     <Compile Include="PersistentData.cs" />
     <Compile Include="Playlist.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="BotQueue.cs" />
     <Compile Include="RuntimeData.cs" />
     <Compile Include="VideoData.cs" />
     <Compile Include="VideoHistory.cs" />

@@ -210,7 +210,6 @@
     <Compile Include="UI\DelayedSlider.cs" />
     <Compile Include="Misc\BotMisc.cs" />
     <Compile Include="Misc\ChannelListManager.cs" />
-    <Compile Include="Misc\PlaylistManager.cs" />
     <Compile Include="OSInterop.cs" />
     <Compile Include="UI\About.xaml.cs">
       <DependentUpon>About.xaml</DependentUpon>
@@ -219,6 +218,9 @@
       <DependentUpon>ButtonHotkeyPopup.xaml</DependentUpon>
     </Compile>
     <Compile Include="IO\HotkeyManager.cs" />
+    <Compile Include="UI\LyricsSheet.xaml.cs">
+      <DependentUpon>LyricsSheet.xaml</DependentUpon>
+    </Compile>
     <Compile Include="UI\Settings.xaml.cs">
       <DependentUpon>Settings.xaml</DependentUpon>
     </Compile>
@@ -283,6 +285,10 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="UI\LyricsSheet.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="UI\Settings.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

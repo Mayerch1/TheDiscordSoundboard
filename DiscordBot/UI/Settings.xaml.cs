@@ -22,6 +22,8 @@ namespace DiscordBot.UI
     /// </summary>
     public partial class Settings : UserControl, INotifyPropertyChanged
     {
+        private bool _sliderMutex = false;
+
         public delegate void RefreshModulesHandle();
 
         public RefreshModulesHandle RefreshModules;
@@ -60,6 +62,7 @@ namespace DiscordBot.UI
         /// </summary>
         public Settings()
         {
+
             //get primary/secondary colors and sort both by sRGB values
             PrimarySwatches =
                 new ObservableCollection<Swatch>(
@@ -69,8 +72,10 @@ namespace DiscordBot.UI
                     (new SwatchesProvider().Swatches).Where(x => x.AccentExemplarHue != null)
                     .OrderBy(cS => cS.AccentExemplarHue.Color.ToString()));
 
-
+            _sliderMutex = true;
             InitializeComponent();
+            _sliderMutex = false;
+
             this.DataContext = Handle.Data.Persistent;
 
             updateStartupCombo();
@@ -378,27 +383,105 @@ namespace DiscordBot.UI
         private void slider_MinVisBtn_Reset(object sender, MouseButtonEventArgs e)
         {
             Handle.Data.Persistent.MinVisibleButtons = DataManagement.PersistentData.defaultMinVisBtn;
+            if (sender is TextBlock box && box.Parent is StackPanel panel)
+            {
+                if (panel.Children.Count >= 2 && panel.Children[1] is Slider sl)
+                {
+                    sl.Value = Handle.Data.Persistent.MinVisibleButtons;
+                }
+            }
         }
 
         private void slider_BtnHeight_Reset(object sender, MouseButtonEventArgs e)
         {
             Handle.Data.Persistent.BtnHeight = DataManagement.PersistentData.defaultBtnHeight;
+            if (sender is TextBlock box && box.Parent is StackPanel panel)
+            {
+                if (panel.Children.Count >= 2 && panel.Children[1] is Slider sl)
+                {
+                    sl.Value = Handle.Data.Persistent.BtnHeight;
+                }
+            }
         }
 
         private void slider_BtnWidth_Reset(object sender, MouseButtonEventArgs e)
         {
             Handle.Data.Persistent.BtnWidth = DataManagement.PersistentData.defaultBtnWidth;
+            if (sender is TextBlock box && box.Parent is StackPanel panel)
+            {
+                if (panel.Children.Count >= 2 && panel.Children[1] is Slider sl)
+                {
+                    sl.Value = Handle.Data.Persistent.BtnWidth;
+                }
+            }
         }
 
         private void slider_VidHistoryLen_Reset(object sender, MouseButtonEventArgs e)
         {
             Handle.Data.Persistent.MaxVideoHistoryLen = DataManagement.PersistentData.defaultMaxVidHistoryLen;
+            if (sender is TextBlock box && box.Parent is StackPanel panel)
+            {
+                if (panel.Children.Count >= 2 && panel.Children[1] is Slider sl)
+                {
+                    sl.Value = Handle.Data.Persistent.MaxVideoHistoryLen;
+                }
+            }
         }
 
         private void slider_HistoryLen_Reset(object sender, MouseButtonEventArgs e)
         {
             Handle.Data.Persistent.MaxHistoryLen = DataManagement.PersistentData.defaultMaxHistoryLen;
+            if (sender is TextBlock box && box.Parent is StackPanel panel)
+            {
+                if (panel.Children.Count >= 2 && panel.Children[1] is Slider sl)
+                {
+                    sl.Value = Handle.Data.Persistent.MaxHistoryLen;
+                }
+            }
         }
+
+        private void slider_BtnHeight_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            if (!_sliderMutex)
+            {
+                _sliderMutex = true;
+
+
+                //incr.button width (fixed ratio)
+                if (Handle.Data.Persistent.IsFixedBtnRatio)
+                {
+                    var ratio = Handle.Data.Persistent.BtnWidth / Handle.Data.Persistent.BtnHeight;
+                    var diff = e.NewValue - e.OldValue;
+
+                    slider_BtnWidth.Value += Math.Round(diff * ratio, 0);
+                    Console.WriteLine(diff + "/" + Math.Round(diff * ratio, 0));
+                }
+                _sliderMutex = false;
+            }
+        }
+
+        private void slider_BtnWidth_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            if (!_sliderMutex)
+            {
+                _sliderMutex = true;
+
+      
+
+                //incr button height (fixed ratio)
+                if (Handle.Data.Persistent.IsFixedBtnRatio)
+                {
+                    var ratio = Handle.Data.Persistent.BtnHeight / Handle.Data.Persistent.BtnWidth;
+                    var diff = e.NewValue - e.OldValue;
+
+                    slider_BtnHeight.Value += Math.Round(diff * ratio, 0);
+                    Console.WriteLine(diff + "/" + Math.Round(diff*ratio, 0));
+                }
+                _sliderMutex = false;
+            }
+            
+        }
+
     }
 
 #pragma warning restore CS1591

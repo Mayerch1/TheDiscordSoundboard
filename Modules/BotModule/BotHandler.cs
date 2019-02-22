@@ -24,9 +24,7 @@ namespace BotModule
         public BotHandle()
         {
         }
-
-   
-
+        
         #region properties
 
         /// <summary>
@@ -59,49 +57,27 @@ namespace BotModule
         #region controll stuff
 
         /// <summary>
-        /// enques a Button into the list, only the file property is relevant. Loop and Boost are optional
+        /// load stream of file, Will interrupt current streams
         /// </summary>
         /// <param name="data">BotData object which should be streamed</param>
-        /// <returns>Task</returns>
         /// <remarks>
-        /// auto connects to Server, calls enqueAsync(BotData) of base
+        /// auto connects to Server, calls base
         /// </remarks>
-        public new async Task enqueueAsync(BotData data)
-        {
-            await enqueueRegardingPriorityAsync(data, false);
-        }
-
-        /// <summary>
-        /// enques a Button infront of the lsit, only the file property is relevant. Loop and Boost are optional
-        /// </summary>
-        /// <param name="data">BotData object which should be streamed</param>
-        /// <returns>Task</returns>
-        /// <remarks>
-        /// auto connects to Server, calls enqueAsync(BotData) of base
-        /// </remarks>
-        public new async Task enqueuePriorityAsync(BotData data)
-        {
-            await enqueueRegardingPriorityAsync(data, true);
-        }
-
-        private async Task enqueueRegardingPriorityAsync(BotData data, bool isPriority)
+        public new async Task loadFileAsync(BotData data)
         {
             if (!await connectToServerAsync())
                 return;
 
             try
-            {
-                if (isPriority)
-                    base.enqueuePriorityAsync(data);
-                else
-                    base.enqueueAsync(data);
+            {          
+                 await base.loadFileAsync(data);
             }
             catch (Exception ex)
             {
                 await disconnectFromChannelAsync();
                 handleReplayException(ex, "Trying to add a new file to the queue. (Button Nr: " + data.id + ", Name: \"" + data.name + "\").", data.id);
             }
-        }
+        }     
 
         /// <summary>
         /// resumes or starts the stream

@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
+using System.Security.Cryptography;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -45,6 +46,7 @@ namespace DiscordBot
         #region fields
 
         private bool isEarrape = false;
+        private static bool _queueMutex = false;
 
 
         private LoopState loopStatus = LoopState.LoopNone;
@@ -75,8 +77,6 @@ namespace DiscordBot
                 OnPropertyChanged("CurrentSongName");
             }
         }
-
-
 
 
         private double LastVolume { get; set; }
@@ -175,6 +175,7 @@ namespace DiscordBot
                 Util.IO.LogManager.LogException(ex, "DiscordBot/Main", "Could not load settings location", true);
             }
 
+
             //test comment
             //need this, so other tasks will wait
             Handle.Data.loadAll();
@@ -184,6 +185,8 @@ namespace DiscordBot
 
 
             InitializeComponent();
+
+           
 
             //--------
             //self assign theme values
@@ -214,7 +217,7 @@ namespace DiscordBot
 
             if (btn_Repeat.Content is PackIcon ic)
                 ic.Kind = PackIconKind.RepeatOff;
-            
+
             LivePitch = Handle.Pitch;
 
 
@@ -247,6 +250,8 @@ namespace DiscordBot
             }
 
             FileWatcher.indexFiles(Handle.Data.Persistent.MediaSources);
+
+           
         }
 
         private void MainWindow_Closing(object sender, CancelEventArgs e)
@@ -293,7 +298,6 @@ namespace DiscordBot
 
 
             //this will prevent the StreamState-changed handler from queueing the next song, when trying to disconnect
-            Handle.Data.IsPlaylistPlaying = false;
             await Handle.Bot.disconnectFromServerAsync();
         }
 
@@ -521,7 +525,7 @@ namespace DiscordBot
         {
             //delay this method by 2,5 seconds
             await Task.Delay(2500);
-
+            
             //search for updates on github/releases
             var git = new GithubVersionChecker.GithubUpdateChecker(DataManagement.PersistentData.gitAuthor,
                 DataManagement.PersistentData.gitRepo);
@@ -530,7 +534,7 @@ namespace DiscordBot
                 SnackbarManager.SnackbarMessage("A newer version is available", SnackbarManager.SnackbarAction.Update);
             }
 
-            
+
             Handle.ClientName_Changed(Handle.ClientName);
 
             //resolve user to get avatar-url
@@ -628,8 +632,6 @@ namespace DiscordBot
 
             if (btn_Repeat.Content is PackIcon ic)
             {
-
-
                 //set icon, based on loopstate
                 if (nextState == LoopState.LoopAll)
                     ic.Kind = PackIconKind.Repeat;
@@ -686,6 +688,9 @@ namespace DiscordBot
 
             //event Handler for Stream-state of bot
             Handle.Bot.StreamStateChanged += bot_streamState_Changed;
+
+            //event Handler when bot finished current file
+            Handle.Bot.EndOfFile += bot_EndOfFile_Trigger;
 
             //earrape event
             Handle.Bot.EarrapeStateChanged += delegate(bool isEarrape) { earrapeStatusChanged(isEarrape); };
@@ -784,27 +789,35 @@ namespace DiscordBot
 
         #region BotPlayDelegates
 
-        private void triggerMasterReplay(BotData data, bool isInstant, bool disableHistory = false,
+        private void triggerMasterReplay(BotData data, bool isInstant, bool isPlaylist, bool disableHistory = false, 
             bool isDiscord = true)
         {
-            if (!isDiscord)
-                return;
 
             if (isInstant)
             {
+                //only if not playlist
+                if(!isPlaylist)
+                //instant play aborts the playlist
+                    Handle.Data.Queue.clearPlaylist();
+
+                //prepare lyrics w/o stressing the api
+                Util.IO.LyricsManager.setParameter(data.name, data.author);           
+                         
                 //interrupt any stream
                 triggerInstantReplay(data, disableHistory);
             }
             else
             {
-                triggerQueueReplay(data, disableHistory);
+                Handle.Data.Queue.enqueue(data, disableHistory);
             }
         }
 
 
         private void btn_InstantButton_Clicked(int btnListIndex, bool isInstant)
         {
-            triggerMasterReplay(new DataManagement.BotData(Handle.Data.Persistent.BtnList[btnListIndex]), isInstant);
+            //TODO check ALL triggerMasterReplay for correct order of args
+            //especially isPlaylist argument
+            triggerMasterReplay(new DataManagement.BotData(Handle.Data.Persistent.BtnList[btnListIndex]), isInstant, false);
         }
 
         private void List_Item_Play(uint index, bool isPriority = true)
@@ -815,25 +828,27 @@ namespace DiscordBot
                 if (file.Id == index)
                 {
                     //create ButtonData to feed to bot
-                    DataManagement.BotData data = new DataManagement.BotData(file.Name, file.Path);
-                    triggerMasterReplay(data, isPriority);
+                    DataManagement.BotData data = new DataManagement.BotData(file.Name, file.Path, "", file.Author);
+                    triggerMasterReplay(data, isPriority, false);
                 }
             }
         }
 
         private void Playlist_SingleFile_Play(DataManagement.FileData file)
         {
-            triggerMasterReplay(new DataManagement.BotData(file.Name, file.Path), false);
+          
+            triggerMasterReplay(new DataManagement.BotData(file.Name, file.Path, "", file.Author), false, false);
         }
 
         private void Stream_Video_Play(DataManagement.BotData data)
         {
-            triggerMasterReplay(data, true, true);
+            triggerMasterReplay(data, true, false, true);
         }
 
         private void Stream_Video_Queue(DataManagement.BotData data)
         {
-            triggerMasterReplay(data, false, true);
+            //queue play will NOT abort playlist
+            triggerMasterReplay(data, false, false, true);
         }
 
         private void Stream_Eula_Rejected()
@@ -848,19 +863,40 @@ namespace DiscordBot
         {
             //stop streaming
             if (Handle.Bot.IsStreaming)
-            {
-                Handle.Data.IsPlaylistPlaying = false;
                 await Handle.Bot.stopStreamAsync();
+
+            //delete the current list
+            Handle.Data.Queue.clearPlaylist();
+
+            //add the list or history 
+            Playlist list;
+            bool isHistory = false;
+
+            if (listIndex < 0)
+            {
+                list = Handle.Data.History;
+                isHistory = true;
+            }
+            else
+            {
+                if (listIndex < Handle.Data.Playlists.Count)
+                    list = Handle.Data.Playlists[listIndex];
+                else
+                    return;
             }
 
-            //init playlist Mgr
-            DataManagement.FileData nextFile = Misc.PlaylistManager.InitList(listIndex, (int) fileIndex);
+            Handle.Data.Queue.enqueuePlaylist(list, fileIndex, isHistory);
 
+            //get first file for replay
+            BotQueue.QueueItem? nextFile = Handle.Data.Queue.getNextItem();
 
-            if (nextFile != null)
+            if (nextFile.HasValue)
             {
-                triggerMasterReplay(new DataManagement.BotData(nextFile.Name, nextFile.Path), true);
-                Handle.Data.IsPlaylistPlaying = true;
+                
+
+                BotQueue.QueueItem item = nextFile.Value;
+                //instant enqueue for first item in list
+                triggerMasterReplay(item.botData, true, true, item.disableHistory);
             }
         }
 
@@ -870,37 +906,44 @@ namespace DiscordBot
             await triggerBotInstantReplay(data, disableHistory);
         }
 
-        private async void triggerQueueReplay(DataManagement.BotData data, bool disableHistory = false)
-        {
-            await triggerBotQueueReplay(data, disableHistory);
-        }
-
 
         private async Task triggerBotInstantReplay(DataManagement.BotData data, bool disableHistory)
         {
             //place song in front of queue
-            await Handle.Bot.enqueuePriorityAsync(data);
+            await Handle.Bot.loadFileAsync(data);
+
             if (!disableHistory)
                 addTitleToHistory(data);
             //start or skip current track
-            if (!Handle.Bot.IsStreaming)
-                await Handle.Bot.resumeStream();
-            else
-                Handle.Bot.skipTrack();
-        }
+            //if (!Handle.Bot.IsStreaming)
+            //TODO test by playing song from list, when other song is currently played
 
-        private async Task triggerBotQueueReplay(DataManagement.BotData data, bool disableHistory)
-        {
-            await Handle.Bot.enqueueAsync(data);
-
-            if (!disableHistory)
-                addTitleToHistory(data);
-            //only resume, if not streaming + not in pause mode
-            if (!Handle.Bot.IsStreaming)
-                await Handle.Bot.resumeStream();
+            await Handle.Bot.resumeStream();
+            //else
+            //  Handle.Bot.skipTrack();
         }
 
         #endregion BotPlayDelegates
+
+        private void btn_LyricShow_Click(object sender, RoutedEventArgs e)
+        {
+            if (LyricGrid.Height == 0)
+            {
+                LyricGrid.Height = Double.NaN;
+                var lyrics = Util.IO.LyricsManager.getLyrics();
+
+                if (lyrics != null)
+                {
+                    LyricsSheet.setTitle(lyrics.LyricSong);
+                    LyricsSheet.setAuth(lyrics.LyricArtist);
+                    LyricsSheet.setLyric(lyrics.Lyric);
+                }
+            }
+            else
+            {
+                LyricGrid.Height = 0;
+            }
+        }
 
         private void addTitleToHistory(DataManagement.BotData title)
         {
@@ -909,7 +952,33 @@ namespace DiscordBot
                     Handle.Data.Persistent.MaxHistoryLen);
         }
 
-        private async void bot_streamState_Changed(bool newState, string songName)
+
+        private void bot_EndOfFile_Trigger()
+        {
+            //only triggered when bot ended file
+            //NOT triggered on pause or loop
+            //if (!_queueMutex)
+            //{
+                //_queueMutex = true;
+                BotQueue.QueueItem? nextItem = Handle.Data.Queue.getNextItem(LoopStatus == LoopState.LoopAll);
+
+                //take next title in playlist
+                if (nextItem.HasValue)
+                {
+                    //bot is not streaming when reaching this point
+                    
+                    //next file
+                    var itemVal = nextItem.Value;
+
+                    //play the next file
+                    triggerMasterReplay(itemVal.botData, true, true, itemVal.disableHistory);
+                }
+                //_queueMutex = false;
+            //}
+        }
+
+
+        private void bot_streamState_Changed(bool newState, string songName)
         {
             //display pause icon, if bot is streaming
             if (newState /* is playing */)
@@ -923,35 +992,6 @@ namespace DiscordBot
             {
                 if (btn_Play.Content is PackIcon ic)
                     ic.Kind = PackIconKind.Play;
-
-
-                //take next title in playlist
-                if (Handle.Data.IsPlaylistPlaying && !Handle.Bot.IsPause)
-                {
-                    //disable playlistmode to prevent multiple skips
-                    Handle.Data.IsPlaylistPlaying = false;
-
-                    if (Handle.Bot.IsStreaming)
-                        await Handle.Bot.stopStreamAsync();
-
-
-                    //set loop-status of playlist
-                    bool isLoop = LoopStatus == LoopState.LoopAll;
-                    Misc.PlaylistManager.SetLoopState(isLoop);
-
-
-                    var nextFile = Misc.PlaylistManager.GetNextTrack();
-
-                    if (nextFile != null)
-                    {
-                        //enqueue next file
-                        triggerMasterReplay(new DataManagement.BotData(nextFile.Name, nextFile.Path), false);
-
-                        Handle.Data.IsPlaylistPlaying = true;
-                    }
-
-                    //playlist stays on off, if null is returned
-                }
             }
         }
 
@@ -962,17 +1002,18 @@ namespace DiscordBot
 
         private void btn_Next_Click(object sender, RoutedEventArgs e)
         {
+            //skip to next track
             Handle.Bot.skipTrack();
         }
 
         private void btn_Previous_Click(object sender, RoutedEventArgs e)
         {
             //skip prev title in playlist, when in playlist-mode and <2s
-            if (Handle.Data.IsPlaylistPlaying && Handle.Bot.CurrentTime.TotalSeconds < 2)
+            if (Handle.Bot.CurrentTime.TotalSeconds < 2)
             {
-                //move to back, than skip one forward, 
-                //this will skip the current track and start at t-1
-                Misc.PlaylistManager.SkipBackwards();
+                //move back
+                Handle.Data.Queue.skipBackTrack(2);
+                //skips one forward, so bot will get the next queued song
                 Handle.Bot.skipTrack();
             }
             else
@@ -1008,15 +1049,15 @@ namespace DiscordBot
 
         private void btn_PitchReset_Click(object sender, RoutedEventArgs e)
         {
-                LivePitch = (float)1.0f;
+            LivePitch = (float) 1.0f;
             Handle.Pitch = (float) 1.0f;
         }
-        
+
         private void Slider_DelayedValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
             //is NewValue is the same as LivePitch
             Handle.Pitch = (float) e.NewValue;
-           
+
             Console.WriteLine(@"Set Pitch to " + Handle.Pitch);
         }
 
@@ -1234,15 +1275,13 @@ namespace DiscordBot
                 btn_Avatar_Click(null, null);
             }
 
-          
-                //only close dialog, if click was outside of the dialog     
+
+            //only close dialog, if click was outside of the dialog     
             if (!dialogHost_OtherControls.IsMouseOver)
             {
                 DialogHost.CloseDialogCommand.Execute(null, null);
                 e.Handled = false;
             }
-
-
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
@@ -1294,9 +1333,8 @@ namespace DiscordBot
         }
 
         #endregion stuff related to dll
+
 #pragma warning restore CS1591
-
-
        
     }
 }
