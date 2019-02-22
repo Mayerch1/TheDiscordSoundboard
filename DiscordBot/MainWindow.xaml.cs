@@ -186,6 +186,8 @@ namespace DiscordBot
 
             InitializeComponent();
 
+           
+
             //--------
             //self assign theme values
             //this will apply themes to the ui, as it triggers delegates/events
@@ -248,6 +250,8 @@ namespace DiscordBot
             }
 
             FileWatcher.indexFiles(Handle.Data.Persistent.MediaSources);
+
+           
         }
 
         private void MainWindow_Closing(object sender, CancelEventArgs e)
@@ -521,7 +525,7 @@ namespace DiscordBot
         {
             //delay this method by 2,5 seconds
             await Task.Delay(2500);
-
+            
             //search for updates on github/releases
             var git = new GithubVersionChecker.GithubUpdateChecker(DataManagement.PersistentData.gitAuthor,
                 DataManagement.PersistentData.gitRepo);
@@ -788,8 +792,6 @@ namespace DiscordBot
         private void triggerMasterReplay(BotData data, bool isInstant, bool isPlaylist, bool disableHistory = false, 
             bool isDiscord = true)
         {
-            if (!isDiscord)
-                return;
 
             if (isInstant)
             {
@@ -798,6 +800,9 @@ namespace DiscordBot
                 //instant play aborts the playlist
                     Handle.Data.Queue.clearPlaylist();
 
+                //prepare lyrics w/o stressing the api
+                Util.IO.LyricsManager.setParameter(data.name, data.author);           
+                         
                 //interrupt any stream
                 triggerInstantReplay(data, disableHistory);
             }
@@ -919,6 +924,26 @@ namespace DiscordBot
         }
 
         #endregion BotPlayDelegates
+
+        private void btn_LyricShow_Click(object sender, RoutedEventArgs e)
+        {
+            if (LyricGrid.Height == 0)
+            {
+                LyricGrid.Height = Double.NaN;
+                var lyrics = Util.IO.LyricsManager.getLyrics();
+
+                if (lyrics != null)
+                {
+                    LyricsSheet.setTitle(lyrics.LyricSong);
+                    LyricsSheet.setAuth(lyrics.LyricArtist);
+                    LyricsSheet.setLyric(lyrics.Lyric);
+                }
+            }
+            else
+            {
+                LyricGrid.Height = 0;
+            }
+        }
 
         private void addTitleToHistory(DataManagement.BotData title)
         {
@@ -1310,5 +1335,6 @@ namespace DiscordBot
         #endregion stuff related to dll
 
 #pragma warning restore CS1591
+       
     }
 }

@@ -25,6 +25,22 @@ namespace DiscordBot.UI
         {
             InitializeComponent();
         }
+
+        public void setLyric(string lyric)
+        {
+            txt_lyric.Text = lyric;
+        }
+
+        public void setAuth(string auth)
+        {
+            txt_Auth.Text = auth;
+
+        }
+
+        public void setTitle(string title)
+        {
+            txt_Title.Text = title;
+        }
     }
 #pragma warning restore CS1591
 }
