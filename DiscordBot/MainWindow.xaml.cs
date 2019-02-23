@@ -815,7 +815,6 @@ namespace DiscordBot
 
         private void btn_InstantButton_Clicked(int btnListIndex, bool isInstant)
         {
-            //TODO check ALL triggerMasterReplay for correct order of args
             //especially isPlaylist argument
             triggerMasterReplay(new DataManagement.BotData(Handle.Data.Persistent.BtnList[btnListIndex]), isInstant, false);
         }
@@ -915,21 +914,23 @@ namespace DiscordBot
             if (!disableHistory)
                 addTitleToHistory(data);
             //start or skip current track
-            //if (!Handle.Bot.IsStreaming)
-            //TODO test by playing song from list, when other song is currently played
 
             await Handle.Bot.resumeStream();
-            //else
-            //  Handle.Bot.skipTrack();
         }
 
         #endregion BotPlayDelegates
 
         private void btn_LyricShow_Click(object sender, RoutedEventArgs e)
         {
-            if (LyricGrid.Height == 0)
+            if (LyricGrid.Visibility == Visibility.Visible)
             {
-                LyricGrid.Height = Double.NaN;
+                LyricGrid.Visibility = Visibility.Hidden;
+            }
+            else
+            {
+                LyricGrid.Visibility = Visibility.Visible;
+
+
                 var lyrics = Util.IO.LyricsManager.getLyrics();
 
                 if (lyrics != null)
@@ -939,10 +940,7 @@ namespace DiscordBot
                     LyricsSheet.setLyric(lyrics.Lyric);
                 }
             }
-            else
-            {
-                LyricGrid.Height = 0;
-            }
+            
         }
 
         private void addTitleToHistory(DataManagement.BotData title)

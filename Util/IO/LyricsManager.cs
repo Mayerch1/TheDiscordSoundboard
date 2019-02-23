@@ -12,7 +12,7 @@ namespace Util.IO
     /// </summary>
     public class LyricsManager
     {
-        private static string _title="", _author="";
+        private static string _title=null, _author=null;
 
 
         /// <summary>

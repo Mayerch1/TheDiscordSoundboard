@@ -258,7 +258,6 @@ namespace BotModule
         /// <param name="data"></param>
         protected async Task loadFileAsync(BotData data)
         {
-            //TODO consider not awaiting the stopped stream
             if (IsStreaming)
                 await stopStreamAsync();
 

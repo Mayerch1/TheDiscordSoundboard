@@ -4,14 +4,21 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:DiscordBot.UI"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800"
              Background="Wheat">
     <Grid>
         <StackPanel Orientation="Vertical">
-            <TextBlock x:Name="txt_Title"/>
-            <TextBlock x:Name="txt_Auth"/>
+            <TextBox x:Name="box_Title"/>
+            <TextBox x:Name="box_Auth"/>
+
+            <Button Click="btn_RefetchLyrics_Click">
+                <materialDesign:PackIcon Kind="Redo"/>
+            </Button>
+
             <TextBlock x:Name="txt_lyric"/>
+
 
         </StackPanel>
     </Grid>

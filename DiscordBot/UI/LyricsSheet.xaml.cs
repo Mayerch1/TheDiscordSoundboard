@@ -26,20 +26,29 @@ namespace DiscordBot.UI
             InitializeComponent();
         }
 
+        public void setTitle(string title)
+        {
+            box_Title.Text = title;
+        }
+
+        public void setAuth(string auth)
+        {
+            box_Auth.Text = auth;
+        }
+
         public void setLyric(string lyric)
         {
             txt_lyric.Text = lyric;
         }
 
-        public void setAuth(string auth)
-        {
-            txt_Auth.Text = auth;
 
-        }
-
-        public void setTitle(string title)
+        private void btn_RefetchLyrics_Click(object sender, RoutedEventArgs e)
         {
-            txt_Title.Text = title;
+            var lyric = Util.IO.LyricsManager.getLyrics(box_Title.Text, box_Auth.Text);
+            if (lyric != null)
+            {
+                setLyric(lyric.Lyric);
+            }
         }
     }
 #pragma warning restore CS1591

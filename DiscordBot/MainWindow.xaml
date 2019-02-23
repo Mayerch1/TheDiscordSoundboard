@@ -452,7 +452,7 @@
                         <ui:ButtonUI x:Name="ButtonUI" />
                     </Grid>
 
-                    <Grid x:Name="LyricGrid" Grid.ZIndex="1" Height="0" VerticalAlignment="Bottom">
+                    <Grid x:Name="LyricGrid" Grid.ZIndex="1" Visibility="Hidden" VerticalAlignment="Bottom">
                         <ui:LyricsSheet x:Name="LyricsSheet"/>
                     </Grid>
 
