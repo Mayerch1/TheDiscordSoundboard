@@ -17,6 +17,7 @@ using MaterialDesignThemes.Wpf;
 using StreamModule;
 using PlaylistModule;
 using PlaylistModule.Playlist;
+using Util.com.chartlyrics.api;
 using Util.IO;
 
 namespace DiscordBot
@@ -28,6 +29,9 @@ namespace DiscordBot
     //blub
     public partial class MainWindow : Window, INotifyPropertyChanged
     {
+        //TODO playlist queeu when other playlist is running will skip one track
+
+
 #pragma warning disable CS1591
 
         #region enums
@@ -46,7 +50,6 @@ namespace DiscordBot
         #region fields
 
         private bool isEarrape = false;
-        private static bool _queueMutex = false;
 
 
         private LoopState loopStatus = LoopState.LoopNone;
@@ -656,7 +659,7 @@ namespace DiscordBot
             if (Handle.Bot.IsStreaming)
             {
                 Handle.Bot.IsPause = true;
-                await Handle.Bot.stopStreamAsync();
+                await Handle.Bot.stopStreamAsync(false, false);
             }
             else if (!Handle.Bot.IsBufferEmpty)
             {
@@ -862,7 +865,7 @@ namespace DiscordBot
         {
             //stop streaming
             if (Handle.Bot.IsStreaming)
-                await Handle.Bot.stopStreamAsync();
+                await Handle.Bot.stopStreamAsync(true, false);
 
             //delete the current list
             Handle.Data.Queue.clearPlaylist();
@@ -939,6 +942,13 @@ namespace DiscordBot
                     LyricsSheet.setAuth(lyrics.LyricArtist);
                     LyricsSheet.setLyric(lyrics.Lyric);
                 }
+                else
+                {
+                    LyricsSheet.setTitle(CurrentSongName);
+                    LyricsSheet.setAuth("");
+                    LyricsSheet.setLyric("");
+                }
+         
             }
             
         }

@@ -49,9 +49,17 @@ namespace Util.IO
             if (result.Length > 0 && result[0] != null)
             {
                 //request.GetLyricAsync(result[0].LyricId, result[0].LyricChecksum);
+                try
+                {
+                    var lyr = request.GetLyric(result[0].LyricId, result[0].LyricChecksum);
+                    return lyr;
+                }
+                catch (Exception x)
+                {
+                    return null;
+                }
 
-                return request.GetLyric(result[0].LyricId, result[0].LyricChecksum);    
-                
+
             }
             return null;
         }

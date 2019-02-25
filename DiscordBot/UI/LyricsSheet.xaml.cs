@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
 using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
@@ -48,6 +49,18 @@ namespace DiscordBot.UI
             if (lyric != null)
             {
                 setLyric(lyric.Lyric);
+            }
+        }
+
+
+        private void btn_DirectMode_Toggle(object sender, RoutedEventArgs e)
+        {
+            if (sender is ToggleButton btn)
+            {
+                if (btn.IsChecked == true)
+                    Handle.Bot.IsDirectMode = true;
+                else
+                    Handle.Bot.IsDirectMode = false;
             }
         }
     }

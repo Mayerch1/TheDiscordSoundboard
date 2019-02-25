@@ -89,6 +89,7 @@ namespace BotModule
         private string currentSong = "";
         private float pitch = 1.0f;
         private bool isEarrape = false;
+        private bool isDirectMode = false;
 
         #endregion status fields
 
@@ -182,6 +183,33 @@ namespace BotModule
         }
 
         /// <summary>
+        /// Direct Mode Plays song over local Soundcard.
+        /// No Delay for singing along the song, etc
+        /// </summary>
+        public bool IsDirectMode
+        {
+            private get { return isDirectMode; }
+            set
+            {
+                isDirectMode = value;
+                if (value && waveOut == null)
+                {
+                    //enable waveOut and skip to current time
+                    waveOut = new WaveOutEvent();
+                    LocalReader.CurrentTime = Reader.CurrentTime;
+                    waveOut.Init(LocalReader);
+                    waveOut.Play();
+                }
+                else if (!value)
+                {
+                    waveOut?.Stop();
+                    waveOut = null;
+                }
+
+            }
+        }
+
+        /// <summary>
         /// IsBufferEmpty property
         /// </summary>
         public bool IsBufferEmpty { get; private set; }
@@ -228,14 +256,20 @@ namespace BotModule
         private IAudioClient AudioCl { get; set; }
 
 
+        private MediaFoundationReader LocalReader { get; set; }
+
         private MediaFoundationReader Reader { get; set; }
-        private MediaFoundationResampler ActiveResampler { get; set; }
+        private MediaFoundationResampler ActiveResampler { get; set; }       
 
         private MediaFoundationResampler NormalResampler { get; set; }
         private MediaFoundationResampler SourceResampler { get; set; }
 
         private MediaFoundationResampler BoostResampler { get; set; }
         private WaveFormat OutFormat { get; set; }
+
+        private AudioOutStream OutStream { get; set; } = null;
+
+        private WaveOutEvent waveOut { get; set; } = null;
 
         #endregion other vars
 
@@ -259,7 +293,7 @@ namespace BotModule
         protected async Task loadFileAsync(BotData data)
         {
             if (IsStreaming)
-                await stopStreamAsync();
+                await stopStreamAsync(true, false);
 
             getStream(data);
         }
@@ -287,17 +321,20 @@ namespace BotModule
         {
             if (SourceResampler != null)
             {
+                //delete current resamplers
                 NormalResampler = null;
 
                 var pSampler = new SmbPitchShiftingSampleProvider(SourceResampler.ToSampleProvider());
                 pSampler.PitchFactor = val;
-                NormalResampler = new MediaFoundationResampler(pSampler.ToWaveProvider(), OutFormat);
+
+                NormalResampler = new MediaFoundationResampler(pSampler.ToWaveProvider(), OutFormat); 
             }
         }
 
         private void EarrapeChanged(bool val)
         {
             //will play the boosted version, ignores pitch
+            //local stream will not be boosted
             if (val)
                 ActiveResampler = BoostResampler;
             else
@@ -314,6 +351,7 @@ namespace BotModule
             if ((IsStreaming || enforce) && CanSeek)
             {
                 Reader.CurrentTime = newTime;
+                LocalReader.CurrentTime = newTime;
             }
         }
 
@@ -326,6 +364,7 @@ namespace BotModule
             if (IsStreaming && CanSeek)
             {
                 Reader.CurrentTime = Reader.CurrentTime.Add(skipTime);
+                LocalReader.CurrentTime = Reader.CurrentTime.Add(skipTime);
             }
         }
 
@@ -366,13 +405,12 @@ namespace BotModule
             if (!String.IsNullOrWhiteSpace(data.uri))
             {
                 Reader = new MediaFoundationReader(data.uri);
+                LocalReader = new MediaFoundationReader(data.uri);
             }
             else if (File.Exists(data.filePath))
             {
                 Reader = new MediaFoundationReader(data.filePath);
-
-                //set seekable
-                CanSeek = true;
+                LocalReader = new MediaFoundationReader(data.filePath);
             }
             else
                 return;
@@ -413,12 +451,11 @@ namespace BotModule
         /// <summary>
         /// starts the stream
         /// </summary>
-        /// <param name="stream">if one stream is already opened it goes here to prevent a gap in the audio line</param>
         /// <returns>Task</returns>
         /// <remarks>
         /// calls itself again as long as isLoop is true
         /// </remarks>
-        private async Task startStreamAsync(AudioOutStream stream = null)
+        private async Task startStreamAsync()
         {
             //IsChannelConnected gaurantees, to have IsServerConnected
             if (!IsChannelConnected)
@@ -434,12 +471,13 @@ namespace BotModule
 
             if (!IsStreaming && IsServerConnected && AudioCl != null)
             {
-                if (stream == null)
-                    stream = AudioCl.CreatePCMStream(AudioApplication.Music);
+                if (OutStream == null)
+                    OutStream = AudioCl.CreatePCMStream(AudioApplication.Music);
 
                 if (ActiveResampler == null)
                 {
-                    stream.Close();
+                    OutStream.Close();
+                    OutStream = null;
                     return;
                 }
 
@@ -450,6 +488,15 @@ namespace BotModule
 
                 IsStreaming = true;
                 IsPause = false;
+
+                
+                if (IsDirectMode)
+                {
+                    //TODO test local replay in karaoke mode
+                    waveOut = new WaveOutEvent();
+                    waveOut.Init(LocalReader);
+                    waveOut.Play();
+                }
 
                 //repeat, read new block into buffer -> stream buffer
                 while ((byteCount = ActiveResampler.Read(buffer, 0, blockSize)) > 0)
@@ -467,9 +514,11 @@ namespace BotModule
                         IsBufferEmpty = true;
                     }
 
-                    await stream.WriteAsync(buffer, 0, blockSize);
+                    await OutStream.WriteAsync(buffer, 0, blockSize);
                 }
 
+                waveOut?.Stop();
+                waveOut = null;
 
                 IsStreaming = false;
 
@@ -478,7 +527,7 @@ namespace BotModule
                 {
                     //move head to begin of file
                     skipToTime(TimeSpan.Zero, true);
-                    await startStreamAsync(stream);
+                    await startStreamAsync();
                 }
                 //exit stream
                 else
@@ -487,10 +536,12 @@ namespace BotModule
                     SkipTracks = 0;
 
                     //wait until last packages are played
-                    await stream.FlushAsync();
+                    await OutStream.FlushAsync();
 
 
-                    stream.Close();
+                    OutStream.Close();
+                    OutStream = null;
+
                     IsToAbort = false;
 
                     //trigger end of file delegate, needed e.g. for playlist processing
@@ -611,13 +662,13 @@ namespace BotModule
         /// stop running streams and disconnect from channel
         /// </summary>
         /// <returns>Task</returns>
-        /// <see cref="stopStreamAsync()"/>
+        /// <see cref="stopStreamAsync(bool, bool)"/>
         public async Task disconnectFromChannelAsync()
         {
             if (!IsChannelConnected)
                 return;
 
-            await stopStreamAsync();
+            await stopStreamAsync(false, true);
 
             await AudioCl.StopAsync();
 
@@ -649,23 +700,34 @@ namespace BotModule
         /// <summary>
         /// stop a running stream
         /// </summary>
+        /// <param name="flushStream">flushes the current stream</param>
+        /// <param name="closeStream">closes the current stream</param>
         /// <returns>Task</returns>
-        public async Task stopStreamAsync()
+        public async Task stopStreamAsync(bool flushStream, bool closeStream)
         {
             if (!IsStreaming)
                 return;
 
             IsToAbort = true;
 
-
-            //wait until last package is played
+            //wait until last package is read in
             while (IsStreaming)
                 await Task.Delay(5);
 
-            //TODO flush stream at this point in execution
+            if (OutStream != null)
+            {
+                if (flushStream)
+                    await OutStream.FlushAsync();
+
+                if (closeStream)
+                {
+                    OutStream.Close();
+                    OutStream = null;
+                }
+            }
 
 
-            //make shure to not block future streams
+            //make sure to not block future streams
             IsToAbort = false;
         }
 
@@ -681,7 +743,7 @@ namespace BotModule
         {
             if (!IsServerConnected)
                 throw new BotException(BotException.type.connection,
-                    "Not connectet to the servers, while trying to get channel list",
+                    "Not connected to the servers, while trying to get channel list",
                     BotException.connectionError.NoServer);
 
             List<List<SocketVoiceChannel>> guildList = new List<List<SocketVoiceChannel>>();
@@ -717,7 +779,7 @@ namespace BotModule
         {
             if (!IsServerConnected)
                 throw new BotException(BotException.type.connection,
-                    "Not connectet to the servers, while trying to get clint list",
+                    "Not connected to the servers, while trying to get clint list",
                     BotException.connectionError.NoServer);
 
             List<List<SocketGuildUser>> guildList = new List<List<SocketGuildUser>>();

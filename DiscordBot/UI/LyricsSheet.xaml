@@ -13,9 +13,14 @@
             <TextBox x:Name="box_Title"/>
             <TextBox x:Name="box_Auth"/>
 
+
             <Button Click="btn_RefetchLyrics_Click">
                 <materialDesign:PackIcon Kind="Redo"/>
             </Button>
+
+            <ToggleButton Click="btn_DirectMode_Toggle">
+                <materialDesign:PackIcon Kind="Microphone"/>
+            </ToggleButton>
 
             <TextBlock x:Name="txt_lyric"/>
 
