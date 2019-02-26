@@ -192,8 +192,9 @@ namespace BotModule
             set
             {
                 isDirectMode = value;
-                if (value && waveOut == null)
+                if (value && IsStreaming)
                 {
+                    waveOut?.Stop();
                     //enable waveOut and skip to current time
                     waveOut = new WaveOutEvent();
                     LocalReader.CurrentTime = Reader.CurrentTime;
@@ -326,8 +327,21 @@ namespace BotModule
 
                 var pSampler = new SmbPitchShiftingSampleProvider(SourceResampler.ToSampleProvider());
                 pSampler.PitchFactor = val;
+             
+                NormalResampler = new MediaFoundationResampler(pSampler.ToWaveProvider(), OutFormat);
 
-                NormalResampler = new MediaFoundationResampler(pSampler.ToWaveProvider(), OutFormat); 
+                //TODO test this
+                //adjust local sampler
+                if (IsDirectMode)
+                {
+                    var localSampler = new SmbPitchShiftingSampleProvider(LocalReader.ToSampleProvider());
+                    localSampler.PitchFactor = val;
+
+                    waveOut?.Stop();
+                    waveOut = new WaveOutEvent();
+                    waveOut.Init(localSampler);
+                    waveOut.Play();
+                }
             }
         }
 
@@ -492,8 +506,11 @@ namespace BotModule
                 
                 if (IsDirectMode)
                 {
+                    waveOut?.Stop();
                     //TODO test local replay in karaoke mode
                     waveOut = new WaveOutEvent();
+                    //set localReader to StreamReader
+                    skipOverTime(TimeSpan.Zero);
                     waveOut.Init(LocalReader);
                     waveOut.Play();
                 }
