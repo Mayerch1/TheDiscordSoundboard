@@ -92,6 +92,16 @@ namespace DiscordBot.UI
             Handle.Token = ((TextBox) sender).Text;
         }
 
+        private void box_clientName_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            //TODO: fix this
+            //if (sender is TextBox box)
+            //{
+            //    Handle.ClientName = box.Text;
+            //}
+
+        }
+
         private void btn_Help_Application_Click(object sender, RoutedEventArgs e)
         {
             openHelpPage("Settings#Application");
@@ -158,6 +168,7 @@ namespace DiscordBot.UI
         private void dialogHost_OnDialogClosing(object sender, DialogClosingEventArgs eventArgs)
         {
             //DO NOT REMOVE
+
             //this is needed, to call CloseDialogCommand.Execute(null, null) from code
             Console.WriteLine("SAMPLE 1: Closing dialog with parameter: " + (eventArgs.Parameter ?? ""));
 
@@ -167,17 +178,7 @@ namespace DiscordBot.UI
             if (!Equals(eventArgs.Parameter, true)) return;
         }
 
-
-        private void box_userName_TextChanged(object sender, TextChangedEventArgs e)
-        {
-            //var box = (TextBox)sender;
-
-            ////replace all blancs
-            //box.Text = box.Text.Replace(" ", String.Empty);
-
-            //box.SelectionStart = box.Text.Length;
-            //box.SelectionLength = 0;
-        }
+        
 
         private void btn_addMediaSource_Click(object sender, RoutedEventArgs e)
         {
@@ -482,6 +483,7 @@ namespace DiscordBot.UI
             
         }
 
+       
     }
 
 #pragma warning restore CS1591

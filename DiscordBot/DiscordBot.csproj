@@ -405,6 +405,10 @@
       <Project>{f05a9a53-0213-4334-82e4-36d922c23127}</Project>
       <Name>BotModule</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Modules\DeviceStreamModule\DeviceStreamModule.csproj">
+      <Project>{0e8ad61c-1e62-4d68-a1a5-270e00cf41e3}</Project>
+      <Name>DeviceStreamModule</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Modules\PlaylistModule\PlaylistModule.csproj">
       <Project>{b1ee8812-c82c-4de7-a589-5e1d88e49c20}</Project>
       <Name>PlaylistModule</Name>

@@ -32,6 +32,13 @@ namespace DiscordBot.UI.Tutorial
             box_Username.Text = Handle.Data.Persistent.ClientName;
         }
 
+        public void loadToken(string token = null)
+        {
+            if (token == null)
+                token = Handle.Token;
+            box_Token.Text = token;
+        }
+
         private void btn_Accept(object sender, RoutedEventArgs e)
         {
             Handle.Data.Persistent.ClientName = box_Username.Text;

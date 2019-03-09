@@ -10,6 +10,7 @@ using System.Windows.Input;
 using System.Windows.Media.Animation;
 using System.Windows.Threading;
 using DataManagement;
+using DeviceStreamModule;
 using DiscordBot.UI;
 using DiscordBot.UI.Tutorial;
 using GithubVersionChecker;
@@ -29,7 +30,7 @@ namespace DiscordBot
     //blub
     public partial class MainWindow : Window, INotifyPropertyChanged
     {
-        //TODO playlist queeu when other playlist is running will skip one track
+        //TODO playlist queue when other playlist is running will skip one track
 
 
 #pragma warning disable CS1591
@@ -162,7 +163,7 @@ namespace DiscordBot
         private bool IsChannelListOpened { get; set; } = false;
 
         #endregion propertys
-
+        
         public MainWindow()
         {
             Util.IO.LogManager.InitLog();
@@ -324,7 +325,7 @@ namespace DiscordBot
             // update the version number for the Modules
             // can be any higher integer number than the current
             //-------------------
-            const int version = 0;
+            const int version = 1;
 
             //create entire class and default modules
             if (Handle.Data.ModuleStates == null || Handle.Data.ModuleStates.Version < version)
@@ -352,8 +353,13 @@ namespace DiscordBot
                         new DataManagement.Func[]
                             {new DataManagement.Func(5, "STREAM", PackIconKind.YoutubePlay)}),
 
+                    new Module(4, "Device Module", "DeviceStreamModule.dll",
+                        new DataManagement.Func[]
+                        {
+                            new DataManagement.Func(6, "DEVICE", PackIconKind.Directions),
+                        }),
                     //---------STEP 2/3-------
-                    // add new Modules or new Functions here
+                    // add new Modules or new Functions above
                     // ID should be unique to all functions in all Modules
                     // ModId should be unique to other modules, but can be the same as function id
                     // Not removable module has dll name "" (empty string)
@@ -401,6 +407,9 @@ namespace DiscordBot
                                 break;
                             case 5:
                                 func.Handler = btn_Stream_Click;
+                                break;
+                            case 6:
+                                func.Handler = btn_Device_Click;
                                 break;
                             default:
                                 Util.IO.LogManager.LogException(null, "Main/MainWindow",
@@ -1106,7 +1115,6 @@ namespace DiscordBot
             else
                 SnackbarManager.SnackbarMessage("Module not installed");
         }
-
         private void LoadStreamMode()
         {
             MainGrid.Children.Clear();
@@ -1115,6 +1123,25 @@ namespace DiscordBot
             StreamMode streamUI = new StreamMode(Handle.Data);
             registerStreamEvents(streamUI);
             MainGrid.Children.Add(streamUI);
+        }
+
+        private void btn_Device_Click(object sender, RoutedEventArgs e)
+        {
+            if (File.Exists("DeviceStreamModule.dll"))
+                LoadDeviceMode();
+            else
+                SnackbarManager.SnackbarMessage("Module not installed");
+        }
+
+      
+        private void LoadDeviceMode()
+        {
+            MainGrid.Children.Clear();
+            //UI.StreamMode streamUI = new UI.StreamMode();
+
+            DeviceStreamModule.DeviceMode deviceUi = new DeviceStreamModule.DeviceMode();
+            registerDeviceEvents(deviceUi);
+            MainGrid.Children.Add(deviceUi);
         }
 
 
@@ -1338,6 +1365,11 @@ namespace DiscordBot
             ui.PlayVideo += Stream_Video_Play;
             ui.QueueVideo += Stream_Video_Queue;
             ui.EulaRejected += Stream_Eula_Rejected;
+        }
+
+        private void registerDeviceEvents(DeviceMode ui)
+        {
+
         }
 
         #endregion stuff related to dll
