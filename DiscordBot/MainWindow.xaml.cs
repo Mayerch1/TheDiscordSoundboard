@@ -30,7 +30,6 @@ namespace DiscordBot
     //blub
     public partial class MainWindow : Window, INotifyPropertyChanged
     {
-        //TODO playlist queue when other playlist is running will skip one track
 
 
 #pragma warning disable CS1591
@@ -872,12 +871,12 @@ namespace DiscordBot
         /// <param name="fileIndex">index in the array of all playList files</param>
         private async void Playlist_Play(int listIndex, uint fileIndex)
         {
+            //delete the current list, keep single-item queues
+            Handle.Data.Queue.clearPlaylist();
+
             //stop streaming
             if (Handle.Bot.IsStreaming)
-                await Handle.Bot.stopStreamAsync(true, false);
-
-            //delete the current list
-            Handle.Data.Queue.clearPlaylist();
+                await Handle.Bot.stopStreamAsync(true, false);     
 
             //add the list or history 
             Playlist list;
@@ -896,19 +895,10 @@ namespace DiscordBot
                     return;
             }
 
-            Handle.Data.Queue.enqueuePlaylist(list, fileIndex, isHistory);
+            Handle.Data.Queue.enqueuePlaylist(list, fileIndex, isHistory);          
 
-            //get first file for replay
-            BotQueue.QueueItem? nextFile = Handle.Data.Queue.getNextItem();
-
-            if (nextFile.HasValue)
-            {
-                
-
-                BotQueue.QueueItem item = nextFile.Value;
-                //instant enqueue for first item in list
-                triggerMasterReplay(item.botData, true, true, item.disableHistory);
-            }
+            //get next File from BotQueue
+            bot_EndOfFile_Trigger();         
         }
 
 
@@ -997,13 +987,14 @@ namespace DiscordBot
 
         private void bot_streamState_Changed(bool newState, string songName)
         {
+            CurrentSongName = songName;
             //display pause icon, if bot is streaming
             if (newState /* is playing */)
             {
                 if (btn_Play.Content is PackIcon ic)
                     ic.Kind = PackIconKind.Pause;
                 //test if set properly
-                CurrentSongName = songName;
+                
             }
             else
             {
