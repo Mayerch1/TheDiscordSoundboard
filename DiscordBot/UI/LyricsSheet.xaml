@@ -18,9 +18,7 @@
                 <materialDesign:PackIcon Kind="Redo"/>
             </Button>
 
-            <ToggleButton Click="btn_DirectMode_Toggle">
-                <materialDesign:PackIcon Kind="Microphone"/>
-            </ToggleButton>
+           
 
             <TextBlock x:Name="txt_lyric"/>
 

@@ -54,7 +54,7 @@ namespace Util.IO
                     var lyr = request.GetLyric(result[0].LyricId, result[0].LyricChecksum);
                     return lyr;
                 }
-                catch (Exception x)
+                catch (Exception)
                 {
                     return null;
                 }

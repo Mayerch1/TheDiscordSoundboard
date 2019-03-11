@@ -88,7 +88,7 @@ namespace DataManagement
                     //return the item and increase counter
                     var data = playList.Tracks[trackId++];
                     //if playlist is history, than it's not added to the history
-                    return new QueueItem(new BotData(data.Name, data.Path, "",data.Author), isHistory);
+                    return new QueueItem(new BotData(data.Name, data.Path, "","",data.Author), isHistory);
                 }
                 //if playlist is empty, return null
             }

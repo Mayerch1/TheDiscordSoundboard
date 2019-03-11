@@ -23,8 +23,10 @@ namespace DeviceStreamModule
     /// </summary>
     public partial class DeviceMode : UserControl, INotifyPropertyChanged
     {
+        //private WasapiCapture _capture = null;
 
-        public delegate void DeviceStartStreamHandler(string id);
+
+        public delegate void DeviceStartStreamHandler(string name, string id);
 
         public DeviceStartStreamHandler DeviceStartStream;
 
@@ -34,19 +36,7 @@ namespace DeviceStreamModule
 
 
         private string selectedDevice = null;
-
-        private List<MMDevice> deviceList = new List<MMDevice>();
-
-        public List<MMDevice> DeviceList
-        {
-            get => deviceList;
-            set
-            {
-                deviceList = value;
-                OnPropertyChanged("DeviceList");
-            }
-        }
-
+        private string selectedDeviceName = null;
 
 
         public DeviceMode()
@@ -56,10 +46,8 @@ namespace DeviceStreamModule
             this.DataContext = this;
 
             findDevices();
-
         }
 
-        
 
         private void findDevices()
         {
@@ -70,10 +58,11 @@ namespace DeviceStreamModule
             //devices.GetDefaultAudioEndpoint(DataFlow.Capture, Role.Multimedia);
             foreach (MMDevice device in devices.EnumerateAudioEndPoints(DataFlow.Capture, DeviceState.Active))
             {
-                DeviceList.Add(device);
-                
+                ComboBox.Items.Add(new BoxElement(device.FriendlyName, device.ID));
+
+
                 //Console.WriteLine(device.FriendlyName + "\t" + device.State);
-            }       
+            }
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
@@ -87,12 +76,60 @@ namespace DeviceStreamModule
 
         private void Selector_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            Console.WriteLine("");
-            if (e.AddedItems[0] is MMDevice device)
+            if (e.AddedItems[0] is BoxElement device)
             {
-                selectedDevice = device.ID;
-            
+                selectedDevice = device.Id;
+                selectedDeviceName = device.Name;
+
+                //_capture?.StopRecording();
+
+                //_capture = new WasapiCapture(device);
+                //_capture.DataAvailable += WaveInOnDataAvailable;
+                //_capture.StartRecording();
             }
+        }
+
+        //takes to much cpu-time
+        //private void WaveInOnDataAvailable(object sender, WaveInEventArgs e)
+        //{
+        //    float max = 0;
+        //    var buffer = new WaveBuffer(e.Buffer);
+        //    // interpret as 32 bit floating point audio
+        //    for (int index = 0; index < e.BytesRecorded / 4; index++)
+        //    {
+        //        var sample = buffer.FloatBuffer[index];
+
+        //        // absolute value 
+        //        if (sample < 0) sample = -sample;
+        //        // is this the max value?
+        //        if (sample > max) max = sample;
+
+
+        //    }
+        //    ProgressVal = max * 100;
+        //}
+        private void ButtonBase_OnClick(object sender, RoutedEventArgs e)
+        {
+            if (selectedDevice != null)
+                DeviceStartStream(selectedDeviceName, selectedDevice);
+        }
+
+        private struct BoxElement
+        {
+            public BoxElement(string name, string id)
+            {
+                Id = id;
+                Name = name;
+            }
+
+            public override string ToString()
+            {
+                return Name;
+            }
+
+            public string Id;
+            public string Name;
+
         }
     }
 }

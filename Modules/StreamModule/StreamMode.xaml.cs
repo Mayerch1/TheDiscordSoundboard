@@ -290,7 +290,7 @@ namespace StreamModule
 
             if (!String.IsNullOrWhiteSpace(result.location) || !String.IsNullOrWhiteSpace(result.uri))
             {
-                BotData data = new BotData(Title, result.location, result.uri, Author);
+                BotData data = new BotData(Title, result.location, result.uri, "",Author);
 
 
                 if (IsQueue)

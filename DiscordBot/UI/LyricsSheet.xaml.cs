@@ -53,16 +53,7 @@ namespace DiscordBot.UI
         }
 
 
-        private void btn_DirectMode_Toggle(object sender, RoutedEventArgs e)
-        {
-            if (sender is ToggleButton btn)
-            {
-                if (btn.IsChecked == true)
-                    Handle.Bot.IsDirectMode = true;
-                else
-                    Handle.Bot.IsDirectMode = false;
-            }
-        }
+      
     }
 #pragma warning restore CS1591
 }

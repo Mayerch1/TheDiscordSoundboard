@@ -9,11 +9,12 @@ using Util.IO;
 namespace BotModule
 {
     /// <summary>
-    /// BotHandle inherites from Bot, failsave frame around the bot class
+    /// BotHandle inherits from Bot, fail safe frame around the bot class
     /// </summary>
+    /// <see cref="Bot"/>
     /// <remarks>
     /// Does only communicate with api through its base 'Bot'
-    /// Catches and treats excetpion from base class
+    /// Catches and treats exception from base class
     /// If not connected to channels, methods will return false (or void)
     /// </remarks>
     public class BotHandle : Bot

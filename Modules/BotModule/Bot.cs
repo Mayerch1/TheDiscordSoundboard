@@ -7,17 +7,19 @@ using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
 using DataManagement;
+using NAudio.CoreAudioApi;
 using NAudio.Dsp;
 using NAudio.Wave.SampleProviders;
 
 namespace BotModule
 {
     /// <summary>
-    /// Basic Bot class, directly communicates with the api, throws for every little sh
+    /// Basic Bot class, directly communicates with the api, no fail safe, throws for everything
     /// </summary>
+    /// <seealso cref="BotHandle"/>
     /// <remarks>
     /// can used as standalone but requires to change all 'protected' keywords to 'public' in order to be accessed, also it is not recommended
-    /// if bot is not connected to server or channel, it throws a BotException(...)
+    /// if bot is not connected to server or channel, it throws a <see cref="BotException"/>
     /// </remarks>
     public class Bot
     {
@@ -89,7 +91,6 @@ namespace BotModule
         private string currentSong = "";
         private float pitch = 1.0f;
         private bool isEarrape = false;
-        private bool isDirectMode = false;
 
         #endregion status fields
 
@@ -182,33 +183,7 @@ namespace BotModule
             }
         }
 
-        /// <summary>
-        /// Direct Mode Plays song over local Soundcard.
-        /// No Delay for singing along the song, etc
-        /// </summary>
-        public bool IsDirectMode
-        {
-            private get { return isDirectMode; }
-            set
-            {
-                isDirectMode = value;
-                if (value && IsStreaming)
-                {
-                    waveOut?.Stop();
-                    //enable waveOut and skip to current time
-                    waveOut = new WaveOutEvent();
-                    LocalReader.CurrentTime = Reader.CurrentTime;
-                    waveOut.Init(LocalReader);
-                    waveOut.Play();
-                }
-                else if (!value)
-                {
-                    waveOut?.Stop();
-                    waveOut = null;
-                }
-
-            }
-        }
+       
 
         /// <summary>
         /// IsBufferEmpty property
@@ -256,8 +231,7 @@ namespace BotModule
         private DiscordSocketClient Client { get; set; }
         private IAudioClient AudioCl { get; set; }
 
-
-        private MediaFoundationReader LocalReader { get; set; }
+        
 
         private MediaFoundationReader Reader { get; set; }
         private MediaFoundationResampler ActiveResampler { get; set; }       
@@ -269,8 +243,7 @@ namespace BotModule
         private WaveFormat OutFormat { get; set; }
 
         private AudioOutStream OutStream { get; set; } = null;
-
-        private WaveOutEvent waveOut { get; set; } = null;
+        
 
         #endregion other vars
 
@@ -328,20 +301,7 @@ namespace BotModule
                 var pSampler = new SmbPitchShiftingSampleProvider(SourceResampler.ToSampleProvider());
                 pSampler.PitchFactor = val;
              
-                NormalResampler = new MediaFoundationResampler(pSampler.ToWaveProvider(), OutFormat);
-
-                //TODO test this
-                //adjust local sampler
-                if (IsDirectMode)
-                {
-                    var localSampler = new SmbPitchShiftingSampleProvider(LocalReader.ToSampleProvider());
-                    localSampler.PitchFactor = val;
-
-                    waveOut?.Stop();
-                    waveOut = new WaveOutEvent();
-                    waveOut.Init(localSampler);
-                    waveOut.Play();
-                }
+                NormalResampler = new MediaFoundationResampler(pSampler.ToWaveProvider(), OutFormat);             
             }
         }
 
@@ -365,7 +325,6 @@ namespace BotModule
             if ((IsStreaming || enforce) && CanSeek)
             {
                 Reader.CurrentTime = newTime;
-                LocalReader.CurrentTime = newTime;
             }
         }
 
@@ -378,7 +337,6 @@ namespace BotModule
             if (IsStreaming && CanSeek)
             {
                 Reader.CurrentTime = Reader.CurrentTime.Add(skipTime);
-                LocalReader.CurrentTime = Reader.CurrentTime.Add(skipTime);
             }
         }
 
@@ -419,12 +377,18 @@ namespace BotModule
             if (!String.IsNullOrWhiteSpace(data.uri))
             {
                 Reader = new MediaFoundationReader(data.uri);
-                LocalReader = new MediaFoundationReader(data.uri);
+            }
+            else if (!String.IsNullOrEmpty(data.deviceId))
+            {
+                MMDeviceEnumerator enumerator = new MMDeviceEnumerator();
+                MMDevice device = enumerator.GetDevice(data.deviceId);
+
+                var x = new WasapiCapture(device);
+                //TODO use WasapiCapture and pipe to bot
             }
             else if (File.Exists(data.filePath))
             {
                 Reader = new MediaFoundationReader(data.filePath);
-                LocalReader = new MediaFoundationReader(data.filePath);
             }
             else
                 return;
@@ -502,19 +466,7 @@ namespace BotModule
 
                 IsStreaming = true;
                 IsPause = false;
-
-                
-                if (IsDirectMode)
-                {
-                    waveOut?.Stop();
-                    //TODO test local replay in karaoke mode
-                    waveOut = new WaveOutEvent();
-                    //set localReader to StreamReader
-                    skipOverTime(TimeSpan.Zero);
-                    waveOut.Init(LocalReader);
-                    waveOut.Play();
-                }
-
+            
                 //repeat, read new block into buffer -> stream buffer
                 while ((byteCount = ActiveResampler.Read(buffer, 0, blockSize)) > 0)
                 {
@@ -534,8 +486,6 @@ namespace BotModule
                     await OutStream.WriteAsync(buffer, 0, blockSize);
                 }
 
-                waveOut?.Stop();
-                waveOut = null;
 
                 IsStreaming = false;
 

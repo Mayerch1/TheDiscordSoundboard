@@ -355,7 +355,7 @@ namespace DiscordBot
                     new Module(4, "Device Module", "DeviceStreamModule.dll",
                         new DataManagement.Func[]
                         {
-                            new DataManagement.Func(6, "DEVICE", PackIconKind.Directions),
+                            new DataManagement.Func(6, "DEVICES", PackIconKind.Pipe),
                         }),
                     //---------STEP 2/3-------
                     // add new Modules or new Functions above
@@ -838,7 +838,7 @@ namespace DiscordBot
                 if (file.Id == index)
                 {
                     //create ButtonData to feed to bot
-                    DataManagement.BotData data = new DataManagement.BotData(file.Name, file.Path, "", file.Author);
+                    DataManagement.BotData data = new DataManagement.BotData(file.Name, file.Path, "", "",file.Author);
                     triggerMasterReplay(data, isPriority, false);
                 }
             }
@@ -847,7 +847,7 @@ namespace DiscordBot
         private void Playlist_SingleFile_Play(DataManagement.FileData file)
         {
           
-            triggerMasterReplay(new DataManagement.BotData(file.Name, file.Path, "", file.Author), false, false);
+            triggerMasterReplay(new DataManagement.BotData(file.Name, file.Path, "", "",file.Author), false, false);
         }
 
         private void Stream_Video_Play(DataManagement.BotData data)
@@ -865,6 +865,20 @@ namespace DiscordBot
         {
             //return to button ui
             btn_Sounds_Click(null, null);
+        }
+
+        private void Device_StartStream(string name, string id)
+        {
+            //remove all elements because of infinite stream from device
+            Handle.Data.Queue.clearQueue();
+
+            var data = new BotData(name, "", "", id, "");
+            triggerMasterReplay(data, true, false);
+        }
+
+        private void Device_StopStream(string id)
+        {
+
         }
 
         /// <param name="listIndex">unique id field of playlist</param>
@@ -1360,6 +1374,8 @@ namespace DiscordBot
 
         private void registerDeviceEvents(DeviceMode ui)
         {
+            ui.DeviceStartStream += Device_StartStream;
+            ui.DeviceStopStream += Device_StopStream;
 
         }
 
