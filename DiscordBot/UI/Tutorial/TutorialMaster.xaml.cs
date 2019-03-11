@@ -48,8 +48,9 @@ namespace DiscordBot.UI.Tutorial
             switch (obj)
             {
                 case Slide_EnterCredentials sl:
+                    sl.loadToken();
                     sl.FinishedSetup += FinishSetup;
-                    break;
+                    break;               
             }
         }
 

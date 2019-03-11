@@ -13,12 +13,13 @@ namespace DataManagement
         {
         }
 
-        public BotData(string name, string filePath, string uri="", string author="")
+        public BotData(string name, string filePath, string uri="", string deviceId="", string author="")
         {
             this.name = name;
             this.filePath = filePath;
             this.uri = uri;
             this.author = author;
+            this.deviceId = deviceId;
         }
 
         
@@ -30,11 +31,13 @@ namespace DataManagement
             isLoop = btn.IsLoop;
             id = btn.ID;
             uri = "";
+            deviceId = "";
             author = btn.Author;
         }
 
         public string name = "";
         public string uri = "";
+        public string deviceId = "";
         public string filePath = null;
         public bool isEarrape = false;
         public bool isLoop = false;

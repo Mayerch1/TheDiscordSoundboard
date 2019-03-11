@@ -12,7 +12,7 @@ namespace Util.IO
     /// </summary>
     public class LyricsManager
     {
-        private static string _title="", _author="";
+        private static string _title=null, _author=null;
 
 
         /// <summary>
@@ -49,9 +49,17 @@ namespace Util.IO
             if (result.Length > 0 && result[0] != null)
             {
                 //request.GetLyricAsync(result[0].LyricId, result[0].LyricChecksum);
+                try
+                {
+                    var lyr = request.GetLyric(result[0].LyricId, result[0].LyricChecksum);
+                    return lyr;
+                }
+                catch (Exception)
+                {
+                    return null;
+                }
 
-                return request.GetLyric(result[0].LyricId, result[0].LyricChecksum);    
-                
+
             }
             return null;
         }
