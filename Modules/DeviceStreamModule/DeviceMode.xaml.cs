@@ -74,7 +74,14 @@ namespace DeviceStreamModule
             handler?.Invoke(this, new PropertyChangedEventArgs(info));
         }
 
-        private void Selector_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
+      
+        private void ButtonBase_OnClick(object sender, RoutedEventArgs e)
+        {
+            if (selectedDevice != null)
+                DeviceStartStream(selectedDeviceName, selectedDevice);
+        }
+
+        private void ComboBox_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (e.AddedItems[0] is BoxElement device)
             {
@@ -108,11 +115,7 @@ namespace DeviceStreamModule
         //    }
         //    ProgressVal = max * 100;
         //}
-        private void ButtonBase_OnClick(object sender, RoutedEventArgs e)
-        {
-            if (selectedDevice != null)
-                DeviceStartStream(selectedDeviceName, selectedDevice);
-        }
+
 
         private struct BoxElement
         {
@@ -131,5 +134,7 @@ namespace DeviceStreamModule
             public string Name;
 
         }
+
+       
     }
 }

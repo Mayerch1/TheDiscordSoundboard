@@ -277,15 +277,16 @@
                                             Width="24" />
                                     </Button>
 
-                                    <Slider VerticalAlignment="Center"
-
+                                    <ui:DelayedSlider VerticalAlignment="Center"
+                                            Style="{DynamicResource MaterialDesignSlider}"
                                             Foreground="{DynamicResource PrimaryHueMidBrush}"
                                             Margin="5,0,0,0"
                                             TickFrequency="5"
                                             Orientation="Horizontal"
                                             Minimum="0"
                                             Maximum="100"
-                                            Value="{Binding Volume}"
+                                            Value="{Binding LiveVolume}"
+                                            DelayedValueChanged="Slider_DelayedVolumeChanged"
                                             Width="150"
                                             ToolTip="Volume" />
 
@@ -328,7 +329,7 @@
                                                                       Minimum="0.1"
                                                                       Maximum="2"
                                                                       
-                                                                        DelayedValueChanged="Slider_DelayedValueChanged"
+                                                                      DelayedValueChanged="Slider_DelayedPitchChanged"
                                                                       Value="{Binding LivePitch}"
                                                                       Width="150"
                                                                       ToolTip="Pitch" />

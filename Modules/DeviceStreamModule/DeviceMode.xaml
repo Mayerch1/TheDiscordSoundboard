@@ -9,7 +9,7 @@
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid>
         <StackPanel>
-            <ComboBox x:Name="ComboBox" />
+            <ComboBox x:Name="ComboBox" SelectionChanged="ComboBox_OnSelectionChanged"/>
 
 
             <!--<ListBox ItemsSource="{Binding DeviceList}" SelectionMode="Single"

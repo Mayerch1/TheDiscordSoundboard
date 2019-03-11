@@ -56,6 +56,7 @@ namespace DiscordBot
         private SnackbarMessageQueue snackbarMessageQueue = new SnackbarMessageQueue(TimeSpan.FromMilliseconds(3500));
         private string currentSongName = "";
         private double livePitch = 1.0f;
+        private double liveVolume = 1.0f;
 
         #endregion fields
 
@@ -84,15 +85,18 @@ namespace DiscordBot
 
         private double LastVolume { get; set; }
 
-        public double Volume
+       
+
+
+        public double LiveVolume
         {
-            get => ((double) Handle.Volume * 100) * (1 / (Handle.Data.Persistent.VolumeCap / 100.0f));
+            get => liveVolume;
             set
             {
-                LastVolume = Volume;
-                Handle.Volume = ((float) value / 100) * (Handle.Data.Persistent.VolumeCap / 100.0f);
-                setVolumeIcon();
-                OnPropertyChanged("Volume");
+                liveVolume = value;
+                setVolumeIcon(value);
+                OnPropertyChanged("LiveVolume");
+
             }
         }
 
@@ -189,8 +193,7 @@ namespace DiscordBot
 
             InitializeComponent();
 
-           
-
+  
             //--------
             //self assign theme values
             //this will apply themes to the ui, as it triggers delegates/events
@@ -200,9 +203,7 @@ namespace DiscordBot
             Handle.Data.Persistent.SecondarySwatch = Handle.Data.Persistent.SecondarySwatch;
             //--------
 
-            LastVolume = Volume;
-
-
+                       
             SetDynamicMenu();
 
             //events
@@ -214,15 +215,16 @@ namespace DiscordBot
             FileWatcher.StartMonitor(Handle.Data.Persistent.MediaSources, Handle.Data);
 
             initTimer();
-
+           
             //ui
-            setVolumeIcon();
+            LivePitch = Handle.Pitch;
+            LiveVolume = ((double)Handle.Volume * 100) * (1 / (Handle.Data.Persistent.VolumeCap / 100.0f));
+            LastVolume = LiveVolume;
+
+            setVolumeIcon(LiveVolume);
 
             if (btn_Repeat.Content is PackIcon ic)
                 ic.Kind = PackIconKind.RepeatOff;
-
-            LivePitch = Handle.Pitch;
-
 
             initHotkeys();
 
@@ -256,6 +258,7 @@ namespace DiscordBot
 
            
         }
+
 
         private void MainWindow_Closing(object sender, CancelEventArgs e)
         {
@@ -571,19 +574,19 @@ namespace DiscordBot
             channelMgr.populateTree(tree_channelList);
         }
 
-        private void setVolumeIcon()
+        private void setVolumeIcon(double val)
         {
             if (btn_Volume.Content is PackIcon ic)
             {
-                if (Volume == 0)
+                if (val == 0)
                 {
                     ic.Kind = PackIconKind.VolumeMute;
                 }
-                else if (Volume > 0 && Volume < 10)
+                else if (val > 0 && val < 10)
                 {
                     ic.Kind = PackIconKind.VolumeLow;
                 }
-                else if (Volume >= 10 && Volume < 44)
+                else if (val >= 10 && val < 44)
                 {
                     ic.Kind = PackIconKind.VolumeMedium;
                 }
@@ -1059,13 +1062,14 @@ namespace DiscordBot
 
         private void btn_Volume_Click(object sender, RoutedEventArgs e)
         {
-            if (Volume > 0)
+            if (LiveVolume > 0)
             {
-                Volume = 0;
+                LastVolume = LiveVolume;
+                LiveVolume = 0;
             }
             else
             {
-                Volume = LastVolume;
+                LiveVolume = LastVolume;
             }
         }
 
@@ -1075,13 +1079,21 @@ namespace DiscordBot
             Handle.Pitch = (float) 1.0f;
         }
 
-        private void Slider_DelayedValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        private void Slider_DelayedPitchChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
             //is NewValue is the same as LivePitch
             Handle.Pitch = (float) e.NewValue;
 
             Console.WriteLine(@"Set Pitch to " + Handle.Pitch);
         }
+
+        private void Slider_DelayedVolumeChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            Handle.Volume = ((float)e.NewValue / 100) * (Handle.Data.Persistent.VolumeCap / 100.0f);
+            Console.WriteLine(@"Set Volume to " + Handle.Volume);
+        }
+
+       
 
 
         private void btn_About_Click(object sender, RoutedEventArgs e)
@@ -1382,6 +1394,7 @@ namespace DiscordBot
         #endregion stuff related to dll
 
 #pragma warning restore CS1591
-       
+
+        
     }
 }
