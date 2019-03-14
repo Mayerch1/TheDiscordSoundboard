@@ -63,6 +63,9 @@ namespace DeviceStreamModule
 
                 //Console.WriteLine(device.FriendlyName + "\t" + device.State);
             }
+
+            //add a virtual earrape device
+            ComboBox.Items.Add(new BoxElement("Death and Destruction", "-1"));
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

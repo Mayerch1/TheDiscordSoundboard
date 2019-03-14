@@ -881,7 +881,7 @@ namespace DiscordBot
 
         private void Device_StopStream(string id)
         {
-
+            throw new NotImplementedException();
         }
 
         /// <param name="listIndex">unique id field of playlist</param>

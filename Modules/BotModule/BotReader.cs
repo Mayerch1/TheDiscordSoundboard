@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -13,6 +14,15 @@ namespace BotModule
     /// </summary>
     public class BotWave
     {
+        //===============================
+        private const int channelCount = 2;
+        private const int sampleRate = 48000;
+        private const int sampleQuality = 60;
+     
+        private const int bitDepth = 16;
+        //=================================
+
+
         /// <summary>
         /// Reader points to File or stream
         /// </summary>
@@ -39,6 +49,9 @@ namespace BotModule
         /// <summary>
         /// Format for streaming
         /// </summary>
-        public WaveFormat OutFormat { get; set; }
+        public readonly WaveFormat OutFormat = new WaveFormat(sampleRate, bitDepth, channelCount);
+        
+        
+       
     }
 }

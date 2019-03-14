@@ -24,15 +24,11 @@ namespace BotModule
     public class Bot
     {
         #region config
-        //===============================
-        private const int channelCount = 2;
-        private const int sampleRate = 48000;
-        private const int sampleQuality = 60;
-        private const int packagesPerSecond = 50;
 
-        // NOTE: if changed, also change applyVolume();
-        private const int bitDepth = 16;
-        //=================================
+        //===========================
+        private const int packagesPerSecond = 50;
+        //===========================
+
         #endregion config
 
         #region event Handlers
@@ -192,7 +188,6 @@ namespace BotModule
             }
         }
 
-       
 
         /// <summary>
         /// IsBufferEmpty property
@@ -241,8 +236,8 @@ namespace BotModule
         private DiscordSocketClient Client { get; set; }
         private IAudioClient AudioCl { get; set; }
         private AudioOutStream OutStream { get; set; } = null;
-        
-        private BotWave Wave { get; set; }  = new BotWave();   
+
+        private BotWave Wave { get; set; } = new BotWave();
 
         #endregion other vars
 
@@ -316,7 +311,7 @@ namespace BotModule
                 Wave.ActiveResampler = new MediaFoundationResampler(volumeSampler, Wave.OutFormat);
             }
         }
-   
+
 
         /// <summary>
         /// skips ahead to a timespan
@@ -380,7 +375,7 @@ namespace BotModule
             Wave.Capture = null;
 
             //see if file or uri was provided
-            if (!String.IsNullOrWhiteSpace(data.uri))
+            if (!string.IsNullOrWhiteSpace(data.uri))
             {
                 Wave.Reader = new MediaFoundationReader(data.uri);
                 CanSeek = Wave.Reader.CanSeek;
@@ -390,19 +385,32 @@ namespace BotModule
                 Wave.Reader = new MediaFoundationReader(data.filePath);
                 CanSeek = Wave.Reader.CanSeek;
             }
-            else if (!String.IsNullOrEmpty(data.deviceId))
+            else if (!string.IsNullOrEmpty(data.deviceId))
             {
-                MMDeviceEnumerator enumerator = new MMDeviceEnumerator();
-                MMDevice device = enumerator.GetDevice(data.deviceId);
+                var enumerator = new MMDeviceEnumerator();
 
-                Wave.Capture = new WasapiCapture(device);
+                if (data.deviceId == "-1")
+                {
+                    //get earrape stream
+                    MMDevice device = enumerator.GetDefaultAudioEndpoint(DataFlow.Capture, Role.Communications);
 
+                    Wave.Capture = new WasapiCapture(device);
+                    Wave.Capture.WaveFormat = WaveFormat.CreateIeeeFloatWaveFormat(48000, 2);
+                }
+                else
+                {
+                    //device stream
+                    MMDevice device = enumerator.GetDevice(data.deviceId);
+               
+                    Wave.Capture = new WasapiCapture(device);
+
+                    Wave.Capture.WaveFormat = Wave.OutFormat;
+                }
                 CanSeek = false;
             }
             else
                 return;
 
-            Wave.OutFormat = new WaveFormat(sampleRate, bitDepth, channelCount);
 
             IsBufferEmpty = false;
 
@@ -423,6 +431,8 @@ namespace BotModule
             else if (Wave.Capture != null)
             {
                 Wave.Capture.DataAvailable += Capture_DataAvailable;
+
+                //no override settings for stream available
             }
         }
 
@@ -433,17 +443,34 @@ namespace BotModule
             if (IsToAbort)
             {
                 Wave.Capture?.StopRecording();
+
                 IsToAbort = false;
+                
+                OutStream.Flush();
+                OutStream.Close();
+                OutStream = null;
+
                 IsStreaming = false;
+
+                EndOfFile();
+ 
                 return;
             }
 
+            WaveFormat format = Wave.Capture.WaveFormat;
 
-            var buffer = e.Buffer;
-            var size = e.BytesRecorded;
+            byte[] buffer = e.Buffer;
+            int size = e.BytesRecorded;
 
             OutStream.Write(buffer, 0, size);
         }
+
+
+        private async Task playBufferedStream()
+        {
+           
+        }
+
 
         /// <summary>
         /// starts the stream
@@ -473,9 +500,10 @@ namespace BotModule
 
                 if (Wave.ActiveResampler == null)
                 {
+                    //streaming device streams
                     if (Wave.Capture != null)
                     {
-                        //loop, earrape, pitch is not available in first implementation
+                        //earrape, pitch is not available in first implementation
                         IsStreaming = true;
                         Wave.Capture.StartRecording();
                     }
@@ -483,19 +511,18 @@ namespace BotModule
                     return;
                 }
 
+                //streaming local or uri streams
+                IsStreaming = true;
                 //send stream in small packages
                 int blockSize = Wave.OutFormat.AverageBytesPerSecond / packagesPerSecond;
                 byte[] buffer = new byte[blockSize];
                 int byteCount;
 
-                IsStreaming = true;
+
                 IsPause = false;
-            
-
-
                 //repeat, read new block into buffer -> stream buffer
                 while ((byteCount = Wave.ActiveResampler.Read(buffer, 0, blockSize)) > 0)
-                {                  
+                {
                     if (IsToAbort || SkipTracks > 0)
                         break;
 
@@ -509,8 +536,6 @@ namespace BotModule
 
                     await OutStream.WriteAsync(buffer, 0, blockSize);
                 }
-
-
                 IsStreaming = false;
 
                 //reopen the same file
@@ -526,12 +551,12 @@ namespace BotModule
                     //can't skip a track if nothing is running
                     SkipTracks = 0;
 
-                    //wait until last packages are played
-                    await OutStream.FlushAsync();
-
-
-                    OutStream.Close();
-                    OutStream = null;
+                    if (OutStream != null)
+                    {
+                        await OutStream.FlushAsync();
+                        OutStream.Close();
+                        OutStream = null;
+                    }
 
                     IsToAbort = false;
 
@@ -541,6 +566,9 @@ namespace BotModule
                 }
             }
         }
+
+
+      
 
         /// <summary>
         /// load all specific button settings, raise events to call back to ui for visual indication
@@ -671,7 +699,7 @@ namespace BotModule
 
             //wait until last package is read in
             while (IsStreaming)
-                await Task.Delay(5);
+                await Task.Delay(5);        
 
             if (OutStream != null)
             {
