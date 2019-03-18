@@ -5,6 +5,7 @@ using NAudio.Wave;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using DataManagement;
 using NAudio.CoreAudioApi;
@@ -379,11 +380,13 @@ namespace BotModule
             {
                 Wave.Reader = new MediaFoundationReader(data.uri);
                 CanSeek = Wave.Reader.CanSeek;
+                //Wave.Capture = null;
             }
             else if (File.Exists(data.filePath))
             {
                 Wave.Reader = new MediaFoundationReader(data.filePath);
                 CanSeek = Wave.Reader.CanSeek;
+                //Wave.Capture = null;
             }
             else if (!string.IsNullOrEmpty(data.deviceId))
             {
@@ -401,12 +404,16 @@ namespace BotModule
                 {
                     //device stream
                     MMDevice device = enumerator.GetDevice(data.deviceId);
-               
+
                     Wave.Capture = new WasapiCapture(device);
 
                     Wave.Capture.WaveFormat = Wave.OutFormat;
                 }
+
                 CanSeek = false;
+
+                Wave.ActiveResampler = null;
+                Wave.SourceResampler = null;
             }
             else
                 return;
@@ -440,23 +447,6 @@ namespace BotModule
         //receives Data from requested device
         private void Capture_DataAvailable(object sender, WaveInEventArgs e)
         {
-            if (IsToAbort)
-            {
-                Wave.Capture?.StopRecording();
-
-                IsToAbort = false;
-                
-                OutStream.Flush();
-                OutStream.Close();
-                OutStream = null;
-
-                IsStreaming = false;
-
-                EndOfFile();
- 
-                return;
-            }
-
             WaveFormat format = Wave.Capture.WaveFormat;
 
             byte[] buffer = e.Buffer;
@@ -467,9 +457,7 @@ namespace BotModule
 
 
         private async Task playBufferedStream()
-        {
-           
-        }
+        { }
 
 
         /// <summary>
@@ -536,6 +524,7 @@ namespace BotModule
 
                     await OutStream.WriteAsync(buffer, 0, blockSize);
                 }
+
                 IsStreaming = false;
 
                 //reopen the same file
@@ -567,8 +556,6 @@ namespace BotModule
             }
         }
 
-
-      
 
         /// <summary>
         /// load all specific button settings, raise events to call back to ui for visual indication
@@ -695,11 +682,31 @@ namespace BotModule
             if (!IsStreaming)
                 return;
 
-            IsToAbort = true;
 
-            //wait until last package is read in
-            while (IsStreaming)
-                await Task.Delay(5);        
+            //streaming from device
+            if (Wave.Capture != null)
+            {
+                Wave.Capture.StopRecording();
+                
+
+                IsStreaming = false;
+
+                if (!IsPause)
+                {
+                    Wave.Capture.DataAvailable -= Capture_DataAvailable;
+                    EndOfFile();
+                }
+            }
+            //streaming from buffer
+            else
+            {
+                IsToAbort = true;
+
+                //wait until last package is read in
+                while (IsStreaming)
+                    await Task.Delay(5);
+            }
+
 
             if (OutStream != null)
             {

@@ -240,7 +240,10 @@
                                     </Grid>
 
                                     <Grid Grid.Column="3">
-                                        <Button Click="btn_LyricShow_Click"/>
+                                        <Button Click="btn_LyricShow_Click">
+                                            <materialDesign:PackIcon Kind="TextToSpeech"/>
+                                        </Button>
+
                                     </Grid>
                                 </Grid>
                             </Grid>

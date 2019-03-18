@@ -876,7 +876,7 @@ namespace DiscordBot
             Handle.Data.Queue.clearQueue();
 
             var data = new BotData(name, "", "", id, "");
-            triggerMasterReplay(data, true, false);
+            triggerMasterReplay(data, true, false, true);
         }
 
         private void Device_StopStream(string id)
