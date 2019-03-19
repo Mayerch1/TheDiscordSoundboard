@@ -254,9 +254,7 @@ namespace DiscordBot
                 initDelayedAsync();
             }
 
-            FileWatcher.indexFiles(Handle.Data.Persistent.MediaSources);
-
-           
+            FileWatcher.indexFiles(Handle.Data.Persistent.MediaSources); 
         }
 
 
@@ -826,6 +824,7 @@ namespace DiscordBot
             }
         }
 
+        
 
         private void btn_InstantButton_Clicked(int btnListIndex, bool isInstant)
         {
@@ -938,6 +937,19 @@ namespace DiscordBot
         }
 
         #endregion BotPlayDelegates
+
+
+        private void btn_Disconnect_Clicked(object sender, RoutedEventArgs e)
+        {
+            DisconnectFromChannel();
+        }
+
+        private async void DisconnectFromChannel()
+        {
+            await Handle.Bot.disconnectFromChannelAsync();
+        }
+
+
 
         private void btn_LyricShow_Click(object sender, RoutedEventArgs e)
         {
@@ -1098,6 +1110,7 @@ namespace DiscordBot
 
         private void btn_About_Click(object sender, RoutedEventArgs e)
         {
+            SideChanged();
             //About is mandatory
             MainGrid.Children.Clear();
             MainGrid.Children.Add(new UI.About());
@@ -1111,10 +1124,21 @@ namespace DiscordBot
 
         private void btn_Playlist_Click(object sender, RoutedEventArgs e)
         {
+            SideChanged();
+
             if (File.Exists("PlaylistModule.dll"))
                 LoadPlaylistMode();
             else
                 SnackbarManager.SnackbarMessage("Module not installed");
+        }
+
+
+        /// <summary>
+        /// Close menues,... for switching the tab/page
+        /// </summary>
+        private void SideChanged()
+        {
+            LyricGrid.Visibility = Visibility.Hidden;
         }
 
         private void LoadPlaylistMode()
@@ -1127,6 +1151,7 @@ namespace DiscordBot
 
         private void btn_Stream_Click(object sender, RoutedEventArgs e)
         {
+            SideChanged();
             if (File.Exists("StreamModule.dll"))
                 LoadStreamMode();
             else
@@ -1144,6 +1169,7 @@ namespace DiscordBot
 
         private void btn_Device_Click(object sender, RoutedEventArgs e)
         {
+            SideChanged();
             if (File.Exists("DeviceStreamModule.dll"))
                 LoadDeviceMode();
             else
@@ -1164,6 +1190,7 @@ namespace DiscordBot
 
         private void btn_Settings_Click()
         {
+            SideChanged();
             //settings are mandatory
             MainGrid.Children.Clear();
             var ui = new UI.Settings();
@@ -1187,6 +1214,7 @@ namespace DiscordBot
 
         private void btn_Sounds_Click(object sender, RoutedEventArgs e)
         {
+            SideChanged();
             //buttonUI is mandatory
             //change embeds for maingrid
             MainGrid.Children.Clear();
@@ -1197,6 +1225,8 @@ namespace DiscordBot
 
         private void btn_Search_Click(object sender, RoutedEventArgs e)
         {
+            SideChanged();
+
             if (File.Exists("PlaylistModule.dll"))
                 LoadSearchMode();
             else
