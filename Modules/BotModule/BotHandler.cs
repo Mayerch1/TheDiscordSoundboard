@@ -106,6 +106,7 @@ namespace BotModule
             {
                 await base.resumeStream();
             }
+           
             catch (Exception ex)
             {
                 await disconnectFromChannelAsync();
@@ -287,8 +288,16 @@ namespace BotModule
                     Util.IO.LogManager.LogException(iEx, location, "Cannot reach Discord servers");
                     break;
 
+                case System.ArgumentException iEx:
+                    string iExMsg = msg;               
+                    if(iEx.Message == "Unsupported Wave Format"){
+                       iExMsg = "Mic not supported";
+                    }
+                    SnackbarManager.SnackbarMessage(iExMsg, SnackbarManager.SnackbarAction.None);
+                    Util.IO.LogManager.LogException(iEx, location, iExMsg);
+                    break;
                 case Exception iEx:
-                    SnackbarManager.SnackbarMessage(msg);
+                    SnackbarManager.SnackbarMessage(msg, SnackbarManager.SnackbarAction.Log);
                     Util.IO.LogManager.LogException(iEx, location, msg, true);
                     break;
             }
