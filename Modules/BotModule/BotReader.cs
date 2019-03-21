@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Dynamic;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -15,11 +16,11 @@ namespace BotModule
     public class BotWave
     {
         //===============================
-        private const int channelCount = 2;
-        private const int sampleRate = 48000;
+        public const int channelCount = 2;
+        public const int sampleRate = 48000;
         private const int sampleQuality = 60;
 
-        private const int bitDepth = 16;
+        public const int bitDepth = 16;
         //=================================
 
 
@@ -50,5 +51,7 @@ namespace BotModule
         /// Format for streaming
         /// </summary>
         public readonly WaveFormat OutFormat = new WaveFormat(sampleRate, bitDepth, channelCount);
+
+        public bool IncompatibleWaveFormat { get; set; }= false;
     }
 }

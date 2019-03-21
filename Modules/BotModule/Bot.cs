@@ -374,7 +374,8 @@ namespace BotModule
         {
             Wave.Reader = null;
             Wave.Capture = null;
-
+            Wave.IncompatibleWaveFormat = false;
+  
             //see if file or uri was provided
             if (!string.IsNullOrWhiteSpace(data.uri))
             {
@@ -407,7 +408,17 @@ namespace BotModule
 
                     Wave.Capture = new WasapiCapture(device);
 
-                    Wave.Capture.WaveFormat = Wave.OutFormat;
+                    ////if channels/sample count is not default, resample it later
+                    if (Wave.Capture.WaveFormat.Channels != Wave.OutFormat.Channels ||
+                        Wave.Capture.WaveFormat.SampleRate != Wave.OutFormat.SampleRate)
+                    {
+                        Wave.IncompatibleWaveFormat = true;
+                        //convert to 48kHz/2 Channel when streaming
+                        Wave.Capture.WaveFormat = new WaveFormat(Wave.Capture.WaveFormat.SampleRate, BotWave.bitDepth, Wave.Capture.WaveFormat.Channels);
+                    }
+                    else
+                        //convert from ieee to pcm
+                        Wave.Capture.WaveFormat = Wave.OutFormat;
                 }
 
                 CanSeek = false;
@@ -449,8 +460,25 @@ namespace BotModule
         {
             WaveFormat format = Wave.Capture.WaveFormat;
 
-            byte[] buffer = e.Buffer;
+            //empty buffer with size of recorded bytes
             int size = e.BytesRecorded;
+            byte[] buffer = new byte[size];
+
+            //resample audio here
+            if (Wave.IncompatibleWaveFormat)
+            {
+                //TOOD: resample without changing the pitch
+
+                var x = new BufferedWaveProvider(Wave.OutFormat);
+                x.AddSamples(e.Buffer, 0, size);
+
+                x.Read(buffer, 0, size);
+            }
+            else
+            {
+                buffer = e.Buffer;
+            }
+
 
             OutStream.Write(buffer, 0, size);
         }
@@ -485,6 +513,7 @@ namespace BotModule
             {
                 if (OutStream == null)
                     OutStream = AudioCl.CreatePCMStream(AudioApplication.Music);
+
 
                 if (Wave.ActiveResampler == null)
                 {
@@ -687,7 +716,7 @@ namespace BotModule
             if (Wave.Capture != null)
             {
                 Wave.Capture.StopRecording();
-                
+
 
                 IsStreaming = false;
 
