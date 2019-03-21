@@ -18,7 +18,7 @@ namespace BotModule
         private const int channelCount = 2;
         private const int sampleRate = 48000;
         private const int sampleQuality = 60;
-     
+
         private const int bitDepth = 16;
         //=================================
 
@@ -33,25 +33,22 @@ namespace BotModule
         /// </summary>
         public MediaFoundationResampler ActiveResampler { get; set; }
 
-       // public MediaFoundationResampler NormalResampler { get; set; }
+        // public MediaFoundationResampler NormalResampler { get; set; }
 
-       /// <summary>
-       /// Is never modified, to keep quality for multiple pitch/volume changes
-       /// </summary>
+        /// <summary>
+        /// Is never modified, to keep quality for multiple pitch/volume changes
+        /// </summary>
         public MediaFoundationResampler SourceResampler { get; set; }
 
         /// <summary>
         /// device which delivers data
         /// </summary>
-       public WasapiCapture Capture { get; set; }
-        
+        public WasapiCapture Capture { get; set; }
+
 
         /// <summary>
         /// Format for streaming
         /// </summary>
         public readonly WaveFormat OutFormat = new WaveFormat(sampleRate, bitDepth, channelCount);
-        
-        
-       
     }
 }

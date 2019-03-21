@@ -91,6 +91,11 @@
                                       CornerRadius="5" Background="{DynamicResource MaterialDesignPaper}">
 
                 <DockPanel Margin="0,5,0,0">
+                    <Button DockPanel.Dock="Top" HorizontalAlignment="Stretch"
+                               Content="Disconnect from channel"
+                               Click="btn_Disconnect_Clicked"/>
+
+
                     <DockPanel DockPanel.Dock="Top" HorizontalAlignment="Stretch">
                         <TextBlock Margin="5" DockPanel.Dock="Left" Text="Permanent Selection" />
                         <CheckBox
@@ -429,6 +434,12 @@
                                     </Border>
                                 </ControlTemplate>
                             </Button.Template>
+                            <Button.ContextMenu>
+                                <ContextMenu>
+                                    <MenuItem Header="Disconnect from channel"
+                                              Click="btn_Disconnect_Clicked" />
+                                </ContextMenu>
+                            </Button.ContextMenu>
 
                         </Button>
                     </StackPanel>
