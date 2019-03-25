@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using NAudio.CoreAudioApi;
 using NAudio.Wave;
+using NAudio.Wave.Compression;
 
 namespace BotModule
 {
@@ -22,7 +23,6 @@ namespace BotModule
 
         public const int bitDepth = 16;
         //=================================
-
 
         /// <summary>
         /// Reader points to File or stream
@@ -46,12 +46,11 @@ namespace BotModule
         /// </summary>
         public WasapiCapture Capture { get; set; }
 
-
+      
         /// <summary>
         /// Format for streaming
         /// </summary>
         public readonly WaveFormat OutFormat = new WaveFormat(sampleRate, bitDepth, channelCount);
-
-        public bool IncompatibleWaveFormat { get; set; }= false;
+     
     }
 }

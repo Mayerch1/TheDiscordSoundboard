@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using DataManagement;
 using NAudio.CoreAudioApi;
 using NAudio.Dsp;
+using NAudio.Wave.Compression;
 using NAudio.Wave.SampleProviders;
 
 namespace BotModule
@@ -33,6 +34,18 @@ namespace BotModule
         #endregion config
 
         #region event Handlers
+
+        /// <summary>
+        /// IncompatibleWaveHandler delegate
+        /// </summary>
+        protected delegate void IncompatibleWaveHandler();
+
+        /// <summary>
+        /// Gets triggered when the waveformat of a infinite stream is not equals to the desired format
+        /// Replay is possible, but the audio is distorted
+        /// </summary>
+        protected IncompatibleWaveHandler IncompatibleWave;
+
 
         /// <summary>
         /// EndOfFileHandler delegate
@@ -374,8 +387,7 @@ namespace BotModule
         {
             Wave.Reader = null;
             Wave.Capture = null;
-            Wave.IncompatibleWaveFormat = false;
-  
+
             //see if file or uri was provided
             if (!string.IsNullOrWhiteSpace(data.uri))
             {
@@ -412,19 +424,21 @@ namespace BotModule
                     if (Wave.Capture.WaveFormat.Channels != Wave.OutFormat.Channels ||
                         Wave.Capture.WaveFormat.SampleRate != Wave.OutFormat.SampleRate)
                     {
-                        Wave.IncompatibleWaveFormat = true;
-                        //convert to 48kHz/2 Channel when streaming
-                        Wave.Capture.WaveFormat = new WaveFormat(Wave.Capture.WaveFormat.SampleRate, BotWave.bitDepth, Wave.Capture.WaveFormat.Channels);
+                        //send delegate to bot Handler
+                        IncompatibleWave();
                     }
-                    else
-                        //convert from ieee to pcm
-                        Wave.Capture.WaveFormat = Wave.OutFormat;
+
+                    //convert from ieee to pcm
+                    Wave.Capture.WaveFormat = new WaveFormat(Wave.Capture.WaveFormat.SampleRate, BotWave.bitDepth, Wave.Capture.WaveFormat.Channels);
                 }
 
                 CanSeek = false;
 
                 Wave.ActiveResampler = null;
                 Wave.SourceResampler = null;
+
+                Wave.Capture.DataAvailable += Capture_DataAvailable;
+                //no override settings for stream available
             }
             else
                 return;
@@ -446,12 +460,6 @@ namespace BotModule
                 //will apply Earrape and loop
                 loadOverrideSettings(data);
             }
-            else if (Wave.Capture != null)
-            {
-                Wave.Capture.DataAvailable += Capture_DataAvailable;
-
-                //no override settings for stream available
-            }
         }
 
 
@@ -462,25 +470,10 @@ namespace BotModule
 
             //empty buffer with size of recorded bytes
             int size = e.BytesRecorded;
-            byte[] buffer = new byte[size];
+            //byte[] buffer;
 
-            //resample audio here
-            if (Wave.IncompatibleWaveFormat)
-            {
-                //TOOD: resample without changing the pitch
-
-                var x = new BufferedWaveProvider(Wave.OutFormat);
-                x.AddSamples(e.Buffer, 0, size);
-
-                x.Read(buffer, 0, size);
-            }
-            else
-            {
-                buffer = e.Buffer;
-            }
-
-
-            OutStream.Write(buffer, 0, size);
+         
+            OutStream.Write(e.Buffer, 0, size);
         }
 
 

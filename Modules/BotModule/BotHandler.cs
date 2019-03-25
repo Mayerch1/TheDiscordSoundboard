@@ -69,16 +69,35 @@ namespace BotModule
             if (!await connectToServerAsync())
                 return;
 
+            base.IncompatibleWave += PublishIncompatibleMic;
+
             try
-            {          
-                 await base.loadFileAsync(data);
+            {
+                await base.loadFileAsync(data);
             }
             catch (Exception ex)
             {
                 await disconnectFromChannelAsync();
-                handleReplayException(ex, "Trying to add a new file to the queue. (Button Nr: " + data.id + ", Name: \"" + data.name + "\").", data.id);
+                handleReplayException(ex,
+                    "Trying to add a new file to the queue. (Button Nr: " + data.id + ", Name: \"" + data.name + "\").",
+                    data.id);
             }
-        }     
+            finally
+            {
+                base.IncompatibleWave -= PublishIncompatibleMic;
+            }
+        }
+
+
+        private void PublishIncompatibleMic()
+        {
+            SnackbarManager.SnackbarMessage("Incompatible Mic Settings", SnackbarManager.SnackbarAction.Log);
+
+            Util.IO.LogManager.LogException(null, "BotModule/BotHandler",
+                "Incompatible Mic Settings. To prevent distorted audio, set your device to " + BotWave.sampleRate + " Hz and " + BotWave.channelCount + " channels.", false);
+        }
+
+
 
         /// <summary>
         /// resumes or starts the stream
