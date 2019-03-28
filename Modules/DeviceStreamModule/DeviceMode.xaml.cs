@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -24,6 +25,9 @@ namespace DeviceStreamModule
     public partial class DeviceMode : UserControl, INotifyPropertyChanged
     {
         //private WasapiCapture _capture = null;
+        public const int _channelCount = 2;
+        public const int _sampleRate = 48000;
+        public const int _bitDepth = 16;
 
 
         public delegate void DeviceStartStreamHandler(string name, string id);
@@ -37,12 +41,51 @@ namespace DeviceStreamModule
 
         private string selectedDevice = null;
         private string selectedDeviceName = null;
+        private int channelCount = 0;
+        private int sampleRate = 0;
+        private int bitDepth = 0;
+
+        private bool isFalseSampleRate = false, isFalseChannelCount = false, isFalseBitDepth = false;
+
+
+        public int ChannelCount
+        {
+            get => channelCount;
+            set
+            {
+                channelCount = value;
+                OnPropertyChanged("ChannelCount");
+            }
+        }
+
+        public int SampleRate
+        {
+            get => sampleRate;
+            set
+            {
+                sampleRate = value;
+                OnPropertyChanged("SampleRate");
+            }
+        }
+
+        public int BitDepth
+        {
+            get => bitDepth;
+            set
+            {
+                bitDepth = value;
+                OnPropertyChanged("BitDepth");
+            }
+        }
+
+
 
 
         public DeviceMode()
         {
             InitializeComponent();
 
+           
             this.DataContext = this;
 
             findDevices();
@@ -53,20 +96,72 @@ namespace DeviceStreamModule
         {
             MMDeviceEnumerator devices = new MMDeviceEnumerator();
 
-            //devices.GetDefaultAudioEndpoint(DataFlow.Capture, Role.Communications);
-            //devices.GetDefaultAudioEndpoint(DataFlow.Capture, Role.Console);
-            //devices.GetDefaultAudioEndpoint(DataFlow.Capture, Role.Multimedia);
+            //loop through all available and active devices
             foreach (MMDevice device in devices.EnumerateAudioEndPoints(DataFlow.Capture, DeviceState.Active))
             {
-                ComboBox.Items.Add(new BoxElement(device.FriendlyName, device.ID));
+                //add the device to the dropdown list
+                var waveFormat = device.AudioClient.MixFormat;
+
+                var element = new BoxElement()
+                {
+                    Name = device.FriendlyName,
+                    Id = device.ID,
+                    sampleRate = waveFormat.SampleRate,
+                    channelCount = waveFormat.Channels,
+                    bitDepth = waveFormat.BitsPerSample,
+                };
 
 
+                ComboBox.Items.Add(element);   
                 //Console.WriteLine(device.FriendlyName + "\t" + device.State);
             }
 
             //add a virtual earrape device
-            ComboBox.Items.Add(new BoxElement("Death and Destruction", "-1"));
+            Random r = new Random();
+            ComboBox.Items.Add(new BoxElement("Death and Destruction", "-1", r.Next(100000), r.Next(6), r.Next(32)));
         }
+
+       
+
+      
+        private void ButtonBase_OnClick(object sender, RoutedEventArgs e)
+        {
+            //start streaming the selected device
+            if (selectedDevice != null)
+                DeviceStartStream(selectedDeviceName, selectedDevice);
+        }
+
+        private void ComboBox_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (e.AddedItems[0] is BoxElement device)
+            {
+                //set all properties for displaying the selected item
+                selectedDevice = device.Id;
+                selectedDeviceName = device.Name;
+                ChannelCount = device.channelCount;
+                SampleRate = device.sampleRate;
+                BitDepth = device.bitDepth;
+
+                
+                ToggleInvalidSettings(SampleRate==_sampleRate, ChannelCount==_channelCount, BitDepth==_bitDepth);
+            }
+        }
+
+
+        /// <summary>
+        /// Toggle the warning for incompatible formats
+        /// </summary>
+        /// <param name="sampleValid">if SampleRate is compatible</param>
+        /// <param name="channelValid">if ChannelCount is compatible</param>
+        /// <param name="bitValid">if BitDepth is compatible</param>
+        private void ToggleInvalidSettings(bool sampleValid, bool channelValid, bool bitValid)
+        {
+            Icon_Sample_Valid.Visibility = !sampleValid ? Visibility.Visible : Visibility.Hidden;
+            Icon_Channel_Valid.Visibility = !channelValid ? Visibility.Visible : Visibility.Hidden;
+            //Icon_Bit_Valid.Visibility = !bitValid ? Visibility.Visible : Visibility.Hidden;
+        }
+
+        
 
         public event PropertyChangedEventHandler PropertyChanged;
 
@@ -77,55 +172,15 @@ namespace DeviceStreamModule
             handler?.Invoke(this, new PropertyChangedEventArgs(info));
         }
 
-      
-        private void ButtonBase_OnClick(object sender, RoutedEventArgs e)
-        {
-            if (selectedDevice != null)
-                DeviceStartStream(selectedDeviceName, selectedDevice);
-        }
-
-        private void ComboBox_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            if (e.AddedItems[0] is BoxElement device)
-            {
-                selectedDevice = device.Id;
-                selectedDeviceName = device.Name;
-
-                //_capture?.StopRecording();
-
-                //_capture = new WasapiCapture(device);
-                //_capture.DataAvailable += WaveInOnDataAvailable;
-                //_capture.StartRecording();
-            }
-        }
-
-        //takes to much cpu-time
-        //private void WaveInOnDataAvailable(object sender, WaveInEventArgs e)
-        //{
-        //    float max = 0;
-        //    var buffer = new WaveBuffer(e.Buffer);
-        //    // interpret as 32 bit floating point audio
-        //    for (int index = 0; index < e.BytesRecorded / 4; index++)
-        //    {
-        //        var sample = buffer.FloatBuffer[index];
-
-        //        // absolute value 
-        //        if (sample < 0) sample = -sample;
-        //        // is this the max value?
-        //        if (sample > max) max = sample;
-
-
-        //    }
-        //    ProgressVal = max * 100;
-        //}
-
-
         private struct BoxElement
         {
-            public BoxElement(string name, string id)
+            public BoxElement(string name, string id, int sRate=0, int chCnt = 0, int bitDpth=0)
             {
                 Id = id;
                 Name = name;
+                sampleRate = sRate;
+                bitDepth = bitDpth;
+                channelCount = chCnt;
             }
 
             public override string ToString()
@@ -135,6 +190,9 @@ namespace DeviceStreamModule
 
             public string Id;
             public string Name;
+            public int sampleRate;
+            public int bitDepth;
+            public int channelCount;
 
         }
 

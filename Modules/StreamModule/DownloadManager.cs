@@ -84,7 +84,7 @@ namespace StreamModule
 
             //wait until mutex is free
             while (mutex)
-                await Task.Delay(25);
+                await Task.Delay(10);
 
             if (!mutex)
             {

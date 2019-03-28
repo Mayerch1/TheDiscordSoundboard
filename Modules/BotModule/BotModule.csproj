@@ -167,7 +167,7 @@
     <Compile Include="Bot.cs" />
     <Compile Include="BotException.cs" />
     <Compile Include="BotHandler.cs" />
-    <Compile Include="BotReader.cs" />
+    <Compile Include="BotWave.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

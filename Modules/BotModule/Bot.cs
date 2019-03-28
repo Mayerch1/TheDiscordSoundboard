@@ -465,15 +465,8 @@ namespace BotModule
 
         //receives Data from requested device
         private void Capture_DataAvailable(object sender, WaveInEventArgs e)
-        {
-            WaveFormat format = Wave.Capture.WaveFormat;
-
-            //empty buffer with size of recorded bytes
-            int size = e.BytesRecorded;
-            //byte[] buffer;
-
-         
-            OutStream.Write(e.Buffer, 0, size);
+        {    
+            OutStream.Write(e.Buffer, 0, e.BytesRecorded);
         }
 
 

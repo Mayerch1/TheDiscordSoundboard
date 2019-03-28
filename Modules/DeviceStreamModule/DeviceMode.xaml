@@ -7,45 +7,61 @@
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              mc:Ignorable="d"
              d:DesignHeight="450" d:DesignWidth="800">
+
+    <UserControl.Resources>
+        <Style x:Key="IconIncompatibleSettings" TargetType="materialDesign:PackIcon">
+            <Setter Property="Kind" Value="Warning"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+        </Style>
+
+
+
+    </UserControl.Resources>
+
     <Grid>
-        <StackPanel>
-            <ComboBox x:Name="ComboBox" SelectionChanged="ComboBox_OnSelectionChanged"/>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+
+        </Grid.ColumnDefinitions>
 
 
-            <!--<ListBox ItemsSource="{Binding DeviceList}" SelectionMode="Single"
-                 HorizontalContentAlignment="Stretch"
-                 SelectionChanged="Selector_OnSelectionChanged">
-            <ListBox.ItemTemplate>
-                <DataTemplate>
+        <Grid Column="0">
+            <StackPanel>
+                <ComboBox x:Name="ComboBox" 
+                          materialDesign:ComboBoxAssist.ShowSelectedItem="True"
+                          SelectionChanged="ComboBox_OnSelectionChanged" 
+                          Width="450" 
+                          Margin="0,0,0,10"/>
+                <Button Click="ButtonBase_OnClick" Width="450" Margin="0,10,0,0"/>
 
 
-                    <Grid Background="Transparent">
+            </StackPanel>
+        </Grid>
+        <Grid Column="1">
+            <StackPanel>
+            <StackPanel Orientation="Horizontal">
+                <Label Content="Samplerate: "/>
+                <Label Content="{Binding SampleRate}"/>
+                <materialDesign:PackIcon Style="{DynamicResource IconIncompatibleSettings}" x:Name="Icon_Sample_Valid"/>
+            </StackPanel>
 
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*" />
-                            <ColumnDefinition Width="*" />
-                            <ColumnDefinition Width="*" />
-                        </Grid.ColumnDefinitions>
+            <StackPanel Orientation="Horizontal">
+                <Label Content="Channel Count: "/>
+                <Label Content="{Binding ChannelCount}"/>
+                <materialDesign:PackIcon Style="{DynamicResource IconIncompatibleSettings}" x:Name="Icon_Channel_Valid"/>
+            </StackPanel>
 
-                        <Grid Grid.Column="0" VerticalAlignment="Center">
-                            <Label Content="{Binding FriendlyName}" />
-                        </Grid>
+            <StackPanel Orientation="Horizontal">
+                <Label Content="Bitdepth: "/>
+                <Label Content="{Binding BitDepth}"/>
+                <!--<materialDesign:PackIcon Style="{DynamicResource IconIncompatibleSettings}" x:Name="Icon_Bit_Valid"/>-->
+            </StackPanel>
+</StackPanel>
+        </Grid>
 
-                        <Grid Grid.Column="1" VerticalAlignment="Center">
-                            <Label Content="{Binding AudioEndpointVolume.MasterVolumeLevelScalar}" />
-                        </Grid>
 
-                        <Grid Grid.Column="2" VerticalAlignment="Center">
-                            <Label Content="{Binding AudioEndpointVolume.Mute}" />
-                        </Grid>
 
-                    </Grid>
-
-                </DataTemplate>
-            </ListBox.ItemTemplate>
-        </ListBox>-->
-            <!--<ProgressBar x:Name="ProgressBar" Minimum="0" Maximum="100" Value="{Binding ProgressVal}"/>-->
-            <Button Click="ButtonBase_OnClick" />
-        </StackPanel>
+        
     </Grid>
 </UserControl>
