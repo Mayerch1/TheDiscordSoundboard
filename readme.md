@@ -1,7 +1,12 @@
 
 <img src="DiscordBot/res/speaker.png" alt="drawing" style="width:100px;"/>
 
- ![Alt Text](https://www.openhub.net/p/TheDiscordSoundboard/widgets/project_thin_badge?format=gif) 
+
+ [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
+ [![Alt Text](https://www.openhub.net/p/TheDiscordSoundboard/widgets/project_thin_badge?format=gif)](https://www.openhub.net/p/TheDiscordSoundboard) 
+ 
+
+
 
 # Welcome to TDS<br> 
 ## **T**he **D**iscord **S**oundboard 2.X
