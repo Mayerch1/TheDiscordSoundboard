@@ -1,11 +1,12 @@
 
 <img src="DiscordBot/res/speaker.png" alt="drawing" style="width:100px;"/>
 
+ ![Alt Text](https://www.openhub.net/p/TheDiscordSoundboard/widgets/project_thin_badge?format=gif) 
 
-# Welcome to TDS <br> 
+# Welcome to TDS<br> 
 ## **T**he **D**iscord **S**oundboard 2.X
 
-<br><br>
+<br>
 
 Hi, 
 this is a small Discord-Soundboard for streaming Sounds/Music into Discord - voice channels.
