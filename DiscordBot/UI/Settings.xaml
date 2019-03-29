@@ -303,7 +303,7 @@
                                     <ToggleButton
                                         Style="{DynamicResource MaterialDesignFlatToggleButton}"
                                         IsChecked="{Binding IsFixedBtnRatio}">
-                                        <materialDesign:PackIcon Kind="AttachmentVertical" />
+                                        <materialDesign:PackIcon Kind="Lock" />
                                     </ToggleButton>
                                 </StackPanel>
 
