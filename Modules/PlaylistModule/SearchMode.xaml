@@ -75,7 +75,8 @@
                         </Button>
                     </DockPanel>
                 </materialDesign:ColorZone>
-
+                
+                <!--start of search bar -->
                 <StackPanel DockPanel.Dock="Left" VerticalAlignment="Stretch">
                     <materialDesign:ColorZone Background="{DynamicResource MaterialDesignTextFieldBoxBackground}" VerticalAlignment="Stretch"
                                                       CornerRadius="9"

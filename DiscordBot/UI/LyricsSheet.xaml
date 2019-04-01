@@ -9,25 +9,59 @@
              d:DesignHeight="450" d:DesignWidth="800"
              Background="{DynamicResource MaterialDesignPaper}">
     <Grid>
-        <StackPanel Orientation="Vertical">
+        <StackPanel Orientation="Vertical" Margin="20">
 
-            <StackPanel Orientation="Horizontal">
-                <StackPanel Orientation="Vertical">
-                    <TextBox x:Name="box_Title" MinWidth="200"/>
-                    <TextBox x:Name="box_Auth" MinWidth="200"/>
-                </StackPanel>
-                <Button Click="btn_RefetchLyrics_Click">
-                    <materialDesign:PackIcon Kind="Redo" />
+            <StackPanel DockPanel.Dock="Left" VerticalAlignment="Stretch">
+
+                <materialDesign:ColorZone Background="{DynamicResource MaterialDesignTextFieldBoxBackground}" VerticalAlignment="Stretch"
+                                                      CornerRadius="9"
+                                                      Margin="5,4,4,5"
+                                                      Height="30">
+
+                    <DockPanel LastChildFill="True" VerticalAlignment="Stretch">
+                        <materialDesign:PackIcon Kind="Person" Height="20" Width="20"
+                                                                 VerticalAlignment="Center" Margin="10,0,10,0"
+                                                                 Foreground="{DynamicResource MaterialDesignBody}" />
+
+                        <TextBox x:Name="box_Auth"
+                                                 materialDesign:HintAssist.Hint="Interpret"
+                                                 materialDesign:TextFieldAssist.DecorationVisibility="Hidden"
+                                                 BorderThickness="0" VerticalAlignment="Center" 
+                                                 Foreground="{DynamicResource MaterialDesignBody}"/>
+                    </DockPanel>
+                </materialDesign:ColorZone>
+                
+                <materialDesign:ColorZone Background="{DynamicResource MaterialDesignTextFieldBoxBackground}" VerticalAlignment="Stretch"
+                                                      CornerRadius="9"
+                                                      Margin="5,4,4,5"
+                                                      Height="30">
+
+                    <DockPanel LastChildFill="True" VerticalAlignment="Stretch">
+                        <materialDesign:PackIcon Kind="Music" Height="20" Width="20"
+                                                                 VerticalAlignment="Center" Margin="10,0,10,0"
+                                                                 Foreground="{DynamicResource MaterialDesignBody}" />
+
+                        <TextBox x:Name="box_Title"
+                                                 materialDesign:HintAssist.Hint="Title"
+                                                 materialDesign:TextFieldAssist.DecorationVisibility="Hidden"
+                                                 BorderThickness="0" VerticalAlignment="Center" 
+                                                 Foreground="{DynamicResource MaterialDesignBody}"/>
+                    </DockPanel>
+                </materialDesign:ColorZone>
+                <Button Click="btn_RefetchLyrics_Click" Margin="5,4,4,5">
+                    <materialDesign:PackIcon Kind="Magnify" />
                 </Button>
+
             </StackPanel>
-            
 
 
-            
 
+                <ScrollViewer VerticalAlignment="Stretch" VerticalScrollBarVisibility="Auto" Height="800" Margin="20,0,0,0">
 
-          
-                <TextBlock x:Name="txt_lyric" />
+                    <TextBlock x:Name="txt_lyric"/>
+
+                </ScrollViewer>
+           
             
 
 

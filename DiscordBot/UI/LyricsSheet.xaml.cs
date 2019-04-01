@@ -40,6 +40,7 @@ namespace DiscordBot.UI
         public void setLyric(string lyric)
         {
             txt_lyric.Text = lyric;
+            
         }
 
 
