@@ -245,7 +245,13 @@
                                     </Grid>
 
                                     <Grid Grid.Column="3">
-                                        <Button Click="btn_LyricShow_Click">
+                                        <Button Margin="0"
+                                                VerticalAlignment="Center"
+                                                HorizontalAlignment="Center"
+                                                Foreground="{DynamicResource MaterialDesignBody}"
+                                                Style="{StaticResource MaterialDesignFlatButton}"
+                                                Click="btn_LyricShow_Click"
+                                                ToolTip="Show Lyrics">
                                             <materialDesign:PackIcon Kind="TextToSpeech" />
                                         </Button>
 
@@ -300,7 +306,7 @@
 
 
                                     <StackPanel Orientation="Horizontal" Margin="0,20,0,0">
-                                        <!-- dialog host for primary colors-->
+                                        <!-- dialog host for additional controls-->
                                         <materialDesign:DialogHost x:Name="dialogHost_OtherControls"
                                                                    materialDesign:DialogHost.DialogClosingAttached="dialogHost_OnDialogClosing"
                                                                    HorizontalAlignment="Center"

@@ -9,43 +9,48 @@
              d:DesignHeight="450" d:DesignWidth="800"
              Background="{DynamicResource MaterialDesignPaper}">
     <Grid>
-        <StackPanel Orientation="Vertical" Margin="20">
+        <!-- use same margin as other pages (Playlist/Search mode) -->
+        <DockPanel Margin="5,4,4,5">
 
-            <StackPanel DockPanel.Dock="Left" VerticalAlignment="Stretch">
+            <StackPanel DockPanel.Dock="Top" HorizontalAlignment="Stretch">
 
-                <materialDesign:ColorZone Background="{DynamicResource MaterialDesignTextFieldBoxBackground}" VerticalAlignment="Stretch"
-                                                      CornerRadius="9"
-                                                      Margin="5,4,4,5"
-                                                      Height="30">
+                <materialDesign:ColorZone Background="{DynamicResource MaterialDesignTextFieldBoxBackground}"
+                                          VerticalAlignment="Stretch"
+                                          CornerRadius="9"
+                                          Margin="5,4,4,5"
+                                          Height="30">
 
                     <DockPanel LastChildFill="True" VerticalAlignment="Stretch">
                         <materialDesign:PackIcon Kind="Person" Height="20" Width="20"
-                                                                 VerticalAlignment="Center" Margin="10,0,10,0"
-                                                                 Foreground="{DynamicResource MaterialDesignBody}" />
+                                                 VerticalAlignment="Center" Margin="10,0,10,0"
+                                                 Foreground="{DynamicResource MaterialDesignBody}" />
 
-                        <TextBox x:Name="box_Auth"
-                                                 materialDesign:HintAssist.Hint="Interpret"
-                                                 materialDesign:TextFieldAssist.DecorationVisibility="Hidden"
-                                                 BorderThickness="0" VerticalAlignment="Center" 
-                                                 Foreground="{DynamicResource MaterialDesignBody}"/>
+                        <TextBox
+                            Text="{Binding Author}"
+                            materialDesign:HintAssist.Hint="Interpret"
+                            materialDesign:TextFieldAssist.DecorationVisibility="Hidden"
+                            BorderThickness="0" VerticalAlignment="Center"
+                            Foreground="{DynamicResource MaterialDesignBody}" />
                     </DockPanel>
                 </materialDesign:ColorZone>
-                
-                <materialDesign:ColorZone Background="{DynamicResource MaterialDesignTextFieldBoxBackground}" VerticalAlignment="Stretch"
-                                                      CornerRadius="9"
-                                                      Margin="5,4,4,5"
-                                                      Height="30">
+
+                <materialDesign:ColorZone Background="{DynamicResource MaterialDesignTextFieldBoxBackground}"
+                                          VerticalAlignment="Stretch"
+                                          CornerRadius="9"
+                                          Margin="5,4,4,5"
+                                          Height="30">
 
                     <DockPanel LastChildFill="True" VerticalAlignment="Stretch">
                         <materialDesign:PackIcon Kind="Music" Height="20" Width="20"
-                                                                 VerticalAlignment="Center" Margin="10,0,10,0"
-                                                                 Foreground="{DynamicResource MaterialDesignBody}" />
+                                                 VerticalAlignment="Center" Margin="10,0,10,0"
+                                                 Foreground="{DynamicResource MaterialDesignBody}" />
 
-                        <TextBox x:Name="box_Title"
-                                                 materialDesign:HintAssist.Hint="Title"
-                                                 materialDesign:TextFieldAssist.DecorationVisibility="Hidden"
-                                                 BorderThickness="0" VerticalAlignment="Center" 
-                                                 Foreground="{DynamicResource MaterialDesignBody}"/>
+                        <TextBox
+                            Text="{Binding Title}"
+                            materialDesign:HintAssist.Hint="Title"
+                            materialDesign:TextFieldAssist.DecorationVisibility="Hidden"
+                            BorderThickness="0" VerticalAlignment="Center"
+                            Foreground="{DynamicResource MaterialDesignBody}" />
                     </DockPanel>
                 </materialDesign:ColorZone>
                 <Button Click="btn_RefetchLyrics_Click" Margin="5,4,4,5">
@@ -55,16 +60,13 @@
             </StackPanel>
 
 
+            <ScrollViewer VerticalAlignment="Stretch" Margin="20,0,0,0">
 
-                <ScrollViewer VerticalAlignment="Stretch" VerticalScrollBarVisibility="Auto" Height="800" Margin="20,0,0,0">
+                <TextBlock Text="{Binding Lyrics}" />
 
-                    <TextBlock x:Name="txt_lyric"/>
-
-                </ScrollViewer>
-           
-            
+            </ScrollViewer>
 
 
-        </StackPanel>
+        </DockPanel>
     </Grid>
 </UserControl>

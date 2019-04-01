@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -20,41 +21,81 @@ namespace DiscordBot.UI
     /// <summary>
     /// Interaction logic for LyricsSheet.xaml
     /// </summary>
-    public partial class LyricsSheet : UserControl
+    public partial class LyricsSheet : UserControl, INotifyPropertyChanged
     {
-        public LyricsSheet()
-        {
-            InitializeComponent();
-        }
+        private const string lyricErr = "Could not find any lyrics for the given input\nMake sure to enter the exact title and the exact name of the Author.\nHit the search button to retry";
+        private string lyrics;
+        private string title;
+        private string author;
 
-        public void setTitle(string title)
+        public string Lyrics
         {
-            box_Title.Text = title;
-        }
-
-        public void setAuth(string auth)
-        {
-            box_Auth.Text = auth;
-        }
-
-        public void setLyric(string lyric)
-        {
-            txt_lyric.Text = lyric;
-            
-        }
-
-
-        private void btn_RefetchLyrics_Click(object sender, RoutedEventArgs e)
-        {
-            var lyric = Util.IO.LyricsManager.getLyrics(box_Title.Text, box_Auth.Text);
-            if (lyric != null)
+            get => lyrics;
+            set
             {
-                setLyric(lyric.Lyric);
+                lyrics = value;
+                OnPropertyChanged("Lyrics");
             }
         }
 
 
-      
+        public string Title
+        {
+            get => title;
+            set
+            {
+                title = value;
+                OnPropertyChanged("Title");
+            }
+        }
+
+        public string Author
+        {
+            get => author;
+            set
+            {
+                author = value;
+                OnPropertyChanged("Author");
+            }
+        }
+
+        
+
+        //TODO change name from interpret into author/songwriter
+        public LyricsSheet()
+        {          
+            InitializeComponent();
+            this.DataContext = this;
+            Lyrics = lyricErr;
+        }
+
+
+
+        private void btn_RefetchLyrics_Click(object sender, RoutedEventArgs e)
+        {
+            var result = Util.IO.LyricsManager.getLyrics(Title, Author);
+            if (result != null)
+            {
+                //TODO see if writing back Author/Title is wanted
+                Lyrics = result.Lyric;
+                Title = result.LyricSong;
+                Author = result.LyricArtist;
+            }
+            else
+            {
+                Lyrics = lyricErr;
+            }
+           
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        private void OnPropertyChanged(string info)
+        {
+            PropertyChangedEventHandler handler = PropertyChanged;
+
+            handler?.Invoke(this, new PropertyChangedEventArgs(info));
+        }
     }
 #pragma warning restore CS1591
 }

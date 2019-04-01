@@ -969,15 +969,15 @@ namespace DiscordBot
 
                 if (lyrics != null)
                 {
-                    LyricsSheet.setTitle(lyrics.LyricSong);
-                    LyricsSheet.setAuth(lyrics.LyricArtist);
-                    LyricsSheet.setLyric(lyrics.Lyric);
+                    LyricsSheet.Title =  lyrics.LyricSong;
+                    LyricsSheet.Author= lyrics.LyricArtist;
+                    LyricsSheet.Lyrics = lyrics.Lyric;
                 }
                 else
                 {
-                    LyricsSheet.setTitle(CurrentSongName);
-                    LyricsSheet.setAuth("");
-                    LyricsSheet.setLyric("");
+                    LyricsSheet.Title = CurrentSongName;
+                    LyricsSheet.Author = "";
+                    LyricsSheet.Lyrics = "";
                 }
             }
         }
