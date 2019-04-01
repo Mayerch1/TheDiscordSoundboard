@@ -3,7 +3,7 @@
 
 
  [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
- ![GitHub release](https://img.shields.io/github/release/mayerch1/TheDiscordSoundboard.svg)
+ [![GitHub release](https://img.shields.io/github/release/mayerch1/TheDiscordSoundboard.svg)](https://github.com/mayerch1/TheDiscordSoundboard/releases/latest)
  [![Openhub](https://www.openhub.net/p/TheDiscordSoundboard/widgets/project_thin_badge?format=gif)](https://www.openhub.net/p/TheDiscordSoundboard) 
  
 
