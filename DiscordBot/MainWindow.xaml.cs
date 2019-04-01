@@ -27,7 +27,7 @@ namespace DiscordBot
     ///  <summary>
     ///  Interaction logic for MainWindow.xaml
     ///  </summary>
-    //blub2
+    //blub
     public partial class MainWindow : Window, INotifyPropertyChanged
     {
 #pragma warning disable CS1591
