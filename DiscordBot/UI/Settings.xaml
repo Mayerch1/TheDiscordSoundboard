@@ -111,7 +111,7 @@
                                     VerticalAlignment="Top"
                                     AcceptsReturn="False"
                                     TextWrapping="NoWrap"
-                                    Width="450" TextChanged="box_clientName_TextChanged"/>
+                                    Width="450" TextChanged="box_clientName_TextChanged" />
 
                                 <TextBox
                                     Style="{StaticResource MaterialDesignFilledTextFieldTextBox}"
@@ -281,7 +281,7 @@
                                             ToolTip="Width of Button"
                                             Value="{Binding BtnWidth}"
                                             Width="280"
-                                            ValueChanged="slider_BtnWidth_ValueChanged"/>
+                                            ValueChanged="slider_BtnWidth_ValueChanged" />
                                 </StackPanel>
 
                                 <StackPanel Orientation="Horizontal">
@@ -317,7 +317,7 @@
                                             Margin="10,0,0,0"
                                             ToolTip="Displayed Buttons"
                                             Value="{Binding MinVisibleButtons}"
-                                            Width="280"/>
+                                            Width="280" />
                                 </StackPanel>
 
                                 <StackPanel Orientation="Horizontal" Margin="5,0,0,0">

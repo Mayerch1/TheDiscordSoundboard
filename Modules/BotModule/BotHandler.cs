@@ -366,9 +366,10 @@ namespace BotModule
             {
                 userList = base.getAllClients(acceptOffline);
             }
-            catch
+            catch(Exception ex)
             {
-                SnackbarManager.SnackbarMessage("Cannot get clients. Retry later");
+                Util.IO.LogManager.LogException(ex, "BotModule/BotHandler", "Exception when trying to GET client-list from Discord Servers");
+                SnackbarManager.SnackbarMessage("Cannot get clients. Retry later", SnackbarManager.SnackbarAction.Log);
                 return null;
             }
 

@@ -17,10 +17,22 @@ namespace BotModule
     public class BotWave
     {
         //===============================
+        /// <summary>
+        /// Desired channelCount for Discord
+        /// </summary>
         public const int channelCount = 2;
+        /// <summary>
+        /// Desired channelCount for Discord
+        /// </summary>
         public const int sampleRate = 48000;
+
+        //not used, yet
         private const int sampleQuality = 60;
 
+
+        /// <summary>
+        /// Desired channelCount for Discord
+        /// </summary>
         public const int bitDepth = 16;
         //=================================
 

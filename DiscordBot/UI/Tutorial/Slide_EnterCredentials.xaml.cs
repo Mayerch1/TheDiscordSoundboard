@@ -45,18 +45,6 @@ namespace DiscordBot.UI.Tutorial
             Handle.Token = box_Token.Text;
             FinishedSetup(true);
         }
-
-        private void box_Username_TextChanged(object sender, TextChangedEventArgs e)
-        {
-            if (sender is TextBox box)
-            {
-                //replace all blancs
-                box.Text = box.Text.Replace(" ", String.Empty);
-
-                box.SelectionStart = box.Text.Length;
-                box.SelectionLength = 0;
-            }
-        }
     }
 #pragma warning restore CS1591
 }

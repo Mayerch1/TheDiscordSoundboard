@@ -25,9 +25,9 @@ namespace DeviceStreamModule
     public partial class DeviceMode : UserControl, INotifyPropertyChanged
     {
         //private WasapiCapture _capture = null;
-        public const int _channelCount = 2;
-        public const int _sampleRate = 48000;
-        public const int _bitDepth = 16;
+        private const int _channelCount = 2;
+        private const int _sampleRate = 48000;
+        private const int _bitDepth = 16;
 
 
         public delegate void DeviceStartStreamHandler(string name, string id);
@@ -43,9 +43,7 @@ namespace DeviceStreamModule
         private string selectedDeviceName = null;
         private int channelCount = 0;
         private int sampleRate = 0;
-        private int bitDepth = 0;
-
-        private bool isFalseSampleRate = false, isFalseChannelCount = false, isFalseBitDepth = false;
+        private int bitDepth = 0;       
 
 
         public int ChannelCount

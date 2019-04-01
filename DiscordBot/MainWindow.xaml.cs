@@ -30,8 +30,6 @@ namespace DiscordBot
     //blub
     public partial class MainWindow : Window, INotifyPropertyChanged
     {
-
-
 #pragma warning disable CS1591
 
         #region enums
@@ -85,8 +83,6 @@ namespace DiscordBot
 
         private double LastVolume { get; set; }
 
-       
-
 
         public double LiveVolume
         {
@@ -96,7 +92,6 @@ namespace DiscordBot
                 liveVolume = value;
                 setVolumeIcon(value);
                 OnPropertyChanged("LiveVolume");
-
             }
         }
 
@@ -166,7 +161,7 @@ namespace DiscordBot
         private bool IsChannelListOpened { get; set; } = false;
 
         #endregion propertys
-        
+
         public MainWindow()
         {
             Util.IO.LogManager.InitLog();
@@ -193,7 +188,7 @@ namespace DiscordBot
 
             InitializeComponent();
 
-  
+
             //--------
             //self assign theme values
             //this will apply themes to the ui, as it triggers delegates/events
@@ -203,7 +198,7 @@ namespace DiscordBot
             Handle.Data.Persistent.SecondarySwatch = Handle.Data.Persistent.SecondarySwatch;
             //--------
 
-                       
+
             SetDynamicMenu();
 
             //events
@@ -215,10 +210,10 @@ namespace DiscordBot
             FileWatcher.StartMonitor(Handle.Data.Persistent.MediaSources, Handle.Data);
 
             initTimer();
-           
+
             //ui
             LivePitch = Handle.Pitch;
-            LiveVolume = ((double)Handle.Volume * 100) * (1 / (Handle.Data.Persistent.VolumeCap / 100.0f));
+            LiveVolume = ((double) Handle.Volume * 100) * (1 / (Handle.Data.Persistent.VolumeCap / 100.0f));
             LastVolume = LiveVolume;
 
             setVolumeIcon(LiveVolume);
@@ -250,12 +245,13 @@ namespace DiscordBot
                     }
                 }
 
-                initAsync();
-                initDelayedAsync();
+                InitWrapperAsync();
             }
 
-            FileWatcher.indexFiles(Handle.Data.Persistent.MediaSources); 
+            FileWatcher.indexFiles(Handle.Data.Persistent.MediaSources);
         }
+
+
 
 
         private void MainWindow_Closing(object sender, CancelEventArgs e)
@@ -280,6 +276,56 @@ namespace DiscordBot
         }
 
         #endregion hotkeys
+
+        private async void InitWrapperAsync()
+        {
+            await initAsync();
+            await initDelayedAsync();       
+        }
+        private async Task initAsync()
+        {
+            //refresh Binding for Button Width and Size
+            Handle.Data.Persistent.BtnWidth = Handle.Data.Persistent.BtnWidth;
+            Handle.Data.Persistent.BtnHeight = Handle.Data.Persistent.BtnHeight;
+
+            Handle.Token = Handle.Data.Persistent.Token;
+            Handle.ClientId = Handle.Data.Persistent.ClientId;
+            Handle.Volume = Handle.Data.Persistent.Volume;
+            Handle.ChannelId = Handle.Data.Persistent.ChannelId;
+
+            await Handle.Bot.connectToServerAsync();
+        }
+
+        private async Task initDelayedAsync()
+        {
+            //delay this method by 2,5 seconds
+            await Task.Delay(2500);
+
+            //search for updates on github/releases
+            var git = new GithubVersionChecker.GithubUpdateChecker(DataManagement.PersistentData.gitAuthor,
+                DataManagement.PersistentData.gitRepo);
+            if (await git.CheckForUpdateAsync(DataManagement.PersistentData.version, VersionChange.Revision))
+            {
+                SnackbarManager.SnackbarMessage("A newer version is available", SnackbarManager.SnackbarAction.Update);
+            }
+
+
+            Handle.ClientName_Changed(Handle.ClientName);
+
+            //resolve user to get avatar-url
+            var client = Handle.BotMisc.extractClient(await Handle.Bot.getAllClients(true), Handle.ClientId);
+            Handle.BotMisc.updateAvatar(client);
+            OnPropertyChanged("ClientAvatar");
+
+            //get channel list to display in TreeView
+            initChannelList();
+
+
+            var palette = new PaletteHelper().QueryPalette();
+
+            var x = new MaterialDesignColors.SwatchesProvider();
+        }
+
 
         private async void cleanUp()
         {
@@ -421,15 +467,7 @@ namespace DiscordBot
             }
         }
 
-        private async void initAsync()
-        {
-            Handle.Token = Handle.Data.Persistent.Token;
-            Handle.ClientId = Handle.Data.Persistent.ClientId;
-            Handle.Volume = Handle.Data.Persistent.Volume;
-            Handle.ChannelId = Handle.Data.Persistent.ChannelId;
-
-            await Handle.Bot.connectToServerAsync();
-        }
+       
 
         private void initTimer()
         {
@@ -533,36 +571,7 @@ namespace DiscordBot
             }
         }
 
-        private async void initDelayedAsync()
-        {
-            //delay this method by 2,5 seconds
-            await Task.Delay(2500);
-            
-            //search for updates on github/releases
-            var git = new GithubVersionChecker.GithubUpdateChecker(DataManagement.PersistentData.gitAuthor,
-                DataManagement.PersistentData.gitRepo);
-            if (await git.CheckForUpdateAsync(DataManagement.PersistentData.version, VersionChange.Revision))
-            {
-                SnackbarManager.SnackbarMessage("A newer version is available", SnackbarManager.SnackbarAction.Update);
-            }
-
-
-            Handle.ClientName_Changed(Handle.ClientName);
-
-            //resolve user to get avatar-url
-            var client = Handle.BotMisc.extractClient(await Handle.Bot.getAllClients(true), Handle.ClientId);
-            Handle.BotMisc.updateAvatar(client);
-            OnPropertyChanged("ClientAvatar");
-
-            //get channel list to display in TreeView
-            initChannelList();
-
-
-            var palette = new PaletteHelper().QueryPalette();
-
-            var x = new MaterialDesignColors.SwatchesProvider();
-        }
-
+       
         private async void initChannelList()
         {
             //receives channel list + displays it when menu is opened
@@ -801,20 +810,19 @@ namespace DiscordBot
 
         #region BotPlayDelegates
 
-        private void triggerMasterReplay(BotData data, bool isInstant, bool isPlaylist, bool disableHistory = false, 
+        private void triggerMasterReplay(BotData data, bool isInstant, bool isPlaylist, bool disableHistory = false,
             bool isDiscord = true)
         {
-
             if (isInstant)
             {
                 //only if not playlist
-                if(!isPlaylist)
-                //instant play aborts the playlist
+                if (!isPlaylist)
+                    //instant play aborts the playlist
                     Handle.Data.Queue.clearPlaylist();
 
                 //prepare lyrics w/o stressing the api
-                Util.IO.LyricsManager.setParameter(data.name, data.author);           
-                         
+                Util.IO.LyricsManager.setParameter(data.name, data.author);
+
                 //interrupt any stream
                 triggerInstantReplay(data, disableHistory);
             }
@@ -824,12 +832,12 @@ namespace DiscordBot
             }
         }
 
-        
 
         private void btn_InstantButton_Clicked(int btnListIndex, bool isInstant)
         {
             //especially isPlaylist argument
-            triggerMasterReplay(new DataManagement.BotData(Handle.Data.Persistent.BtnList[btnListIndex]), isInstant, false);
+            triggerMasterReplay(new DataManagement.BotData(Handle.Data.Persistent.BtnList[btnListIndex]), isInstant,
+                false);
         }
 
         private void List_Item_Play(uint index, bool isPriority = true)
@@ -840,7 +848,7 @@ namespace DiscordBot
                 if (file.Id == index)
                 {
                     //create ButtonData to feed to bot
-                    DataManagement.BotData data = new DataManagement.BotData(file.Name, file.Path, "", "",file.Author);
+                    DataManagement.BotData data = new DataManagement.BotData(file.Name, file.Path, "", "", file.Author);
                     triggerMasterReplay(data, isPriority, false);
                 }
             }
@@ -848,8 +856,7 @@ namespace DiscordBot
 
         private void Playlist_SingleFile_Play(DataManagement.FileData file)
         {
-          
-            triggerMasterReplay(new DataManagement.BotData(file.Name, file.Path, "", "",file.Author), false, false);
+            triggerMasterReplay(new DataManagement.BotData(file.Name, file.Path, "", "", file.Author), false, false);
         }
 
         private void Stream_Video_Play(DataManagement.BotData data)
@@ -892,7 +899,7 @@ namespace DiscordBot
 
             //stop streaming
             if (Handle.Bot.IsStreaming)
-                await Handle.Bot.stopStreamAsync(true, false);     
+                await Handle.Bot.stopStreamAsync(true, false);
 
             //add the list or history 
             Playlist list;
@@ -911,10 +918,10 @@ namespace DiscordBot
                     return;
             }
 
-            Handle.Data.Queue.enqueuePlaylist(list, fileIndex, isHistory);          
+            Handle.Data.Queue.enqueuePlaylist(list, fileIndex, isHistory);
 
             //get next File from BotQueue
-            bot_EndOfFile_Trigger();         
+            bot_EndOfFile_Trigger();
         }
 
 
@@ -950,7 +957,6 @@ namespace DiscordBot
         }
 
 
-
         private void btn_LyricShow_Click(object sender, RoutedEventArgs e)
         {
             if (LyricGrid.Visibility == Visibility.Visible)
@@ -976,9 +982,7 @@ namespace DiscordBot
                     LyricsSheet.setAuth("");
                     LyricsSheet.setLyric("");
                 }
-         
             }
-            
         }
 
         private void addTitleToHistory(DataManagement.BotData title)
@@ -995,21 +999,22 @@ namespace DiscordBot
             //NOT triggered on pause or loop
             //if (!_queueMutex)
             //{
-                //_queueMutex = true;
-                BotQueue.QueueItem? nextItem = Handle.Data.Queue.getNextItem(LoopStatus == LoopState.LoopAll);
+            //_queueMutex = true;
+            BotQueue.QueueItem? nextItem = Handle.Data.Queue.getNextItem(LoopStatus == LoopState.LoopAll);
 
-                //take next title in playlist
-                if (nextItem.HasValue)
-                {
-                    //bot is not streaming when reaching this point
-                    
-                    //next file
-                    var itemVal = nextItem.Value;
+            //take next title in playlist
+            if (nextItem.HasValue)
+            {
+                //bot is not streaming when reaching this point
 
-                    //play the next file
-                    triggerMasterReplay(itemVal.botData, true, true, itemVal.disableHistory);
-                }
-                //_queueMutex = false;
+                //next file
+                var itemVal = nextItem.Value;
+
+                //play the next file
+                triggerMasterReplay(itemVal.botData, true, true, itemVal.disableHistory);
+            }
+
+            //_queueMutex = false;
             //}
         }
 
@@ -1023,7 +1028,6 @@ namespace DiscordBot
                 if (btn_Play.Content is PackIcon ic)
                     ic.Kind = PackIconKind.Pause;
                 //test if set properly
-                
             }
             else
             {
@@ -1101,11 +1105,9 @@ namespace DiscordBot
 
         private void Slider_DelayedVolumeChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
-            Handle.Volume = ((float)e.NewValue / 100) * (Handle.Data.Persistent.VolumeCap / 100.0f);
+            Handle.Volume = ((float) e.NewValue / 100) * (Handle.Data.Persistent.VolumeCap / 100.0f);
             Console.WriteLine(@"Set Volume to " + Handle.Volume);
         }
-
-       
 
 
         private void btn_About_Click(object sender, RoutedEventArgs e)
@@ -1157,6 +1159,7 @@ namespace DiscordBot
             else
                 SnackbarManager.SnackbarMessage("Module not installed");
         }
+
         private void LoadStreamMode()
         {
             MainGrid.Children.Clear();
@@ -1176,7 +1179,7 @@ namespace DiscordBot
                 SnackbarManager.SnackbarMessage("Module not installed");
         }
 
-      
+
         private void LoadDeviceMode()
         {
             MainGrid.Children.Clear();
@@ -1357,13 +1360,16 @@ namespace DiscordBot
                 btn_Avatar_Click(null, null);
             }
 
-
             //only close dialog, if click was outside of the dialog     
             if (!dialogHost_OtherControls.IsMouseOver)
             {
-                DialogHost.CloseDialogCommand.Execute(null, null);
-                e.Handled = false;
+                if (dialogHost_OtherControls is DialogHost host)
+                {
+                    DialogHost.CloseDialogCommand.Execute(null, host);
+                }
             }
+
+            e.Handled = false;
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
@@ -1380,13 +1386,16 @@ namespace DiscordBot
 
         #region stuff related to dll
 
+
+       
+
+
         private void registerTutorialEvents(TutorialMaster ui)
         {
             ui.TutorialFinished += delegate
             {
-                initAsync();
-                initDelayedAsync();
-                btn_Settings_Click();
+                InitWrapperAsync();
+                btn_Sounds_Click(null, null);
             };
         }
 
@@ -1418,13 +1427,10 @@ namespace DiscordBot
         {
             ui.DeviceStartStream += Device_StartStream;
             ui.DeviceStopStream += Device_StopStream;
-
         }
 
         #endregion stuff related to dll
 
 #pragma warning restore CS1591
-
-        
     }
 }

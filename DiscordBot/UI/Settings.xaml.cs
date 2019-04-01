@@ -95,10 +95,10 @@ namespace DiscordBot.UI
         private void box_clientName_TextChanged(object sender, TextChangedEventArgs e)
         {
             //TODO: fix this
-            //if (sender is TextBox box)
-            //{
-            //    Handle.ClientName = box.Text;
-            //}
+            if (sender is TextBox box)
+            {
+                Handle.ClientName = box.Text;
+            }
 
         }
 
@@ -154,8 +154,10 @@ namespace DiscordBot.UI
             }
         }
 
+
         private void btn_AccentSwatch_Click(object sender, RoutedEventArgs e)
         {
+            //TODO in some conditions not triggered, on some devices never triggered
             if (sender is Button btn)
             {
                 if (btn.Tag != null)
@@ -262,10 +264,22 @@ namespace DiscordBot.UI
 
         private void Settings_OnPreviewMouseDown(object sender, MouseButtonEventArgs e)
         {
-            //only close dialog, if click was outside of the dialog     
-            if (!dialogHost_Primary.IsMouseOver && !dialogHost_Accent.IsMouseOver &&
-                !dialogHost_SupportedFormat.IsMouseOver)
-                DialogHost.CloseDialogCommand.Execute(null, null);
+            if (!dialogHost_Primary.IsMouseOver && dialogHost_Primary is DialogHost pHost)
+            {
+                DialogHost.CloseDialogCommand.Execute(null, pHost);
+
+            }
+            if (!dialogHost_Accent.IsMouseOver && dialogHost_Accent is DialogHost aHost)
+            {
+                DialogHost.CloseDialogCommand.Execute(null, aHost);
+
+            }
+            if (!dialogHost_SupportedFormat.IsMouseOver && dialogHost_SupportedFormat is DialogHost sHost)
+            {
+                DialogHost.CloseDialogCommand.Execute(null, sHost);
+
+            }
+
             e.Handled = false;
         }
 
@@ -482,8 +496,7 @@ namespace DiscordBot.UI
             }
             
         }
-
-       
+    
     }
 
 #pragma warning restore CS1591
