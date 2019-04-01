@@ -465,8 +465,13 @@ namespace BotModule
 
         //receives Data from requested device
         private void Capture_DataAvailable(object sender, WaveInEventArgs e)
-        {    
-            OutStream.Write(e.Buffer, 0, e.BytesRecorded);
+        {
+            var buff = e.Buffer;
+
+            applyVolume(ref buff);
+
+
+            OutStream.Write(buff, 0, e.BytesRecorded);
         }
 
 
@@ -595,6 +600,36 @@ namespace BotModule
             //IsLoop will be set from outside
 
             LoopStateChanged(data.isLoop);
+        }
+
+
+        /// <summary>
+        /// split buffer and apply volume to each byte pair
+        /// </summary>
+        /// <param name="buffer">ref to byte array package of the current stream</param>
+        private void applyVolume(ref byte[] buffer)
+        {
+            var vol = Volume;
+
+            if (IsEarrape)
+                vol = 22;
+
+            if (vol == 1)
+                return;
+
+                for (int i = 0; i < buffer.Length; i += 2)
+                {
+                    //convert a byte-Pair into one char (with 2 bytes)
+
+                    short bytePair = (short)((buffer[i + 1] & 0xFF) << 8 | (buffer[i] & 0xFF));
+
+                    bytePair = (short)(bytePair * vol);
+
+                    //convert char back to 2 bytes
+                    buffer[i] = (byte)bytePair;
+                    buffer[i + 1] = (byte)(bytePair >> 8);
+                }
+            
         }
 
         #endregion play stuff

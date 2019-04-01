@@ -24,11 +24,17 @@ namespace DeviceStreamModule
     /// </summary>
     public partial class DeviceMode : UserControl, INotifyPropertyChanged
     {
-        //private WasapiCapture _capture = null;
+        // string frames for tooltip
+        private const string _tooltipFrameA = "Not supported! Audio devices should have ";
+        private const string _tooltipFrameB = " There might be problems with the audio streams";
+        
         private const int _channelCount = 2;
         private const int _sampleRate = 48000;
         private const int _bitDepth = 16;
 
+        //tooltip for indicators of incompatible settings. needs to be public for accessibility from xaml
+        public static readonly string _channelCountTooltip = _tooltipFrameA + _channelCount + " Channels." +  _tooltipFrameB;
+        public static readonly string _sampleRateTooltip = _tooltipFrameA + _sampleRate +"Hz."+ _tooltipFrameB;
 
         public delegate void DeviceStartStreamHandler(string name, string id);
 

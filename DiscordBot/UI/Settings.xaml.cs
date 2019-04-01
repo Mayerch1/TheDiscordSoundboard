@@ -94,7 +94,6 @@ namespace DiscordBot.UI
 
         private void box_clientName_TextChanged(object sender, TextChangedEventArgs e)
         {
-            //TODO: fix this
             if (sender is TextBox box)
             {
                 Handle.ClientName = box.Text;
@@ -157,7 +156,6 @@ namespace DiscordBot.UI
 
         private void btn_AccentSwatch_Click(object sender, RoutedEventArgs e)
         {
-            //TODO in some conditions not triggered, on some devices never triggered
             if (sender is Button btn)
             {
                 if (btn.Tag != null)

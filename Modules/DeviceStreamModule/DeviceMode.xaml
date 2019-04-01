@@ -47,15 +47,15 @@
             <StackPanel Orientation="Horizontal">
                 <Label Content="Samplerate: "/>
                 <Label Content="{Binding SampleRate}"/>
-                <materialDesign:PackIcon Style="{DynamicResource IconIncompatibleSettings}" x:Name="Icon_Sample_Valid" 
-                                         ToolTip="Not supported! Audio device should have 48000Hz! There might be problems with audio stream"/>
+                <materialDesign:PackIcon Style="{DynamicResource IconIncompatibleSettings}" x:Name="Icon_Sample_Valid"
+                                         ToolTip="{x:Static local:DeviceMode._sampleRateTooltip}"/>
             </StackPanel>
 
             <StackPanel Orientation="Horizontal">
                 <Label Content="Channel Count: "/>
                 <Label Content="{Binding ChannelCount}"/>
-                    <materialDesign:PackIcon Style="{DynamicResource IconIncompatibleSettings}" x:Name="Icon_Channel_Valid" 
-                                             ToolTip="Not supported! Audio device should have 2 channels! There might be problems with audio stream"/>
+                    <materialDesign:PackIcon Style="{DynamicResource IconIncompatibleSettings}" x:Name="Icon_Channel_Valid"
+                                             ToolTip="{x:Static local:DeviceMode._channelCountTooltip}"/>
             </StackPanel>
 
             <StackPanel Orientation="Horizontal">

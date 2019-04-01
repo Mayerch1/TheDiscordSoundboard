@@ -885,10 +885,7 @@ namespace DiscordBot
             triggerMasterReplay(data, true, false, true);
         }
 
-        private void Device_StopStream(string id)
-        {
-            throw new NotImplementedException();
-        }
+       
 
         /// <param name="listIndex">unique id field of playlist</param>
         /// <param name="fileIndex">index in the array of all playList files</param>
@@ -1426,7 +1423,8 @@ namespace DiscordBot
         private void registerDeviceEvents(DeviceMode ui)
         {
             ui.DeviceStartStream += Device_StartStream;
-            ui.DeviceStopStream += Device_StopStream;
+            //ui.DeviceStopStream += Device_StopStream;
+            //TODO implement
         }
 
         #endregion stuff related to dll
