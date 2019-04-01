@@ -3,10 +3,11 @@
 
 
  [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
- [![Alt Text](https://www.openhub.net/p/TheDiscordSoundboard/widgets/project_thin_badge?format=gif)](https://www.openhub.net/p/TheDiscordSoundboard) 
+ ![GitHub release](https://img.shields.io/github/release/mayerch1/TheDiscordSoundboard.svg)
+ [![Openhub](https://www.openhub.net/p/TheDiscordSoundboard/widgets/project_thin_badge?format=gif)](https://www.openhub.net/p/TheDiscordSoundboard) 
  
 
-
+---
 
 # Welcome to TDS<br> 
 ## **T**he **D**iscord **S**oundboard 2.X
@@ -14,11 +15,11 @@
 <br>
 
 Hi, 
-this is a small Discord-Soundboard for streaming Sounds/Music into Discord - voice channels.
+this is a small Discord-Soundboard for streaming Sounds/Music into Discord voice channels.
 <br>
 <br>
-In contrast to a 'normal' Soundbot, this application hosts a bot on your local machine for the duration of the playback.
-This brings the advantage of an guaranteed availability of the service, combined with the abillity to stream local files from your Harddrive. The latest release enables you, to stream YouTube videos into a dicsord voice-channel.
+In contrast to a 'normal' Soundboard/Soundbot, this application hosts a bot on your local machine for the duration of the playback.
+This brings the advantage of an guaranteed availability of the service, combined with the abillity to stream local files from your Harddrive. The latest release enables you, to stream YouTube and several other online-videos into a dicsord voice-channel.
 <br>
 
 ---
@@ -38,8 +39,8 @@ See the ['Long Term Features' - Project](https://github.com/Mayerch1/TheDiscordS
 1. A confirmed Discord Account (only for setup)
 2. Rights to invite a bot to your server (only for setup)
 3. Internet Connection (obviously)
-4. Administrator rights (only if using installer, for setup)
-4. Some soundfiles to stream (or link to YT)
+4. Administrator rights (only if using installer, NOT for portable)
+4. Some soundfiles to stream (or a weblink)
 
 <br/>
 
@@ -53,16 +54,17 @@ See the ['Long Term Features' - Project](https://github.com/Mayerch1/TheDiscordS
 ---
 #### How to create the Bot:
 
-If you don't already know the procedure, check out [this](https://github.com/Mayerch1/TheDiscordSoundboard/wiki/Configure-The-Bot) instruction in the wiki ([wiki/Configure-The-Bot.md](https://github.com/Mayerch1/TheDiscordSoundboard/wiki/Configure-The-Bot))
+On the first startup, the application will show you within a introduction sequence, how to setup the bot.
+If you want to re-read the instructions, check out [this](https://github.com/Mayerch1/TheDiscordSoundboard/wiki/Configure-The-Bot) the guide in the wiki ([wiki/Configure-The-Bot.md](https://github.com/Mayerch1/TheDiscordSoundboard/wiki/Configure-The-Bot))
 
 ---
 
 #### How to 'install' the Soundboard
 
-We've now got a new installer for this application.
+We've got a installer for this application.
 
 You only need to [download](https://github.com/Mayerch1/TheDiscordSoundboard/releases/latest) and execute the install wizard.
-Follow all steps and instruction and everything will be set up correctly.
+Follow all steps and instruction. Everything will be set up correctly.
 
 
 If you compile the project by yourself, the opus and libsodium dll's won't get generated, so you'll need to download them seperately.
@@ -72,7 +74,7 @@ If you compile the project by yourself, the opus and libsodium dll's won't get g
 #### How to use the Bot
 <br>
 
-To see, how to set up the application on it's first startup, have a look at [this](https://github.com/Mayerch1/TheDiscordSoundboard/wiki/First-Startup) wiki page ([wiki/First-Startup](https://github.com/Mayerch1/TheDiscordSoundboard/wiki/First-Startup)).
+To see, how to use the application after it's first startup, have a look at [this](https://github.com/Mayerch1/TheDiscordSoundboard/wiki/First-Startup) wiki page ([wiki/First-Startup](https://github.com/Mayerch1/TheDiscordSoundboard/wiki/First-Startup)).
 
 
 ---
