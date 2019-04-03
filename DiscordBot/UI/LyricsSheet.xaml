@@ -65,10 +65,10 @@
             <ScrollViewer VerticalAlignment="Stretch" Margin="20,10,0,0">
                 <materialDesign:ColorZone Background="{DynamicResource MaterialDesignTextFieldBoxBackground}" CornerRadius="9">
                 <!--Text block for  lyrics -->
-                    <Viewbox MaxWidth="700">
+                    <Viewbox StretchDirection="DownOnly">
 
                         <TextBlock Text="{Binding Lyrics}" TextAlignment="Center" 
-                                   FontSize="15" FontStretch="Expanded"/>
+                                   FontSize="22" FontStretch="Expanded"/>
                     </Viewbox>
                     
                 </materialDesign:ColorZone>
