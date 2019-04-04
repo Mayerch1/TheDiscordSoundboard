@@ -15,13 +15,19 @@ namespace Util.IO
         private static string _title=null, _author=null;
 
 
+        public static GetLyricResult GetLyrics(int lyricId, string lyricChecksum)
+        {
+            var request = new com.chartlyrics.api.apiv1();
+            return request.GetLyric(lyricId, lyricChecksum);
+        }
+
         /// <summary>
         /// get the lyrics of requested song
         /// </summary>
         /// <param name="title">title of song</param>
         /// <param name="author">author of song</param>
         /// <returns>"" if no result</returns>
-        public static GetLyricResult getLyrics(string title=null, string author=null)
+        public static SearchLyricResult[] queryResultList(string title=null, string author=null)
         {
             if (title != null)
                 _title = title;
@@ -48,11 +54,16 @@ namespace Util.IO
 
             if (result.Length > 0 && result[0] != null)
             {
+                //get min(result.Length, 5)
+                int count = result.Length > 5 ? 5 : result.Length;
+
+               
+                return result.Take(count).ToArray();
                 //request.GetLyricAsync(result[0].LyricId, result[0].LyricChecksum);
                 try
                 {
                     var lyr = request.GetLyric(result[0].LyricId, result[0].LyricChecksum);
-                    return lyr;
+                    //return lyr;
                 }
                 catch (Exception)
                 {

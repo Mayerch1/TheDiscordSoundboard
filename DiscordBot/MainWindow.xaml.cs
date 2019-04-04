@@ -965,13 +965,11 @@ namespace DiscordBot
                 LyricGrid.Visibility = Visibility.Visible;
 
 
-                var lyrics = Util.IO.LyricsManager.getLyrics();
+                var lyrics = Util.IO.LyricsManager.queryResultList();
 
                 if (lyrics != null)
                 {
-                    LyricsSheet.Title =  lyrics.LyricSong;
-                    LyricsSheet.Author= lyrics.LyricArtist;
-                    LyricsSheet.Lyrics = lyrics.Lyric;
+                    LyricsSheet.SetLyrics(lyrics);
                 }
                 else
                 {
