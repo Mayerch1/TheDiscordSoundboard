@@ -1,19 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.ComponentModel;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Controls.Primitives;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using Util.com.chartlyrics.api;
 
 namespace DiscordBot.UI
@@ -64,8 +51,6 @@ namespace DiscordBot.UI
             }
         }
 
-
-        //TODO change name from interpret into author/songwriter
         public LyricsSheet()
         {
             InitializeComponent();
@@ -82,7 +67,7 @@ namespace DiscordBot.UI
                 return;
             }
 
-            var result = Util.IO.LyricsManager.GetLyrics(query[index].LyricId, query[index].LyricChecksum);
+            GetLyricResult result = Util.IO.LyricsManager.GetLyrics(query[index].LyricId, query[index].LyricChecksum);
 
             if (result != null)
             {
@@ -92,6 +77,7 @@ namespace DiscordBot.UI
             }
             else
                 Lyrics = lyricErr;
+
         }
 
 
@@ -115,7 +101,7 @@ namespace DiscordBot.UI
 
         private void btn_RefetchLyrics_Click(object sender, RoutedEventArgs e)
         {
-            var result = Util.IO.LyricsManager.queryResultList(Title, Author);
+            SearchLyricResult[] result = Util.IO.LyricsManager.queryResultList(Title, Author);
             SetLyrics(result);
         }
 

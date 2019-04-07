@@ -1,6 +1,4 @@
-﻿using System.IO;
-
-namespace DataManagement
+﻿namespace DataManagement
 {
 #pragma warning disable CS1591
 
@@ -13,7 +11,7 @@ namespace DataManagement
         {
         }
 
-        public BotData(string name, string filePath, string uri="", string deviceId="", string author="")
+        public BotData(string name, string filePath, string uri = "", string deviceId = "", string author = "")
         {
             this.name = name;
             this.filePath = filePath;
@@ -22,7 +20,7 @@ namespace DataManagement
             this.deviceId = deviceId;
         }
 
-        
+
         public BotData(ButtonData btn)
         {
             name = btn.Name;

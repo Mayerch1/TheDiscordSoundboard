@@ -878,11 +878,13 @@ namespace DiscordBot
 
         private void Device_StartStream(string name, string id)
         {
-            //remove all elements because of infinite stream from device
-            Handle.Data.Queue.clearQueue();
+       
+                        //remove all elements because of infinite stream from device
+                        Handle.Data.Queue.clearQueue();
 
-            var data = new BotData(name, "", "", id, "");
-            triggerMasterReplay(data, true, false, true);
+                        var data = new BotData(name, "", "", id, "");
+                        triggerMasterReplay(data, true, false, true);
+            
         }
 
        
@@ -1421,8 +1423,6 @@ namespace DiscordBot
         private void registerDeviceEvents(DeviceMode ui)
         {
             ui.DeviceStartStream += Device_StartStream;
-            //ui.DeviceStopStream += Device_StopStream;
-            //TODO implement
         }
 
         #endregion stuff related to dll
