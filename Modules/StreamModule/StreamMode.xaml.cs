@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Globalization;
 using System.IO;
 using System.Windows;
 using System.Windows.Controls;
@@ -10,6 +11,7 @@ using System.Windows.Media.Imaging;
 using VideoLibrary;
 using YoutubeSearch;
 using DataManagement;
+using NYoutubeDL.Models;
 using Util.IO;
 
 namespace StreamModule
@@ -35,12 +37,13 @@ namespace StreamModule
 
 
         private ObservableCollection<VideoData> _suggestions = new ObservableCollection<VideoData>();
+        private int progress = 50;
         private string _url = "";
         private string _title = "Video Title";
         private string _imageUri = "";
         private string _duration = "0:00";
+        private string _author = "";
         private RuntimeData _data;
-
 
 
         public RuntimeData Data
@@ -50,6 +53,16 @@ namespace StreamModule
             {
                 _data = value;
                 OnPropertyChanged("Data");
+            }
+        }
+
+        public int Progress
+        {
+            get => progress;
+            set
+            {
+                progress = value;
+                OnPropertyChanged("Progress");
             }
         }
 
@@ -105,6 +118,16 @@ namespace StreamModule
             }
         }
 
+        public string Author
+        {
+            get => _author;
+            set
+            {
+                _author = value;
+                OnPropertyChanged("Author");
+            }
+        }
+
 
         public StreamMode(DataManagement.RuntimeData dt)
         {
@@ -113,20 +136,18 @@ namespace StreamModule
             InitializeComponent();
             list_History.DataContext = Data.VideoHistory;
 
+
             //--------------------
             //show legal warning
             //-------------------
             if (!Data.Persistent.IsEulaAccepted)
             {
-                
                 Util.IO.BlurEffectManager.ToggleBlurEffect(true);
-
 
                 var popup = new StreamWarningPopup(Application.Current.MainWindow);
 
-                popup.Closed += delegate (object pSender, EventArgs pArgs)
+                popup.Closed += delegate(object pSender, EventArgs pArgs)
                 {
-
                     Util.IO.BlurEffectManager.ToggleBlurEffect(false);
 
                     Data.Persistent.IsEulaAccepted = popup.eula;
@@ -144,45 +165,71 @@ namespace StreamModule
         private void StartStream(BotData data)
         {
             PlayVideo(data);
-            Data.VideoHistory.addVideo(new VideoData(Url, Title, ImageUri, Duration), Data.Persistent.MaxVideoHistoryLen);
+            Data.VideoHistory.addVideo(new VideoData(Url, Title, Author,ImageUri, Duration),
+                Data.Persistent.MaxVideoHistoryLen);
         }
 
         private void QueueStream(BotData data)
         {
             QueueVideo(data);
-            Data.VideoHistory.addVideo(new VideoData(Url, Title, ImageUri, Duration), Data.Persistent.MaxVideoHistoryLen);
+            Data.VideoHistory.addVideo(new VideoData(Url, Title, Author,ImageUri, Duration),
+                Data.Persistent.MaxVideoHistoryLen);
         }
 
 
         private async void SetMetaDataAsync(string url)
         {
-            string id = YTManager.getIdFromUrl(url);
-
-            if (String.IsNullOrWhiteSpace(id))
-                return;
-
-            List<VideoInformation> infos;
-            try
+            if (url.StartsWith("http://") || url.StartsWith("https://"))
             {
-                infos = await new VideoSearch().SearchQueryTaskAsync(id, 1);
-            }
-            catch
-            {
-                //fallback, if rate limit blocks api call
-                ImageUri = YTManager.getUrlToThumbnail(url);
-                Title = await YTManager.GetTitleTask(url);
-                return;
-            }
+                string id = YTManager.getIdFromUrl(url);
 
-            if (infos.Count > 0)
-            {
-                var videoInfo = infos[0];
+                if (!String.IsNullOrWhiteSpace(id))
+                {
+                    List<VideoInformation> infos;
+                    try
+                    {
+                        infos = await new VideoSearch().SearchQueryTaskAsync(id, 1);
+                        if (infos.Count > 0)
+                        {
+                            var videoInfo = infos[0];
 
-                ImageUri = videoInfo.Thumbnail;
-                Title = videoInfo.Title;
-                Duration = videoInfo.Duration;
+                            ImageUri = videoInfo.Thumbnail;
+                            Title = videoInfo.Title;
+                            Duration = videoInfo.Duration;
+                            Author = videoInfo.Author;
+                        }
+                    }
+                    catch
+                    {
+                        //fallback, if rate limit blocks call
+                        ImageUri = YTManager.getUrlToThumbnail(url);
+                        Title = await YTManager.GetTitleAsync(url);
+                    }
+                    //prepares the download to reduce later waiting time
+                    await DownloadManager.prepareCacheVideoAsync(Url, Title);
+                }
+                else
+                {
+                    var info = await YTManager.GetGeneralInfoAsync(url);
+
+                    Title = info.Title;
+
+                    if (info is VideoDownloadInfo vInfo)
+                    {
+                        ImageUri = vInfo.Thumbnail;
+                        Author = vInfo.Uploader;
+
+                        if (vInfo.Duration.HasValue && vInfo.Duration.Value < TimeSpan.MaxValue.TotalSeconds)
+                        {
+                            TimeSpan t = TimeSpan.FromSeconds(vInfo.Duration.Value);
+                            Duration = t.ToString(@"mm\:ss");
+                        }
+
+                    }
+                }         
             }
         }
+
 
         private void box_link_TextChanged(object sender, TextChangedEventArgs e)
         {
@@ -193,7 +240,7 @@ namespace StreamModule
 
         private void ProcessEntry()
         {
-            if (Url.Contains("http://") || Url.Contains("https://"))
+            if (Url.StartsWith("http://") || Url.StartsWith("https://"))
             {
                 GetAndStartStream(Url);
             }
@@ -234,79 +281,42 @@ namespace StreamModule
             if (url == null)
                 return;
 
-            loadProgress.Visibility = Visibility.Visible;
-            //download video
-            Video vid = await YTManager.getVideoAsync(url);
-            if (vid == null)
+            card_downProgress.Visibility = Visibility.Visible;
+
+            //cache the file using cacheVideoAsync
+            DownloadManager.CacheResult result = await DownloadManager.cacheVideoAsync(url, Title);
+
+            card_downProgress.Visibility = Visibility.Collapsed;
+
+            if (!String.IsNullOrWhiteSpace(result.location) || !String.IsNullOrWhiteSpace(result.uri))
             {
-                
-                SnackbarManager.SnackbarMessage("Cannot cache video.");
-                loadProgress.Visibility = Visibility.Collapsed;
-                return;
-            }
+                BotData data = new BotData(Title, result.location, result.uri, "",Author);
 
-            Title = vid.Title;
-
-            //get playable stream
-            Stream stream = await YTManager.getStreamAsync(vid);
-
-            //disable it for now 
-            if (stream != null && !Data.Persistent.AlwaysCacheVideo)
-            {
-                loadProgress.Visibility = Visibility.Collapsed;
-
-                //enqueue BotData item with stream
-                //reference
 
                 if (IsQueue)
-                {
-                    QueueVideo(new BotData(Title)
-                    {
-                        stream = stream,
-                    });
-                }
+                    QueueStream(data);
                 else
-                {
-                    StartStream(new BotData(Title)
-                    {
-                        stream = stream,
-                    });
-                }
+                    StartStream(data);
             }
             else
-            {
-                //fall back to caching to disk
-                  
-                //alternatively try to download the video
-
-
-                string location = await YTManager.cacheVideo(vid);
-
-                loadProgress.Visibility = Visibility.Collapsed;
-
-                if (location != null)
-                {
-                    if (IsQueue)
-                        QueueVideo(new BotData(Title, location));
-                    else
-                        StartStream(new BotData(Title, location));
-                }
-
-            }
-            vid = null;
+                SnackbarManager.SnackbarMessage("Source not supported");
         }
 
         #region events
+
+
+
         private void Recommended_OnPreviewMouseWheel(object sender, MouseWheelEventArgs e)
         {
             //intercept scroll event and make scroll viewer accept the wheel
-            ScrollViewer scv = (ScrollViewer)sender;
+            ScrollViewer scv = (ScrollViewer) sender;
             scv.ScrollToVerticalOffset(scv.VerticalOffset - e.Delta / 4);
             e.Handled = true;
         }
+
         private void box_url_KeyDown(object sender, KeyEventArgs e)
         {
-            Url = ((TextBox)sender).Text;
+            Url = ((TextBox) sender).Text;
 
             if (e.Key == Key.Enter)
             {
@@ -329,7 +339,6 @@ namespace StreamModule
             if (sender is FrameworkElement fe)
             {
                 Url = fe.Tag.ToString();
-
             }
         }
 
@@ -340,6 +349,7 @@ namespace StreamModule
                 GetAndStartStream(fe.Tag as string, true);
             }
         }
+
         #endregion events
 
         #region property changed
@@ -352,9 +362,6 @@ namespace StreamModule
         }
 
         #endregion property changed     
-
-
-        
     }
 
 #pragma warning restore CS1591

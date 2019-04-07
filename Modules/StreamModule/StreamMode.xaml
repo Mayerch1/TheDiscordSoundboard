@@ -58,7 +58,7 @@
 
     <Grid Margin="15,5,0,0">
         <Grid Grid.ZIndex="1">
-            <materialDesign:Card x:Name="loadProgress"
+            <materialDesign:Card x:Name="card_downProgress"
                                  UniformCornerRadius="14" Visibility="Collapsed"
                                  Height="30" Width="30"
                                  Padding="4">

@@ -55,10 +55,40 @@ namespace DataManagement
         /// </summary>
         public const string videoCacheFolder = "Videos";
 
+
+        /// <summary>
+        /// path to the binary of the youtube-dl
+        /// </summary>
+        public const string youtubeDLPath = "youtube-dl.exe";
+
+
         /// <summary>
         /// version of this build, refers to the github release number
         /// </summary>
-        public const string version = "2.3.0";
+        public const string version = "2.4.0";
+
+
+        /// <summary>
+        /// default value for BtnWidth
+        /// </summary>
+        public const double defaultBtnWidth = 171;
+        /// <summary>
+        /// default value for BtnHeight
+        /// </summary>
+        public const double defaultBtnHeight = 80;
+        /// <summary>
+        /// default value for MinVisibleButtons
+        /// </summary>
+        public const int defaultMinVisBtn = 35;
+        /// <summary>
+        /// default value for MaxHistoryLen
+        /// </summary>
+        public const int defaultMaxHistoryLen = 50;
+        /// <summary>
+        /// default value for MaxVideoHistoryLen
+        /// </summary>
+        public const int defaultMaxVidHistoryLen = 25;
+
 
 
         #endregion consts
@@ -81,6 +111,9 @@ namespace DataManagement
         private bool isFirstStart = true;
         private bool isEulaAccepted = false;
 
+        private double btnWidth = defaultBtnWidth;
+        private double btnHeight =defaultBtnHeight;
+
         private string settingsPath;
         private int highestButtonToSave = -1;
         private ulong clientId;
@@ -89,7 +122,7 @@ namespace DataManagement
         private string clientAvatar;
         private string token = null;
         private int selectedServerIndex = 0;
-        private bool alwaysCacheVideo = true;
+        private bool alwaysCacheVideo = false;
 
 
         private bool isDarkTheme = false;
@@ -97,9 +130,11 @@ namespace DataManagement
         private string secondarySwatch = null;
 
 
-        private int minVisibleButtons = 35;
-        private int maxHistoryLen = 50;
-        private int maxVideoHistoryLen = 25;
+        private int minVisibleButtons = defaultMinVisBtn;
+        private int maxHistoryLen = defaultMaxHistoryLen;
+        private int maxVideoHistoryLen = defaultMaxVidHistoryLen;
+
+        private bool isFixedBtnRatio = false;
 
         private float volume = 0.5f;
         private int volumeCap = 30;
@@ -122,6 +157,35 @@ namespace DataManagement
             }
         }
 
+
+        /// <summary>
+        /// width of each Instantbutton
+        /// </summary>
+        public double BtnWidth  
+        {
+            get => btnWidth;
+            set
+            {
+                btnWidth= value;
+                OnPropertyChanged("BtnWidth");
+                ButtonData.Width = value;           
+            }
+        }
+
+        /// <summary>
+        /// height of each Instantbutton
+        /// </summary>
+        public double BtnHeight
+        {
+            get => btnHeight;
+            set
+            {
+                btnHeight = value;
+                OnPropertyChanged("BtnHeight");
+                ButtonData.Height = value;              
+            }
+        }   
+        
         /// <summary>
         /// determines, if BotModule will be loaded
         /// </summary>
@@ -379,6 +443,19 @@ namespace DataManagement
             {
                 maxVideoHistoryLen = value;
                 OnPropertyChanged("MaxVideoHistoryLen");
+            }
+        }
+
+        /// <summary>
+        /// Locks the width:height ratio of instant buttons
+        /// </summary>
+        public bool IsFixedBtnRatio
+        {
+            get => isFixedBtnRatio;
+            set
+            {
+                isFixedBtnRatio = value;
+                OnPropertyChanged("IsFixedBtnRatio");
             }
         }
 

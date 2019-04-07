@@ -1,6 +1,4 @@
-﻿using System.IO;
-
-namespace DataManagement
+﻿namespace DataManagement
 {
 #pragma warning disable CS1591
 
@@ -13,12 +11,16 @@ namespace DataManagement
         {
         }
 
-        public BotData(string name, string filePath="")
+        public BotData(string name, string filePath, string uri = "", string deviceId = "", string author = "")
         {
             this.name = name;
             this.filePath = filePath;
+            this.uri = uri;
+            this.author = author;
+            this.deviceId = deviceId;
         }
-     
+
+
         public BotData(ButtonData btn)
         {
             name = btn.Name;
@@ -26,15 +28,19 @@ namespace DataManagement
             isEarrape = btn.IsEarrape;
             isLoop = btn.IsLoop;
             id = btn.ID;
-            stream = null;
+            uri = "";
+            deviceId = "";
+            author = btn.Author;
         }
 
         public string name = "";
+        public string uri = "";
+        public string deviceId = "";
         public string filePath = null;
-        public Stream stream = null;
         public bool isEarrape = false;
         public bool isLoop = false;
         public int id = -1;
+        public string author = "";
     }
 
 #pragma warning restore CS1591

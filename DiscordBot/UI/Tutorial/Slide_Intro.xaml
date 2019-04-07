@@ -7,10 +7,11 @@
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300"
+             
              >
 
 
-    <materialDesign:ColorZone Mode="Light" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" VerticalContentAlignment="Stretch">
+    <materialDesign:ColorZone Mode="Light" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" VerticalContentAlignment="Stretch" CornerRadius="100">
 
         <Grid VerticalAlignment="Center" HorizontalAlignment="Center"
               MaxWidth="600">
@@ -24,9 +25,8 @@
                 <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Margin="15,32,15,32"
                            Style="{DynamicResource MaterialDesignHeadlineTextBlock}"
                            TextWrapping="Wrap"
-                           >
-                    Welcome to The Discord Soundboard (TDS)!
-                </TextBlock>
+                           FontWeight="Bold"
+                           > Welcome to The Discord Soundboard (TDS)! </TextBlock>
 
                 <TextBlock Margin="15" HorizontalAlignment="Center">First you have to setup a few things. We happily guide you through the necassary steps</TextBlock>
                 <TextBlock Margin="15" HorizontalAlignment="Center">Do you want to follow the step by step introduction ?</TextBlock>

@@ -22,6 +22,8 @@ namespace DiscordBot.UI
     /// </summary>
     public partial class Settings : UserControl, INotifyPropertyChanged
     {
+        private bool _sliderMutex = false;
+
         public delegate void RefreshModulesHandle();
 
         public RefreshModulesHandle RefreshModules;
@@ -60,6 +62,7 @@ namespace DiscordBot.UI
         /// </summary>
         public Settings()
         {
+
             //get primary/secondary colors and sort both by sRGB values
             PrimarySwatches =
                 new ObservableCollection<Swatch>(
@@ -69,8 +72,10 @@ namespace DiscordBot.UI
                     (new SwatchesProvider().Swatches).Where(x => x.AccentExemplarHue != null)
                     .OrderBy(cS => cS.AccentExemplarHue.Color.ToString()));
 
-
+            _sliderMutex = true;
             InitializeComponent();
+            _sliderMutex = false;
+
             this.DataContext = Handle.Data.Persistent;
 
             updateStartupCombo();
@@ -85,6 +90,15 @@ namespace DiscordBot.UI
         private void box_token_TextChanged(object sender, TextChangedEventArgs e)
         {
             Handle.Token = ((TextBox) sender).Text;
+        }
+
+        private void box_clientName_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            if (sender is TextBox box)
+            {
+                Handle.ClientName = box.Text;
+            }
+
         }
 
         private void btn_Help_Application_Click(object sender, RoutedEventArgs e)
@@ -139,6 +153,7 @@ namespace DiscordBot.UI
             }
         }
 
+
         private void btn_AccentSwatch_Click(object sender, RoutedEventArgs e)
         {
             if (sender is Button btn)
@@ -153,6 +168,7 @@ namespace DiscordBot.UI
         private void dialogHost_OnDialogClosing(object sender, DialogClosingEventArgs eventArgs)
         {
             //DO NOT REMOVE
+
             //this is needed, to call CloseDialogCommand.Execute(null, null) from code
             Console.WriteLine("SAMPLE 1: Closing dialog with parameter: " + (eventArgs.Parameter ?? ""));
 
@@ -162,17 +178,7 @@ namespace DiscordBot.UI
             if (!Equals(eventArgs.Parameter, true)) return;
         }
 
-
-        private void box_userName_TextChanged(object sender, TextChangedEventArgs e)
-        {
-            //var box = (TextBox)sender;
-
-            ////replace all blancs
-            //box.Text = box.Text.Replace(" ", String.Empty);
-
-            //box.SelectionStart = box.Text.Length;
-            //box.SelectionLength = 0;
-        }
+        
 
         private void btn_addMediaSource_Click(object sender, RoutedEventArgs e)
         {
@@ -256,10 +262,22 @@ namespace DiscordBot.UI
 
         private void Settings_OnPreviewMouseDown(object sender, MouseButtonEventArgs e)
         {
-            //only close dialog, if click was outside of the dialog     
-            if (!dialogHost_Primary.IsMouseOver && !dialogHost_Accent.IsMouseOver &&
-                !dialogHost_SupportedFormat.IsMouseOver)
-                DialogHost.CloseDialogCommand.Execute(null, null);
+            if (!dialogHost_Primary.IsMouseOver && dialogHost_Primary is DialogHost pHost)
+            {
+                DialogHost.CloseDialogCommand.Execute(null, pHost);
+
+            }
+            if (!dialogHost_Accent.IsMouseOver && dialogHost_Accent is DialogHost aHost)
+            {
+                DialogHost.CloseDialogCommand.Execute(null, aHost);
+
+            }
+            if (!dialogHost_SupportedFormat.IsMouseOver && dialogHost_SupportedFormat is DialogHost sHost)
+            {
+                DialogHost.CloseDialogCommand.Execute(null, sHost);
+
+            }
+
             e.Handled = false;
         }
 
@@ -374,6 +392,109 @@ namespace DiscordBot.UI
                 module_checkForPresent();
             }
         }
+
+        private void slider_MinVisBtn_Reset(object sender, MouseButtonEventArgs e)
+        {
+            Handle.Data.Persistent.MinVisibleButtons = DataManagement.PersistentData.defaultMinVisBtn;
+            if (sender is TextBlock box && box.Parent is StackPanel panel)
+            {
+                if (panel.Children.Count >= 2 && panel.Children[1] is Slider sl)
+                {
+                    sl.Value = Handle.Data.Persistent.MinVisibleButtons;
+                }
+            }
+        }
+
+        private void slider_BtnHeight_Reset(object sender, MouseButtonEventArgs e)
+        {
+            Handle.Data.Persistent.BtnHeight = DataManagement.PersistentData.defaultBtnHeight;
+            if (sender is TextBlock box && box.Parent is StackPanel panel)
+            {
+                if (panel.Children.Count >= 2 && panel.Children[1] is Slider sl)
+                {
+                    sl.Value = Handle.Data.Persistent.BtnHeight;
+                }
+            }
+        }
+
+        private void slider_BtnWidth_Reset(object sender, MouseButtonEventArgs e)
+        {
+            Handle.Data.Persistent.BtnWidth = DataManagement.PersistentData.defaultBtnWidth;
+            if (sender is TextBlock box && box.Parent is StackPanel panel)
+            {
+                if (panel.Children.Count >= 2 && panel.Children[1] is Slider sl)
+                {
+                    sl.Value = Handle.Data.Persistent.BtnWidth;
+                }
+            }
+        }
+
+        private void slider_VidHistoryLen_Reset(object sender, MouseButtonEventArgs e)
+        {
+            Handle.Data.Persistent.MaxVideoHistoryLen = DataManagement.PersistentData.defaultMaxVidHistoryLen;
+            if (sender is TextBlock box && box.Parent is StackPanel panel)
+            {
+                if (panel.Children.Count >= 2 && panel.Children[1] is Slider sl)
+                {
+                    sl.Value = Handle.Data.Persistent.MaxVideoHistoryLen;
+                }
+            }
+        }
+
+        private void slider_HistoryLen_Reset(object sender, MouseButtonEventArgs e)
+        {
+            Handle.Data.Persistent.MaxHistoryLen = DataManagement.PersistentData.defaultMaxHistoryLen;
+            if (sender is TextBlock box && box.Parent is StackPanel panel)
+            {
+                if (panel.Children.Count >= 2 && panel.Children[1] is Slider sl)
+                {
+                    sl.Value = Handle.Data.Persistent.MaxHistoryLen;
+                }
+            }
+        }
+
+        private void slider_BtnHeight_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            if (!_sliderMutex)
+            {
+                _sliderMutex = true;
+
+
+                //incr.button width (fixed ratio)
+                if (Handle.Data.Persistent.IsFixedBtnRatio)
+                {
+                    var ratio = Handle.Data.Persistent.BtnWidth / Handle.Data.Persistent.BtnHeight;
+                    var diff = e.NewValue - e.OldValue;
+
+                    slider_BtnWidth.Value += Math.Round(diff * ratio, 0);
+                    Console.WriteLine(diff + "/" + Math.Round(diff * ratio, 0));
+                }
+                _sliderMutex = false;
+            }
+        }
+
+        private void slider_BtnWidth_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            if (!_sliderMutex)
+            {
+                _sliderMutex = true;
+
+      
+
+                //incr button height (fixed ratio)
+                if (Handle.Data.Persistent.IsFixedBtnRatio)
+                {
+                    var ratio = Handle.Data.Persistent.BtnHeight / Handle.Data.Persistent.BtnWidth;
+                    var diff = e.NewValue - e.OldValue;
+
+                    slider_BtnHeight.Value += Math.Round(diff * ratio, 0);
+                    Console.WriteLine(diff + "/" + Math.Round(diff*ratio, 0));
+                }
+                _sliderMutex = false;
+            }
+            
+        }
+    
     }
 
 #pragma warning restore CS1591

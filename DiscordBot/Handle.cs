@@ -46,7 +46,8 @@ namespace DiscordBot
                 var id = await BotMisc.resolveUserName(newName);
 
                 if (id > 0)
-                    Data.Persistent.ClientId = id;
+                    ClientId = id;
+
             }
         }
 
@@ -92,6 +93,8 @@ namespace DiscordBot
             {
                 Bot.Token = value;
                 Data.Persistent.Token = value;
+                //trigger this on every change of Credential/Username 
+                ClientName_Changed(ClientName);
             }
         }
 
@@ -131,9 +134,8 @@ namespace DiscordBot
             {
                 //set clientId, by resolving userName
                 Data.Persistent.ClientName = value;
-                var uId = BotMisc.resolveUserName(value);
-                if (uId.Result > 0)
-                    ClientId = uId.Result;
+                //trigger this on every change of Credential/Username 
+                ClientName_Changed(value);
             }
         }
 

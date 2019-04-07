@@ -1,0 +1,73 @@
+﻿<UserControl x:Class="DeviceStreamModule.DeviceMode"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:local="clr-namespace:DeviceStreamModule"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             mc:Ignorable="d"
+             d:DesignHeight="450" d:DesignWidth="800">
+
+    <UserControl.Resources>
+        <Style x:Key="IconIncompatibleSettings" TargetType="materialDesign:PackIcon">
+            <Setter Property="Kind" Value="Warning"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+        </Style>
+
+
+
+    </UserControl.Resources>
+
+    <Grid Margin="20,20,20,20" MinWidth="300">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="auto"/>
+            <ColumnDefinition Width="250"/>
+
+        </Grid.ColumnDefinitions>
+
+        <!-- start of main dropdown and resume button -->
+        <Grid Column="0" >
+            <StackPanel>
+                <ComboBox x:Name="ComboBox" 
+                          materialDesign:ComboBoxAssist.ShowSelectedItem="True"
+                          SelectionChanged="ComboBox_OnSelectionChanged" 
+                          Width="450" 
+                          Margin="0,0,0,10"/>
+                <Button Click="ButtonBase_OnClick" Width="450" Margin="0,10,0,0" Content="Pass">
+                    
+                        
+                    
+                </Button>
+
+
+            </StackPanel>
+        </Grid>
+        <Grid Column="1" HorizontalAlignment="Center">
+            <StackPanel>
+            <StackPanel Orientation="Horizontal">
+                <Label Content="Samplerate: "/>
+                <Label Content="{Binding SampleRate}"/>
+                <materialDesign:PackIcon Style="{DynamicResource IconIncompatibleSettings}" x:Name="Icon_Sample_Valid"
+                                         ToolTip="{x:Static local:DeviceMode._sampleRateTooltip}"/>
+            </StackPanel>
+
+            <StackPanel Orientation="Horizontal">
+                <Label Content="Channel Count: "/>
+                <Label Content="{Binding ChannelCount}"/>
+                    <materialDesign:PackIcon Style="{DynamicResource IconIncompatibleSettings}" x:Name="Icon_Channel_Valid"
+                                             ToolTip="{x:Static local:DeviceMode._channelCountTooltip}"/>
+            </StackPanel>
+
+            <StackPanel Orientation="Horizontal">
+                <Label Content="Bitdepth: "/>
+                <Label Content="{Binding BitDepth}"/>
+                <!--<materialDesign:PackIcon Style="{DynamicResource IconIncompatibleSettings}" x:Name="Icon_Bit_Valid"/>-->
+            </StackPanel>
+</StackPanel>
+        </Grid>
+
+
+
+        
+    </Grid>
+</UserControl>

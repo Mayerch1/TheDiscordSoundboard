@@ -8,6 +8,8 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Web;
+using NYoutubeDL;
+using NYoutubeDL.Models;
 using Util.IO;
 using VideoLibrary;
 using YoutubeSearch;
@@ -22,7 +24,6 @@ namespace StreamModule
         private const string imageUrl = "https://img.youtube.com/vi/";
 
         private const string thumbnailQuality = "/sddefault.jpg";
-
 
         /// <summary>
         /// deletes all cached videos
@@ -60,7 +61,7 @@ namespace StreamModule
         /// <returns>null if no url was entered</returns>
         public static string getIdFromUrl(string url)
         {
-            if (url.Contains("https://") || url.Contains("http://"))
+            if ((url.Contains("youtube") || url.Contains("youtu.be")) && url.Contains("https://") || url.Contains("http://"))
             {
                 const string delimiter = "watch?v=";
                 const string shortDelimiter = ".be/";
@@ -81,9 +82,13 @@ namespace StreamModule
         /// <returns>direct url to thumbnail</returns>
         public static string getUrlToThumbnail(string url)
         {
-            return imageUrl + getIdFromUrl(url) + thumbnailQuality;
-        }
+            string id;
+            if((id = getIdFromUrl(url)) != null){
+                return imageUrl + id + thumbnailQuality;
+            }
 
+            return "";
+        }
 
         /// <summary>
         /// get the title from an url
@@ -92,11 +97,12 @@ namespace StreamModule
         /// <remarks>fallback for SearchQueryTaskAsync</remarks>
         /// <seealso cref="VideoSearch.SearchQueryTaskAsync"/>
         /// <returns>task string representing the title</returns>
-        public static async Task<string> GetTitleTask(string url)
+        public static async Task<string> GetTitleAsync(string url)
         {
             var api = $"http://youtube.com/get_video_info?video_id={GetArgs(url, "v", '?')}";
             return GetArgs(await new WebClient().DownloadStringTaskAsync(api), "title", '&');
         }
+
 
         private static string GetArgs(string args, string key, char query)
         {
@@ -108,135 +114,22 @@ namespace StreamModule
                     : string.Empty)[key];
         }
 
-        /// <summary>
-        /// download video from ulr
-        /// </summary>
-        /// <param name="url">url to yt video</param>
-        /// <returns></returns>
-        public static async Task<Video> getVideoAsync(string url)
-        {
-            //download video
-            YouTube yt = YouTube.Default;
-            Video mpAudio;
-
-            VideoClient videoClient = new VideoClient();
-
-            try
-            {              
-                //-------------------------
-                // getting the audio from yt is very slow,
-                // it's faster to download the vid, even on 10Mbit/s
-                //--------------------------
-                //get video file
-                var videos = await YouTube.Default.GetAllVideosAsync(url);
-
-                //get audios, only aac
-                var audios = videos.Where(v => v.AudioFormat != AudioFormat.Unknown && v.AudioFormat != AudioFormat.Vorbis).ToList();               
-
-                //save audio into Video, only with audio
-                mpAudio = audios.FirstOrDefault(x => x.AudioBitrate > 0);
-            }
-            catch (Exception ex)
-            {
-                Util.IO.LogManager.LogException(ex, "StreamModule/YTManager", "Error in requesting Video information");
-                return null;
-            }
-
-
-
-
-            return mpAudio;
-        }
 
         /// <summary>
-        /// return readable string from video object
-        /// </summary>
-        /// <param name="vid">video object</param>
-        /// <returns>Readable stream</returns>
-        public static async Task<Stream> getStreamAsync(Video vid)
-        {
-            using (VideoClient cl = new VideoClient())
-            {
-                try
-                {
-                    return await cl.StreamAsync(vid);
-                }
-                catch(Exception ex)
-                {
-                    Util.IO.LogManager.LogException(ex, "StreamModule/YTManager", "Could not retrieve stream object");
-                    return null;
-                }
-            }
-        }
-
-        /// <summary>
-        /// return readable string from url
+        /// Gets general information about non-YT video
         /// </summary>
         /// <param name="url">url to video</param>
-        /// <returns>Readable stream</returns>
-        public static async Task<Stream> getStreamAsync(string url)
+        /// <returns>Title, Thumbnail-Uri, duration</returns>
+        public static async Task<DownloadInfo> GetGeneralInfoAsync(string url)
         {
-            return await getStreamAsync(await getVideoAsync(url));
+            NYoutubeDL.YoutubeDL dl = new YoutubeDL();
+            dl.VideoUrl = url;
+
+            dl.RetrieveAllInfo = true;
+            await dl.PrepareDownloadAsync();
+            
+            return dl.Info;
         }
 
-        /// <summary>
-        /// saves a video into cache folder, this may block ui thread when disc is slow
-        /// </summary>
-        /// <param name="vid">video to save</param>
-        public static async Task<string> cacheVideo(Video vid)
-        {
-            string folder = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + @"\" +
-                            DataManagement.PersistentData.defaultFolderName + @"\" + DataManagement.PersistentData.videoCacheFolder;
-            //save video into cache folder
-            if (!Directory.Exists(folder))
-            {
-                Directory.CreateDirectory(folder);
-            }
-
-            //hash name so it cannot be searched easily (bc of copyright)
-            var name = getHashSha256(vid.FullName) + vid.FileExtension;
-            var location = folder + "\\" + name;
-
-            try
-            {
-                //make async
-                File.WriteAllBytes(location, await vid.GetBytesAsync());
-            }
-            catch (System.Net.Http.HttpRequestException ex)
-            {
-                Util.IO.LogManager.LogException(ex, "StreamModule/YTManager", "Failed to decrypt video");
-                SnackbarManager.SnackbarMessage("Could not decrypt video", SnackbarManager.SnackbarAction.Log);
-                return null;
-            }
-            catch (System.OutOfMemoryException ex)
-            {
-                Util.IO.LogManager.LogException(ex, "StreamModule/YTManager", "Tried to cache video to disk");
-                SnackbarManager.SnackbarMessage("File too large");
-                Console.WriteLine(@"File " + name + @" is to large to save");
-            }
-            catch (System.IO.IOException)
-            {
-                //return old file
-                if (File.Exists(location))
-                    return location;
-            }
-            catch (Exception ex)
-            {
-                SnackbarManager.SnackbarMessage("Failed to cache Video", SnackbarManager.SnackbarAction.Log);
-                Util.IO.LogManager.LogException(ex, "StreamModule/YTManager", "Failed to cache video");
-                return null;
-            }
-
-            return location;
-        }
-
-        private static string getHashSha256(string title)
-        {
-            byte[] byteStr = Encoding.UTF8.GetBytes(title);
-
-            byte[] hash = new SHA256Managed().ComputeHash(byteStr);
-
-            return Convert.ToBase64String(hash).Replace('/', '_');
-        }
     }
 }

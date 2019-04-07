@@ -32,23 +32,18 @@ namespace DiscordBot.UI.Tutorial
             box_Username.Text = Handle.Data.Persistent.ClientName;
         }
 
+        public void loadToken(string token = null)
+        {
+            if (token == null)
+                token = Handle.Token;
+            box_Token.Text = token;
+        }
+
         private void btn_Accept(object sender, RoutedEventArgs e)
         {
             Handle.Data.Persistent.ClientName = box_Username.Text;
             Handle.Token = box_Token.Text;
             FinishedSetup(true);
-        }
-
-        private void box_Username_TextChanged(object sender, TextChangedEventArgs e)
-        {
-            if (sender is TextBox box)
-            {
-                //replace all blancs
-                box.Text = box.Text.Replace(" ", String.Empty);
-
-                box.SelectionStart = box.Text.Length;
-                box.SelectionLength = 0;
-            }
         }
     }
 #pragma warning restore CS1591

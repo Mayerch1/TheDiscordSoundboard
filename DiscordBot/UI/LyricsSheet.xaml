@@ -1,0 +1,80 @@
+﻿<UserControl x:Class="DiscordBot.UI.LyricsSheet"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:local="clr-namespace:DiscordBot.UI"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             mc:Ignorable="d"
+             d:DesignHeight="450" d:DesignWidth="800"
+             Background="{DynamicResource MaterialDesignPaper}">
+    <Grid>
+        <!-- use same margin as other pages (Playlist/Search mode) -->
+        <DockPanel Margin="5,4,4,5">
+
+            <StackPanel DockPanel.Dock="Top" HorizontalAlignment="Stretch">
+
+                <!-- Artist textfield-->
+                <materialDesign:ColorZone Background="{DynamicResource MaterialDesignTextFieldBoxBackground}"
+                                          VerticalAlignment="Stretch"
+                                          CornerRadius="9"
+                                          Margin="5,4,4,5"
+                                          Height="30">
+
+                    <DockPanel LastChildFill="True" VerticalAlignment="Stretch">
+                        <materialDesign:PackIcon Kind="Person" Height="20" Width="20"
+                                                 VerticalAlignment="Center" Margin="10,0,10,0"
+                                                 Foreground="{DynamicResource MaterialDesignBody}" />
+
+                        <TextBox
+                            Text="{Binding Author}"
+                            materialDesign:HintAssist.Hint="Artist"
+                            materialDesign:TextFieldAssist.DecorationVisibility="Hidden"
+                            BorderThickness="0" VerticalAlignment="Center"
+                            Foreground="{DynamicResource MaterialDesignBody}" />
+                    </DockPanel>
+                </materialDesign:ColorZone>
+
+                <!-- Titel textfield-->
+                <materialDesign:ColorZone Background="{DynamicResource MaterialDesignTextFieldBoxBackground}"
+                                          VerticalAlignment="Stretch"
+                                          CornerRadius="9"
+                                          Margin="5,4,4,5"
+                                          Height="30">
+
+                    <DockPanel LastChildFill="True" VerticalAlignment="Stretch">
+                        <materialDesign:PackIcon Kind="Music" Height="20" Width="20"
+                                                 VerticalAlignment="Center" Margin="10,0,10,0"
+                                                 Foreground="{DynamicResource MaterialDesignBody}" />
+
+                        <TextBox
+                            Text="{Binding Title}"
+                            materialDesign:HintAssist.Hint="Title"
+                            materialDesign:TextFieldAssist.DecorationVisibility="Hidden"
+                            BorderThickness="0" VerticalAlignment="Center"
+                            Foreground="{DynamicResource MaterialDesignBody}" />
+                    </DockPanel>
+                </materialDesign:ColorZone>
+                <Button Click="btn_RefetchLyrics_Click" Margin="5,4,4,5">
+                    <materialDesign:PackIcon Kind="Magnify" />
+                </Button>
+
+            </StackPanel>
+
+
+            <ScrollViewer VerticalAlignment="Stretch" Margin="20,10,0,0">
+                <materialDesign:ColorZone Background="{DynamicResource MaterialDesignTextFieldBoxBackground}" CornerRadius="9">
+                <!--Text block for  lyrics -->
+                    <Viewbox StretchDirection="DownOnly">
+
+                        <TextBlock Text="{Binding Lyrics}" TextAlignment="Center" 
+                                   FontSize="22" FontStretch="Expanded"/>
+                    </Viewbox>
+                    
+                </materialDesign:ColorZone>
+            </ScrollViewer>
+
+
+        </DockPanel>
+    </Grid>
+</UserControl>

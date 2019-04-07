@@ -28,18 +28,21 @@ namespace DataManagement
 
         private PersistentData persistent = new PersistentData();
 
+
         private ObservableCollection<FileData> files = new ObservableCollection<FileData>();
         private ObservableCollection<Playlist> playlists = new ObservableCollection<Playlist>();
         private History history = new History();
         private VideoHistory videoHistory = new VideoHistory();
         private ModuleManager moduleStates = new ModuleManager();
-        private bool isPlaylistPlaying = false;
         private float pitch = 1.0f;
 
         #endregion fields
 
         #region properties
 
+        /// <summary>
+        /// Pitch of bot
+        /// </summary>
         public float Pitch
         {
             get => pitch;
@@ -52,6 +55,13 @@ namespace DataManagement
         /// </summary>
         public PersistentData Persistent { get => persistent;
             set { persistent = value; OnPropertyChanged("Persistent"); } }
+
+
+        /// <summary>
+        /// song queue for bot (not saved)
+        /// </summary>
+        /// <remarks>does not implement OnPropertyChanged, as it is never visual present</remarks>
+        public BotQueue Queue { get; set; } = new BotQueue();
 
         /// <summary>
         /// Files property (collection of classes)
@@ -97,11 +107,7 @@ namespace DataManagement
             }
         }
 
-        /// <summary>
-        /// IsPlaylistPlaying property
-        /// </summary>
-        public bool IsPlaylistPlaying { get => isPlaylistPlaying;
-            set { isPlaylistPlaying = value; OnPropertyChanged("IsPlaylistPlaying"); } }
+      
 
         #endregion properties
 

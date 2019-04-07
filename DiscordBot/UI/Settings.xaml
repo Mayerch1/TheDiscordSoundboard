@@ -63,7 +63,7 @@
     </UserControl.Resources>
 
 
-    <Grid >
+    <Grid>
         <ScrollViewer PreviewMouseWheel="Settings_OnPreviewMouseWheel">
 
             <StackPanel Orientation="Vertical">
@@ -78,7 +78,7 @@
 
                     <Grid Margin="20,20,20,20">
 
-                        <StackPanel Orientation="Vertical" >
+                        <StackPanel Orientation="Vertical">
                             <!--Settings Content-->
 
 
@@ -86,33 +86,32 @@
                                 <!-- general application settings-->
                                 <StackPanel Orientation="Horizontal">
 
-                                    <TextBlock Text="Application" FontSize="15" FontWeight="Bold" VerticalAlignment="Center"/>
+                                    <TextBlock Text="Application" FontSize="15" FontWeight="Bold"
+                                               VerticalAlignment="Center" />
                                     <Button Click="btn_Help_Application_Click"
                                             Style="{StaticResource HelpButton}"
-                                            Margin="0"
-                                            >
+                                            Margin="0">
 
                                         <materialDesign:PackIcon
-                                            
+
                                             Kind="HelpCircleOutline"
                                             Height="15"
                                             Width="15" />
                                     </Button>
                                 </StackPanel>
 
-                                <Separator/>
+                                <Separator />
 
                                 <TextBox
                                     Style="{StaticResource MaterialDesignFilledTextFieldTextBox}"
                                     Text="{Binding ClientName}"
-                                    TextChanged="box_userName_TextChanged"
                                     materialDesign:HintAssist.Hint="Own UserName#1234"
                                     HorizontalAlignment="Left"
                                     Margin="0,20,0,0"
                                     VerticalAlignment="Top"
                                     AcceptsReturn="False"
                                     TextWrapping="NoWrap"
-                                    Width="450" />
+                                    Width="450" TextChanged="box_clientName_TextChanged" />
 
                                 <TextBox
                                     Style="{StaticResource MaterialDesignFilledTextFieldTextBox}"
@@ -151,8 +150,9 @@
                             <StackPanel Orientation="Vertical" Margin="0,20,0,0">
                                 <!-- Appearance Settings -->
 
-                                <StackPanel Orientation="Horizontal" >
-                                    <TextBlock Text="Appearance" FontSize="15" FontWeight="Bold" VerticalAlignment="Center" />
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="Appearance" FontSize="15" FontWeight="Bold"
+                                               VerticalAlignment="Center" />
                                     <Button
                                         Click="btn_Help_Appearance_Click"
 
@@ -166,7 +166,7 @@
                                     </Button>
                                 </StackPanel>
 
-                                <Separator/>
+                                <Separator />
 
                                 <StackPanel Orientation="Horizontal" Margin="0,20,0,0">
                                     <TextBlock Text="Light" Margin="10" FontSize="15" />
@@ -180,15 +180,15 @@
                                 <StackPanel Orientation="Horizontal" Margin="0,20,0,0" x:Name="stack_ColorTheme">
                                     <!-- dialog host for primary colors-->
                                     <materialDesign:DialogHost x:Name="dialogHost_Primary" Margin="0,0,5,0"
-                                                            materialDesign:DialogHost.DialogClosingAttached="dialogHost_OnDialogClosing"
-                                                            HorizontalAlignment="Center" VerticalAlignment="Center"
-                                                            CloseOnClickAway="True">
+                                                               materialDesign:DialogHost.DialogClosingAttached="dialogHost_OnDialogClosing"
+                                                               HorizontalAlignment="Center" VerticalAlignment="Center"
+                                                               CloseOnClickAway="True">
                                         <materialDesign:DialogHost.DialogContent>
 
                                             <ItemsControl ItemsSource="{Binding PrimarySwatches}"
-                                                        DataContext="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}"
-                                                        ItemTemplate="{StaticResource SwatchPrimaryTemplate}"
-                                                        MaxWidth="{Binding ActualWidth, ElementName=stack_ColorTheme}">
+                                                          DataContext="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}"
+                                                          ItemTemplate="{StaticResource SwatchPrimaryTemplate}"
+                                                          MaxWidth="{Binding ActualWidth, ElementName=stack_ColorTheme}">
                                                 <ItemsControl.ItemsPanel>
                                                     <ItemsPanelTemplate>
                                                         <WrapPanel />
@@ -199,24 +199,24 @@
                                         </materialDesign:DialogHost.DialogContent>
 
                                         <Button Background="{DynamicResource PrimaryHueMidBrush}"
-                                            Foreground="{DynamicResource PrimaryHueMidForegroundBrush}"
-                                            BorderBrush="{x:Null}"
-                                            Command="{x:Static materialDesign:DialogHost.OpenDialogCommand}"
-                                            Content="Primary" />
+                                                Foreground="{DynamicResource PrimaryHueMidForegroundBrush}"
+                                                BorderBrush="{x:Null}"
+                                                Command="{x:Static materialDesign:DialogHost.OpenDialogCommand}"
+                                                Content="Primary" />
                                     </materialDesign:DialogHost>
 
                                     <!-- dialog host for accent colors-->
                                     <materialDesign:DialogHost x:Name="dialogHost_Accent"
-                                                            materialDesign:DialogHost.DialogClosingAttached="dialogHost_OnDialogClosing"
+                                                               materialDesign:DialogHost.DialogClosingAttached="dialogHost_OnDialogClosing"
 
-                                                            HorizontalAlignment="Center" VerticalAlignment="Center"
-                                                            CloseOnClickAway="True">
+                                                               HorizontalAlignment="Center" VerticalAlignment="Center"
+                                                               CloseOnClickAway="True">
                                         <materialDesign:DialogHost.DialogContent>
 
                                             <ItemsControl ItemsSource="{Binding SecondarySwatches}"
-                                                        DataContext="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}"
-                                                        ItemTemplate="{StaticResource SwatchAccentTemplate}"
-                                                        MaxWidth="{Binding ActualWidth, ElementName=stack_ColorTheme}">
+                                                          DataContext="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}"
+                                                          ItemTemplate="{StaticResource SwatchAccentTemplate}"
+                                                          MaxWidth="{Binding ActualWidth, ElementName=stack_ColorTheme}">
                                                 <ItemsControl.ItemsPanel>
                                                     <ItemsPanelTemplate>
                                                         <WrapPanel />
@@ -227,249 +227,306 @@
                                         </materialDesign:DialogHost.DialogContent>
 
                                         <Button Background="{DynamicResource SecondaryAccentBrush}"
-                                            Foreground="{DynamicResource SecondaryAccentForegroundBrush}"
-                                            BorderBrush="{x:Null}"
-                                            Command="{x:Static materialDesign:DialogHost.OpenDialogCommand}"
-                                            Content="Accent" />
+                                                Foreground="{DynamicResource SecondaryAccentForegroundBrush}"
+                                                BorderBrush="{x:Null}"
+                                                Command="{x:Static materialDesign:DialogHost.OpenDialogCommand}"
+                                                Content="Accent" />
                                     </materialDesign:DialogHost>
                                 </StackPanel>
                             </StackPanel>
 
                             <StackPanel Orientation="Vertical" Margin="0,20,0,0">
-                            <!-- Preferences Settings -->
-                            <StackPanel Orientation="Horizontal">
-                                <TextBlock Text="Preferences" FontSize="15" FontWeight="Bold" VerticalAlignment="Center" />
-                                <Button
-                                    Click="btn_Help_Preferences_Click"
+                                <!-- Preferences Settings -->
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="Preferences" FontSize="15" FontWeight="Bold"
+                                               VerticalAlignment="Center" />
+                                    <Button
+                                        Click="btn_Help_Preferences_Click"
 
-                                    Style="{StaticResource HelpButton}">
+                                        Style="{StaticResource HelpButton}">
 
-                                    <materialDesign:PackIcon
+                                        <materialDesign:PackIcon
 
-                                        Kind="HelpCircleOutline"
-                                        Height="15"
-                                        Width="15" />
-                                </Button>
-                            </StackPanel>
-
-                            <Separator/>
-
-                            <StackPanel Orientation="Horizontal" Margin="5,10,0,0">
-                                <TextBlock VerticalAlignment="Center" MinWidth="160">Startup Page</TextBlock>
-                                <ComboBox
-                                    Name="combo_startup"
-                                    SelectionChanged="combo_SelectionChanged">
-                                    <ComboBox.ItemsPanel>
-                                        <ItemsPanelTemplate>
-                                            <VirtualizingStackPanel />
-                                        </ItemsPanelTemplate>
-                                    </ComboBox.ItemsPanel>
-                                </ComboBox>
-                                   
-                            </StackPanel>
-
-
-                            <StackPanel Orientation="Horizontal" Margin="5,0,0,0">
-                                <TextBlock VerticalAlignment="Bottom" MinWidth="140">History Length</TextBlock>
-                            <Slider Minimum="1" Maximum="100"
-                                    Style="{StaticResource MaterialDesignDiscreteSlider}"
-                                    Margin="10,0,0,0"
-                                    ToolTip="Delete Old History"
-                                    Value="{Binding MaxHistoryLen}"
-                                    Width="280" />
-                                </StackPanel>
-
-                            <StackPanel Orientation="Horizontal" Margin="5,5,0,0">
-                                <TextBlock VerticalAlignment="Bottom" MinWidth="140">Video History Length</TextBlock>
-                            <Slider Minimum="1" Maximum="100"
-                                    Style="{StaticResource MaterialDesignDiscreteSlider}"
-                                    Margin="10,0,0,0"
-                                    ToolTip="Delete Old History"
-                                    Value="{Binding MaxVideoHistoryLen}"
-                                    Width="280" />
-                                </StackPanel>
-
-                        </StackPanel>
-
-                           
-
-                        <StackPanel Orientation="Vertical" x:Name="Stack_ModuleSelector" Margin="0,20,0,0">
-                            <!-- Modules Settings -->
-
-                            <StackPanel Orientation="Horizontal">
-                                <TextBlock Text="Modules" FontSize="15" FontWeight="Bold" VerticalAlignment="Center" />
-                                <Button
-                                    Click="btn_Help_Modules_Click"
-
-                                    Style="{StaticResource HelpButton}">
-
-                                    <materialDesign:PackIcon
-
-                                        Kind="HelpCircleOutline"
-                                        Height="15"
-                                        Width="15" />
-                                </Button>
-                            </StackPanel>
-
-                            <Separator/>
-
-                            <!--SPACER-->
-                            <!-- checkboxes for modules are added here with code-->
-
-                        </StackPanel >
-
-                        <StackPanel Orientation="Vertical" Margin="0,20,0,0">
-                            <!-- File Settings -->
-
-                            <StackPanel Orientation="Horizontal">
-                                <TextBlock Text="Files" FontSize="15" FontWeight="Bold" VerticalAlignment="Center" />
-                                <Button
-                                    Click="btn_Help_Files_Click"
-                                    Style="{StaticResource HelpButton}">
-
-                                    <materialDesign:PackIcon
-
-                                        Kind="HelpCircleOutline"
-                                        Height="15"
-                                        Width="15" />
-                                </Button>
-                            </StackPanel>
-
-                            <Separator/>
-
-                            <StackPanel Orientation="Horizontal" Margin="0,20,0,0">
-                                <Expander HorizontalAlignment="Left"
-                                            Header="Library Locations">
-                                    <ListBox x:Name="list_MediaSources" ItemsSource="{Binding MediaSources}"
-                                                MinWidth="300" />
-                                </Expander>
-
-                                <StackPanel Orientation="Horizontal" VerticalAlignment="Top">
-                                    <Button Click="btn_addMediaSource_Click"
-                                            Background="{DynamicResource PrimaryHueMidBrush}"
-                                            BorderBrush="{x:Null}">
-                                        <materialDesign:PackIcon Kind="Plus" />
-                                    </Button>
-                                    <Button Click="btn_deleteMediaSource_Click"
-                                            Background="{DynamicResource PrimaryHueMidBrush}"
-                                            BorderBrush="{x:Null}">
-                                        <materialDesign:PackIcon Kind="Minus" />
+                                            Kind="HelpCircleOutline"
+                                            Height="15"
+                                            Width="15" />
                                     </Button>
                                 </StackPanel>
+
+                                <Separator />
+
+                                <StackPanel Orientation="Horizontal" Margin="5,10,0,0">
+                                    <TextBlock VerticalAlignment="Center" MinWidth="160">Startup Page</TextBlock>
+                                    <ComboBox
+                                        Name="combo_startup"
+                                        SelectionChanged="combo_SelectionChanged">
+                                        <ComboBox.ItemsPanel>
+                                            <!-- set by code -->
+                                            <ItemsPanelTemplate>
+                                                <VirtualizingStackPanel />
+                                            </ItemsPanelTemplate>
+                                        </ComboBox.ItemsPanel>
+                                    </ComboBox>
+                                </StackPanel>
+
+                                <StackPanel Orientation="Horizontal" Margin="5,5,0,0">
+                                    <TextBlock VerticalAlignment="Bottom" MinWidth="140"
+                                               MouseDown="slider_BtnWidth_Reset">
+                                        Button Width
+                                    </TextBlock>
+                                    <Slider Minimum="25" Maximum="500"
+                                            Name="slider_BtnWidth"
+                                            Style="{StaticResource MaterialDesignDiscreteSlider}"
+                                            Margin="10,0,0,0"
+                                            ToolTip="Width of Button"
+                                            Value="{Binding BtnWidth}"
+                                            Width="280"
+                                            ValueChanged="slider_BtnWidth_ValueChanged" />
+                                </StackPanel>
+
+                                <StackPanel Orientation="Horizontal">
+                                    <StackPanel Orientation="Horizontal" Margin="5,5,0,0">
+                                        <TextBlock VerticalAlignment="Bottom" MinWidth="140"
+                                                   MouseDown="slider_BtnHeight_Reset">
+                                            Button Height
+                                        </TextBlock>
+                                        <Slider Minimum="25" Maximum="500"
+                                                Name="slider_BtnHeight"
+                                                Style="{StaticResource MaterialDesignDiscreteSlider}"
+                                                Margin="10,0,0,0"
+                                                ToolTip="Height of Button"
+                                                Value="{Binding BtnHeight}"
+                                                ValueChanged="slider_BtnHeight_ValueChanged"
+                                                Width="280" />
+                                    </StackPanel>
+
+                                    <ToggleButton
+                                        Style="{DynamicResource MaterialDesignFlatToggleButton}"
+                                        IsChecked="{Binding IsFixedBtnRatio}">
+                                        <materialDesign:PackIcon Kind="Lock" />
+                                    </ToggleButton>
+                                </StackPanel>
+
+                                <StackPanel Orientation="Horizontal" Margin="5,5,0,0">
+                                    <TextBlock VerticalAlignment="Bottom" MinWidth="140"
+                                               MouseDown="slider_MinVisBtn_Reset">
+                                        Min. Visible Button
+                                    </TextBlock>
+                                    <Slider Minimum="1" Maximum="150"
+                                            Style="{StaticResource MaterialDesignDiscreteSlider}"
+                                            Margin="10,0,0,0"
+                                            ToolTip="Displayed Buttons"
+                                            Value="{Binding MinVisibleButtons}"
+                                            Width="280" />
+                                </StackPanel>
+
+                                <StackPanel Orientation="Horizontal" Margin="5,0,0,0">
+                                    <TextBlock VerticalAlignment="Bottom" MinWidth="140"
+                                               MouseDown="slider_HistoryLen_Reset">
+                                        History Length
+                                    </TextBlock>
+                                    <Slider Minimum="1" Maximum="100"
+                                            Style="{StaticResource MaterialDesignDiscreteSlider}"
+                                            Margin="10,0,0,0"
+                                            ToolTip="Delete Old History"
+                                            Value="{Binding MaxHistoryLen}"
+                                            Width="280" />
+                                </StackPanel>
+
+                                <StackPanel Orientation="Horizontal" Margin="5,5,0,0">
+                                    <TextBlock VerticalAlignment="Bottom" MinWidth="140"
+                                               MouseDown="slider_VidHistoryLen_Reset">
+                                        Video History Length
+                                    </TextBlock>
+                                    <Slider Minimum="1" Maximum="100"
+                                            Style="{StaticResource MaterialDesignDiscreteSlider}"
+                                            Margin="10,0,0,0"
+                                            ToolTip="Delete Old History"
+                                            Value="{Binding MaxVideoHistoryLen}"
+                                            Width="280" />
+                                </StackPanel>
+
+
                             </StackPanel>
 
-                            <StackPanel Margin="0,15,0,0" Orientation="Horizontal">
-                                <Expander HorizontalAlignment="Left"
-                                            Header="Supported File Extensions">
 
+                            <StackPanel Orientation="Vertical" x:Name="Stack_ModuleSelector" Margin="0,20,0,0">
+                                <!-- Modules Settings -->
 
-                                    <ListBox x:Name="list_SupportedFormats"
-                                                ItemsSource="{Binding SupportedFormats}"
-                                                MinWidth="300" />
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="Modules" FontSize="15" FontWeight="Bold"
+                                               VerticalAlignment="Center" />
+                                    <Button
+                                        Click="btn_Help_Modules_Click"
 
-                                </Expander>
+                                        Style="{StaticResource HelpButton}">
 
-                                <StackPanel Orientation="Horizontal" VerticalAlignment="Top">
-                                    <!-- dialog for adding extensions -->
-                                    <materialDesign:DialogHost x:Name="dialogHost_SupportedFormat"
-                                                                materialDesign:DialogHost.DialogClosingAttached="dialogHost_OnDialogClosing"
-                                                                HorizontalAlignment="Center"
-                                                                VerticalAlignment="Center"
-                                                                CloseOnClickAway="True">
-                                        <materialDesign:DialogHost.DialogContent>
-                                            <!-- textblock with accept and cancel buttons -->
-                                            <StackPanel
-                                                Margin="16">
-                                                <TextBlock>
-                                                    Add a new extension.
-                                                </TextBlock>
-                                                <TextBox
-                                                    Margin="0 8 0 0"
-                                                    HorizontalAlignment="Stretch"
-                                                    x:Name="box_supportedFile"
-                                                    materialDesign:HintAssist.Hint="mp3;mp4" />
-                                                <StackPanel
-                                                    Orientation="Horizontal"
-                                                    HorizontalAlignment="Right">
-                                                    <Button
-                                                        Style="{StaticResource MaterialDesignFlatButton}"
-                                                        IsCancel="True"
-                                                        Margin="0 8 8 0"
-                                                        Command="materialDesign:DialogHost.CloseDialogCommand">
-                                                        <Button.CommandParameter>
-                                                            <system:Boolean
-                                                                xmlns:system="clr-namespace:System;assembly=mscorlib">
-                                                                False
-                                                            </system:Boolean>
-                                                        </Button.CommandParameter>
-                                                        CANCEL
-                                                    </Button>
-                                                    <Button
-                                                        Style="{StaticResource MaterialDesignFlatButton}"
-                                                        IsDefault="True"
-                                                        Margin="0 8 8 0"
-                                                        Command="materialDesign:DialogHost.CloseDialogCommand"
-                                                        Click="btn_SupportedFormatAdded_Click">
+                                        <materialDesign:PackIcon
 
-                                                        <Button.CommandParameter>
-                                                            <system:Boolean
-                                                                xmlns:system="clr-namespace:System;assembly=mscorlib">
-                                                                True
-                                                            </system:Boolean>
-                                                        </Button.CommandParameter>
-                                                        ACCEPT
-                                                    </Button>
-                                                </StackPanel>
-                                            </StackPanel>
-                                        </materialDesign:DialogHost.DialogContent>
+                                            Kind="HelpCircleOutline"
+                                            Height="15"
+                                            Width="15" />
+                                    </Button>
+                                </StackPanel>
 
-                                        <!-- button to open the dialog -->
-                                        <Button 
-                                                Command="{x:Static materialDesign:DialogHost.OpenDialogCommand}"
+                                <Separator />
+
+                                <!--SPACER-->
+                                <!-- checkboxes for modules are added here with code-->
+
+                            </StackPanel>
+
+                            <StackPanel Orientation="Vertical" Margin="0,20,0,0">
+                                <!-- File Settings -->
+
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="Files" FontSize="15" FontWeight="Bold" VerticalAlignment="Center" />
+                                    <Button
+                                        Click="btn_Help_Files_Click"
+                                        Style="{StaticResource HelpButton}">
+
+                                        <materialDesign:PackIcon
+
+                                            Kind="HelpCircleOutline"
+                                            Height="15"
+                                            Width="15" />
+                                    </Button>
+                                </StackPanel>
+
+                                <Separator />
+
+                                <StackPanel Orientation="Horizontal" Margin="0,20,0,0">
+                                    <Expander HorizontalAlignment="Left"
+                                              Header="Library Locations">
+                                        <ListBox x:Name="list_MediaSources" ItemsSource="{Binding MediaSources}"
+                                                 MinWidth="300" />
+                                    </Expander>
+
+                                    <StackPanel Orientation="Horizontal" VerticalAlignment="Top">
+                                        <Button Click="btn_addMediaSource_Click"
                                                 Background="{DynamicResource PrimaryHueMidBrush}"
                                                 BorderBrush="{x:Null}">
                                             <materialDesign:PackIcon Kind="Plus" />
                                         </Button>
+                                        <Button Click="btn_deleteMediaSource_Click"
+                                                Background="{DynamicResource PrimaryHueMidBrush}"
+                                                BorderBrush="{x:Null}">
+                                            <materialDesign:PackIcon Kind="Minus" />
+                                        </Button>
+                                    </StackPanel>
+                                </StackPanel>
 
-                                        <!-- button to remove selected entry -->
-                                    </materialDesign:DialogHost>
-                                    <Button Click="btn_deleteSupportedFormat_Click"
-                                            Background="{DynamicResource PrimaryHueMidBrush}"
-                                            BorderBrush="{x:Null}">
-                                        <materialDesign:PackIcon Kind="Minus" />
+                                <StackPanel Margin="0,15,0,0" Orientation="Horizontal">
+                                    <Expander HorizontalAlignment="Left"
+                                              Header="Supported File Extensions">
+
+
+                                        <ListBox x:Name="list_SupportedFormats"
+                                                 ItemsSource="{Binding SupportedFormats}"
+                                                 MinWidth="300" />
+
+                                    </Expander>
+
+                                    <StackPanel Orientation="Horizontal" VerticalAlignment="Top">
+                                        <!-- dialog for adding extensions -->
+                                        <materialDesign:DialogHost x:Name="dialogHost_SupportedFormat"
+                                                                   materialDesign:DialogHost.DialogClosingAttached="dialogHost_OnDialogClosing"
+                                                                   HorizontalAlignment="Center"
+                                                                   VerticalAlignment="Center"
+                                                                   CloseOnClickAway="True">
+                                            <materialDesign:DialogHost.DialogContent>
+                                                <!-- textblock with accept and cancel buttons -->
+                                                <StackPanel
+                                                    Margin="16">
+                                                    <TextBlock>
+                                                        Add a new extension.
+                                                    </TextBlock>
+                                                    <TextBox
+                                                        Margin="0 8 0 0"
+                                                        HorizontalAlignment="Stretch"
+                                                        x:Name="box_supportedFile"
+                                                        materialDesign:HintAssist.Hint="mp3;mp4" />
+                                                    <StackPanel
+                                                        Orientation="Horizontal"
+                                                        HorizontalAlignment="Right">
+                                                        <Button
+                                                            Style="{StaticResource MaterialDesignFlatButton}"
+                                                            IsCancel="True"
+                                                            Margin="0 8 8 0"
+                                                            Command="materialDesign:DialogHost.CloseDialogCommand">
+                                                            <Button.CommandParameter>
+                                                                <system:Boolean
+                                                                    xmlns:system="clr-namespace:System;assembly=mscorlib">
+                                                                    False
+                                                                </system:Boolean>
+                                                            </Button.CommandParameter>
+                                                            CANCEL
+                                                        </Button>
+                                                        <Button
+                                                            Style="{StaticResource MaterialDesignFlatButton}"
+                                                            IsDefault="True"
+                                                            Margin="0 8 8 0"
+                                                            Command="materialDesign:DialogHost.CloseDialogCommand"
+                                                            Click="btn_SupportedFormatAdded_Click">
+
+                                                            <Button.CommandParameter>
+                                                                <system:Boolean
+                                                                    xmlns:system="clr-namespace:System;assembly=mscorlib">
+                                                                    True
+                                                                </system:Boolean>
+                                                            </Button.CommandParameter>
+                                                            ACCEPT
+                                                        </Button>
+                                                    </StackPanel>
+                                                </StackPanel>
+                                            </materialDesign:DialogHost.DialogContent>
+
+                                            <!-- button to open the dialog -->
+                                            <Button
+                                                Command="{x:Static materialDesign:DialogHost.OpenDialogCommand}"
+                                                Background="{DynamicResource PrimaryHueMidBrush}"
+                                                BorderBrush="{x:Null}">
+                                                <materialDesign:PackIcon Kind="Plus" />
+                                            </Button>
+
+                                            <!-- button to remove selected entry -->
+                                        </materialDesign:DialogHost>
+                                        <Button Click="btn_deleteSupportedFormat_Click"
+                                                Background="{DynamicResource PrimaryHueMidBrush}"
+                                                BorderBrush="{x:Null}">
+                                            <materialDesign:PackIcon Kind="Minus" />
+                                        </Button>
+                                    </StackPanel>
+
+                                </StackPanel>
+                            </StackPanel>
+
+
+                            <StackPanel Orientation="Vertical" Margin="0,20,0,0">
+                                <!-- Setup Settings -->
+
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="Setup" FontSize="15" FontWeight="Bold" VerticalAlignment="Center" />
+                                    <Button
+                                        Click="btn_Help_Setup_Click"
+                                        Style="{StaticResource HelpButton}">
+
+                                        <materialDesign:PackIcon
+
+                                            Kind="HelpCircleOutline"
+                                            Height="15"
+                                            Width="15" />
                                     </Button>
                                 </StackPanel>
 
-                            </StackPanel>
-                        </StackPanel>
+                                <Separator Margin="0,5,0,20" />
 
-
-                        <StackPanel Orientation="Vertical" Margin="0,20,0,0">
-                            <!-- Setup Settings -->
-
-                            <StackPanel Orientation="Horizontal">
-                                <TextBlock Text="Setup" FontSize="15" FontWeight="Bold" VerticalAlignment="Center"/>
-                                <Button
-                                    Click="btn_Help_Setup_Click"
-                                    Style="{StaticResource HelpButton}">
-
-                                    <materialDesign:PackIcon
-
-                                        Kind="HelpCircleOutline"
-                                        Height="15"
-                                        Width="15" />
-                                </Button>
+                                <Button Click="btn_OpenTutorial_Click"
+                                        Content="Open Introduction"
+                                        Margin="0,-11,0,0" />
                             </StackPanel>
 
-                            <Separator Margin="0,5,0,20" />
 
-                            <Button Click="btn_OpenTutorial_Click"
-                                    Content="Open Introduction"
-                                    Margin="0,-11,0,0">
-                            </Button>
-                        </StackPanel>
-
-                           
                         </StackPanel>
                     </Grid>
                 </materialDesign:ColorZone>

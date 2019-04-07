@@ -9,11 +9,12 @@ using Util.IO;
 namespace BotModule
 {
     /// <summary>
-    /// BotHandle inherites from Bot, failsave frame around the bot class
+    /// BotHandle inherits from Bot, fail safe frame around the bot class
     /// </summary>
+    /// <see cref="Bot"/>
     /// <remarks>
     /// Does only communicate with api through its base 'Bot'
-    /// Catches and treats excetpion from base class
+    /// Catches and treats exception from base class
     /// If not connected to channels, methods will return false (or void)
     /// </remarks>
     public class BotHandle : Bot
@@ -24,9 +25,7 @@ namespace BotModule
         public BotHandle()
         {
         }
-
-   
-
+        
         #region properties
 
         /// <summary>
@@ -59,49 +58,46 @@ namespace BotModule
         #region controll stuff
 
         /// <summary>
-        /// enques a Button into the list, only the file property is relevant. Loop and Boost are optional
+        /// load stream of file, Will interrupt current streams
         /// </summary>
         /// <param name="data">BotData object which should be streamed</param>
-        /// <returns>Task</returns>
         /// <remarks>
-        /// auto connects to Server, calls enqueAsync(BotData) of base
+        /// auto connects to Server, calls base
         /// </remarks>
-        public new async Task enqueueAsync(BotData data)
-        {
-            await enqueueRegardingPriorityAsync(data, false);
-        }
-
-        /// <summary>
-        /// enques a Button infront of the lsit, only the file property is relevant. Loop and Boost are optional
-        /// </summary>
-        /// <param name="data">BotData object which should be streamed</param>
-        /// <returns>Task</returns>
-        /// <remarks>
-        /// auto connects to Server, calls enqueAsync(BotData) of base
-        /// </remarks>
-        public new async Task enqueuePriorityAsync(BotData data)
-        {
-            await enqueueRegardingPriorityAsync(data, true);
-        }
-
-        private async Task enqueueRegardingPriorityAsync(BotData data, bool isPriority)
+        public new async Task loadFileAsync(BotData data)
         {
             if (!await connectToServerAsync())
                 return;
 
+            base.IncompatibleWave += PublishIncompatibleMic;
+
             try
             {
-                if (isPriority)
-                    base.enqueuePriorityAsync(data);
-                else
-                    base.enqueueAsync(data);
+                await base.loadFileAsync(data);
             }
             catch (Exception ex)
             {
                 await disconnectFromChannelAsync();
-                handleReplayException(ex, "Trying to add a new file to the queue. (Button Nr: " + data.id + ", Name: \"" + data.name + "\").", data.id);
+                handleReplayException(ex,
+                    "Trying to add a new file to the queue. (Button Nr: " + data.id + ", Name: \"" + data.name + "\").",
+                    data.id);
+            }
+            finally
+            {
+                base.IncompatibleWave -= PublishIncompatibleMic;
             }
         }
+
+
+        private void PublishIncompatibleMic()
+        {
+            SnackbarManager.SnackbarMessage("Incompatible Mic Settings", SnackbarManager.SnackbarAction.Log);
+
+            Util.IO.LogManager.LogException(null, "BotModule/BotHandler",
+                "Incompatible Mic Settings. To prevent distorted audio, set your device to " + BotWave.sampleRate + " Hz and " + BotWave.channelCount + " channels.", false);
+        }
+
+
 
         /// <summary>
         /// resumes or starts the stream
@@ -129,6 +125,7 @@ namespace BotModule
             {
                 await base.resumeStream();
             }
+           
             catch (Exception ex)
             {
                 await disconnectFromChannelAsync();
@@ -310,8 +307,16 @@ namespace BotModule
                     Util.IO.LogManager.LogException(iEx, location, "Cannot reach Discord servers");
                     break;
 
+                case System.ArgumentException iEx:
+                    string iExMsg = msg;               
+                    if(iEx.Message == "Unsupported Wave Format"){
+                       iExMsg = "Mic not supported";
+                    }
+                    SnackbarManager.SnackbarMessage(iExMsg, SnackbarManager.SnackbarAction.None);
+                    Util.IO.LogManager.LogException(iEx, location, iExMsg);
+                    break;
                 case Exception iEx:
-                    SnackbarManager.SnackbarMessage(msg);
+                    SnackbarManager.SnackbarMessage(msg, SnackbarManager.SnackbarAction.Log);
                     Util.IO.LogManager.LogException(iEx, location, msg, true);
                     break;
             }
@@ -361,9 +366,10 @@ namespace BotModule
             {
                 userList = base.getAllClients(acceptOffline);
             }
-            catch
+            catch(Exception ex)
             {
-                SnackbarManager.SnackbarMessage("Cannot get clients. Retry later");
+                Util.IO.LogManager.LogException(ex, "BotModule/BotHandler", "Exception when trying to GET client-list from Discord Servers");
+                SnackbarManager.SnackbarMessage("Cannot get clients. Retry later", SnackbarManager.SnackbarAction.Log);
                 return null;
             }
 

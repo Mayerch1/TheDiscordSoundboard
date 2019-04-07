@@ -5,35 +5,58 @@ using NAudio.Wave;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using DataManagement;
+using NAudio.CoreAudioApi;
 using NAudio.Dsp;
+using NAudio.Wave.Compression;
 using NAudio.Wave.SampleProviders;
 
 namespace BotModule
 {
     /// <summary>
-    /// Basic Bot class, directly communicates with the api, throws for every little sh
+    /// Basic Bot class, directly communicates with the api, no fail safe, throws for everything
     /// </summary>
+    /// <seealso cref="BotHandle"/>
     /// <remarks>
     /// can used as standalone but requires to change all 'protected' keywords to 'public' in order to be accessed, also it is not recommended
-    /// if bot is not connected to server or channel, it throws a BotException(...)
+    /// if bot is not connected to server or channel, it throws a <see cref="BotException"/>
     /// </remarks>
     public class Bot
     {
         #region config
 
-        private const int channelCount = 2;
-        private const int sampleRate = 48000;
-        private const int sampleQuality = 60;
+        //===========================
         private const int packagesPerSecond = 50;
-
-        //if changed, also change applyVolume();
-        private const int bitDepth = 16;
+        //===========================
 
         #endregion config
 
         #region event Handlers
+
+        /// <summary>
+        /// IncompatibleWaveHandler delegate
+        /// </summary>
+        protected delegate void IncompatibleWaveHandler();
+
+        /// <summary>
+        /// Gets triggered when the waveformat of a infinite stream is not equals to the desired format
+        /// Replay is possible, but the audio is distorted
+        /// </summary>
+        protected IncompatibleWaveHandler IncompatibleWave;
+
+
+        /// <summary>
+        /// EndOfFileHandler delegate
+        /// </summary>
+        public delegate void EndOfFileHandler();
+
+        /// <summary>
+        /// EndOfFile field
+        /// </summary>
+        public EndOfFileHandler EndOfFile;
+
 
         /// <summary>
         /// StreamStateHandler delegate
@@ -78,6 +101,7 @@ namespace BotModule
         private string currentSong = "";
         private float pitch = 1.0f;
         private bool isEarrape = false;
+        private float volume = 1;
 
         #endregion status fields
 
@@ -89,7 +113,15 @@ namespace BotModule
         /// <remarks>
         /// 1.0 is 100%, 10.0 is static noise
         /// </remarks>
-        public float Volume { get; set; }
+        public float Volume
+        {
+            get => volume;
+            set
+            {
+                volume = value;
+                ConfigChanged(Pitch, value);
+            }
+        }
 
         /// <summary>
         /// Pitch property
@@ -103,7 +135,7 @@ namespace BotModule
             set
             {
                 pitch = value;
-                PitchChanged(value);
+                ConfigChanged(value, Volume);
             }
         }
 
@@ -115,7 +147,6 @@ namespace BotModule
         /// <summary>
         /// IsChannelConnected property
         /// </summary>
-        /// TODO test implementation
         public bool IsChannelConnected
         {
             get
@@ -128,7 +159,7 @@ namespace BotModule
 
                 return isChannelConnected;
             }
-            private set { isChannelConnected = value; }
+            private set => isChannelConnected = value;
         }
 
         /// <summary>
@@ -136,7 +167,7 @@ namespace BotModule
         /// </summary>
         public bool IsStreaming
         {
-            get { return isStreaming; }
+            get => isStreaming;
             private set
             {
                 if (value != isStreaming)
@@ -154,7 +185,7 @@ namespace BotModule
         {
             get
             {
-                if (Reader != null) return Reader.CurrentTime;
+                if (Wave.Reader != null) return Wave.Reader.CurrentTime;
                 else return TimeSpan.Zero;
             }
         }
@@ -166,15 +197,17 @@ namespace BotModule
         {
             get
             {
-                if (Reader != null) return Reader.TotalTime;
+                if (Wave.Reader != null) return Wave.Reader.TotalTime;
                 else return TimeSpan.Zero;
             }
         }
+
 
         /// <summary>
         /// IsBufferEmpty property
         /// </summary>
         public bool IsBufferEmpty { get; private set; }
+
 
         /// <summary>
         /// IsLoop property
@@ -203,7 +236,8 @@ namespace BotModule
             set
             {
                 isEarrape = value;
-                EarrapeChanged(value);
+                //method sets Volume to 100, when isEarrape
+                ConfigChanged(Pitch, Volume);
             }
         }
 
@@ -215,23 +249,9 @@ namespace BotModule
 
         private DiscordSocketClient Client { get; set; }
         private IAudioClient AudioCl { get; set; }
+        private AudioOutStream OutStream { get; set; } = null;
 
-        /// <summary>
-        /// queue of files which are going to be played
-        /// </summary>
-        /// <remarks>
-        /// Contains data representation of Buttons, to also store settings like a custom loop-state
-        /// </remarks>
-        private List<DataManagement.BotData> Queue { get; set; }
-
-        private MediaFoundationReader Reader { get; set; }
-        private MediaFoundationResampler ActiveResampler { get; set; }
-
-        private MediaFoundationResampler NormalResampler { get; set; }
-        private MediaFoundationResampler SourceResampler { get; set; }
-
-        private MediaFoundationResampler BoostResampler { get; set; }
-        private WaveFormat OutFormat { get; set; }
+        private BotWave Wave { get; set; } = new BotWave();
 
         #endregion other vars
 
@@ -240,7 +260,6 @@ namespace BotModule
         /// </summary>
         public Bot()
         {
-            Queue = new List<BotData>();
             IsStreaming = false;
             IsChannelConnected = false;
             IsServerConnected = false;
@@ -253,33 +272,12 @@ namespace BotModule
         /// enqueues a btn into the queue, if queue is empy directly gather stream
         /// </summary>
         /// <param name="data"></param>
-        protected void enqueueAsync(BotData data)
+        protected async Task loadFileAsync(BotData data)
         {
-            if (!IsStreaming && IsBufferEmpty)
-            {
-                getStream(data);
-            }
-            else
-            {
-                Queue.Add(data);
-            }
-        }
+            if (IsStreaming)
+                await stopStreamAsync(true, false);
 
-        /// <summary>
-        /// enqueues a btn at the first position of the queue
-        /// </summary>
-        /// <param name="data"></param>
-        protected void enqueuePriorityAsync(BotData data)
-        {
-            if (!IsStreaming)
-            {
-                getStream(data);
-            }
-            else
-            {
-                //insert on first position
-                Queue.Insert(0, data);
-            }
+            getStream(data);
         }
 
         /// <summary>
@@ -301,26 +299,33 @@ namespace BotModule
         }
 
 
-        private void PitchChanged(float val)
+        private void ConfigChanged(float pitch, float volume)
         {
-            if (SourceResampler != null)
+            //first apply pitch
+            if (Wave.SourceResampler != null)
             {
-                NormalResampler = null;
+                //delete current resampler, disposing can cause thread issue
+                Wave.ActiveResampler = null;
 
-                var pSampler = new SmbPitchShiftingSampleProvider(SourceResampler.ToSampleProvider());
-                pSampler.PitchFactor = val;
-                NormalResampler = new MediaFoundationResampler(pSampler.ToWaveProvider(), OutFormat);
+                var pSampler = new SmbPitchShiftingSampleProvider(Wave.SourceResampler.ToSampleProvider());
+                pSampler.PitchFactor = pitch;
+
+                Wave.ActiveResampler = new MediaFoundationResampler(pSampler.ToWaveProvider(), Wave.OutFormat);
+
+
+                //secondly apply volume
+                var volumeSampler = new VolumeWaveProvider16(Wave.ActiveResampler);
+
+                if (IsEarrape)
+                    //this means 10,000%
+                    volumeSampler.Volume = 100;
+                else
+                    volumeSampler.Volume = volume;
+
+                Wave.ActiveResampler = new MediaFoundationResampler(volumeSampler, Wave.OutFormat);
             }
         }
 
-        private void EarrapeChanged(bool val)
-        {
-            //will play the boosted version, ignores pitch
-            if (val)
-                ActiveResampler = BoostResampler;
-            else
-                ActiveResampler = NormalResampler;
-        }
 
         /// <summary>
         /// skips ahead to a timespan
@@ -331,7 +336,7 @@ namespace BotModule
         {
             if ((IsStreaming || enforce) && CanSeek)
             {
-                Reader.CurrentTime = newTime;
+                Wave.Reader.CurrentTime = newTime;
             }
         }
 
@@ -343,7 +348,7 @@ namespace BotModule
         {
             if (IsStreaming && CanSeek)
             {
-                Reader.CurrentTime = Reader.CurrentTime.Add(skipTime);
+                Wave.Reader.CurrentTime = Wave.Reader.CurrentTime.Add(skipTime);
             }
         }
 
@@ -360,9 +365,9 @@ namespace BotModule
                 throw new BotException(BotException.type.connection,
                     "Not connected to the Servers, while Setting GameState", BotException.connectionError.NoServer);
 
-            StreamType type = StreamType.NotStreaming;
+            ActivityType type = ActivityType.Watching;
             if (isStreaming)
-                type = StreamType.Twitch;
+                type = ActivityType.Streaming;
 
             if (streamUrl == "")
                 await Client.SetGameAsync(msg, streamUrl, type);
@@ -380,68 +385,108 @@ namespace BotModule
         /// <param name="data">BotData object</param>
         private void getStream(BotData data)
         {
-            //return if nothing to stream
-            if (!File.Exists(data.filePath) && data.stream == null)
+            Wave.Reader = null;
+            Wave.Capture = null;
+
+            //see if file or uri was provided
+            if (!string.IsNullOrWhiteSpace(data.uri))
+            {
+                Wave.Reader = new MediaFoundationReader(data.uri);
+                CanSeek = Wave.Reader.CanSeek;
+                //Wave.Capture = null;
+            }
+            else if (File.Exists(data.filePath))
+            {
+                Wave.Reader = new MediaFoundationReader(data.filePath);
+                CanSeek = Wave.Reader.CanSeek;
+                //Wave.Capture = null;
+            }
+            else if (!string.IsNullOrEmpty(data.deviceId))
+            {
+                var enumerator = new MMDeviceEnumerator();
+
+                if (data.deviceId == "-1")
+                {
+                    //get earrape stream
+                    MMDevice device = enumerator.GetDefaultAudioEndpoint(DataFlow.Capture, Role.Communications);
+
+                    Wave.Capture = new WasapiCapture(device);
+                    Wave.Capture.WaveFormat = WaveFormat.CreateIeeeFloatWaveFormat(48000, 2);
+                }
+                else
+                {
+                    //device stream
+                    MMDevice device = enumerator.GetDevice(data.deviceId);
+
+                    Wave.Capture = new WasapiCapture(device);
+
+                    ////if channels/sample count is not default, resample it later
+                    if (Wave.Capture.WaveFormat.Channels != Wave.OutFormat.Channels ||
+                        Wave.Capture.WaveFormat.SampleRate != Wave.OutFormat.SampleRate)
+                    {
+                        //send delegate to bot Handler
+                        IncompatibleWave();
+                    }
+
+                    //convert from ieee to pcm
+                    Wave.Capture.WaveFormat = new WaveFormat(Wave.Capture.WaveFormat.SampleRate, BotWave.bitDepth, Wave.Capture.WaveFormat.Channels);
+                }
+
+                CanSeek = false;
+
+                Wave.ActiveResampler = null;
+                Wave.SourceResampler = null;
+
+                Wave.Capture.DataAvailable += Capture_DataAvailable;
+                //no override settings for stream available
+            }
+            else
                 return;
 
-            OutFormat = new WaveFormat(sampleRate, bitDepth, channelCount);
-
-            if (data.filePath != null)
-            {
-                Reader = new MediaFoundationReader(data.filePath);
-
-                //set seekable
-                CanSeek = true;
-            }
-            else if (data.stream != null)
-            {
-                return;
-
-                //Reader = new StreamMediaFoundationReader(data.stream);
-                // Reader = new StreamMediaFoundationReader(data.stream);
-                //set non seekable bool
-                //CanSeek = data.stream.CanSeek;
-            }
-
-            //create source and finally used resampler
-            SourceResampler = new MediaFoundationResampler(Reader, OutFormat);
-
-            //apply pitch to the resampler, will also set NormalResampler
-            PitchChanged(Pitch);
-
-
-            /*
-             * Generate one normal resampler,
-             * Generate one boosted resampler,
-             * in applyVolume() the matching resampler is assigned to activeResampler
-             */
-
-
-            var volumeSampler = new VolumeWaveProvider16(NormalResampler);
-            //this means 10,000%
-            volumeSampler.Volume = 100;
-            BoostResampler = new MediaFoundationResampler(volumeSampler, OutFormat);
-
-            ActiveResampler = NormalResampler;
 
             IsBufferEmpty = false;
 
-            //will apply Earrape and loop
-            loadOverrideSettings(data);
-
             //set name of loaded song
             currentSong = data.name;
+
+            if (Wave.Reader != null)
+            {
+                //create source and finally used resampler
+                Wave.SourceResampler = new MediaFoundationResampler(Wave.Reader, Wave.OutFormat);
+
+                //apply pitch and volume to the resampler, will also set NormalResampler
+                ConfigChanged(Pitch, Volume);
+
+                //will apply Earrape and loop
+                loadOverrideSettings(data);
+            }
         }
+
+
+        //receives Data from requested device
+        private void Capture_DataAvailable(object sender, WaveInEventArgs e)
+        {
+            var buff = e.Buffer;
+
+            applyVolume(ref buff);
+
+
+            OutStream.Write(buff, 0, e.BytesRecorded);
+        }
+
+
+        private async Task playBufferedStream()
+        { }
+
 
         /// <summary>
         /// starts the stream
         /// </summary>
-        /// <param name="stream">if one stream is already opened it goes here to prevent a gap in the audio line</param>
         /// <returns>Task</returns>
         /// <remarks>
         /// calls itself again as long as isLoop is true
         /// </remarks>
-        private async Task startStreamAsync(AudioOutStream stream = null)
+        private async Task startStreamAsync()
         {
             //IsChannelConnected gaurantees, to have IsServerConnected
             if (!IsChannelConnected)
@@ -457,29 +502,35 @@ namespace BotModule
 
             if (!IsStreaming && IsServerConnected && AudioCl != null)
             {
-                if (stream == null)
-                    stream = AudioCl.CreatePCMStream(AudioApplication.Music);
+                if (OutStream == null)
+                    OutStream = AudioCl.CreatePCMStream(AudioApplication.Music);
 
-                if (ActiveResampler == null)
+
+                if (Wave.ActiveResampler == null)
                 {
-                    stream.Close();
+                    //streaming device streams
+                    if (Wave.Capture != null)
+                    {
+                        //earrape, pitch is not available in first implementation
+                        IsStreaming = true;
+                        Wave.Capture.StartRecording();
+                    }
+
                     return;
                 }
 
+                //streaming local or uri streams
+                IsStreaming = true;
                 //send stream in small packages
-                int blockSize = OutFormat.AverageBytesPerSecond / packagesPerSecond;
+                int blockSize = Wave.OutFormat.AverageBytesPerSecond / packagesPerSecond;
                 byte[] buffer = new byte[blockSize];
                 int byteCount;
 
-                IsStreaming = true;
+
                 IsPause = false;
-
-
                 //repeat, read new block into buffer -> stream buffer
-                while ((byteCount = ActiveResampler.Read(buffer, 0, blockSize)) > 0)
+                while ((byteCount = Wave.ActiveResampler.Read(buffer, 0, blockSize)) > 0)
                 {
-                    applyVolume(ref buffer);
-
                     if (IsToAbort || SkipTracks > 0)
                         break;
 
@@ -491,9 +542,8 @@ namespace BotModule
                         IsBufferEmpty = true;
                     }
 
-                    await stream.WriteAsync(buffer, 0, blockSize);
+                    await OutStream.WriteAsync(buffer, 0, blockSize);
                 }
-
 
                 IsStreaming = false;
 
@@ -502,25 +552,7 @@ namespace BotModule
                 {
                     //move head to begin of file
                     skipToTime(TimeSpan.Zero, true);
-                    await startStreamAsync(stream);
-                }
-                //next file in queue
-                else if (Queue.Count > 0 && !IsToAbort)
-                {
-                    //skip one less
-                    if (SkipTracks > 0)
-                        --SkipTracks;
-
-                    //reset for next song
-                    if (IsLoop)
-                        LoopStateChanged(false);
-
-                    //queue must contain at least one item
-                    var nextTitle = Queue[0];
-                    Queue.RemoveAt(0);
-                    getStream(nextTitle);
-
-                    await startStreamAsync(stream);
+                    await startStreamAsync();
                 }
                 //exit stream
                 else
@@ -528,14 +560,22 @@ namespace BotModule
                     //can't skip a track if nothing is running
                     SkipTracks = 0;
 
-                    //wait until last packages are played
-                    await stream.FlushAsync();
+                    if (OutStream != null)
+                    {
+                        await OutStream.FlushAsync();
+                        OutStream.Close();
+                        OutStream = null;
+                    }
 
-                    stream.Close();
                     IsToAbort = false;
+
+                    //trigger end of file delegate, needed e.g. for playlist processing
+                    if (!IsPause)
+                        EndOfFile();
                 }
             }
         }
+
 
         /// <summary>
         /// load all specific button settings, raise events to call back to ui for visual indication
@@ -562,37 +602,34 @@ namespace BotModule
             LoopStateChanged(data.isLoop);
         }
 
+
         /// <summary>
         /// split buffer and apply volume to each byte pair
         /// </summary>
         /// <param name="buffer">ref to byte array package of the current stream</param>
         private void applyVolume(ref byte[] buffer)
         {
+            var vol = Volume;
+
             if (IsEarrape)
-            {
-                ActiveResampler = BoostResampler;
-            }
-            else
-            {
-                ActiveResampler = NormalResampler;
+                vol = 22;
+
+            if (vol == 1)
+                return;
+
                 for (int i = 0; i < buffer.Length; i += 2)
                 {
                     //convert a byte-Pair into one char (with 2 bytes)
 
-                    short bytePair = (short) ((buffer[i + 1] & 0xFF) << 8 | (buffer[i] & 0xFF));
+                    short bytePair = (short)((buffer[i + 1] & 0xFF) << 8 | (buffer[i] & 0xFF));
 
-                    //float floatPair = bytePair * Volume;
-
-                    var customVol = Volume;
-                    var overOne = Volume - 1;
-
-                    bytePair = (short) (bytePair * customVol);
+                    bytePair = (short)(bytePair * vol);
 
                     //convert char back to 2 bytes
-                    buffer[i] = (byte) bytePair;
-                    buffer[i + 1] = (byte) (bytePair >> 8);
+                    buffer[i] = (byte)bytePair;
+                    buffer[i + 1] = (byte)(bytePair >> 8);
                 }
-            }
+            
         }
 
         #endregion play stuff
@@ -612,6 +649,7 @@ namespace BotModule
             Client = new DiscordSocketClient();
 
             await Client.LoginAsync(TokenType.Bot, token);
+
 
             await Client.StartAsync();
 
@@ -635,7 +673,7 @@ namespace BotModule
                     BotException.connectionError.NoServer);
             }
 
-            AudioCl = await ((ISocketAudioChannel) Client.GetChannel(channelId)).ConnectAsync();
+            AudioCl = await ((ISocketAudioChannel) Client.GetChannel(channelId)).ConnectAsync(true);
 
             IsChannelConnected = true;
         }
@@ -648,13 +686,13 @@ namespace BotModule
         /// stop running streams and disconnect from channel
         /// </summary>
         /// <returns>Task</returns>
-        /// <see cref="stopStreamAsync()"/>
+        /// <see cref="stopStreamAsync(bool, bool)"/>
         public async Task disconnectFromChannelAsync()
         {
             if (!IsChannelConnected)
                 return;
 
-            await stopStreamAsync();
+            await stopStreamAsync(false, true);
 
             await AudioCl.StopAsync();
 
@@ -675,7 +713,7 @@ namespace BotModule
 
             //wait until last packet is played
             while (IsChannelConnected)
-                await Task.Delay(10);
+                await Task.Delay(5);
 
             await Client.StopAsync();
             await Client.LogoutAsync();
@@ -686,19 +724,54 @@ namespace BotModule
         /// <summary>
         /// stop a running stream
         /// </summary>
+        /// <param name="flushStream">flushes the current stream</param>
+        /// <param name="closeStream">closes the current stream</param>
         /// <returns>Task</returns>
-        public async Task stopStreamAsync()
+        public async Task stopStreamAsync(bool flushStream, bool closeStream)
         {
             if (!IsStreaming)
                 return;
 
-            IsToAbort = true;
 
-            //wait until last package is played
-            while (IsStreaming)
-                await Task.Delay(10);
+            //streaming from device
+            if (Wave.Capture != null)
+            {
+                Wave.Capture.StopRecording();
 
-            //make shure to not block future streams
+
+                IsStreaming = false;
+
+                if (!IsPause)
+                {
+                    Wave.Capture.DataAvailable -= Capture_DataAvailable;
+                    EndOfFile();
+                }
+            }
+            //streaming from buffer
+            else
+            {
+                IsToAbort = true;
+
+                //wait until last package is read in
+                while (IsStreaming)
+                    await Task.Delay(5);
+            }
+
+
+            if (OutStream != null)
+            {
+                if (flushStream)
+                    await OutStream.FlushAsync();
+
+                if (closeStream)
+                {
+                    OutStream.Close();
+                    OutStream = null;
+                }
+            }
+
+
+            //make sure to not block future streams
             IsToAbort = false;
         }
 
@@ -714,7 +787,7 @@ namespace BotModule
         {
             if (!IsServerConnected)
                 throw new BotException(BotException.type.connection,
-                    "Not connectet to the servers, while trying to get channel list",
+                    "Not connected to the servers, while trying to get channel list",
                     BotException.connectionError.NoServer);
 
             List<List<SocketVoiceChannel>> guildList = new List<List<SocketVoiceChannel>>();
@@ -750,7 +823,7 @@ namespace BotModule
         {
             if (!IsServerConnected)
                 throw new BotException(BotException.type.connection,
-                    "Not connectet to the servers, while trying to get clint list",
+                    "Not connected to the servers, while trying to get clint list",
                     BotException.connectionError.NoServer);
 
             List<List<SocketGuildUser>> guildList = new List<List<SocketGuildUser>>();

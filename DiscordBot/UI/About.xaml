@@ -15,8 +15,8 @@
 
                 <materialDesign:ColorZone Style="{StaticResource FloatingHeader}">
                     <StackPanel>
-                        <TextBlock  VerticalAlignment="Center"  Margin="20,0,0,0" FontSize="30" materialDesign:ShadowAssist.ShadowDepth="Depth2" Text="About" FontWeight="Bold" Foreground="#262626" />
-                        <StackPanel Orientation="Horizontal">
+                        <TextBlock  VerticalAlignment="Bottom"  Margin="20,5,0,0" FontSize="30" materialDesign:ShadowAssist.ShadowDepth="Depth2" Text="About" FontWeight="Bold" Foreground="#262626" />
+                        <StackPanel Orientation="Horizontal" VerticalAlignment="Bottom">
                             <TextBlock Margin="20,-5,0,0" FontSize="20" Text="(v. " />
                             <TextBlock Margin="0,-5,0,0" FontSize="20"  Text="{x:Static dataManagement:PersistentData.version}" />
                             <TextBlock Margin="0,-5,0,0" FontSize="20" Text=")" />
