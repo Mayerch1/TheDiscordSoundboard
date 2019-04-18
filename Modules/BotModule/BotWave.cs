@@ -49,12 +49,10 @@ namespace BotModule
         /// <summary>
         /// Stream for changing speed of stream
         /// </summary>
-        public NAudio.SoundTouch.SoundTouchWaveStream Speed { get; set; }
+        public NAudio.SoundTouch.SoundTouchWaveStream Touch { get; set; }
 
-        /// <summary>
-        /// Provider for Pitched samples
-        /// </summary>
-        public NAudio.Wave.SampleProviders.SmbPitchShiftingSampleProvider Pitch { get; set; }
+       
+       // public NAudio.Wave.SampleProviders.SmbPitchShiftingSampleProvider Pitch { get; set; }
 
         /// <summary>
         /// Resampler used to get next byte[] for feeding to bot

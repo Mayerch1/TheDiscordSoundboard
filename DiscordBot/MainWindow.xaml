@@ -314,10 +314,11 @@
                                                                    CloseOnClickAway="True">
                                             <materialDesign:DialogHost.DialogContent>
 
-                                                <StackPanel Orientation="Horizontal" Margin="5">
+                                                <StackPanel Orientation="Vertical" Margin="5">
 
                                                     <!--slider for pitch -->
 
+                                                    <StackPanel Orientation="Horizontal" Margin="5">
                                                     <Button HorizontalAlignment="Center"
                                                             Click="btn_PitchReset_Click"
                                                             materialDesign:ShadowAssist.ShadowDepth="Depth0"
@@ -347,10 +348,11 @@
                                                                       Value="{Binding LivePitch}"
                                                                       Width="150"
                                                                       ToolTip="Pitch" />
-
+                                                    </StackPanel>
                                                     <!--end test slider for pitch -->
                                                     
                                                     <!-- slider for speed -->
+                                                    <StackPanel Orientation="Horizontal" Margin="5">
                                                     <Button HorizontalAlignment="Center"
                                                             Click="btn_SpeedReset_Click"
                                                             materialDesign:ShadowAssist.ShadowDepth="Depth0"
@@ -373,14 +375,14 @@
                                                                       Margin="5,0,0,0"
                                                                       TickFrequency="5"
                                                                       Orientation="Horizontal"
-                                                                      Minimum="0.1"
+                                                                      Minimum="0.5"
                                                                       Maximum="2"
 
-                                                                      DelayedValueChanged="Slider_DelayedPitchChanged"
+                                                                      DelayedValueChanged="Slider_DelayedSpeedChanged"
                                                                       Value="{Binding LiveSpeed}"
                                                                       Width="150"
                                                                       ToolTip="Speed" />
-
+                                                        </StackPanel>
                                                     <!-- end slider for speed-->
                                                 </StackPanel>
 

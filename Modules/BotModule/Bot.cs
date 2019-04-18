@@ -104,6 +104,8 @@ namespace BotModule
         private bool isEarrape = false;
         private float volume = 1;
 
+        private float appliedPitch, appliedSpeed, appliedVolume;
+
         #endregion status fields
 
         #region status propertys
@@ -275,6 +277,10 @@ namespace BotModule
             IsChannelConnected = false;
             IsServerConnected = false;
             IsBufferEmpty = true;
+
+            appliedPitch = pitch;
+            appliedSpeed = speed;
+            appliedVolume = volume;
         }
 
         #region controll stuff
@@ -314,18 +320,34 @@ namespace BotModule
         {
             //apply given parameters to all readers
             if(Wave.SourceResampler != null && Wave.ActiveResampler !=null)
-            {           
-                if (Wave.Speed != null)
-                    Wave.Speed.Tempo = speed;
-                if (Wave.Pitch != null)
-                    Wave.Pitch.PitchFactor = pitch;
+            {
+                if (Wave.Touch != null )
+                    
+                {
+                    if (speed != appliedSpeed)
+                    {
+                        appliedSpeed = speed;
+                        Wave.Touch.Tempo = appliedSpeed;
+                    }
 
-                if (Wave.Volume != null)
+                    if (pitch != appliedPitch)
+                    {
+                        appliedPitch = pitch;
+                        Wave.Touch.Pitch = appliedPitch;
+                    }
+    
+                }
+
+
+
+                if (Wave.Volume != null && (volume != appliedVolume || IsEarrape))
                 {
                     if (isEarrape)
-                        Wave.Volume.Volume = 100;
+                        appliedVolume = 100;
                     else
-                        Wave.Volume.Volume = volume;
+                        appliedVolume = volume;
+
+                    Wave.Volume.Volume = appliedVolume;
                 }
             }
         }
@@ -461,10 +483,10 @@ namespace BotModule
                 //create additional providers for Volume, Speed and Pitch
 
                 Wave.Volume = new VolumeWaveProvider16(Wave.SourceResampler);
-                Wave.Speed = new NAudio.SoundTouch.SoundTouchWaveStream(Wave.Volume);
-                Wave.Pitch = new SmbPitchShiftingSampleProvider(Wave.Speed.ToSampleProvider());
+                Wave.Touch = new NAudio.SoundTouch.SoundTouchWaveStream(Wave.Volume);
+                //Wave.Pitch = new SmbPitchShiftingSampleProvider(Wave.Speed.ToSampleProvider());
 
-                Wave.ActiveResampler = new MediaFoundationResampler(Wave.Pitch.ToWaveProvider(), Wave.OutFormat);
+                Wave.ActiveResampler = new MediaFoundationResampler(Wave.Touch, Wave.OutFormat);
 
 
                 //will apply Earrape and loop
@@ -529,7 +551,6 @@ namespace BotModule
                         IsStreaming = true;
                         Wave.Capture.StartRecording();
                     }
-
                     return;
                 }
 
@@ -538,13 +559,14 @@ namespace BotModule
                 //send stream in small packages
                 int blockSize = Wave.OutFormat.AverageBytesPerSecond / packagesPerSecond;
                 byte[] buffer = new byte[blockSize];
-                int byteCount;
 
 
                 IsPause = false;
                 //repeat, read new block into buffer -> stream buffer
-                while ((byteCount = Wave.ActiveResampler.Read(buffer, 0, blockSize)) > 0)
+                while (Wave.Reader.Position < Wave.Reader.Length)
                 {
+                    int byteCount = Wave.ActiveResampler.Read(buffer, 0, blockSize);
+
                     if (IsToAbort || SkipTracks > 0)
                         break;
 

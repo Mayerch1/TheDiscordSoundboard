@@ -1113,14 +1113,26 @@ namespace DiscordBot
         {
             //is NewValue is the same as LivePitch
             Handle.Pitch = (float) e.NewValue;
-
+#if DEBUG
             Console.WriteLine(@"Set Pitch to " + Handle.Pitch);
+#endif
+        }
+        private void Slider_DelayedSpeedChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            //is NewValue is the same as LivePitch
+            Handle.Speed = (float)e.NewValue;
+
+#if DEBUG
+            Console.WriteLine(@"Set Speed to " + Handle.Speed);
+#endif
         }
 
         private void Slider_DelayedVolumeChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
             Handle.Volume = ((float) e.NewValue / 100) * (Handle.Data.Persistent.VolumeCap / 100.0f);
+#if DEBUG
             Console.WriteLine(@"Set Volume to " + Handle.Volume);
+#endif
         }
 
 
@@ -1395,10 +1407,10 @@ namespace DiscordBot
             handler?.Invoke(this, new PropertyChangedEventArgs(info));
         }
 
-        #endregion event stuff
+#endregion event stuff
 
 
-        #region stuff related to dll
+#region stuff related to dll
 
 
        
@@ -1442,7 +1454,7 @@ namespace DiscordBot
             ui.DeviceStartStream += Device_StartStream;
         }
 
-        #endregion stuff related to dll
+#endregion stuff related to dll
 
 #pragma warning restore CS1591
     }

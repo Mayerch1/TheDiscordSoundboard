@@ -88,12 +88,6 @@
     <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Newtonsoft.Json.12.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
-    <Reference Include="SoundTouch.Net, Version=1.9.2.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\SoundTouch.Net.1.9.2.2\lib\net40\SoundTouch.Net.dll</HintPath>
-    </Reference>
-    <Reference Include="SoundTouch.Net.NAudio, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\SoundTouch.Net.NAudio.1.0.0\lib\net461\SoundTouch.Net.NAudio.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.AppContext, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\..\packages\System.AppContext.4.3.0\lib\net46\System.AppContext.dll</HintPath>
@@ -184,6 +178,10 @@
     <ProjectReference Include="..\..\DataManagement\DataManagement.csproj">
       <Project>{6745405b-8a1d-423f-9d17-95bad658db18}</Project>
       <Name>DataManagement</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\SoundTouch.Net.NAudio\SoundTouch.Net.NAudio.csproj">
+      <Project>{0aada976-3763-44e8-b2a4-950bf7c49a26}</Project>
+      <Name>SoundTouch.Net.NAudio</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Util\Util.csproj">
       <Project>{f2e53bb4-2144-4fcd-9b17-fb6408f6e061}</Project>
