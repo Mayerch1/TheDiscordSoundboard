@@ -35,6 +35,7 @@ namespace DataManagement
         private VideoHistory videoHistory = new VideoHistory();
         private ModuleManager moduleStates = new ModuleManager();
         private float pitch = 1.0f;
+        private float speed = 1.0f;
 
         #endregion fields
 
@@ -47,6 +48,12 @@ namespace DataManagement
         {
             get => pitch;
             set => pitch = value;
+        }
+
+        public float Speed
+        {
+            get => speed;
+            set => speed = value;
         }
 
 

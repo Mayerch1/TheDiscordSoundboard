@@ -54,6 +54,7 @@ namespace DiscordBot
         private SnackbarMessageQueue snackbarMessageQueue = new SnackbarMessageQueue(TimeSpan.FromMilliseconds(3500));
         private string currentSongName = "";
         private double livePitch = 1.0f;
+        private double liveSpeed = 1.0f;
         private double liveVolume = 1.0f;
 
         #endregion fields
@@ -102,6 +103,16 @@ namespace DiscordBot
             {
                 livePitch = value;
                 OnPropertyChanged("LivePitch");
+            }
+        }
+
+        public double LiveSpeed
+        {
+            get => liveSpeed;
+            set
+            {
+                liveSpeed = value;
+                OnPropertyChanged("LiveSpeed");
             }
         }
 
@@ -1090,6 +1101,12 @@ namespace DiscordBot
         {
             LivePitch = (float) 1.0f;
             Handle.Pitch = (float) 1.0f;
+        }
+
+        private void btn_SpeedReset_Click(object sender, RoutedEventArgs e)
+        {
+            LiveSpeed = (float)1.0f;
+            Handle.Speed = (float)1.0f;
         }
 
         private void Slider_DelayedPitchChanged(object sender, RoutedPropertyChangedEventArgs<double> e)

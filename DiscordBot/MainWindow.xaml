@@ -349,6 +349,39 @@
                                                                       ToolTip="Pitch" />
 
                                                     <!--end test slider for pitch -->
+                                                    
+                                                    <!-- slider for speed -->
+                                                    <Button HorizontalAlignment="Center"
+                                                            Click="btn_SpeedReset_Click"
+                                                            materialDesign:ShadowAssist.ShadowDepth="Depth0"
+                                                            Background="{x:Null}"
+                                                            BorderBrush="{x:Null}"
+                                                            Foreground="{DynamicResource MaterialDesignBody}"
+                                                            Style="{StaticResource MaterialDesignFloatingActionMiniLightButton}"
+                                                            ToolTip="Reset">
+
+                                                        <materialDesign:PackIcon
+                                                            Margin="5,0,5,0"
+                                                            Kind="Speedometer"
+                                                            Height="24"
+                                                            Width="24" />
+                                                    </Button>
+
+                                                    <ui:DelayedSlider VerticalAlignment="Center"
+                                                                      Style="{DynamicResource MaterialDesignSlider}"
+                                                                      Foreground="{DynamicResource PrimaryHueMidBrush}"
+                                                                      Margin="5,0,0,0"
+                                                                      TickFrequency="5"
+                                                                      Orientation="Horizontal"
+                                                                      Minimum="0.1"
+                                                                      Maximum="2"
+
+                                                                      DelayedValueChanged="Slider_DelayedPitchChanged"
+                                                                      Value="{Binding LiveSpeed}"
+                                                                      Width="150"
+                                                                      ToolTip="Speed" />
+
+                                                    <!-- end slider for speed-->
                                                 </StackPanel>
 
                                             </materialDesign:DialogHost.DialogContent>

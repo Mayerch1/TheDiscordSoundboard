@@ -100,6 +100,7 @@ namespace BotModule
         private bool isChannelConnected = false;
         private string currentSong = "";
         private float pitch = 1.0f;
+        private float speed = 1.0f;
         private bool isEarrape = false;
         private float volume = 1;
 
@@ -119,7 +120,7 @@ namespace BotModule
             set
             {
                 volume = value;
-                ConfigChanged(Pitch, value);
+                ConfigChanged(Pitch, value, Speed);
             }
         }
 
@@ -135,7 +136,17 @@ namespace BotModule
             set
             {
                 pitch = value;
-                ConfigChanged(value, Volume);
+                ConfigChanged(value, Volume, Speed);
+            }
+        }
+
+        public float Speed
+        {
+            get => speed;
+            set
+            {
+                speed = value;
+                ConfigChanged(Pitch, Volume, value);
             }
         }
 
@@ -237,7 +248,7 @@ namespace BotModule
             {
                 isEarrape = value;
                 //method sets Volume to 100, when isEarrape
-                ConfigChanged(Pitch, Volume);
+                ConfigChanged(Pitch, Volume, Speed);
             }
         }
 
@@ -299,30 +310,23 @@ namespace BotModule
         }
 
 
-        private void ConfigChanged(float pitch, float volume)
+        private void ConfigChanged(float pitch, float volume, float speed)
         {
-            //first apply pitch
-            if (Wave.SourceResampler != null)
-            {
-                //delete current resampler, disposing can cause thread issue
-                Wave.ActiveResampler = null;
+            //apply given parameters to all readers
+            if(Wave.SourceResampler != null && Wave.ActiveResampler !=null)
+            {           
+                if (Wave.Speed != null)
+                    Wave.Speed.Tempo = speed;
+                if (Wave.Pitch != null)
+                    Wave.Pitch.PitchFactor = pitch;
 
-                var pSampler = new SmbPitchShiftingSampleProvider(Wave.SourceResampler.ToSampleProvider());
-                pSampler.PitchFactor = pitch;
-
-                Wave.ActiveResampler = new MediaFoundationResampler(pSampler.ToWaveProvider(), Wave.OutFormat);
-
-
-                //secondly apply volume
-                var volumeSampler = new VolumeWaveProvider16(Wave.ActiveResampler);
-
-                if (IsEarrape)
-                    //this means 10,000%
-                    volumeSampler.Volume = 100;
-                else
-                    volumeSampler.Volume = volume;
-
-                Wave.ActiveResampler = new MediaFoundationResampler(volumeSampler, Wave.OutFormat);
+                if (Wave.Volume != null)
+                {
+                    if (isEarrape)
+                        Wave.Volume.Volume = 100;
+                    else
+                        Wave.Volume.Volume = volume;
+                }
             }
         }
 
@@ -454,11 +458,21 @@ namespace BotModule
                 //create source and finally used resampler
                 Wave.SourceResampler = new MediaFoundationResampler(Wave.Reader, Wave.OutFormat);
 
-                //apply pitch and volume to the resampler, will also set NormalResampler
-                ConfigChanged(Pitch, Volume);
+                //create additional providers for Volume, Speed and Pitch
+
+                Wave.Volume = new VolumeWaveProvider16(Wave.SourceResampler);
+                Wave.Speed = new NAudio.SoundTouch.SoundTouchWaveStream(Wave.Volume);
+                Wave.Pitch = new SmbPitchShiftingSampleProvider(Wave.Speed.ToSampleProvider());
+
+                Wave.ActiveResampler = new MediaFoundationResampler(Wave.Pitch.ToWaveProvider(), Wave.OutFormat);
+
 
                 //will apply Earrape and loop
                 loadOverrideSettings(data);
+
+
+                //apply pitch and volume to the resampler, will also set NormalResampler
+                ConfigChanged(Pitch, Volume, Speed);        
             }
         }
 
