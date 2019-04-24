@@ -49,7 +49,7 @@ namespace NAudio.SoundTouch
             get { return _pitch; }
             set
             {
-                _stretcher.SetPitch(value);
+                _stretcher.SetPitchSemiTones(value);
                 _pitch = value;
             }
         }
@@ -131,7 +131,11 @@ namespace NAudio.SoundTouch
 						// End of stream, zero pad
 						Array.Clear(buffer, offset, count);
 
-						numRead += count;
+                        //the calling method will handle not filled arrays
+          //              if (offset == 0 && count == buffer.Length)
+          //                  numRead = 0;
+          //               //else
+						    ////numRead += count;
 
 						EndOfStream?.Invoke(this, EventArgs.Empty);
 

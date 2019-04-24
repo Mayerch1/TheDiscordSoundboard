@@ -335,15 +335,15 @@
                                                             Width="24" />
                                                     </Button>
 
-                                                    <ui:DelayedSlider VerticalAlignment="Center"
+                                                        <ui:DelayedSlider VerticalAlignment="Center"
+                                                                      IsSnapToTickEnabled="True"
                                                                       Style="{DynamicResource MaterialDesignSlider}"
                                                                       Foreground="{DynamicResource PrimaryHueMidBrush}"
                                                                       Margin="5,0,0,0"
-                                                                      TickFrequency="5"
+                                                                      TickFrequency="1"
                                                                       Orientation="Horizontal"
-                                                                      Minimum="0.1"
-                                                                      Maximum="2"
-
+                                                                      Minimum="-12"
+                                                                      Maximum="12"
                                                                       DelayedValueChanged="Slider_DelayedPitchChanged"
                                                                       Value="{Binding LivePitch}"
                                                                       Width="150"
@@ -353,7 +353,7 @@
                                                     
                                                     <!-- slider for speed -->
                                                     <StackPanel Orientation="Horizontal" Margin="5">
-                                                    <Button HorizontalAlignment="Center"
+                                                        <Button HorizontalAlignment="Center"
                                                             Click="btn_SpeedReset_Click"
                                                             materialDesign:ShadowAssist.ShadowDepth="Depth0"
                                                             Background="{x:Null}"
@@ -362,27 +362,26 @@
                                                             Style="{StaticResource MaterialDesignFloatingActionMiniLightButton}"
                                                             ToolTip="Reset">
 
-                                                        <materialDesign:PackIcon
+                                                            <materialDesign:PackIcon
                                                             Margin="5,0,5,0"
                                                             Kind="Speedometer"
                                                             Height="24"
                                                             Width="24" />
-                                                    </Button>
+                                                        </Button>
 
-                                                    <ui:DelayedSlider VerticalAlignment="Center"
+                                                        <ui:DelayedSlider VerticalAlignment="Center"
                                                                       Style="{DynamicResource MaterialDesignSlider}"
                                                                       Foreground="{DynamicResource PrimaryHueMidBrush}"
                                                                       Margin="5,0,0,0"
-                                                                      TickFrequency="5"
+                                                                      TickFrequency="1"
                                                                       Orientation="Horizontal"
-                                                                      Minimum="0.5"
+                                                                      Minimum="0.01"
                                                                       Maximum="2"
-
                                                                       DelayedValueChanged="Slider_DelayedSpeedChanged"
                                                                       Value="{Binding LiveSpeed}"
                                                                       Width="150"
                                                                       ToolTip="Speed" />
-                                                        </StackPanel>
+                                                    </StackPanel>
                                                     <!-- end slider for speed-->
                                                 </StackPanel>
 

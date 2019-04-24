@@ -562,10 +562,13 @@ namespace BotModule
 
 
                 IsPause = false;
+                int byteCount;
+
+                while((byteCount = Wave.ActiveResampler.Read(buffer, 0, blockSize)) > 0)
                 //repeat, read new block into buffer -> stream buffer
-                while (Wave.Reader.Position < Wave.Reader.Length)
+                //while (Wave.Reader.Position < Wave.Reader.Length)
                 {
-                    int byteCount = Wave.ActiveResampler.Read(buffer, 0, blockSize);
+                    //int byteCount = Wave.ActiveResampler.Read(buffer, 0, blockSize);
 
                     if (IsToAbort || SkipTracks > 0)
                         break;
@@ -580,8 +583,9 @@ namespace BotModule
 
                     await OutStream.WriteAsync(buffer, 0, blockSize);
                 }
+                 
 
-                IsStreaming = false;
+                    IsStreaming = false;
 
                 //reopen the same file
                 if (IsLoop && !IsToAbort && SkipTracks == 0)
@@ -853,8 +857,7 @@ namespace BotModule
         /// get a list of all clients of all servers
         /// </summary>
         /// <param name="acceptOffline">incude users which are offline</param>
-        /// <returns>list of all servers, each contains a list of all clients, regarding acceptOffline</returns>
-        //returns a List<List>, all online clients of all servers are contained
+        /// <returns>list of all servers, each contains a list of all clients, regarding acceptOffline. Returns null if Client is still Connecting</returns>
         protected List<List<SocketGuildUser>> getAllClients(bool acceptOffline)
         {
             if (!IsServerConnected)
@@ -863,6 +866,10 @@ namespace BotModule
                     BotException.connectionError.NoServer);
 
             List<List<SocketGuildUser>> guildList = new List<List<SocketGuildUser>>();
+
+            if (Client.ConnectionState == ConnectionState.Connecting)
+                return null;
+
 
             var guilds = Client.Guilds;
             foreach (var gElement in guilds)
