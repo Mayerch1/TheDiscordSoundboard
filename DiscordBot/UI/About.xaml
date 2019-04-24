@@ -69,72 +69,24 @@
 
                 <materialDesign:ColorZone Style="{StaticResource FloatingSection}">
                     <StackPanel>
-                        <StackPanel>
-                            <Label Content="Concentus"/>
-                            <Label Content="Opus License"/>
-                            <Label Content="https://opus-codec.org/license/"/>
-                        </StackPanel>
-                        <StackPanel>
-                            <Label Content="Discord.Net"/>
-                            <Label Content="MIT License"/>
-                            <Label Content="https://opensource.org/licenses/MIT"/>
-                        </StackPanel>
-                        <StackPanel>
-                            <Label Content="Gong-WPF-DragDrop"/>
-                            <Label Content="BSD 3-Clause"/>
-                            <Label Content="https://github.com/punker76/gong-wpf-dragdrop/blob/dev/LICENSE"/>
-                        </StackPanel>
-                        <StackPanel>
-                            <Label Content="MaterialDesign for XML"/>
-                            <Label Content="MIT License"/>
-                            <Label Content="https://github.com/MaterialDesignInXAML/MaterialDesignInXamlToolkit/blob/master/LICENSE"/>
-                        </StackPanel>
-                        <StackPanel>
-                            <Label Content="NAudio"/>
-                            <Label Content="Microsoft Public License"/>
-                            <Label Content="https://github.com/naudio/NAudio/blob/master/license.txt"/>
-                        </StackPanel>
-                        <StackPanel>
-                            <Label Content="Soundtouch(.Net)"/>
-                            <Label Content="LGPL 2.1"/>
-                            <Label Content="https://raw.githubusercontent.com/owoudenberg/soundtouch.net/master/LICENSE"/>
-                        </StackPanel>
-                        <StackPanel>
-                            <Label Content="Soundtouch.Net.NAudio"/>
-                            <Label Content="LGPL 2.1"/>
-                            <Label Content="https://raw.githubusercontent.com/owoudenberg/soundtouch.net/master/LICENSE"/>
-                        </StackPanel>
+                        
+                         <TextBlock Text="3rd Party Software" FontSize="15" FontWeight="Bold"
+                                    VerticalAlignment="Center" />
 
-                        <StackPanel>
-                            <Label Content="NYoutubeDL"/>
-                            <Label Content="MIT License"/>
-                            <Label Content="https://licenses.nuget.org/MIT"/>
-                        </StackPanel>
-                        <StackPanel>
-                            <Label Content="libvideo"/>
-                            <Label Content="BSD 2-Clause"/>
-                            <Label Content="https://github.com/i3arnon/libvideo/blob/master/LICENSE"/>
-                        </StackPanel>
-                        <StackPanel>
-                            <Label Content="YoutubeSearch"/>
-                            <Label Content="GPL License"/>
-                            <Label Content="https://github.com/mrklintscher/YoutubeSearch#license"/>
-                        </StackPanel>
-                        <StackPanel>
-                            <Label Content="Taglib"/>
-                            <Label Content="LGPL 2.1"/>
-                            <Label Content="https://opensource.org/licenses/lgpl-2.1.php"/>
-                        </StackPanel>
-                        <StackPanel>
-                            <Label Content="Newtonsoft.Json"/>
-                            <Label Content="MIT License"/>
-                            <Label Content="https://licenses.nuget.org/MIT"/>
-                        </StackPanel>
-                        <StackPanel>
-                            <Label Content="Microsoft .NET Library"/>
-                            <Label Content="Microsoft"/>
-                            <Label Content="https://dotnet.microsoft.com/dotnet_library_license.htm"/>
-                        </StackPanel>
+
+                        <ItemsControl ItemsSource="{Binding ThirdParty}">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <StackPanel Orientation="Horizontal">
+                                        <Label Content="{Binding Name}"/>
+                                        <Label Content="{Binding Licensemodel}"/>
+                                        <Label Content="{Binding Url}"/>
+                                    </StackPanel>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+
+ 
                     </StackPanel>
                 </materialDesign:ColorZone>
             </StackPanel>
