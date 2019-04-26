@@ -212,6 +212,13 @@ namespace BotModule
                 //this should not throw, bc Connection is ensured above
                 var clientList = await getAllClients();
 
+
+                if (clientList == null)
+                {
+                    Util.IO.SnackbarManager.SnackbarMessage("Bot is still connecting. Please Retry");
+                    return false;
+                }
+
                 client = getClient(clientList);
 
                 if (client == null)
@@ -372,7 +379,6 @@ namespace BotModule
                 SnackbarManager.SnackbarMessage("Cannot get clients. Retry later", SnackbarManager.SnackbarAction.Log);
                 return null;
             }
-
             return userList;
         }
 

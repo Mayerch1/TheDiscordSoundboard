@@ -84,6 +84,20 @@ namespace DiscordBot
         }
 
         /// <summary>
+        /// sync property for speed
+        /// </summary>
+        public static float Speed
+        {
+            //speed is volatile
+            get => Data.Speed;
+            set
+            {
+                Bot.Speed = value;
+                Data.Speed = value;
+            }
+        }
+
+        /// <summary>
         /// property for Token, synced
         /// </summary>
         public static string Token

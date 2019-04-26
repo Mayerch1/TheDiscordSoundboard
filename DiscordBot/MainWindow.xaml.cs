@@ -53,7 +53,8 @@ namespace DiscordBot
         private LoopState loopStatus = LoopState.LoopNone;
         private SnackbarMessageQueue snackbarMessageQueue = new SnackbarMessageQueue(TimeSpan.FromMilliseconds(3500));
         private string currentSongName = "";
-        private double livePitch = 1.0f;
+        private double livePitch = 0.0f;
+        private double liveSpeed = 1.0f;
         private double liveVolume = 1.0f;
 
         #endregion fields
@@ -102,6 +103,16 @@ namespace DiscordBot
             {
                 livePitch = value;
                 OnPropertyChanged("LivePitch");
+            }
+        }
+
+        public double LiveSpeed
+        {
+            get => liveSpeed;
+            set
+            {
+                liveSpeed = value;
+                OnPropertyChanged("LiveSpeed");
             }
         }
 
@@ -213,6 +224,8 @@ namespace DiscordBot
 
             //ui
             LivePitch = Handle.Pitch;
+            LiveSpeed = Handle.Speed;
+
             LiveVolume = ((double) Handle.Volume * 100) * (1 / (Handle.Data.Persistent.VolumeCap / 100.0f));
             LastVolume = LiveVolume;
 
@@ -1088,22 +1101,63 @@ namespace DiscordBot
 
         private void btn_PitchReset_Click(object sender, RoutedEventArgs e)
         {
-            LivePitch = (float) 1.0f;
-            Handle.Pitch = (float) 1.0f;
+            LivePitch = (float) 0.0f;
+            Handle.Pitch = (float) 0.0f;
+        }
+
+        private void btn_SpeedReset_Click(object sender, RoutedEventArgs e)
+        {
+            LiveSpeed = (float)1.0f;
+            Handle.Speed = (float)1.0f;
         }
 
         private void Slider_DelayedPitchChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
             //is NewValue is the same as LivePitch
             Handle.Pitch = (float) e.NewValue;
-
+#if DEBUG
             Console.WriteLine(@"Set Pitch to " + Handle.Pitch);
+#endif
         }
+
+      
+
+        private float ScaleSpeedSlider(float newVal)
+        {
+            const float n_min = 0.5f, n_max = 1;
+            const float o_min = 0.01f, o_max = 1;
+
+            //scale Values to fit the new Range
+            // input: 0..1
+            // scaled to : 0.5..1
+            if (newVal < 1)
+            {
+                newVal = (float)(((n_max - n_min) * (newVal - o_min)) / (o_max - o_min) + n_min);
+            }
+
+            return newVal;
+        }
+
+        private void Slider_DelayedSpeedChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            float newVal = ScaleSpeedSlider((float)e.NewValue);
+
+            //is NewValue is the same as LivePitch
+            Handle.Speed = newVal;
+
+#if DEBUG
+            Console.WriteLine(@"Set Speed to " + Handle.Speed);
+#endif
+        }
+
+      
 
         private void Slider_DelayedVolumeChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
             Handle.Volume = ((float) e.NewValue / 100) * (Handle.Data.Persistent.VolumeCap / 100.0f);
+#if DEBUG
             Console.WriteLine(@"Set Volume to " + Handle.Volume);
+#endif
         }
 
 
@@ -1378,10 +1432,10 @@ namespace DiscordBot
             handler?.Invoke(this, new PropertyChangedEventArgs(info));
         }
 
-        #endregion event stuff
+#endregion event stuff
 
 
-        #region stuff related to dll
+#region stuff related to dll
 
 
        
@@ -1425,8 +1479,9 @@ namespace DiscordBot
             ui.DeviceStartStream += Device_StartStream;
         }
 
-        #endregion stuff related to dll
+#endregion stuff related to dll
 
 #pragma warning restore CS1591
+       
     }
 }

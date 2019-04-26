@@ -179,6 +179,10 @@
       <Project>{6745405b-8a1d-423f-9d17-95bad658db18}</Project>
       <Name>DataManagement</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\SoundTouch.Net.NAudio\SoundTouch.Net.NAudio.csproj">
+      <Project>{0aada976-3763-44e8-b2a4-950bf7c49a26}</Project>
+      <Name>SoundTouch.Net.NAudio</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\Util\Util.csproj">
       <Project>{f2e53bb4-2144-4fcd-9b17-fb6408f6e061}</Project>
       <Name>Util</Name>

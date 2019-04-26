@@ -59,18 +59,6 @@ namespace Util.IO
 
                
                 return result.Take(count).ToArray();
-                //request.GetLyricAsync(result[0].LyricId, result[0].LyricChecksum);
-                try
-                {
-                    var lyr = request.GetLyric(result[0].LyricId, result[0].LyricChecksum);
-                    //return lyr;
-                }
-                catch (Exception)
-                {
-                    return null;
-                }
-
-
             }
             return null;
         }
