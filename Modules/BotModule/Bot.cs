@@ -1,17 +1,13 @@
-﻿using Discord;
+﻿using DataManagement;
+using Discord;
 using Discord.Audio;
 using Discord.WebSocket;
+using NAudio.CoreAudioApi;
 using NAudio.Wave;
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using DataManagement;
-using NAudio.CoreAudioApi;
-using NAudio.Dsp;
-using NAudio.Wave.Compression;
-using NAudio.Wave.SampleProviders;
 
 namespace BotModule
 {
@@ -34,6 +30,19 @@ namespace BotModule
         #endregion config
 
         #region event Handlers
+
+        /// <summary>
+        /// SpeedAvailableChangedHandler delegate
+        /// </summary>
+        /// <param name="isAvailable">modify speed is available</param>
+        public delegate void SpeedAvailableChangedHandler(bool isAvailable);
+
+        /// <summary>
+        /// Indicates a change in the availability for the speed slider
+        /// Live sources like Microphone are not able to provide this function.
+        /// </summary>
+        public SpeedAvailableChangedHandler SpeedAvailableChanged;
+
 
         /// <summary>
         /// IncompatibleWaveHandler delegate
@@ -142,6 +151,13 @@ namespace BotModule
             }
         }
 
+
+        /// <summary>
+        /// Sets the replay-Speed of the bot
+        /// </summary>
+        /// <remarks>
+        /// No effect on Throughput-devices like Microphone or VCable
+        /// </remarks>
         public float Speed
         {
             get => speed;
@@ -319,10 +335,10 @@ namespace BotModule
         private void ConfigChanged(float pitch, float volume, float speed)
         {
             //apply given parameters to all readers
-            if(Wave.SourceResampler != null && Wave.ActiveResampler !=null)
+            if (Wave.SourceResampler != null && Wave.ActiveResampler != null)
             {
-                if (Wave.Touch != null )
-                    
+                if (Wave.Touch != null)
+
                 {
                     if (speed != appliedSpeed)
                     {
@@ -335,9 +351,7 @@ namespace BotModule
                         appliedPitch = pitch;
                         Wave.Touch.Pitch = appliedPitch;
                     }
-    
                 }
-
 
 
                 if (Wave.Volume != null && (volume != appliedVolume || IsEarrape))
@@ -455,7 +469,8 @@ namespace BotModule
                     }
 
                     //convert from ieee to pcm
-                    Wave.Capture.WaveFormat = new WaveFormat(Wave.Capture.WaveFormat.SampleRate, BotWave.bitDepth, Wave.Capture.WaveFormat.Channels);
+                    Wave.Capture.WaveFormat = new WaveFormat(Wave.Capture.WaveFormat.SampleRate, BotWave.bitDepth,
+                        Wave.Capture.WaveFormat.Channels);
                 }
 
                 CanSeek = false;
@@ -464,6 +479,8 @@ namespace BotModule
                 Wave.SourceResampler = null;
 
                 Wave.Capture.DataAvailable += Capture_DataAvailable;
+
+                SpeedAvailableChanged(false);
                 //no override settings for stream available
             }
             else
@@ -494,7 +511,9 @@ namespace BotModule
 
 
                 //apply pitch and volume to the resampler, will also set NormalResampler
-                ConfigChanged(Pitch, Volume, Speed);        
+                ConfigChanged(Pitch, Volume, Speed);
+
+                SpeedAvailableChanged(true);
             }
         }
 
@@ -506,13 +525,8 @@ namespace BotModule
 
             applyVolume(ref buff);
 
-
             OutStream.Write(buff, 0, e.BytesRecorded);
         }
-
-
-        private async Task playBufferedStream()
-        { }
 
 
         /// <summary>
@@ -551,6 +565,7 @@ namespace BotModule
                         IsStreaming = true;
                         Wave.Capture.StartRecording();
                     }
+
                     return;
                 }
 
@@ -564,9 +579,9 @@ namespace BotModule
                 IsPause = false;
                 int byteCount;
 
-                while((byteCount = Wave.ActiveResampler.Read(buffer, 0, blockSize)) > 0)
-                //repeat, read new block into buffer -> stream buffer
-                //while (Wave.Reader.Position < Wave.Reader.Length)
+                while ((byteCount = Wave.ActiveResampler.Read(buffer, 0, blockSize)) > 0)
+                    //repeat, read new block into buffer -> stream buffer
+                    //while (Wave.Reader.Position < Wave.Reader.Length)
                 {
                     //int byteCount = Wave.ActiveResampler.Read(buffer, 0, blockSize);
 
@@ -583,9 +598,9 @@ namespace BotModule
 
                     await OutStream.WriteAsync(buffer, 0, blockSize);
                 }
-                 
 
-                    IsStreaming = false;
+
+                IsStreaming = false;
 
                 //reopen the same file
                 if (IsLoop && !IsToAbort && SkipTracks == 0)
@@ -657,19 +672,18 @@ namespace BotModule
             if (vol == 1)
                 return;
 
-                for (int i = 0; i < buffer.Length; i += 2)
-                {
-                    //convert a byte-Pair into one char (with 2 bytes)
+            for (int i = 0; i < buffer.Length; i += 2)
+            {
+                //convert a byte-Pair into one char (with 2 bytes)
 
-                    short bytePair = (short)((buffer[i + 1] & 0xFF) << 8 | (buffer[i] & 0xFF));
+                short bytePair = (short) ((buffer[i + 1] & 0xFF) << 8 | (buffer[i] & 0xFF));
 
-                    bytePair = (short)(bytePair * vol);
+                bytePair = (short) (bytePair * vol);
 
-                    //convert char back to 2 bytes
-                    buffer[i] = (byte)bytePair;
-                    buffer[i + 1] = (byte)(bytePair >> 8);
-                }
-            
+                //convert char back to 2 bytes
+                buffer[i] = (byte) bytePair;
+                buffer[i + 1] = (byte) (bytePair >> 8);
+            }
         }
 
         #endregion play stuff
