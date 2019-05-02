@@ -1,4 +1,5 @@
-﻿using System.ComponentModel;
+﻿using System;
+using System.ComponentModel;
 using System.Windows;
 using System.Windows.Controls;
 using Util.com.chartlyrics.api;
@@ -67,7 +68,20 @@ namespace DiscordBot.UI
                 return;
             }
 
-            GetLyricResult result = Util.IO.LyricsManager.GetLyrics(query[index].LyricId, query[index].LyricChecksum);
+
+            GetLyricResult result=null;
+
+            try
+            {
+                result = Util.IO.LyricsManager.GetLyrics(query[index].LyricId, query[index].LyricChecksum);
+            }
+            catch (Exception ex)
+            {
+                result = null;
+            }
+
+
+
 
             if (result != null)
             {
@@ -77,7 +91,6 @@ namespace DiscordBot.UI
             }
             else
                 Lyrics = lyricErr;
-
         }
 
 

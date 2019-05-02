@@ -332,7 +332,7 @@ namespace BotModule
         }
 
 
-        private void ConfigChanged(float pitch, float volume, float speed)
+        private void ConfigChanged(float pitch, float volume, float speed, bool isForced=false)
         {
             //apply given parameters to all readers
             if (Wave.SourceResampler != null && Wave.ActiveResampler != null)
@@ -340,13 +340,13 @@ namespace BotModule
                 if (Wave.Touch != null)
 
                 {
-                    if (speed != appliedSpeed)
+                    if (speed != appliedSpeed || isForced)
                     {
                         appliedSpeed = speed;
                         Wave.Touch.Tempo = appliedSpeed;
                     }
 
-                    if (pitch != appliedPitch)
+                    if (pitch != appliedPitch || isForced)
                     {
                         appliedPitch = pitch;
                         Wave.Touch.Pitch = appliedPitch;
@@ -354,7 +354,7 @@ namespace BotModule
                 }
 
 
-                if (Wave.Volume != null && (volume != appliedVolume || IsEarrape))
+                if (Wave.Volume != null && (volume != appliedVolume || IsEarrape || isForced))
                 {
                     if (isEarrape)
                         appliedVolume = 100;
@@ -511,7 +511,7 @@ namespace BotModule
 
 
                 //apply pitch and volume to the resampler, will also set NormalResampler
-                ConfigChanged(Pitch, Volume, Speed);
+                ConfigChanged(Pitch, Volume, Speed, true);
 
                 SpeedAvailableChanged(true);
             }
