@@ -336,6 +336,7 @@
                                                     </Button>
 
                                                         <ui:DelayedSlider VerticalAlignment="Center"
+                                                                      x:Name="slider_LivePitch"
                                                                       IsSnapToTickEnabled="True"
                                                                       Style="{DynamicResource MaterialDesignSlider}"
                                                                       Foreground="{DynamicResource PrimaryHueMidBrush}"
@@ -370,6 +371,7 @@
                                                         </Button>
 
                                                         <ui:DelayedSlider VerticalAlignment="Center"
+                                                                      x:Name="slider_LiveSpeed"
                                                                       Style="{DynamicResource MaterialDesignSlider}"
                                                                       Foreground="{DynamicResource PrimaryHueMidBrush}"
                                                                       Margin="5,0,0,0"
@@ -380,7 +382,7 @@
                                                                       DelayedValueChanged="Slider_DelayedSpeedChanged"
                                                                       Value="{Binding LiveSpeed}"
                                                                       Width="150"
-                                                                      ToolTip="Speed" />
+                                                                      ToolTip="Speed"/>
                                                     </StackPanel>
                                                     <!-- end slider for speed-->
                                                 </StackPanel>

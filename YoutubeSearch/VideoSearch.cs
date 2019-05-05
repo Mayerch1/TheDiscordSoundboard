@@ -16,8 +16,11 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see<http://www.gnu.org/licenses/>.
 
+using System;
 using System.Collections.Generic;
 using System.Net;
+using System.Runtime.InteropServices;
+using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
@@ -29,15 +32,15 @@ namespace YoutubeSearch
     public class VideoSearch
     {
         //constants for easier maintainability
-        private const string Pattern = "<div class=\"yt-lockup-content\">.*?title=\"(?<NAME>.*?)\".*?</div></div></div></li>";
+        private const string Pattern =
+            "<div class=\"yt-lockup-content\">.*?title=\"(?<NAME>.*?)\".*?</div></div></div></li>";
+
         private const string YtQueryUrl = "https://www.youtube.com/results?search_query=";
         private const string YtThumbnailUrl = "https://i.ytimg.com/vi/";
         private const string YtWatchUrl = "http://www.youtube.com/watch?v=";
 
 
-        List<VideoInformation> items;
-
-        WebClient webclient;
+        List<VideoInformation> items;    
 
         string title;
         string author;
@@ -56,16 +59,20 @@ namespace YoutubeSearch
         {
             items = new List<VideoInformation>();
 
-            webclient = new WebClient();
-
-            // Do search
-            for (int i = 1; i <= querypages; i++)
+            using (WebClient webclient = new WebClient {Encoding = Encoding.UTF8})
             {
-                // Search address
-                string html = await webclient.DownloadStringTaskAsync(YtQueryUrl + querystring + "&page=" + i);
 
-                //extract information from page
-                ProcessPage(html);
+
+                // Do search
+                for (int i = 1; i <= querypages; i++)
+                {
+                    // Search address
+                    string html = await webclient.DownloadStringTaskAsync(YtQueryUrl + querystring + "&page=" + i);
+
+                    //extract information from page
+                    ProcessPage(html);
+                }
+
             }
 
             return items;
@@ -81,25 +88,27 @@ namespace YoutubeSearch
         {
             items = new List<VideoInformation>();
 
-            webclient = new WebClient();
 
-            // Do search
-            for (int i = 1; i <= querypages; i++)
+            using (WebClient webclient = new WebClient {Encoding = Encoding.UTF8})
             {
-                // Search address
-                string html = webclient.DownloadString(YtQueryUrl + querystring + "&page=" + i);
 
-                //extract information from page
-                ProcessPage(html);
+                // Do search
+                for (int i = 1; i <= querypages; i++)
+                {
+                    // Search address
+                    string html = webclient.DownloadString(YtQueryUrl + querystring + "&page=" + i);
+
+                    //extract information from page
+                    ProcessPage(html);
+                }
             }
 
             return items;
         }
 
-
+    
         private void ProcessPage(string htmlPage)
         {
-           
             MatchCollection result = Regex.Matches(htmlPage, Pattern, RegexOptions.Singleline);
 
             for (int ctr = 0; ctr <= result.Count - 1; ctr++)
@@ -108,23 +117,29 @@ namespace YoutubeSearch
                 title = result[ctr].Groups[1].Value;
 
                 // Author
-                author = VideoItemHelper.cull(result[ctr].Value, "/user/", "class").Replace('"', ' ').TrimStart().TrimEnd();
-				if (string.IsNullOrEmpty(author))
-					author = VideoItemHelper.cull(result[ctr].Value, " >", "</a>");
+                author = VideoItemHelper.cull(result[ctr].Value, "/user/", "class").Replace('"', ' ').TrimStart()
+                    .TrimEnd();
+                if (string.IsNullOrEmpty(author))
+                    author = VideoItemHelper.cull(result[ctr].Value, " >", "</a>");
 
                 // Description
-                description = VideoItemHelper.cull(result[ctr].Value, "dir=\"ltr\" class=\"yt-uix-redirect-link\">", "</div>");
-				if (string.IsNullOrEmpty(description))
-					description = VideoItemHelper.cull(result[ctr].Value, "<div class=\"yt-lockup-description yt-ui-ellipsis yt-ui-ellipsis-2\" dir=\"ltr\">", "</div>");
+                description = VideoItemHelper.cull(result[ctr].Value, "dir=\"ltr\" class=\"yt-uix-redirect-link\">",
+                    "</div>");
+                if (string.IsNullOrEmpty(description))
+                    description = VideoItemHelper.cull(result[ctr].Value,
+                        "<div class=\"yt-lockup-description yt-ui-ellipsis yt-ui-ellipsis-2\" dir=\"ltr\">", "</div>");
 
                 // Duration
-                duration = VideoItemHelper.cull(VideoItemHelper.cull(result[ctr].Value, "id=\"description-id-", "span"), ": ", "<").Replace(".", "");
+                duration = VideoItemHelper
+                    .cull(VideoItemHelper.cull(result[ctr].Value, "id=\"description-id-", "span"), ": ", "<")
+                    .Replace(".", "");
 
                 // Url
                 url = string.Concat(YtWatchUrl, VideoItemHelper.cull(result[ctr].Value, "watch?v=", "\""));
 
                 // Thumbnail
-                thumbnail = YtThumbnailUrl + VideoItemHelper.cull(result[ctr].Value, "watch?v=", "\"") + "/mqdefault.jpg";
+                thumbnail = YtThumbnailUrl + VideoItemHelper.cull(result[ctr].Value, "watch?v=", "\"") +
+                            "/mqdefault.jpg";
 
                 // Remove playlists
                 if (title != "__title__")
@@ -132,11 +147,14 @@ namespace YoutubeSearch
                     if (duration != "")
                     {
                         // Add item to list
-                        items.Add(new VideoInformation() { Title = title, Author = author, Description = description, Duration = duration, Url = url, Thumbnail = thumbnail, });
+                        items.Add(new VideoInformation()
+                        {
+                            Title = title, Author = author, Description = description, Duration = duration, Url = url,
+                            Thumbnail = thumbnail,
+                        });
                     }
                 }
             }
         }
-
     }
 }

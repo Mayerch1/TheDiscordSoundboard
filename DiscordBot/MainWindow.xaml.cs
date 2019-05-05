@@ -726,6 +726,9 @@ namespace DiscordBot
             //event Handler when bot finished current file
             Handle.Bot.EndOfFile += bot_EndOfFile_Trigger;
 
+            //event Handler for changed availability of Speed-slider
+            Handle.Bot.SpeedAvailableChanged += bot_SpeedAvailable_Changed;
+
             //earrape event
             Handle.Bot.EarrapeStateChanged += delegate(bool isEarrape) { earrapeStatusChanged(isEarrape); };
             //loop state event
@@ -1026,6 +1029,18 @@ namespace DiscordBot
 
             //_queueMutex = false;
             //}
+        }
+
+
+        private void bot_SpeedAvailable_Changed(bool isAvailable)
+        {
+            if (slider_LiveSpeed != null)
+                slider_LiveSpeed.IsEnabled = isAvailable;
+
+            if (slider_LivePitch != null)
+                slider_LivePitch.IsEnabled = isAvailable;
+
+
         }
 
 
