@@ -1034,10 +1034,13 @@ namespace DiscordBot
 
         private void bot_SpeedAvailable_Changed(bool isAvailable)
         {
-            if (slider_LiveSpeed == null)
-                return;
+            if (slider_LiveSpeed != null)
+                slider_LiveSpeed.IsEnabled = isAvailable;
 
-            slider_LiveSpeed.IsEnabled = isAvailable;
+            if (slider_LivePitch != null)
+                slider_LivePitch.IsEnabled = isAvailable;
+
+
         }
 
 

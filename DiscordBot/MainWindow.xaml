@@ -336,6 +336,7 @@
                                                     </Button>
 
                                                         <ui:DelayedSlider VerticalAlignment="Center"
+                                                                      x:Name="slider_LivePitch"
                                                                       IsSnapToTickEnabled="True"
                                                                       Style="{DynamicResource MaterialDesignSlider}"
                                                                       Foreground="{DynamicResource PrimaryHueMidBrush}"
@@ -370,7 +371,7 @@
                                                         </Button>
 
                                                         <ui:DelayedSlider VerticalAlignment="Center"
-                                                                    x:Name="slider_LiveSpeed"
+                                                                      x:Name="slider_LiveSpeed"
                                                                       Style="{DynamicResource MaterialDesignSlider}"
                                                                       Foreground="{DynamicResource PrimaryHueMidBrush}"
                                                                       Margin="5,0,0,0"
