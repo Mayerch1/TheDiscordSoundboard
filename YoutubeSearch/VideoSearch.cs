@@ -16,19 +16,16 @@
 // You should have received a copy of the GNU General Public License
 // along with this program. If not, see<http://www.gnu.org/licenses/>.
 
-using System;
 using System.Collections.Generic;
 using System.Net;
-using System.Runtime.InteropServices;
-using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using System.IO;
+using System;
+using System.Text;
 
 namespace YoutubeSearch
 {
-    /// <summary>
-    /// Provides methods and fields for searching youtube videos
-    /// </summary>
     public class VideoSearch
     {
         //constants for easier maintainability
@@ -40,7 +37,15 @@ namespace YoutubeSearch
         private const string YtWatchUrl = "http://www.youtube.com/watch?v=";
 
 
-        List<VideoInformation> items;    
+        /// <summary>
+        /// Specify the used encoding. Recommended: ASCII, UTF-8
+        /// </summary>
+        public Encoding encoding = Encoding.Default;
+
+
+        List<VideoInformation> items;
+
+        WebClient webclient;
 
         string title;
         string author;
@@ -48,31 +53,38 @@ namespace YoutubeSearch
         string duration;
         string url;
         string thumbnail;
+        string viewCount;
+        bool noDesc = false;
+        bool noAuthor = false;
 
         /// <summary>
-        /// Doing search query with given parameters. Returns a List object.
+        /// Doing asynchronous search query with given parameters. Returns a List object.
         /// </summary>
         /// <param name="querystring"></param>
-        /// <param name="querypages"></param>
+        /// <param name="querypages">number of pages to query</param>
+        /// <param name="querypagesOffset">offset for querypages</param>
         /// <returns></returns>
-        public async Task<List<VideoInformation>> SearchQueryTaskAsync(string querystring, int querypages)
+        public async Task<List<VideoInformation>> SearchQueryTaskAsync(string querystring, int querypages,
+            int querypagesOffset = 0)
         {
+            //negative index not allowed
+            if (querypagesOffset < 0)
+                querypagesOffset = 0;
+
+
             items = new List<VideoInformation>();
 
-            using (WebClient webclient = new WebClient {Encoding = Encoding.UTF8})
+            webclient = new WebClient();
+            webclient.Encoding = encoding;
+
+            // Do search, regarding offset
+            for (int i = (1 + querypagesOffset); i <= (querypages + querypagesOffset); i++)
             {
+                // Search address
+                string html = await webclient.DownloadStringTaskAsync(YtQueryUrl + querystring + "&page=" + i);
 
-
-                // Do search
-                for (int i = 1; i <= querypages; i++)
-                {
-                    // Search address
-                    string html = await webclient.DownloadStringTaskAsync(YtQueryUrl + querystring + "&page=" + i);
-
-                    //extract information from page
-                    ProcessPage(html);
-                }
-
+                //extract information from page
+                ProcessPage(html);
             }
 
             return items;
@@ -82,37 +94,44 @@ namespace YoutubeSearch
         /// Doing search query with given parameters. Returns a List object.
         /// </summary>
         /// <param name="querystring"></param>
-        /// <param name="querypages"></param>
+        /// <param name="querypages">number of pages to query</param>
+        /// <param name="querypagesOffset">offset for querypages</param>
         /// <returns></returns>
-        public List<VideoInformation> SearchQuery(string querystring, int querypages)
+        public List<VideoInformation> SearchQuery(string querystring, int querypages, int querypagesOffset = 0)
         {
+            //negative index not allowed
+            if (querypagesOffset < 0)
+                querypagesOffset = 0;
+
             items = new List<VideoInformation>();
 
+            webclient = new WebClient();
+            webclient.Encoding = encoding;
 
-            using (WebClient webclient = new WebClient {Encoding = Encoding.UTF8})
+            // Do search, regarding offset
+            for (int i = (1 + querypagesOffset); i <= (querypages + querypagesOffset); i++)
             {
+                // Search address
+                string html = webclient.DownloadString(YtQueryUrl + querystring + "&page=" + i);
 
-                // Do search
-                for (int i = 1; i <= querypages; i++)
-                {
-                    // Search address
-                    string html = webclient.DownloadString(YtQueryUrl + querystring + "&page=" + i);
-
-                    //extract information from page
-                    ProcessPage(html);
-                }
+                //extract information from page
+                ProcessPage(html);
             }
 
             return items;
         }
 
-    
+
         private void ProcessPage(string htmlPage)
         {
             MatchCollection result = Regex.Matches(htmlPage, Pattern, RegexOptions.Singleline);
 
             for (int ctr = 0; ctr <= result.Count - 1; ctr++)
             {
+                if (result[ctr].Value.Contains("yt-uix-button-subscription-container\">") ||
+                    result[ctr].Value.Contains("\"instream\":true"))
+                    continue; // Don't add to the list of search results if the value is a channel or live stream.
+
                 // Title
                 title = result[ctr].Groups[1].Value;
 
@@ -120,14 +139,22 @@ namespace YoutubeSearch
                 author = VideoItemHelper.cull(result[ctr].Value, "/user/", "class").Replace('"', ' ').TrimStart()
                     .TrimEnd();
                 if (string.IsNullOrEmpty(author))
+                {
                     author = VideoItemHelper.cull(result[ctr].Value, " >", "</a>");
+                    if (string.IsNullOrEmpty(author))
+                        noAuthor = true;
+                }
 
                 // Description
                 description = VideoItemHelper.cull(result[ctr].Value, "dir=\"ltr\" class=\"yt-uix-redirect-link\">",
                     "</div>");
                 if (string.IsNullOrEmpty(description))
+                {
                     description = VideoItemHelper.cull(result[ctr].Value,
                         "<div class=\"yt-lockup-description yt-ui-ellipsis yt-ui-ellipsis-2\" dir=\"ltr\">", "</div>");
+                    if (string.IsNullOrEmpty(description))
+                        noDesc = true;
+                }
 
                 // Duration
                 duration = VideoItemHelper
@@ -141,19 +168,35 @@ namespace YoutubeSearch
                 thumbnail = YtThumbnailUrl + VideoItemHelper.cull(result[ctr].Value, "watch?v=", "\"") +
                             "/mqdefault.jpg";
 
-                // Remove playlists
-                if (title != "__title__")
+                // View Count
                 {
-                    if (duration != "")
+                    string strView = VideoItemHelper.cull(result[ctr].Value, "</li><li>", "</li></ul></div>");
+                    if (!string.IsNullOrEmpty(strView) && !string.IsNullOrWhiteSpace(strView))
                     {
-                        // Add item to list
-                        items.Add(new VideoInformation()
-                        {
-                            Title = title, Author = author, Description = description, Duration = duration, Url = url,
-                            Thumbnail = thumbnail,
-                        });
+                        string[] strParsedArr =
+                            strView.Split(new string[] {" "}, StringSplitOptions.RemoveEmptyEntries);
+
+                        string parsedText = strParsedArr[0];
+                        parsedText = parsedText.Trim().Replace(",", ".");
+
+                        viewCount = parsedText;
                     }
                 }
+
+                // Remove playlists
+                if (title != "__title__" && duration != "")
+                {
+                    // Add item to list
+                    items.Add(new VideoInformation()
+                    {
+                        Title = title, Author = author, Description = description, Duration = duration, Url = url,
+                        Thumbnail = thumbnail, NoAuthor = noAuthor, NoDescription = noDesc, ViewCount = viewCount
+                    });
+                }
+
+                // Reset values to default for next loop.
+                noAuthor = false;
+                noDesc = false;
             }
         }
     }

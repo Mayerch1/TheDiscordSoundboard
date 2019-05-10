@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Globalization;
 using System.IO;
+using System.Text;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -188,7 +189,7 @@ namespace StreamModule
                     List<VideoInformation> infos;
                     try
                     {
-                        infos = await new VideoSearch().SearchQueryTaskAsync(id, 1);
+                        infos = await new VideoSearch(){encoding = Encoding.UTF8}.SearchQueryTaskAsync(id, 1);
                         if (infos.Count > 0)
                         {
                             var videoInfo = infos[0];
@@ -261,7 +262,7 @@ namespace StreamModule
 
             try
             {
-                result = await new VideoSearch().SearchQueryTaskAsync(filter, pages);
+                result = await new VideoSearch(){encoding = Encoding.UTF8}.SearchQueryTaskAsync(filter, pages);
             }
             catch (Exception ex)
             {
