@@ -199,6 +199,11 @@ namespace StreamModule
                             Duration = videoInfo.Duration;
                             Author = videoInfo.Author;
                         }
+                        else
+                        {
+                            ImageUri = YTManager.getUrlToThumbnail(url);
+                            Title = await YTManager.GetTitleAsync(url);
+                        }
                     }
                     catch
                     {
