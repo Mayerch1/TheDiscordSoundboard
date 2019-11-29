@@ -83,8 +83,8 @@
                             <ItemsControl.ItemTemplate>
                                 <DataTemplate>
                                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Stretch">
-                                        <Label Content="{Binding Name}"/>
-                                        <Label Content="{Binding Licensemodel}"/>
+                                        <Label Content="{Binding Name}" Width="250"/>
+                                        <Label Content="{Binding Licensemodel}" Width="250"/>
                                         <Label Content="{Binding Url}" HorizontalAlignment="Right"/>
                                     </StackPanel>
                                 </DataTemplate>
