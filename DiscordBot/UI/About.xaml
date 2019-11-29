@@ -68,26 +68,32 @@
                 </materialDesign:ColorZone>
 
                 <materialDesign:ColorZone Style="{StaticResource FloatingSection}">
-                    <StackPanel>
-                        
-                         <TextBlock Text="3rd Party Software" FontSize="15" FontWeight="Bold"
-                                    VerticalAlignment="Center" />
 
+                    <StackPanel Orientation="Vertical" Margin="0,20,0,0">
+                        <!-- Appearance Settings -->
 
-                        <ItemsControl ItemsSource="{Binding ThirdParty}">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="3rd Party Software" FontSize="15" FontWeight="Bold"
+                                               VerticalAlignment="Center" />
+                        </StackPanel>
+
+                        <Separator />
+
+                        <ItemsControl ItemsSource="{Binding ThirdParty}" HorizontalAlignment="Stretch">
                             <ItemsControl.ItemTemplate>
                                 <DataTemplate>
-                                    <StackPanel Orientation="Horizontal">
+                                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Stretch">
                                         <Label Content="{Binding Name}"/>
                                         <Label Content="{Binding Licensemodel}"/>
-                                        <Label Content="{Binding Url}"/>
+                                        <Label Content="{Binding Url}" HorizontalAlignment="Right"/>
                                     </StackPanel>
                                 </DataTemplate>
                             </ItemsControl.ItemTemplate>
                         </ItemsControl>
 
- 
                     </StackPanel>
+
+
                 </materialDesign:ColorZone>
             </StackPanel>
         </ScrollViewer>

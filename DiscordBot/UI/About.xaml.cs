@@ -29,6 +29,9 @@ namespace DiscordBot.UI
             new License("Microsoft .NET Library", "Microsoft", @"https://dotnet.microsoft.com/dotnet_library_license.htm"),
         };
 
+        /// <summary>
+        /// List of all thirdparty licenses (Module name + License Name + link to license)
+        /// </summary>
         public List<License> ThirdParty => thirdParty;
 
 
@@ -70,8 +73,17 @@ namespace DiscordBot.UI
         
     }
 
+    /// <summary>
+    /// Represents a single license object, to be displayed in the about tab
+    /// </summary>
     public class License
     {
+        /// <summary>
+        /// Public constructor, assigns all constructor variables
+        /// </summary>
+        /// <param name="name">Name of the Module using the license</param>
+        /// <param name="model">Name of the license (e.g. MIT)</param>
+        /// <param name="url">Link to the license</param>
         public License(string name, string model, string url=null)
         {
             Name = name;
@@ -80,9 +92,17 @@ namespace DiscordBot.UI
             Url = url ?? Licensemodel;
         }
 
-
+        /// <summary>
+        /// Name of the Module using the license
+        /// </summary>
         public string Name { get; set; }
+        /// <summary>
+        /// Name of the license (e.g. MIT)
+        /// </summary>
         public string Licensemodel { get; set; }
+        /// <summary>
+        /// Link to the license, preferably to the project site, if not available generic license link
+        /// </summary>
         public string Url { get; set; }
     }
 }
