@@ -75,7 +75,7 @@ namespace DiscordBot.UI
             {
                 result = Util.IO.LyricsManager.GetLyrics(query[index].LyricId, query[index].LyricChecksum);
             }
-            catch (Exception ex)
+            catch
             {
                 result = null;
             }

@@ -289,15 +289,26 @@ namespace StreamModule
 
             card_downProgress.Visibility = Visibility.Visible;
 
+            DownloadManager.CacheResult result;
             //cache the file using cacheVideoAsync
-            DownloadManager.CacheResult result = await DownloadManager.cacheVideoAsync(url, Title);
-
-            card_downProgress.Visibility = Visibility.Collapsed;
+            try
+            {
+                result = await DownloadManager.cacheVideoAsync(url, Title);
+            }
+            catch(Exception ex)
+            {
+                LogManager.LogException(ex, "StreamModule/StreamMode.xaml.cs", "The liblido Regex Function couldn't match the download uri");
+                SnackbarManager.SnackbarMessage("Could not resolve video URI", SnackbarManager.SnackbarAction.Log);
+                return;
+            }
+            finally
+            {
+                card_downProgress.Visibility = Visibility.Collapsed;
+            }
 
             if (!String.IsNullOrWhiteSpace(result.location) || !String.IsNullOrWhiteSpace(result.uri))
             {
-                BotData data = new BotData(Title, result.location, result.uri, "",Author);
-
+                BotData data = new BotData(Title, result.location, result.uri, "", Author);
 
                 if (IsQueue)
                     QueueStream(data);
@@ -305,7 +316,9 @@ namespace StreamModule
                     StartStream(data);
             }
             else
+            {
                 SnackbarManager.SnackbarMessage("Source not supported");
+            }
         }
 
         #region events

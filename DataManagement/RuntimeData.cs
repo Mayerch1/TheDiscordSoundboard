@@ -50,6 +50,9 @@ namespace DataManagement
             set => pitch = value;
         }
 
+        /// <summary>
+        /// Replay speed of the bot
+        /// </summary>
         public float Speed
         {
             get => speed;

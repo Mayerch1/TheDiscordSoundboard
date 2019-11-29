@@ -6,8 +6,12 @@ using NAudio.CoreAudioApi;
 using NAudio.Wave;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
+using System.Net.Configuration;
 using System.Threading.Tasks;
+using AForge.Math;
+using NAudio.Dsp;
 
 namespace BotModule
 {
@@ -108,7 +112,7 @@ namespace BotModule
         private bool isStreaming = false;
         private bool isChannelConnected = false;
         private string currentSong = "";
-        private float pitch = 1.0f;
+        private float pitch = 0.0f;
         private float speed = 1.0f;
         private bool isEarrape = false;
         private float volume = 1;
@@ -524,7 +528,7 @@ namespace BotModule
             var buff = e.Buffer;
 
             applyVolume(ref buff);
-
+            applyPitch(ref buff);
             OutStream.Write(buff, 0, e.BytesRecorded);
         }
 
@@ -684,6 +688,71 @@ namespace BotModule
                 buffer[i] = (byte) bytePair;
                 buffer[i + 1] = (byte) (bytePair >> 8);
             }
+        }
+
+
+        /// <summary>
+        /// applies buffer to raw bytestream using fft and ifft
+        /// </summary>
+        /// <param name="buffer"></param>
+        private void applyPitch(ref byte[] buffer)
+        {
+            if (Pitch == 0)
+                return;
+
+
+            // translate semitones to float-pitch
+            float fPitch = (float)Math.Exp(0.69314718056 * (Pitch / 12.0));
+
+
+            // normalize buffer to float [-1.0..1.0)
+            float[] fBuffer = new float[buffer.Length/2];
+
+            for (int i = 0; i < buffer.Length; i += 2)
+            {
+                short bytePair = (short) ((buffer[i + 1] & 0xFF) << 8 | (buffer[i] & 0xFF));
+
+                // index of short is always /2
+                fBuffer[i >> 1] = (float)(bytePair/32768.0);
+            }
+
+
+            // divide buffer into 2^13 pieces or smaller
+            // calculate log2(len) gives potency, ceiling() gives closest number
+            // if result is larger 13, calculation needs to be split up
+            int n = (int)Math.Ceiling(Math.Log(buffer.Length, 2));
+
+
+            while (n > 0)
+            {
+                if (n > 13)
+                {
+                    n = 13; }
+
+
+                long sampleLen = (long)Math.Pow(2, n);
+
+                // Pitchshift all pieces
+                new SmbPitchShifter().PitchShift(fPitch, sampleLen, BotWave.sampleRate, fBuffer);
+
+                n -= 13;
+            }
+
+
+
+            // put pieces together
+            
+            
+            // convert float buffer back to byte buffer
+            for (int i = 0; i < fBuffer.Length; i++)
+            {
+                short bytePair = (short) (fBuffer[i] * 32768.0);
+
+                // split bytePairs back into buffer
+                buffer[i << 1] = (byte) bytePair;
+                buffer[(i << 1) + 1] = (byte) (bytePair >> 8);
+            }
+
         }
 
         #endregion play stuff

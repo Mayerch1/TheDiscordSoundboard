@@ -1037,8 +1037,10 @@ namespace DiscordBot
             if (slider_LiveSpeed != null)
                 slider_LiveSpeed.IsEnabled = isAvailable;
 
+            /*
             if (slider_LivePitch != null)
                 slider_LivePitch.IsEnabled = isAvailable;
+                */
 
 
         }
