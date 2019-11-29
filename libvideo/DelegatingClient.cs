@@ -92,7 +92,6 @@ namespace VideoLibrary
 
         #region HttpClient wrappers
 
-        
         // such as PUT, POST, DELETE, etc.
 
         public Task<HttpResponseMessage> GetAsync(string uri) =>

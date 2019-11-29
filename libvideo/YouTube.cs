@@ -12,8 +12,9 @@ namespace VideoLibrary
     public class YouTube : ServiceBase<YouTubeVideo>
     {
         private const string Playback = "videoplayback";
-
+        private static string _signatureKey;
         public static YouTube Default { get; } = new YouTube();
+
 
         internal async override Task<IEnumerable<YouTubeVideo>> GetAllVideosAsync(
             string videoUri, Func<string, Task<string>> sourceFactory)
@@ -79,21 +80,34 @@ namespace VideoLibrary
             {
                 using (HttpClient hc = new HttpClient())
                 {
-                    string temp = Json.GetKey("dashmpd", source);
-                    temp = WebUtility.UrlDecode(temp).Replace(@"\/", "/");
-
-                    var manifest = hc.GetStringAsync(temp)
-                        .GetAwaiter().GetResult()
-                        .Replace(@"\/", "/");
-
-                    var uris = Html.GetUrisFromManifest(manifest);
-
-                    foreach (var v in uris)
+                    IEnumerable<string> uris = null;
+                    try
                     {
-                        yield return new YouTubeVideo(title,
-                            UnscrambleManifestUri(v),
-                            jsPlayer);
+                        string temp = Json.GetKey("dashmpd", source);
+                        temp = WebUtility.UrlDecode(temp).Replace(@"\/", "/");
+
+                        var manifest = hc.GetStringAsync(temp)
+                            .GetAwaiter().GetResult()
+                            .Replace(@"\/", "/");
+
+                        uris = Html.GetUrisFromManifest(manifest);
                     }
+                    catch (Exception e)
+                    {
+                        throw new Exception("Unavailable : " + e.Message);
+                    }
+
+                    if (uris != null)
+                    {
+                        foreach (var v in uris)
+                        {
+                            yield return new YouTubeVideo(title,
+                                UnscrambleManifestUri(v),
+                                jsPlayer);
+                        }
+
+                    }
+
                 }
             }
             else
@@ -122,16 +136,18 @@ namespace VideoLibrary
             {
                 jsPlayer = $"https:{jsPlayer}";
             }
-            
+
             return jsPlayer;
         }
 
-       
+        // TODO: Consider making this static...
         private UnscrambledQuery Unscramble(string queryString)
         {
             queryString = queryString.Replace(@"\u0026", "&");
             var query = new Query(queryString);
             string uri = query["url"];
+
+            query.TryGetValue("sp", out _signatureKey);
 
             bool encrypted = false;
             string signature;
@@ -139,10 +155,10 @@ namespace VideoLibrary
             if (query.TryGetValue("s", out signature))
             {
                 encrypted = true;
-                uri += GetSignatureAndHost(signature, query);
+                uri += GetSignatureAndHost(GetSignatureKey(), signature, query);
             }
             else if (query.TryGetValue("sig", out signature))
-                uri += GetSignatureAndHost(signature, query);
+                uri += GetSignatureAndHost(GetSignatureKey(), signature, query);
 
             uri = WebUtility.UrlDecode(
                 WebUtility.UrlDecode(uri));
@@ -155,9 +171,9 @@ namespace VideoLibrary
             return new UnscrambledQuery(uri, encrypted);
         }
 
-        private string GetSignatureAndHost(string signature, Query query)
+        private string GetSignatureAndHost(string key, string signature, Query query)
         {
-            string result = "&signature=" + signature;
+            string result = $"&{key}={signature}";
 
             string host;
 
@@ -188,6 +204,11 @@ namespace VideoLibrary
             }
 
             return new UnscrambledQuery(builder.ToString(), false);
+        }
+
+        public static string GetSignatureKey()
+        {
+            return string.IsNullOrWhiteSpace(_signatureKey) ? "signature" : _signatureKey;
         }
     }
 }
