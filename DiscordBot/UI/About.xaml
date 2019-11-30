@@ -66,6 +66,35 @@
                                 Content="View License" />
                     </Grid>
                 </materialDesign:ColorZone>
+
+                <materialDesign:ColorZone Style="{StaticResource FloatingSection}">
+
+                    <StackPanel Orientation="Vertical" Margin="0,20,0,0">
+                        <!-- Appearance Settings -->
+
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="3rd Party Software" FontSize="15" FontWeight="Bold"
+                                               VerticalAlignment="Center" />
+                        </StackPanel>
+
+                        <Separator />
+
+                        <ItemsControl ItemsSource="{Binding ThirdParty}" HorizontalAlignment="Stretch">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Stretch">
+                                        <Label Content="{Binding Name}" Width="250"/>
+                                        <Label Content="{Binding Licensemodel}" Width="250"/>
+                                        <Label Content="{Binding Url}" HorizontalAlignment="Right"/>
+                                    </StackPanel>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+
+                    </StackPanel>
+
+
+                </materialDesign:ColorZone>
             </StackPanel>
         </ScrollViewer>
     </Grid>

@@ -1,17 +1,17 @@
-﻿using Discord;
+﻿using DataManagement;
+using Discord;
 using Discord.Audio;
 using Discord.WebSocket;
+using NAudio.CoreAudioApi;
 using NAudio.Wave;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
-using System.Text.RegularExpressions;
+using System.Net.Configuration;
 using System.Threading.Tasks;
-using DataManagement;
-using NAudio.CoreAudioApi;
+using AForge.Math;
 using NAudio.Dsp;
-using NAudio.Wave.Compression;
-using NAudio.Wave.SampleProviders;
 
 namespace BotModule
 {
@@ -34,6 +34,19 @@ namespace BotModule
         #endregion config
 
         #region event Handlers
+
+        /// <summary>
+        /// SpeedAvailableChangedHandler delegate
+        /// </summary>
+        /// <param name="isAvailable">modify speed is available</param>
+        public delegate void SpeedAvailableChangedHandler(bool isAvailable);
+
+        /// <summary>
+        /// Indicates a change in the availability for the speed slider
+        /// Live sources like Microphone are not able to provide this function.
+        /// </summary>
+        public SpeedAvailableChangedHandler SpeedAvailableChanged;
+
 
         /// <summary>
         /// IncompatibleWaveHandler delegate
@@ -99,9 +112,12 @@ namespace BotModule
         private bool isStreaming = false;
         private bool isChannelConnected = false;
         private string currentSong = "";
-        private float pitch = 1.0f;
+        private float pitch = 0.0f;
+        private float speed = 1.0f;
         private bool isEarrape = false;
         private float volume = 1;
+
+        private float appliedPitch, appliedSpeed, appliedVolume;
 
         #endregion status fields
 
@@ -119,7 +135,7 @@ namespace BotModule
             set
             {
                 volume = value;
-                ConfigChanged(Pitch, value);
+                ConfigChanged(Pitch, value, Speed);
             }
         }
 
@@ -135,7 +151,24 @@ namespace BotModule
             set
             {
                 pitch = value;
-                ConfigChanged(value, Volume);
+                ConfigChanged(value, Volume, Speed);
+            }
+        }
+
+
+        /// <summary>
+        /// Sets the replay-Speed of the bot
+        /// </summary>
+        /// <remarks>
+        /// No effect on Throughput-devices like Microphone or VCable
+        /// </remarks>
+        public float Speed
+        {
+            get => speed;
+            set
+            {
+                speed = value;
+                ConfigChanged(Pitch, Volume, value);
             }
         }
 
@@ -237,7 +270,7 @@ namespace BotModule
             {
                 isEarrape = value;
                 //method sets Volume to 100, when isEarrape
-                ConfigChanged(Pitch, Volume);
+                ConfigChanged(Pitch, Volume, Speed);
             }
         }
 
@@ -264,6 +297,10 @@ namespace BotModule
             IsChannelConnected = false;
             IsServerConnected = false;
             IsBufferEmpty = true;
+
+            appliedPitch = pitch;
+            appliedSpeed = speed;
+            appliedVolume = volume;
         }
 
         #region controll stuff
@@ -299,30 +336,37 @@ namespace BotModule
         }
 
 
-        private void ConfigChanged(float pitch, float volume)
+        private void ConfigChanged(float pitch, float volume, float speed, bool isForced=false)
         {
-            //first apply pitch
-            if (Wave.SourceResampler != null)
+            //apply given parameters to all readers
+            if (Wave.SourceResampler != null && Wave.ActiveResampler != null)
             {
-                //delete current resampler, disposing can cause thread issue
-                Wave.ActiveResampler = null;
+                if (Wave.Touch != null)
 
-                var pSampler = new SmbPitchShiftingSampleProvider(Wave.SourceResampler.ToSampleProvider());
-                pSampler.PitchFactor = pitch;
+                {
+                    if (speed != appliedSpeed || isForced)
+                    {
+                        appliedSpeed = speed;
+                        Wave.Touch.Tempo = appliedSpeed;
+                    }
 
-                Wave.ActiveResampler = new MediaFoundationResampler(pSampler.ToWaveProvider(), Wave.OutFormat);
+                    if (pitch != appliedPitch || isForced)
+                    {
+                        appliedPitch = pitch;
+                        Wave.Touch.Pitch = appliedPitch;
+                    }
+                }
 
 
-                //secondly apply volume
-                var volumeSampler = new VolumeWaveProvider16(Wave.ActiveResampler);
+                if (Wave.Volume != null && (volume != appliedVolume || IsEarrape || isForced))
+                {
+                    if (isEarrape)
+                        appliedVolume = 100;
+                    else
+                        appliedVolume = volume;
 
-                if (IsEarrape)
-                    //this means 10,000%
-                    volumeSampler.Volume = 100;
-                else
-                    volumeSampler.Volume = volume;
-
-                Wave.ActiveResampler = new MediaFoundationResampler(volumeSampler, Wave.OutFormat);
+                    Wave.Volume.Volume = appliedVolume;
+                }
             }
         }
 
@@ -429,7 +473,8 @@ namespace BotModule
                     }
 
                     //convert from ieee to pcm
-                    Wave.Capture.WaveFormat = new WaveFormat(Wave.Capture.WaveFormat.SampleRate, BotWave.bitDepth, Wave.Capture.WaveFormat.Channels);
+                    Wave.Capture.WaveFormat = new WaveFormat(Wave.Capture.WaveFormat.SampleRate, BotWave.bitDepth,
+                        Wave.Capture.WaveFormat.Channels);
                 }
 
                 CanSeek = false;
@@ -438,6 +483,8 @@ namespace BotModule
                 Wave.SourceResampler = null;
 
                 Wave.Capture.DataAvailable += Capture_DataAvailable;
+
+                SpeedAvailableChanged(false);
                 //no override settings for stream available
             }
             else
@@ -454,11 +501,23 @@ namespace BotModule
                 //create source and finally used resampler
                 Wave.SourceResampler = new MediaFoundationResampler(Wave.Reader, Wave.OutFormat);
 
-                //apply pitch and volume to the resampler, will also set NormalResampler
-                ConfigChanged(Pitch, Volume);
+                //create additional providers for Volume, Speed and Pitch
+
+                Wave.Volume = new VolumeWaveProvider16(Wave.SourceResampler);
+                Wave.Touch = new NAudio.SoundTouch.SoundTouchWaveStream(Wave.Volume);
+                //Wave.Pitch = new SmbPitchShiftingSampleProvider(Wave.Speed.ToSampleProvider());
+
+                Wave.ActiveResampler = new MediaFoundationResampler(Wave.Touch, Wave.OutFormat);
+
 
                 //will apply Earrape and loop
                 loadOverrideSettings(data);
+
+
+                //apply pitch and volume to the resampler, will also set NormalResampler
+                ConfigChanged(Pitch, Volume, Speed, true);
+
+                SpeedAvailableChanged(true);
             }
         }
 
@@ -469,14 +528,9 @@ namespace BotModule
             var buff = e.Buffer;
 
             applyVolume(ref buff);
-
-
+            applyPitch(ref buff);
             OutStream.Write(buff, 0, e.BytesRecorded);
         }
-
-
-        private async Task playBufferedStream()
-        { }
 
 
         /// <summary>
@@ -524,13 +578,17 @@ namespace BotModule
                 //send stream in small packages
                 int blockSize = Wave.OutFormat.AverageBytesPerSecond / packagesPerSecond;
                 byte[] buffer = new byte[blockSize];
-                int byteCount;
 
 
                 IsPause = false;
-                //repeat, read new block into buffer -> stream buffer
+                int byteCount;
+
                 while ((byteCount = Wave.ActiveResampler.Read(buffer, 0, blockSize)) > 0)
+                    //repeat, read new block into buffer -> stream buffer
+                    //while (Wave.Reader.Position < Wave.Reader.Length)
                 {
+                    //int byteCount = Wave.ActiveResampler.Read(buffer, 0, blockSize);
+
                     if (IsToAbort || SkipTracks > 0)
                         break;
 
@@ -544,6 +602,7 @@ namespace BotModule
 
                     await OutStream.WriteAsync(buffer, 0, blockSize);
                 }
+
 
                 IsStreaming = false;
 
@@ -617,19 +676,83 @@ namespace BotModule
             if (vol == 1)
                 return;
 
-                for (int i = 0; i < buffer.Length; i += 2)
+            for (int i = 0; i < buffer.Length; i += 2)
+            {
+                //convert a byte-Pair into one char (with 2 bytes)
+
+                short bytePair = (short) ((buffer[i + 1] & 0xFF) << 8 | (buffer[i] & 0xFF));
+
+                bytePair = (short) (bytePair * vol);
+
+                //convert char back to 2 bytes
+                buffer[i] = (byte) bytePair;
+                buffer[i + 1] = (byte) (bytePair >> 8);
+            }
+        }
+
+
+        /// <summary>
+        /// applies buffer to raw bytestream using fft and ifft
+        /// </summary>
+        /// <param name="buffer"></param>
+        private void applyPitch(ref byte[] buffer)
+        {
+            if (Pitch == 0)
+                return;
+
+
+            // translate semitones to float-pitch
+            float fPitch = (float)Math.Exp(0.69314718056 * (Pitch / 12.0));
+
+
+            // normalize buffer to float [-1.0..1.0)
+            float[] fBuffer = new float[buffer.Length/2];
+
+            for (int i = 0; i < buffer.Length; i += 2)
+            {
+                short bytePair = (short) ((buffer[i + 1] & 0xFF) << 8 | (buffer[i] & 0xFF));
+
+                // index of short is always /2
+                fBuffer[i >> 1] = (float)(bytePair/32768.0);
+            }
+
+
+            // divide buffer into 2^13 pieces or smaller
+            // calculate log2(len) gives potency, ceiling() gives closest number
+            // if result is larger 13, calculation needs to be split up
+            int n = (int)Math.Ceiling(Math.Log(buffer.Length, 2));
+
+
+            while (n > 0)
+            {
+                if (n > 13)
                 {
-                    //convert a byte-Pair into one char (with 2 bytes)
+                    n = 13; }
 
-                    short bytePair = (short)((buffer[i + 1] & 0xFF) << 8 | (buffer[i] & 0xFF));
 
-                    bytePair = (short)(bytePair * vol);
+                long sampleLen = (long)Math.Pow(2, n);
 
-                    //convert char back to 2 bytes
-                    buffer[i] = (byte)bytePair;
-                    buffer[i + 1] = (byte)(bytePair >> 8);
-                }
+                // Pitchshift all pieces
+                new SmbPitchShifter().PitchShift(fPitch, sampleLen, BotWave.sampleRate, fBuffer);
+
+                n -= 13;
+            }
+
+
+
+            // put pieces together
             
+            
+            // convert float buffer back to byte buffer
+            for (int i = 0; i < fBuffer.Length; i++)
+            {
+                short bytePair = (short) (fBuffer[i] * 32768.0);
+
+                // split bytePairs back into buffer
+                buffer[i << 1] = (byte) bytePair;
+                buffer[(i << 1) + 1] = (byte) (bytePair >> 8);
+            }
+
         }
 
         #endregion play stuff
@@ -817,8 +940,7 @@ namespace BotModule
         /// get a list of all clients of all servers
         /// </summary>
         /// <param name="acceptOffline">incude users which are offline</param>
-        /// <returns>list of all servers, each contains a list of all clients, regarding acceptOffline</returns>
-        //returns a List<List>, all online clients of all servers are contained
+        /// <returns>list of all servers, each contains a list of all clients, regarding acceptOffline. Returns null if Client is still Connecting</returns>
         protected List<List<SocketGuildUser>> getAllClients(bool acceptOffline)
         {
             if (!IsServerConnected)
@@ -827,6 +949,10 @@ namespace BotModule
                     BotException.connectionError.NoServer);
 
             List<List<SocketGuildUser>> guildList = new List<List<SocketGuildUser>>();
+
+            if (Client.ConnectionState == ConnectionState.Connecting)
+                return null;
+
 
             var guilds = Client.Guilds;
             foreach (var gElement in guilds)

@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
+  <metadata>
+    <id>SoundTouch.Net.NAudio</id>
+    <version>1.0.0</version>
+    <description>An NAudio IWaveProvider that passes another IWaveProvider's stream through the SoundTouch library.</description>
+    <authors>JonathanG@iQmetrix.com</authors>
+    <projectUrl>https://github.com/logiclrd/SoundTouch.Net.NAudio</projectUrl>
+    <license type="expression">LGPL-2.1-or-later</license>
+  </metadata>
+</package>

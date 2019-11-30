@@ -26,7 +26,6 @@ namespace VideoLibrary
             return ParseVideos(source);
         }
 
-        
         private IEnumerable<Video> ParseVideos(string source)
         {
             string title = Html.GetNodeValue("title", source);

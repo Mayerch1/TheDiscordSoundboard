@@ -42,6 +42,19 @@ namespace BotModule
         public MediaFoundationReader Reader { get; set; }
 
         /// <summary>
+        /// SampleProvider for changing Volume of stream
+        /// </summary>
+        public VolumeWaveProvider16 Volume { get; set; }
+
+        /// <summary>
+        /// Stream for changing speed of stream
+        /// </summary>
+        public NAudio.SoundTouch.SoundTouchWaveStream Touch { get; set; }
+
+       
+       // public NAudio.Wave.SampleProviders.SmbPitchShiftingSampleProvider Pitch { get; set; }
+
+        /// <summary>
         /// Resampler used to get next byte[] for feeding to bot
         /// </summary>
         public MediaFoundationResampler ActiveResampler { get; set; }

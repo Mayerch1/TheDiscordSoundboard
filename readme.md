@@ -4,6 +4,7 @@
 
  [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
  [![GitHub release](https://img.shields.io/github/release/mayerch1/TheDiscordSoundboard.svg)](https://github.com/mayerch1/TheDiscordSoundboard/releases/latest)
+ [![Gitter](https://badges.gitter.im/TheDiscordSoundboard/community.svg)](https://gitter.im/TheDiscordSoundboard/community?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
  [![Openhub](https://www.openhub.net/p/TheDiscordSoundboard/widgets/project_thin_badge?format=gif)](https://www.openhub.net/p/TheDiscordSoundboard) 
  
 

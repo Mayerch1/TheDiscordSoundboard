@@ -11,9 +11,8 @@ namespace VideoLibrary
 {
     public partial class YouTubeVideo
     {
-        //Static
-        private static readonly Regex DecryptionFunctionRegex_Static_1 = new Regex(@"\bc\s*&&\s*d\.set\([^,]+\s*,[^(]*\(([a-zA-Z0-9$]+)\(");       
-        //Dynamic with Service
+        private static readonly Regex DecryptionFunctionRegex_Static_1 = new Regex(@"\bc\s*&&\s*a\.set\([^,]+,\s*(?:encodeURIComponent\s*\()?\s*([\w$]+)\(");
+        //Dynamic with Service	
         private static Regex DFunctionRegex_Dynamic;
         private static readonly Regex FunctionRegex = new Regex(@"\w+\.(\w+)\(");
         private async Task<string> DecryptAsync(string uri, Func<DelegatingClient> makeClient)
@@ -21,38 +20,51 @@ namespace VideoLibrary
             var query = new Query(uri);
 
             string signature;
-            if (!query.TryGetValue("signature", out signature))
+            if (!query.TryGetValue(YouTube.GetSignatureKey(), out signature))
                 return uri;
+
+            if (string.IsNullOrWhiteSpace(signature))
+                throw new Exception("Signature not found.");
 
             string js =
                 await makeClient()
                 .GetStringAsync(jsPlayer)
                 .ConfigureAwait(false);
 
-            query["signature"] = DecryptSignature(js, signature);
+            query[YouTube.GetSignatureKey()] = DecryptSignature(js, signature);
             return query.ToString();
         }
         private string DecryptSignature(string js, string signature)
         {
             var functionLines = GetDecryptionFunctionLines(js);
             var decryptor = new Decryptor();
+            var deciphererDefinitionName = Regex.Match(string.Join(";", functionLines), "(\\w+).\\w+\\(\\w+,\\d+\\);").Groups[1].Value;
+            if (string.IsNullOrEmpty(deciphererDefinitionName))
+            {
+                throw new Exception("Could not find signature decipherer definition name. Please report this issue to us.");
+            }
+            var deciphererDefinitionBody = Regex.Match(js, @"var\s+" + Regex.Escape(deciphererDefinitionName) + @"=\{(\w+:function\(\w+(,\w+)?\)\{(.*?)\}),?\};", RegexOptions.Singleline).Groups[0].Value;
+            if (string.IsNullOrEmpty(deciphererDefinitionBody))
+            {
+                throw new Exception("Could not find signature decipherer definition body. Please report this issue to us.");
+            }
             foreach (var functionLine in functionLines)
             {
                 if (decryptor.IsComplete)
                 {
                     break;
                 }
-                /* Pass  TK["do"](a, 36); or TK.BH(a, 1); */
-                var match = FunctionRegex.Match(functionLine.Replace("[\"", ".").Replace("\"]", ""));
+
+                var match = FunctionRegex.Match(functionLine);
                 if (match.Success)
                 {
-                    decryptor.AddFunction(js, match.Groups[1].Value);
+                    decryptor.AddFunction(deciphererDefinitionBody, match.Groups[1].Value);
                 }
             }
 
             foreach (var functionLine in functionLines)
             {
-                var match = FunctionRegex.Match(functionLine.Replace("[\"", ".").Replace("\"]", ""));
+                var match = FunctionRegex.Match(functionLine);
                 if (match.Success)
                 {
                     signature = decryptor.ExecuteFunction(signature, functionLine, match.Groups[1].Value);
@@ -63,28 +75,39 @@ namespace VideoLibrary
         }
         private string[] GetDecryptionFunctionLines(string js)
         {
-            var decryptionFunction = GetDecryptionFunction(js);
-            var match =
-                Regex.Match(
-                    js,
-                    $@"(?!h\.){Regex.Escape(decryptionFunction)}=function\(\w+\)\{{(.*?)\}}",
-                    RegexOptions.Singleline);
-            if (!match.Success)
+            var deciphererFuncName = Regex.Match(js, @"(\w+)=function\(\w+\){(\w+)=\2\.split\(\x22{2}\);.*?return\s+\2\.join\(\x22{2}\)}");
+            if (deciphererFuncName.Success)
             {
-                throw new Exception($"{nameof(GetDecryptionFunctionLines)} failed");
+                var deciphererFuncBody = Regex.Match(js, @"(?!h\.)" + Regex.Escape(deciphererFuncName.Groups[1].Value) + @"=function\(\w+\)\{(.*?)\}", RegexOptions.Singleline);
+                if (deciphererFuncBody.Success)
+                {
+                    return deciphererFuncBody.Groups[1].Value.Split(';');
+                }
             }
+            throw new Exception("Could not find signature DecryptionFunctionLines. Please report this issue to us.");
 
-            return match.Groups[1].Value.Split(';');
+            //OLD
+            //var decryptionFunction = GetDecryptionFunction(js);
+            //var match =
+            //    Regex.Match(
+            //        js,
+            //        $@"(?!h\.){Regex.Escape(decryptionFunction)}=function\(\w+\)\{{(.*?)\}}",
+            //        RegexOptions.Singleline);
+            //if (!match.Success)
+            //{
+            //    throw new Exception($"{nameof(GetDecryptionFunctionLines)} failed");
+            //}
+            //return match.Groups[1].Value.Split(';');
         }
+
         private string GetDecryptionFunction(string js)
         {
-            // Dynamic or Static Regex if get which available
             var match = DecryptionFunctionRegex_Static_1.Match(js);
             if (match.Success)
             {
                 return match.Groups[1].Value;
             }
-            else if((match = DFunctionRegex_Dynamic.Match(js)).Success)
+            else if ((match = DFunctionRegex_Dynamic.Match(js)).Success)
             {
                 return match.Groups[1].Value;
             }
@@ -93,6 +116,7 @@ namespace VideoLibrary
                 throw new Exception($"{nameof(GetDecryptionFunction)} failed");
             }
         }
+
         private class Decryptor
         {
             private static readonly Regex ParametersRegex = new Regex(@"\(\w+,(\d+)\)");
@@ -108,11 +132,7 @@ namespace VideoLibrary
                 var escapedFunction = Regex.Escape(function);
                 FunctionType? type = null;
                 /* Pass  "do":function(a){} or xa:function(a,b){} */
-                if (Regex.IsMatch(js, $@"(\"")?{escapedFunction}(\"")?:\bfunction\b\(\w+\)"))
-                {
-                    type = FunctionType.Reverse;
-                }
-                else if (Regex.IsMatch(js, $@"(\"")?{escapedFunction}(\"")?:\bfunction\b\([a],b\).(\breturn\b)?.?\w+\."))
+                if (Regex.IsMatch(js, $@"(\"")?{escapedFunction}(\"")?:\bfunction\b\([a],b\).(\breturn\b)?.?\w+\."))
                 {
                     type = FunctionType.Slice;
                 }
@@ -120,7 +140,10 @@ namespace VideoLibrary
                 {
                     type = FunctionType.Swap;
                 }
-
+                if (Regex.IsMatch(js, $@"(\"")?{escapedFunction}(\"")?:\bfunction\b\(\w+\){{\w+\.reverse"))
+                {
+                    type = FunctionType.Reverse;
+                }
                 if (type.HasValue)
                 {
                     _functionTypes[function] = type.Value;

@@ -27,6 +27,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DeviceStreamModule", "Modul
 EndProject
 Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "SoundBoard Wizard", "SoundBoard Wizard\SoundBoard Wizard.vdproj", "{3E2AAE8E-9331-422B-AD15-3C4257331BD7}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SoundTouch.Net.NAudio", "SoundTouch.Net.NAudio\SoundTouch.Net.NAudio.csproj", "{0AADA976-3763-44E8-B2A4-950BF7C49A26}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -93,12 +95,12 @@ Global
 		{6745405B-8A1D-423F-9D17-95BAD658DB18}.Release|x64.Build.0 = Release|x64
 		{DFECE3E8-99D9-4652-B486-BEA1010329BA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{DFECE3E8-99D9-4652-B486-BEA1010329BA}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{DFECE3E8-99D9-4652-B486-BEA1010329BA}.Debug|x64.ActiveCfg = Debug|x64
-		{DFECE3E8-99D9-4652-B486-BEA1010329BA}.Debug|x64.Build.0 = Debug|x64
+		{DFECE3E8-99D9-4652-B486-BEA1010329BA}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{DFECE3E8-99D9-4652-B486-BEA1010329BA}.Debug|x64.Build.0 = Debug|Any CPU
 		{DFECE3E8-99D9-4652-B486-BEA1010329BA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DFECE3E8-99D9-4652-B486-BEA1010329BA}.Release|Any CPU.Build.0 = Release|Any CPU
-		{DFECE3E8-99D9-4652-B486-BEA1010329BA}.Release|x64.ActiveCfg = Release|x64
-		{DFECE3E8-99D9-4652-B486-BEA1010329BA}.Release|x64.Build.0 = Release|x64
+		{DFECE3E8-99D9-4652-B486-BEA1010329BA}.Release|x64.ActiveCfg = Release|Any CPU
+		{DFECE3E8-99D9-4652-B486-BEA1010329BA}.Release|x64.Build.0 = Release|Any CPU
 		{17FC1E74-A2A2-4F9B-ABE5-1B36878945CB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{17FC1E74-A2A2-4F9B-ABE5-1B36878945CB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{17FC1E74-A2A2-4F9B-ABE5-1B36878945CB}.Debug|x64.ActiveCfg = Debug|Any CPU
@@ -123,6 +125,14 @@ Global
 		{3E2AAE8E-9331-422B-AD15-3C4257331BD7}.Release|Any CPU.Build.0 = Release
 		{3E2AAE8E-9331-422B-AD15-3C4257331BD7}.Release|x64.ActiveCfg = Release
 		{3E2AAE8E-9331-422B-AD15-3C4257331BD7}.Release|x64.Build.0 = Release
+		{0AADA976-3763-44E8-B2A4-950BF7C49A26}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0AADA976-3763-44E8-B2A4-950BF7C49A26}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0AADA976-3763-44E8-B2A4-950BF7C49A26}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{0AADA976-3763-44E8-B2A4-950BF7C49A26}.Debug|x64.Build.0 = Debug|Any CPU
+		{0AADA976-3763-44E8-B2A4-950BF7C49A26}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0AADA976-3763-44E8-B2A4-950BF7C49A26}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0AADA976-3763-44E8-B2A4-950BF7C49A26}.Release|x64.ActiveCfg = Release|Any CPU
+		{0AADA976-3763-44E8-B2A4-950BF7C49A26}.Release|x64.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

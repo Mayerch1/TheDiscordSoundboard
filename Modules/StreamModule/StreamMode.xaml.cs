@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Globalization;
 using System.IO;
+using System.Text;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -188,7 +189,7 @@ namespace StreamModule
                     List<VideoInformation> infos;
                     try
                     {
-                        infos = await new VideoSearch().SearchQueryTaskAsync(id, 1);
+                        infos = await new VideoSearch(){encoding = Encoding.UTF8}.SearchQueryTaskAsync(id, 1);
                         if (infos.Count > 0)
                         {
                             var videoInfo = infos[0];
@@ -197,6 +198,11 @@ namespace StreamModule
                             Title = videoInfo.Title;
                             Duration = videoInfo.Duration;
                             Author = videoInfo.Author;
+                        }
+                        else
+                        {
+                            ImageUri = YTManager.getUrlToThumbnail(url);
+                            Title = await YTManager.GetTitleAsync(url);
                         }
                     }
                     catch
@@ -261,7 +267,7 @@ namespace StreamModule
 
             try
             {
-                result = await new VideoSearch().SearchQueryTaskAsync(filter, pages);
+                result = await new VideoSearch(){encoding = Encoding.UTF8}.SearchQueryTaskAsync(filter, pages);
             }
             catch (Exception ex)
             {
@@ -283,15 +289,26 @@ namespace StreamModule
 
             card_downProgress.Visibility = Visibility.Visible;
 
+            DownloadManager.CacheResult result;
             //cache the file using cacheVideoAsync
-            DownloadManager.CacheResult result = await DownloadManager.cacheVideoAsync(url, Title);
-
-            card_downProgress.Visibility = Visibility.Collapsed;
+            try
+            {
+                result = await DownloadManager.cacheVideoAsync(url, Title);
+            }
+            catch(Exception ex)
+            {
+                LogManager.LogException(ex, "StreamModule/StreamMode.xaml.cs", "The liblido Regex Function couldn't match the download uri");
+                SnackbarManager.SnackbarMessage("Could not resolve video URI", SnackbarManager.SnackbarAction.Log);
+                return;
+            }
+            finally
+            {
+                card_downProgress.Visibility = Visibility.Collapsed;
+            }
 
             if (!String.IsNullOrWhiteSpace(result.location) || !String.IsNullOrWhiteSpace(result.uri))
             {
-                BotData data = new BotData(Title, result.location, result.uri, "",Author);
-
+                BotData data = new BotData(Title, result.location, result.uri, "", Author);
 
                 if (IsQueue)
                     QueueStream(data);
@@ -299,7 +316,9 @@ namespace StreamModule
                     StartStream(data);
             }
             else
+            {
                 SnackbarManager.SnackbarMessage("Source not supported");
+            }
         }
 
         #region events

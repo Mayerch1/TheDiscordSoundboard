@@ -15,37 +15,27 @@
 
 namespace YoutubeSearch
 {
-    /// <summary>
-    /// Helper Class for <see cref="VideoSearch"/>
-    /// </summary>
     public class VideoItemHelper
     {
-        /// <summary>
-        /// extracts information out of string (using strings as delimiter)
-        /// </summary>
-        /// <param name="strSource">source</param>
-        /// <param name="strStart">start of Substring</param>
-        /// <param name="strEnd">end of Substring</param>
-        /// <returns>Part of string between Start and End. "" if no matches</returns>
-        /// <remarks>wraps Substring method into error fallback and ability to separate for strings instead of indexes</remarks>
-        /// <seealso cref="string.Substring(int, int)"/>
-        /// <returns></returns>
         public static string cull(string strSource, string strStart, string strEnd)
         {
-            int Start, End;
+			int Start, End;
 
             if (strSource.Contains(strStart) && strSource.Contains(strEnd))
             {
                 Start = strSource.IndexOf(strStart, 0) + strStart.Length;
                 End = strSource.IndexOf(strEnd, Start);
 
-                if (End >= 0)
-                {
-                    return strSource.Substring(Start, End - Start);
-                }
-            }
+				int val = (End > Start ? End - Start : Start - End);
+				if (val < 1 || val >= strSource.Length)
+					return "";
 
-            return "";
+				return strSource.Substring(Start, val);
+            }
+            else
+            {
+                return "";
+            }
         }
     }
 }
