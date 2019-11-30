@@ -22,7 +22,7 @@ namespace DiscordBot.UI
             new License("Soundtouch(.Net)", "LGPL 2.1", @"https://raw.githubusercontent.com/owoudenberg/soundtouch.net/master/LICENSE"),
             new License("Soundtouch.Net.NAudio", "LGPL 2.1", @"https://raw.githubusercontent.com/owoudenberg/soundtouch.net/master/LICENSE"),
             new License("NYoutubeDL", "MIT License", @"https://licenses.nuget.org/MIT"),
-            new License("libvideo", "BSD 2-Clause", @"https://github.com/i3arnon/libvideo/blob/master/LICENSE"),
+            new License("libvideo", "BSD 2-Clause", @"https://github.com/omansak/libvideo/blob/master/LICENSE"),
             new License("YoutubeSearch", "GPL License", @"https://github.com/mrklintscher/YoutubeSearch#license"),
             new License("Taglib", "LGPL 2.1", @"https://opensource.org/licenses/lgpl-2.1.php"),
             new License("Newtonsoft.Json", "MIT License", @"https://licenses.nuget.org/MIT"),
