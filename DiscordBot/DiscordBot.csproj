@@ -102,6 +102,9 @@
     <Reference Include="MaterialDesignThemes.Wpf, Version=2.5.1.1345, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\MaterialDesignThemes.2.5.1\lib\net45\MaterialDesignThemes.Wpf.dll</HintPath>
     </Reference>
+    <Reference Include="Mayerch1.GithubUpdateCheck, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Mayerch1.GithubUpdateCheck.1.0.0\lib\netstandard2.0\Mayerch1.GithubUpdateCheck.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.Extensions.DependencyInjection, Version=2.2.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.Extensions.DependencyInjection.2.2.0\lib\net461\Microsoft.Extensions.DependencyInjection.dll</HintPath>
     </Reference>
@@ -396,10 +399,6 @@
     <ProjectReference Include="..\DataManagement\DataManagement.csproj">
       <Project>{6745405b-8a1d-423f-9d17-95bad658db18}</Project>
       <Name>DataManagement</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\GithubVersionChecker\GithubVersionChecker.csproj">
-      <Project>{bf622e71-acb5-401d-8ae2-4abace38ae00}</Project>
-      <Name>GithubVersionChecker</Name>
     </ProjectReference>
     <ProjectReference Include="..\Modules\BotModule\BotModule.csproj">
       <Project>{f05a9a53-0213-4334-82e4-36d922c23127}</Project>

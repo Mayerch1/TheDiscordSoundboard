@@ -13,8 +13,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Util", "Util\Util.csproj", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PlaylistModule", "Modules\PlaylistModule\PlaylistModule.csproj", "{B1EE8812-C82C-4DE7-A589-5E1D88E49C20}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GithubVersionChecker", "GithubVersionChecker\GithubVersionChecker.csproj", "{BF622E71-ACB5-401D-8AE2-4ABACE38AE00}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DiscordBot", "DiscordBot\DiscordBot.csproj", "{DDC0D602-01D6-45FF-85C0-8D2E21C7C6E0}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataManagement", "DataManagement\DataManagement.csproj", "{6745405B-8A1D-423F-9D17-95BAD658DB18}"
@@ -69,14 +67,6 @@ Global
 		{B1EE8812-C82C-4DE7-A589-5E1D88E49C20}.Release|Any CPU.Build.0 = Release|Any CPU
 		{B1EE8812-C82C-4DE7-A589-5E1D88E49C20}.Release|x64.ActiveCfg = Release|x64
 		{B1EE8812-C82C-4DE7-A589-5E1D88E49C20}.Release|x64.Build.0 = Release|x64
-		{BF622E71-ACB5-401D-8AE2-4ABACE38AE00}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{BF622E71-ACB5-401D-8AE2-4ABACE38AE00}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{BF622E71-ACB5-401D-8AE2-4ABACE38AE00}.Debug|x64.ActiveCfg = Debug|x64
-		{BF622E71-ACB5-401D-8AE2-4ABACE38AE00}.Debug|x64.Build.0 = Debug|x64
-		{BF622E71-ACB5-401D-8AE2-4ABACE38AE00}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{BF622E71-ACB5-401D-8AE2-4ABACE38AE00}.Release|Any CPU.Build.0 = Release|Any CPU
-		{BF622E71-ACB5-401D-8AE2-4ABACE38AE00}.Release|x64.ActiveCfg = Release|x64
-		{BF622E71-ACB5-401D-8AE2-4ABACE38AE00}.Release|x64.Build.0 = Release|x64
 		{DDC0D602-01D6-45FF-85C0-8D2E21C7C6E0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{DDC0D602-01D6-45FF-85C0-8D2E21C7C6E0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DDC0D602-01D6-45FF-85C0-8D2E21C7C6E0}.Debug|x64.ActiveCfg = Debug|x64
