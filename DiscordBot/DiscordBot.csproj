@@ -420,10 +420,6 @@
       <Project>{f2e53bb4-2144-4fcd-9b17-fb6408f6e061}</Project>
       <Name>Util</Name>
     </ProjectReference>
-    <ProjectReference Include="..\YoutubeSearch\YoutubeSearch.csproj">
-      <Project>{dfece3e8-99d9-4652-b486-bea1010329ba}</Project>
-      <Name>YoutubeSearch</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Resource Include="res\empty.png" />

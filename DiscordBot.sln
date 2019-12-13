@@ -17,8 +17,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DiscordBot", "DiscordBot\Di
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataManagement", "DataManagement\DataManagement.csproj", "{6745405B-8A1D-423F-9D17-95BAD658DB18}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "YoutubeSearch", "YoutubeSearch\YoutubeSearch.csproj", "{DFECE3E8-99D9-4652-B486-BEA1010329BA}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "libvideo", "libvideo\libvideo.csproj", "{17FC1E74-A2A2-4F9B-ABE5-1B36878945CB}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DeviceStreamModule", "Modules\DeviceStreamModule\DeviceStreamModule.csproj", "{0E8AD61C-1E62-4D68-A1A5-270E00CF41E3}"
@@ -83,14 +81,6 @@ Global
 		{6745405B-8A1D-423F-9D17-95BAD658DB18}.Release|Any CPU.Build.0 = Release|Any CPU
 		{6745405B-8A1D-423F-9D17-95BAD658DB18}.Release|x64.ActiveCfg = Release|x64
 		{6745405B-8A1D-423F-9D17-95BAD658DB18}.Release|x64.Build.0 = Release|x64
-		{DFECE3E8-99D9-4652-B486-BEA1010329BA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{DFECE3E8-99D9-4652-B486-BEA1010329BA}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{DFECE3E8-99D9-4652-B486-BEA1010329BA}.Debug|x64.ActiveCfg = Debug|Any CPU
-		{DFECE3E8-99D9-4652-B486-BEA1010329BA}.Debug|x64.Build.0 = Debug|Any CPU
-		{DFECE3E8-99D9-4652-B486-BEA1010329BA}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{DFECE3E8-99D9-4652-B486-BEA1010329BA}.Release|Any CPU.Build.0 = Release|Any CPU
-		{DFECE3E8-99D9-4652-B486-BEA1010329BA}.Release|x64.ActiveCfg = Release|Any CPU
-		{DFECE3E8-99D9-4652-B486-BEA1010329BA}.Release|x64.Build.0 = Release|Any CPU
 		{17FC1E74-A2A2-4F9B-ABE5-1B36878945CB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{17FC1E74-A2A2-4F9B-ABE5-1B36878945CB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{17FC1E74-A2A2-4F9B-ABE5-1B36878945CB}.Debug|x64.ActiveCfg = Debug|Any CPU
