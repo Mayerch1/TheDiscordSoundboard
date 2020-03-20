@@ -7,7 +7,9 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using Util.IO;
+
 using VideoLibrary;
+
 
 namespace StreamModule
 {
@@ -118,6 +120,7 @@ namespace StreamModule
         {
             //download video
             YouTube yt = YouTube.Default;
+            
             Video mpAudio;
 
             VideoClient videoClient = new VideoClient();
@@ -125,7 +128,7 @@ namespace StreamModule
             {
                 //get video file
                 var videos = await YouTube.Default.GetAllVideosAsync(url);
-
+             
                 //get audios, only aac
                 var audios = videos
                     .Where(v => v.AudioFormat != AudioFormat.Unknown && v.AudioFormat != AudioFormat.Vorbis).ToList();
@@ -135,8 +138,10 @@ namespace StreamModule
             }
             catch (Exception ex)
             {
+                SnackbarManager.SnackbarMessage("Could not load video, unknown reason", SnackbarManager.SnackbarAction.Log);
+
                 Util.IO.LogManager.LogException(ex, "StreamModule/YTManager",
-                    "Error in requesting Video/Audio information");
+                    "Error in requesting Video/Audio information, please report on GitHub");
                 return null;
             }
 

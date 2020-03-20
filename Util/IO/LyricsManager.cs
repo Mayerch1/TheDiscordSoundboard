@@ -15,6 +15,12 @@ namespace Util.IO
         private static string _title=null, _author=null;
 
 
+        /// <summary>
+        /// get lyrics object by passing certain fields of <see cref="SearchLyricResult"/> as argument
+        /// </summary>
+        /// <param name="lyricId">field of <see cref="SearchLyricResult"/> retreived by <see cref="queryResultList(string, string)"/></param>
+        /// <param name="lyricChecksum">checksum field of <see cref="SearchLyricResult"/> retriefed by <see cref="queryResultList(string, string)"/></param>
+        /// <returns></returns>
         public static GetLyricResult GetLyrics(int lyricId, string lyricChecksum)
         {
             var request = new com.chartlyrics.api.apiv1();
