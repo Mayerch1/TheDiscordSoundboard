@@ -1,6 +1,11 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.ComponentModel;
 using System.Xml.Serialization;
+
+using RestSharp;
+using TheDiscordSoundboard.Models;
+using System.Web.UI.WebControls;
 
 namespace DataManagement
 {
@@ -8,133 +13,167 @@ namespace DataManagement
     /// Represents on Button with all its properties, implements INotifyPropertyChanged
     /// </summary>
     [Serializable()]
-    public class ButtonData : INotifyPropertyChanged
+    public class ButtonData : Buttons, INotifyPropertyChanged
 
     {
-        #region constructors
+        // only pass base-class, as others are not represented in db
+        // only register once at same time (set null before adding handler)
+        public delegate long OnButtonUpdate(Buttons update);
+        [JsonIgnore]
+        public static OnButtonUpdate ButtonUpdated;
+        
+
 
         /// <summary>
-        /// default constructor
+        /// uses OnPropertyChanged as id is bound to 'Tag'-field of UI-Button
         /// </summary>
-        public ButtonData()
-        {
-        }
+        [JsonIgnore]
+        public new long Id { get => base.Id; set { base.Id = value; OnPropertyChanged("Id"); } }
+
 
         /// <summary>
-        /// constructor
+        /// do not update database, as only change on index is of interest
+        /// change of member of track is handled by TrackData class
         /// </summary>
-        /// <param name="_file">path to file</param>
-        public ButtonData(string _file)
-        {
-            File = _file;
+        [JsonIgnore]
+        public new TrackData Track { get => base.Track; set { base.Track = value; OnPropertyChanged("Track"); } }
+
+
+        [JsonIgnore]
+        public new string NickName {
+            get=>base.NickName;
+            set {  
+                if (value != base.NickName)
+                {
+                    base.NickName = value;
+                    OnPropertyChanged("NickName");
+                    if (ButtonUpdated != null)
+                    {
+                        // id can change on POST
+                        this.Id = ButtonUpdated(this);
+                    }
+                }
+            } 
         }
 
-        /// <summary>
-        /// constructor
-        /// </summary>
-        /// <param name="_name">name of file</param>
-        /// <param name="_file">path to file</param>
-        /// <param name="_author">author of file</param>
-        public ButtonData(string _name, string _file, string _author="")
+        [JsonIgnore]
+        public new bool IsEarrape
         {
-            Name = _name;
-            File = _file;
-            Author = _author;
+            get => base.IsEarrape;
+            set
+            {
+                if (value != base.IsEarrape)
+                {
+                    base.IsEarrape = value;
+                    OnPropertyChanged("IsEarrape");
+                    if (ButtonUpdated != null)
+                    {
+                        // id can change on POST
+                        this.Id = ButtonUpdated(this);
+                    }
+                }
+            }
         }
 
-        #endregion constructors
+        [JsonIgnore]
+        public new bool IsLoop
+        {
+            get => base.IsLoop;
+            set
+            {
+                if (value != base.IsLoop)
+                {
+                    base.IsLoop = value;
+                    OnPropertyChanged("IsLoop");
+                    if (ButtonUpdated != null)
+                    {
+                        // id can change on POST
+                        this.Id = ButtonUpdated(this);
+                    }
+                }
+            }
+        }
 
-        #region saved fields
-        private string name = null;
-        private string file = null;
-        private string author = null;
-        private bool isEarrape = false;
-        private bool isLoop = false;
-        private int iD;
-        private uint hotkey_vk = 0;
-        private uint hotkey_mod = 0;
+        [JsonIgnore]
+        public new long Position
+        {
+            get => base.Position;
+            set
+            {
+                if (value != base.Position)
+                {
+                    base.Position = value;
+                    OnPropertyChanged("Position");
+                    if (ButtonUpdated != null)
+                    {
+                        // id can change on POST
+                        this.Id = ButtonUpdated(this);
+                    }
+                }
+            }
+        }
 
-        #endregion saved fields
+        [JsonIgnore]
+        public new long? TrackId
+        {
+            get => base.TrackId;
+            set
+            {
+                if (value != base.TrackId)
+                {
+                    base.TrackId = value;
+                    OnPropertyChanged("TrackId");
+                    if (ButtonUpdated != null)
+                    {
+                        // id can change on POST
+                        this.Id = ButtonUpdated(this);
+                    }
+                }
+            }
+        }
 
-        #region propertys
+
 
         //no OnPropertyChanged,
         //as change of value is only possible when not loaded (in settings)
         /// <summary>
         /// Width of a single Button
         /// </summary>
-        [XmlIgnore]
+        [JsonIgnore]
         public static double Width { get; set; }
 
         /// <summary>
         /// Height of a single Button
         /// </summary>
-        [XmlIgnore]
+        [JsonIgnore]
         public static double Height { get; set; }
-           
-
-        /// <summary>
-        /// Name property
-        /// </summary>
-        public string Name { get { return name; } set { name = value; OnPropertyChanged("Name"); } }
-
-
-        /// <summary>
-        /// Author of file
-        /// </summary>
-        public string Author
-        {
-            get => author;
-            set
-            {
-                author = value;
-                OnPropertyChanged("Author");
-            }
-        }
-
-        /// <summary>
-        /// File property
-        /// </summary>
-        /// <value>
-        /// path towards file in filesystem
-        /// </value>
-        public string File { get { return file; } set { file = value; OnPropertyChanged("File"); } }
-
-        /// <summary>
-        /// IsEarrape property
-        /// </summary>
-        /// <value>
-        /// determins if boost should be applied
-        /// </value>
-        public bool IsEarrape { get { return isEarrape; } set { isEarrape = value; OnPropertyChanged("IsEarrape"); } }
-
-        /// <summary>
-        /// IsLoop property
-        /// </summary>
-        public bool IsLoop { get { return isLoop; } set { isLoop = value; OnPropertyChanged("IsLoop"); } }
 
         /// <summary>
         /// virtual keycode of assigned hotkey
         /// </summary>
-        public uint Hotkey_VK { get { return hotkey_vk; } set { hotkey_vk = value; OnPropertyChanged("Hotkey_VK"); } }
+        public uint Hotkey_VK { get { return 0; } set {} }
 
         /// <summary>
         /// modifier code of assigned hotkey
         /// </summary>
-        public uint Hotkey_MOD { get { return hotkey_mod; } set { hotkey_mod = value; OnPropertyChanged("Hotkey_MOD"); } }
+        public uint Hotkey_MOD { get { return 0; } set { } }
 
-        /// <summary>
-        /// ID property
-        /// </summary>
-        /// <value>
-        /// incremental button id, also stored in tag of btn to assign ui-button to data-button
-        /// </value>
-        public int ID { get { return iD; } set { iD = value; OnPropertyChanged("ID"); } }
-
-        #endregion propertys
-
+       
         #region event
 
+
+
+
+        /// <summary>
+        /// Invoke OnProperyChanged from the outside
+        /// usefull when name was changed w/o triggering PropertyChanged
+        /// </summary>
+        public void NotifyNameChanged()
+        {
+            OnPropertyChanged("NickName");
+        }
+
+        
         /// <summary>
         /// PropertyChanged Event handler
         /// </summary>
@@ -151,7 +190,7 @@ namespace DataManagement
                 PropertyChanged(this, new PropertyChangedEventArgs(info));
             }
         }
-
+        
         #endregion event
     }
 }

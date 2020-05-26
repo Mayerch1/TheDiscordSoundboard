@@ -30,7 +30,7 @@ namespace DiscordBot.UI
             //get btnIndex
             for (int i = 0; i < Handle.Data.Persistent.BtnList.Count; i++)
             {
-                if (Handle.Data.Persistent.BtnList[i].ID == BtnId)
+                if (Handle.Data.Persistent.BtnList[i].Id == BtnId)
                 {
                     btnIndex = i;
                     break;
@@ -72,16 +72,16 @@ namespace DiscordBot.UI
 
             //------------set boxes and textboxes --------------------------
 
-            box_ButtonInfo.Text = Btn.Name;
+            box_ButtonInfo.Text = Btn.NickName;
 
             //set button name, if not empty
             box_ButtonInfo.Text = "";
-            if (!String.IsNullOrWhiteSpace(Btn.Name))
+            if (!String.IsNullOrWhiteSpace(Btn.NickName))
             {
-                box_ButtonInfo.Text += "-" + Btn.Name + "- ";
+                box_ButtonInfo.Text += "-" + Btn.NickName + "- ";
             }
             //set button number, not! the Id
-            box_ButtonInfo.Text += "(Nr. " + (Btn.ID + 1) + ")";
+            box_ButtonInfo.Text += "(Nr. " + (Btn.Id + 1) + ")";
 
             box_Hotkey.Text = KeyInterop.KeyFromVirtualKey((int)vk_code).ToString();           
 

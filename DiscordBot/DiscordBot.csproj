@@ -120,6 +120,9 @@
     <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.12.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
+    <Reference Include="RestSharp, Version=106.11.4.0, Culture=neutral, PublicKeyToken=598062e77f915f75, processorArchitecture=MSIL">
+      <HintPath>..\packages\RestSharp.106.11.4\lib\net452\RestSharp.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.AppContext, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\packages\System.AppContext.4.3.0\lib\net46\System.AppContext.dll</HintPath>
@@ -415,6 +418,10 @@
     <ProjectReference Include="..\Modules\StreamModule\StreamModule.csproj">
       <Project>{3d3b56f9-e185-4f36-810d-42924383bc00}</Project>
       <Name>StreamModule</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TheDiscordSoundboard.Models\TheDiscordSoundboard.Models.csproj">
+      <Project>{78a6a3e2-83fb-4578-9b15-4109beaac197}</Project>
+      <Name>TheDiscordSoundboard.Models</Name>
     </ProjectReference>
     <ProjectReference Include="..\Util\Util.csproj">
       <Project>{f2e53bb4-2144-4fcd-9b17-fb6408f6e061}</Project>

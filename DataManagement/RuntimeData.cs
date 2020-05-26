@@ -153,8 +153,8 @@ namespace DataManagement
             foreach (var element in Persistent.BtnList)
             {
                 //a button with file and name null is considered empty
-                if (!String.IsNullOrEmpty(element.Name) && !String.IsNullOrEmpty(element.File))
-                    Persistent.HighestButtonToSave = element.ID;
+                if (!String.IsNullOrEmpty(element.NickName) && !String.IsNullOrEmpty(element.Track.LocalFile))
+                    Persistent.HighestButtonToSave = (int)element.Id;
             }
             OnPropertyChanged("BtnList");
         }
@@ -302,7 +302,7 @@ namespace DataManagement
         {
             ButtonData btnD = new ButtonData();
 
-            btnD.ID = Persistent.BtnList.Count;
+            btnD.Id = (long)Persistent.BtnList.Count;
 
             return btnD;
         }

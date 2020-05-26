@@ -20,6 +20,13 @@ using PlaylistModule.Playlist;
 using Util.com.chartlyrics.api;
 using Util.IO;
 
+using DataManagement;
+using TheDiscordSoundboard.Models;
+using TheDiscordSoundboard.Models.Bot;
+using RestSharp;
+using BotModule;
+using System.Web.ModelBinding;
+
 namespace DiscordBot
 {
     /// <inheritdoc cref="T:System.Windows.Window"/>
@@ -776,8 +783,10 @@ namespace DiscordBot
             //find button and trigger replay
             foreach (var hotkey in Handle.Data.Persistent.HotkeyList)
             {
-                if (keyCode == hotkey.vk_code && modCode == hotkey.mod_code && hotkey.btn_id >= 0)
+                //TODO: resolve button from hotkey id
+                /*if (keyCode == hotkey.vk_code && modCode == hotkey.mod_code && hotkey.btn_id >= 0)
                     btn_InstantButton_Clicked(hotkey.btn_id, true);
+                 */
             }
         }
 
@@ -849,11 +858,38 @@ namespace DiscordBot
         }
 
 
-        private void btn_InstantButton_Clicked(int btnListIndex, bool isInstant)
+        private void btn_InstantButton_Clicked(BotTrackData track)
         {
-            //especially isPlaylist argument
-            triggerMasterReplay(new DataManagement.BotData(Handle.Data.Persistent.BtnList[btnListIndex]), isInstant,
-                false);
+            //TODO: rest interfacing
+            var rest = RestStorage.GetClient();
+            IRestResponse response = null;
+
+
+            // if no instant, append the track to the queue
+            if (!track.Metadata.ForceReplay)
+            {
+                var req = RestStorage.GetRequest("Bot/queue/item", RestSharp.Method.POST);
+                req.AddJsonBody(track);
+                response = rest.Post(req);
+                
+            }
+            // get queue from database and insert front
+            else
+            {
+                var req = RestStorage.GetRequest("Bot/queue", Method.GET);
+                response = rest.Get(req);
+                //TOOD: check for return error
+
+                var data = RestStorage.JsonToObj<List<BotTrackData>>(response.Content);
+                data.Insert(0, track);
+
+                req = RestStorage.GetRequest("Bot/queue", Method.PUT);
+                req.AddQueryParameter("forceQueue", "true"); // this skips the current track
+                req.AddJsonBody(data);
+                response = rest.Put(req);
+            }
+
+            // TODO: evaluate response
         }
 
         private void List_Item_Play(uint index, bool isPriority = true)

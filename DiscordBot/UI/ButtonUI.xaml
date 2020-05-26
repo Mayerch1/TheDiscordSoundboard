@@ -36,13 +36,13 @@
 
                                 <Grid Name="ButtonGrd">
 
-                                    <Button x:Name="btn_Instant" Height="{Binding Height}" Width="{Binding Width}" Tag="{Binding ID}" Foreground="#939393" Content="{Binding Name}" Click="btn_Instant_Click" BorderBrush="{x:Null}" BorderThickness="0" Background="{x:Null}">
+                                    <Button x:Name="btn_Instant" Height="{Binding Height}" Width="{Binding Width}" Tag="{Binding Id}" Foreground="#939393" Content="{Binding NickName}" Click="btn_Instant_Click" BorderBrush="{x:Null}" BorderThickness="0" Background="{x:Null}">
 
 
                                         <Button.ContextMenu>
                                             <ContextMenu>
                                                 <MenuItem Header="Add to BotQueue" 
-                                                          Tag="{Binding ID}"
+                                                          Tag="{Binding Id}"
                                                           Click="btn_Queue_Click"/>
                                             </ContextMenu>
                                         </Button.ContextMenu>
@@ -98,17 +98,17 @@
                                         <StackPanel Orientation="Vertical">
 
                                             <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
-                                                    <Button Margin="0,0,10,0" Click="btn_FileChooser_Click" Tag="{Binding ID}" VerticalAlignment="Top" BorderBrush="{DynamicResource SecondaryAccentBrush}" Background="{DynamicResource SecondaryAccentBrush}" Foreground="{DynamicResource SecondaryAccentForegroundBrush}">
+                                                    <Button Margin="0,0,10,0" Click="btn_FileChooser_Click" Tag="{Binding Id}" VerticalAlignment="Top" BorderBrush="{DynamicResource SecondaryAccentBrush}" Background="{DynamicResource SecondaryAccentBrush}" Foreground="{DynamicResource SecondaryAccentForegroundBrush}">
                                                     <materialDesign:PackIcon Kind="File" Width="25" Height="25" />
                                                 </Button>
-                                                    <Button Margin="5,0,0,0" Click="btn_HotkeyEditor_Click" Tag="{Binding ID}" VerticalAlignment="Top" BorderBrush="{DynamicResource SecondaryAccentBrush}"  Background="{DynamicResource SecondaryAccentBrush}" Foreground="{DynamicResource SecondaryAccentForegroundBrush}">
+                                                    <Button Margin="5,0,0,0" Click="btn_HotkeyEditor_Click" Tag="{Binding Id}" VerticalAlignment="Top" BorderBrush="{DynamicResource SecondaryAccentBrush}"  Background="{DynamicResource SecondaryAccentBrush}" Foreground="{DynamicResource SecondaryAccentForegroundBrush}">
                                                     <materialDesign:PackIcon Kind="Keyboard" Width="25" Height="25" />
                                                 </Button>
                                             </StackPanel>
 
-                                            <TextBox x:Name="NameBox" materialDesign:HintAssist.Hint="Name" materialDesign:HintAssist.IsFloating="True" Margin="0,10,10,0" Text="{Binding Name, Mode=TwoWay}" VerticalAlignment="Center" />
+                                            <TextBox x:Name="NameBox" materialDesign:HintAssist.Hint="Name" materialDesign:HintAssist.IsFloating="True" Margin="0,10,10,0" Text="{Binding NickName, Mode=TwoWay}" VerticalAlignment="Center" />
 
-                                            <TextBox x:Name="FileBox" materialDesign:HintAssist.Hint="File" materialDesign:HintAssist.IsFloating="True" Margin="0,10,10,0" Text="{Binding File, Mode=TwoWay}" VerticalAlignment="Bottom" />
+                                            <TextBox x:Name="FileBox" materialDesign:HintAssist.Hint="File" materialDesign:HintAssist.IsFloating="True" Margin="0,10,10,0" Text="{Binding Track.LocalFile, Mode=TwoWay}" VerticalAlignment="Bottom" />
                                         </StackPanel>
                                     </Grid>
 
