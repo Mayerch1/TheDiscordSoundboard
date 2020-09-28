@@ -25,7 +25,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TheDiscordSoundboard", "The
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TheDiscordSoundboard.Models", "TheDiscordSoundboard.Models\TheDiscordSoundboard.Models.csproj", "{78A6A3E2-83FB-4578-9B15-4109BEAAC197}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TheDiscordSoundboard.Test", "TheDiscordSoundboard.Test\TheDiscordSoundboard.Test.csproj", "{C7BF9C8E-2A58-4B28-BFA5-658D0D9EFA1C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TheDiscordSoundboard.Test", "TheDiscordSoundboard.Test\TheDiscordSoundboard.Test.csproj", "{C7BF9C8E-2A58-4B28-BFA5-658D0D9EFA1C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TheDiscordSoundboard.Bot", "TheDiscordSoundboard.Bot\TheDiscordSoundboard.Bot.csproj", "{CB5EC373-8321-463B-9751-4A9334E3246A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -123,6 +125,14 @@ Global
 		{C7BF9C8E-2A58-4B28-BFA5-658D0D9EFA1C}.Release|Any CPU.Build.0 = Release|Any CPU
 		{C7BF9C8E-2A58-4B28-BFA5-658D0D9EFA1C}.Release|x64.ActiveCfg = Release|Any CPU
 		{C7BF9C8E-2A58-4B28-BFA5-658D0D9EFA1C}.Release|x64.Build.0 = Release|Any CPU
+		{CB5EC373-8321-463B-9751-4A9334E3246A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CB5EC373-8321-463B-9751-4A9334E3246A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CB5EC373-8321-463B-9751-4A9334E3246A}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{CB5EC373-8321-463B-9751-4A9334E3246A}.Debug|x64.Build.0 = Debug|Any CPU
+		{CB5EC373-8321-463B-9751-4A9334E3246A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CB5EC373-8321-463B-9751-4A9334E3246A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CB5EC373-8321-463B-9751-4A9334E3246A}.Release|x64.ActiveCfg = Release|Any CPU
+		{CB5EC373-8321-463B-9751-4A9334E3246A}.Release|x64.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -33,6 +33,15 @@ namespace TheDiscordSoundboard.Controllers
         }
 
 
+        [Route("connect")]
+        [HttpGet]
+        public async Task ConnectBot()
+        {
+            await _service.ConnectBot(); 
+            
+        }
+
+
         [Route("queue")]
         [HttpGet]
         public ActionResult<List<BotTrackData>> GetBotQueue()
@@ -43,18 +52,18 @@ namespace TheDiscordSoundboard.Controllers
 
         [Route("queue")]
         [HttpPut]
-        public IActionResult PutBotQueue(List<BotTrackData> queue)
+        public async Task<IActionResult> PutBotQueue(List<BotTrackData> queue)
         {
-            _service.UpdateQueue(queue);
+            await _service.UpdateQueue(queue);
             return NoContent();
         }
 
 
         [Route("queue/item")]
         [HttpPost]
-        public BotTrackData AppendBotQueue(BotTrackData append)
+        public async Task<BotTrackData> AppendBotQueue(BotTrackData append)
         {
-            _service.AppendToQueue(append);
+            await _service.AppendToQueue(append);
             return append;
         }
 

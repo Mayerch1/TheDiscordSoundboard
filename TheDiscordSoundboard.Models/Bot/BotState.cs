@@ -10,9 +10,6 @@ namespace TheDiscordSoundboard.Models.Bot
     /// </summary>
     public class BotState
     {
-
-        
-
         /// <summary>
         /// currently on play (or on pause)
         /// </summary>

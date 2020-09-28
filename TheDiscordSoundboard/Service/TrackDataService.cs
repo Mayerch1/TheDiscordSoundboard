@@ -23,13 +23,14 @@ namespace TheDiscordSoundboard.Service
 
         public async Task<ActionResult<IEnumerable<TrackData>>> AllTracks()
         {
-            return await _context.TrackDataItems.ToListAsync();
+            // AsQueryable needed where due to clash with Linq.Async
+            return await _context.TrackDataItems.AsQueryable().ToListAsync();
         }
 
 
         public async Task<ActionResult<IEnumerable<TrackData>>> TrackByLocalFile(string localFile)
         {
-            return await (from t in _context.TrackDataItems where t.LocalFile == localFile select t).ToListAsync();
+            return await _context.TrackDataItems.AsQueryable().Where(t => t.LocalFile == localFile).ToListAsync();
         }
 
 

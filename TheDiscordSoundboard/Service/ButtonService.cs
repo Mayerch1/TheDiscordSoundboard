@@ -19,7 +19,8 @@ namespace TheDiscordSoundboard.Service
 
         public async Task<ActionResult<IEnumerable<Buttons>>> AllButtons()
         {
-            List<Buttons> btnList =  await _context.ButtonItems.ToListAsync();
+            // AsQueryable needed where due to clash with Linq.Async
+            List<Buttons> btnList =  await _context.ButtonItems.AsQueryable().ToListAsync();
 
             for (int i = 0; i < btnList.Count; i++)
             {

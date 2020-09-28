@@ -13,7 +13,7 @@ namespace TheDiscordSoundboard.Models
 
         public DbSet<TrackData> TrackDataItems { get; set; }
 
-        public DbSet<Config> ConfigItem { get; set; }
+        public DbSet<config.Config> ConfigItem { get; set; }
 
     }
 

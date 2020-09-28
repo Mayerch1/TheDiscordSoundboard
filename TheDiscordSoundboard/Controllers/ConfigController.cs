@@ -7,8 +7,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using TheDiscordSoundboard.Models;
-using TheDiscordSoundboard.Models.Bot;
+using TheDiscordSoundboard.Models.config;
 using TheDiscordSoundboard.Service;
 
 namespace TheDiscordSoundboard.Controllers
@@ -28,21 +27,50 @@ namespace TheDiscordSoundboard.Controllers
 
 
         [HttpGet]
-        public async Task<ActionResult<Models.Config>> GetConfig()
+        public async Task<ActionResult<Config>> GetConfig()
         {
             return await _service.GetConfig();
         }
 
 
-        [HttpPut]
-        public async Task<IActionResult> PutConfig(Config cfg)
+        [Route("Bot")]
+        [HttpGet]
+        public async Task<ActionResult<BotConfigDto>> GetBotConfig()
         {
-            // only one config object can exist
-            // therefore any adding a new one is not possible
+            return new BotConfigDto((await _service.GetConfig()).Value);
+        }
 
-            await _service.PutConfig(cfg);
+        [Route("Bot")]
+        [HttpPut]
+        public async Task<IActionResult> PutBotConfig(BotConfigDto cfg)
+        {
+            if(await _service.PutBotConfig(cfg))
+            {
+                return NoContent();
+            }
+            else
+            {
+                return Problem("Invalid Token");
+            }
+        }
+
+
+        
+        [Route("Buttons")]
+        [HttpGet]
+        public async Task<ActionResult<ButtonConfigDto>> GetButtonConfig()
+        {
+            return new ButtonConfigDto((await _service.GetConfig()).Value);
+        }
+        [Route("Buttons")]
+        [HttpPut]
+        public async Task<IActionResult> PutButtonConfig(ButtonConfigDto cfg)
+        {
+            await _service.PutButtonConfig(cfg);
             return NoContent();
         }
+
+
 
     }
 }

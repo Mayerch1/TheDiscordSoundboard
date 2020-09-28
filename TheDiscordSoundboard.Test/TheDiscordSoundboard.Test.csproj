@@ -19,4 +19,8 @@
     <ProjectReference Include="..\TheDiscordSoundboard\TheDiscordSoundboard.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="TheDiscordSoundboard.Bot\" />
+  </ItemGroup>
+
 </Project>

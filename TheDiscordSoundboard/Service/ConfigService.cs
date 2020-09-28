@@ -6,19 +6,22 @@ using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using TheDiscordSoundboard.Models;
+using TheDiscordSoundboard.Models.config;
 
 namespace TheDiscordSoundboard.Service
 {
     public class ConfigService: IConfigService
     {
         private readonly SqliteContext _context;
+        private readonly BotContext _botContext = new BotContext();
+
         public ConfigService(SqliteContext context)
         {
             _context = context;
         }
 
 
-        public async Task<ActionResult<Models.Config>> GetConfig()
+        public async Task<ActionResult<Models.config.Config>> GetConfig()
         {
             if (!ConfigExists(1))
             {
@@ -30,7 +33,9 @@ namespace TheDiscordSoundboard.Service
 
         }
 
-        public async Task PutConfig(Config cfg)
+     
+
+        public async Task PutConfig(Models.config.Config cfg)
         {
             _context.Entry(cfg).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
 
@@ -53,12 +58,32 @@ namespace TheDiscordSoundboard.Service
         }
 
 
+        public async Task<bool> PutBotConfig(BotConfigDto cfg)
+        {
+            var FullCfg = (await GetConfig()).Value;
 
-        private async Task CreateConfig(Config cfg = null)
+            FullCfg.Update(cfg);
+            await PutConfig(FullCfg);
+
+            // make the bot aware of the config changes
+            return await _botContext.Bot.UpdateStatics(cfg);
+        }
+
+        public async Task PutButtonConfig(ButtonConfigDto cfg)
+        {
+            var FullCfg = (await GetConfig()).Value;
+
+            FullCfg.Update(cfg);
+            await PutConfig(FullCfg);
+        }
+
+
+
+        private async Task CreateConfig(Models.config.Config cfg = null)
         {
             if(cfg == null)
             {
-                cfg = new Config();
+                cfg = new Models.config.Config();
             }
             _context.ConfigItem.Add(cfg);
             await _context.SaveChangesAsync();
@@ -74,8 +99,10 @@ namespace TheDiscordSoundboard.Service
 
     public interface IConfigService
     {
-        Task<ActionResult<Models.Config>> GetConfig();
+        Task<ActionResult<Models.config.Config>> GetConfig();
 
-        Task PutConfig(Config cfg);
+        Task PutConfig(Models.config.Config cfg);
+        Task<bool> PutBotConfig(BotConfigDto cfg);
+        Task PutButtonConfig(ButtonConfigDto cfg);
     }
 }
