@@ -8,18 +8,18 @@ namespace TheDiscordSoundboard.Models
     public class Buttons
     {
 
-        public long Id { get; set; }
+        public long id { get; set; }
 
-        public long Position { get; set; }
+        public long position { get; set; }
 
-        public string NickName { get; set; }
+        public string nick_name { get; set; }
 
-        public bool IsEarrape { get; set; }
+        public bool is_earrape { get; set; }
 
-        public bool IsLoop { get; set; }
+        public bool is_loop { get; set; }
 
         // foreign key/entry
-        public long? TrackId { get; set; }
-        public virtual TrackData Track { get; set; }
+        public long? track_id { get; set; }
+        public virtual TrackData track { get; set; }
     }
 }

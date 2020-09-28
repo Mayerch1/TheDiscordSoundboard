@@ -6,21 +6,21 @@ namespace TheDiscordSoundboard.Models
 {
     public class TrackData
     {
-        public long Id { get; set; }
-        public string Name { get; set; }
+        public long id { get; set; }
+        public string name { get; set; }
 
         // if both are set, LocalFile is always preffered
-        public string LocalFile { get; set; }
-        public string Uri { get; set; }
+        public string local_file { get; set; }
+        public string uri { get; set; }
 
 
-        public string ImageUri { get; set; }
-        public string Description { get; set; }
+        public string image_uri { get; set; }
+        public string description { get; set; }
 
-        public string Author { get; set; }
-        public string Album { get; set; }
-        public string Genre { get; set; }
+        public string author { get; set; }
+        public string album { get; set; }
+        public string genre { get; set; }
 
-        public int Duration { get; set; }
+        public int duration { get; set; }
     }
 }

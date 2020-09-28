@@ -33,10 +33,10 @@ def get_btn(id):
     id = int(id)
     btn =  ButtonDao.get_instance().get_button(id)
 
-    if btn is not None:
-        return jsonify(btn.to_json())
-    else:
+    if btn is None:
         abort(404)
+
+    return jsonify(btn.to_json())
 
 
 
@@ -81,7 +81,7 @@ async def del_btn(id):
 
 
 @button_page.route('/api/v1/buttons/<id>', methods=['PUT'])
-async def update_btn():
+async def update_btn(id):
 
     body = await request.get_json()
 

@@ -24,10 +24,12 @@ class TrackDataDao:
             list[TrackData]: list of all stored tracks, can be empty
         """
 
-        cursor = SqlConnector.get_cursor()
+        conn, cursor = SqlConnector.get_cursor()
 
         cursor.execute('''SELECT * FROM trackdatas''')
         result = cursor.fetchall()
+
+        SqlConnector.close(conn)
 
         # convert all into python-typed objects
         trk_list = []
@@ -47,12 +49,12 @@ class TrackDataDao:
             bool: True if entry exists
         """
 
-        cursor = SqlConnector.get_cursor()
+        conn, cursor = SqlConnector.get_cursor()
 
         cursor.execute('''SELECT exists(SELECT id from trackdatas WHERE id=?)''', (id,))
         track_exists = cursor.fetchone()
 
-        SqlConnector.close()
+        SqlConnector.close(conn)
 
         # convert int to bool
         return track_exists[0] == 1
@@ -70,12 +72,12 @@ class TrackDataDao:
         Returns:
             TrackData: the requested track, None if id not exists
         """
-        cursor = SqlConnector.get_cursor()
+        conn, cursor = SqlConnector.get_cursor()
 
         cursor.execute('''SELECT * FROM trackdatas WHERE id=?''', (id,))
         track = cursor.fetchone()
 
-        SqlConnector.close()
+        SqlConnector.close(conn)
 
         if track is not None:
             trk = TrackData()
@@ -101,7 +103,7 @@ class TrackDataDao:
             [TrackData]: track as saved into db
         """
 
-        cursor = SqlConnector.get_cursor()
+        conn, cursor = SqlConnector.get_cursor()
 
         sql = '''INSERT INTO trackdatas (name, local_file, uri, image_uri, description, author, album, genre, duration) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)'''
         track_args = (track.name, track.local_file, track.uri, track.image_uri, track.description, track.author, track.album, track.genre, track.duration)
@@ -113,7 +115,7 @@ class TrackDataDao:
         track.id = track_id[0]
 
 
-        SqlConnector.commit()
+        SqlConnector.commit(conn)
 
 
         return track
@@ -128,9 +130,9 @@ class TrackDataDao:
             id (int): id of the track
         """
 
-        cursor = SqlConnector.get_cursor()
+        conn, cursor = SqlConnector.get_cursor()
         cursor.execute('''DELETE FROM trackdatas WHERE id=?''', (id,))
-        SqlConnector.commit() 
+        SqlConnector.commit(conn) 
 
 
     def update_track(self, trk: TrackData):
@@ -141,10 +143,10 @@ class TrackDataDao:
             trk (TrackData): the new track (id must be filled in and existing, otherwise NOP)
         """
 
-        cursor = SqlConnector.get_cursor()
+        conn, cursor = SqlConnector.get_cursor()
 
         sql = '''UPDATE trackdatas SET name=?, local_file=?, uri=?, image_uri=?, description=?, author=?, album=?, genre=?, duration=? WHERE id=?'''
         update_args = (trk.name, trk.local_file, trk.uri, trk.image_uri, trk.description, trk.author, trk.album, trk.genre, trk.duration, trk.id)
         cursor.execute(sql, update_args)
 
-        SqlConnector.commit()
+        SqlConnector.commit(conn)

@@ -26,10 +26,12 @@ class ButtonDao:
             list[Button]: list of all stored buttons, can be empty
         """
 
-        cursor = SqlConnector.get_cursor()
+        conn, cursor = SqlConnector.get_cursor()
 
         cursor.execute('''SELECT * FROM buttons''')
         result = cursor.fetchall()
+
+        SqlConnector.close(conn)
 
         # convert all into python-typed objects
         btn_list = []
@@ -48,12 +50,12 @@ class ButtonDao:
             bool: True if entry exists
         """
 
-        cursor = SqlConnector.get_cursor()
+        conn, cursor = SqlConnector.get_cursor()
 
         cursor.execute('''SELECT exists(SELECT id from buttons WHERE id=?)''', (id,))
         btn_exists = cursor.fetchone()
 
-        SqlConnector.close()
+        SqlConnector.close(conn)
 
         # convert int to bool
         return btn_exists[0] == 1
@@ -71,12 +73,12 @@ class ButtonDao:
         Returns:
             Button: the requested button, None if id not exists
         """
-        cursor = SqlConnector.get_cursor()
+        conn, cursor = SqlConnector.get_cursor()
 
         cursor.execute('''SELECT * FROM buttons WHERE id=?''', (id,))
         button = cursor.fetchone()
 
-        SqlConnector.close()
+        SqlConnector.close(conn)
 
         if button is not None:
             btn = Button()
@@ -132,7 +134,7 @@ class ButtonDao:
             btn.track = TrackDataDao.get_instance().get_track(btn.track_id)
 
 
-        cursor = SqlConnector.get_cursor()
+        conn, cursor = SqlConnector.get_cursor()
 
         sql = ''' INSERT INTO buttons (position, nick_name, is_earrape, is_loop, track_id) VALUES (?, ?, ?, ?, ?) '''
         btn_args = (btn.position, btn.nick_name, btn.is_earrape, btn.is_loop, btn.track_id)
@@ -143,7 +145,7 @@ class ButtonDao:
 
         btn.id = btn_id[0]
 
-        SqlConnector.commit()
+        SqlConnector.commit(conn)
 
         return btn
 
@@ -156,9 +158,9 @@ class ButtonDao:
             id (int): id of the button
         """
 
-        cursor = SqlConnector.get_cursor()
+        conn, cursor = SqlConnector.get_cursor()
         cursor.execute('''DELETE FROM buttons WHERE id=?''', (id,))
-        SqlConnector.commit()
+        SqlConnector.commit(conn)
 
 
 
@@ -171,13 +173,13 @@ class ButtonDao:
             btn (Button): the new button (id must be filled in and existing, otherwise NOP)
         """
 
-        cursor = SqlConnector.get_cursor()
+        conn, cursor = SqlConnector.get_cursor()
 
         sql = '''UPDATE buttons SET position=?, nick_name=?, is_earrape=?, is_loop=?, track_id=? WHERE id=?'''
         update_args = (btn.position, btn.nick_name, btn.is_earrape, btn.is_loop, btn.track_id, btn.id)
         cursor.execute(sql, update_args)
 
-        SqlConnector.commit()
+        SqlConnector.commit(conn)
 
 
         # next check if the contained trackData was modified

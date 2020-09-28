@@ -33,37 +33,36 @@ class SqlConnector:
         curs.executescript(file_content)
 
         conn.commit()
-
         conn.close()
+
 
     @staticmethod
     def get_cursor():
-        if not SqlConnector.cursor:
-            SqlConnector._open_connection()
 
-        if not SqlConnector.cursor:
+        conn = SqlConnector._open_connection()
+        cursor = conn.cursor()
+
+        if not cursor:
             raise Exception('dB error')
 
-        return SqlConnector.cursor
+        return conn, cursor
 
 
     @staticmethod
-    def commit():
-        if SqlConnector.connection:
+    def commit(connection):
 
-            SqlConnector.connection.commit()
-            SqlConnector.close()
+        if connection:
+            connection.commit()
+            SqlConnector.close(connection)
 
 
 
     @staticmethod
-    def close():
-        if SqlConnector.connection:
+    def close(connection):
 
-            SqlConnector.connection.close()
+        if connection:
+            connection.close()
 
-            SqlConnector.connection = None
-            SqlConnector.cursor = None
 
 
 
@@ -71,11 +70,9 @@ class SqlConnector:
     def _open_connection(db_file = 'test.db'):
         
         try:
-            SqlConnector.connection = sqlite3.connect(db_file)
+            connection = sqlite3.connect(db_file)
         except Error as e:
             print(e)
-            SqlConnector.connection = None
-            return False
-        else:
-            SqlConnector.cursor = SqlConnector.connection.cursor()
-            return True
+            connection = None
+
+        return connection

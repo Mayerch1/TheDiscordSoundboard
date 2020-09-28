@@ -24,13 +24,13 @@
         public BotData(ButtonData btn)
         {
             name = btn.NickName;
-            filePath = btn.Track.LocalFile;
+            filePath = btn.Track.local_file;
             isEarrape = btn.IsEarrape;
             isLoop = btn.IsLoop;
             id = (int)btn.Id;
             uri = "";
             deviceId = "";
-            author = btn.Track.Author;
+            author = btn.Track.author;
         }
 
         public string name = "";

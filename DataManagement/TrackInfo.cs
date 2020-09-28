@@ -19,17 +19,17 @@ namespace DataManagement
         [JsonIgnore]
         public new string Name
         {
-            get => base.Name;
+            get => base.name;
             set
             {
-                if (value != base.Name)
+                if (value != base.name)
                 {
-                    base.Name = value;
+                    base.name = value;
                     OnPropertyChanged("Name");
                     if (TrackDataUpdated != null)
                     {
                         // id can change on POST
-                        this.Id = TrackDataUpdated(this);
+                        this.id = TrackDataUpdated(this);
                     }
                 }
             }
@@ -38,17 +38,17 @@ namespace DataManagement
         [JsonIgnore]
         public new string LocalFile
         {
-            get => base.LocalFile;
+            get => base.local_file;
             set
             {
-                if (value != base.LocalFile)
+                if (value != base.local_file)
                 {
-                    base.LocalFile = value;
+                    base.local_file = value;
                     OnPropertyChanged("LocalFile");
                     if (TrackDataUpdated != null)
                     {
                         // id can change on POST
-                        this.Id = TrackDataUpdated(this);
+                        this.id = TrackDataUpdated(this);
                     }
                 }
             }
@@ -57,17 +57,17 @@ namespace DataManagement
         [JsonIgnore]
         public new string Uri
         {
-            get => base.Uri;
+            get => base.uri;
             set
             {
-                if (value != base.Uri)
+                if (value != base.uri)
                 {
-                    base.Uri = value;
+                    base.uri = value;
                     OnPropertyChanged("Uri");
                     if (TrackDataUpdated != null)
                     {
                         // id can change on POST
-                        this.Id = TrackDataUpdated(this);
+                        this.id = TrackDataUpdated(this);
                     }
                 }
             }
@@ -76,17 +76,17 @@ namespace DataManagement
         [JsonIgnore]
         public new string ImageUri
         {
-            get => base.ImageUri;
+            get => base.image_uri;
             set
             {
-                if (value != base.ImageUri)
+                if (value != base.image_uri)
                 {
-                    base.ImageUri = value;
+                    base.image_uri = value;
                     OnPropertyChanged("ImageUri");
                     if (TrackDataUpdated != null)
                     {
                         // id can change on POST
-                        this.Id = TrackDataUpdated(this);
+                        this.id = TrackDataUpdated(this);
                     }
                 }
             }
@@ -95,17 +95,17 @@ namespace DataManagement
         [JsonIgnore]
         public new string Description
         {
-            get => base.Description;
+            get => base.description;
             set
             {
-                if (value != base.Description)
+                if (value != base.description)
                 {
-                    base.Description = value;
+                    base.description = value;
                     OnPropertyChanged("Description");
                     if (TrackDataUpdated != null)
                     {
                         // id can change on POST
-                        this.Id = TrackDataUpdated(this);
+                        this.id = TrackDataUpdated(this);
                     }
                 }
             }
@@ -114,17 +114,17 @@ namespace DataManagement
         [JsonIgnore]
         public new string Author
         {
-            get => base.Author;
+            get => base.author;
             set
             {
-                if (value != base.Author)
+                if (value != base.author)
                 {
-                    base.Author = value;
+                    base.author = value;
                     OnPropertyChanged("Author");
                     if (TrackDataUpdated != null)
                     {
                         // id can change on POST
-                        this.Id = TrackDataUpdated(this);
+                        this.id = TrackDataUpdated(this);
                     }
                 }
             }
@@ -133,17 +133,17 @@ namespace DataManagement
         [JsonIgnore]
         public new string Album
         {
-            get => base.Album;
+            get => base.album;
             set
             {
-                if (value != base.Album)
+                if (value != base.album)
                 {
-                    base.Album = value;
+                    base.album = value;
                     OnPropertyChanged("Album");
                     if (TrackDataUpdated != null)
                     {
                         // id can change on POST
-                        this.Id = TrackDataUpdated(this);
+                        this.id = TrackDataUpdated(this);
                     }
                 }
             }
@@ -152,17 +152,17 @@ namespace DataManagement
         [JsonIgnore]
         public new string Genre
         {
-            get => base.Genre;
+            get => base.genre;
             set
             {
-                if (value != base.Genre)
+                if (value != base.genre)
                 {
-                    base.Genre = value;
+                    base.genre = value;
                     OnPropertyChanged("Genre");
                     if (TrackDataUpdated != null)
                     {
                         // id can change on POST
-                        this.Id = TrackDataUpdated(this);
+                        this.id = TrackDataUpdated(this);
                     }
                 }
             }
@@ -171,17 +171,17 @@ namespace DataManagement
         [JsonIgnore]
         public new int Duration
         {
-            get => base.Duration;
+            get => base.duration;
             set
             {
-                if (value != base.Duration)
+                if (value != base.duration)
                 {
-                    base.Duration = value;
+                    base.duration = value;
                     OnPropertyChanged("Duration");
                     if (TrackDataUpdated != null)
                     {
                         // id can change on POST
-                        this.Id = TrackDataUpdated(this);
+                        this.id = TrackDataUpdated(this);
                     }
                 }
             }

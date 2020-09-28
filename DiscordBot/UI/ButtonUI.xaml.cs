@@ -43,7 +43,7 @@ namespace DiscordBot.UI
         {
             //TODO: move to async
             var rest = RestStorage.GetClient();
-            var request = RestStorage.GetRequest("Buttons", Method.GET);
+            var request = RestStorage.GetRequest("buttons", Method.GET);
             var resp = rest.Get(request);
 
             BtnList = RestStorage.JsonToObj<ObservableCollection<DataManagement.ButtonData>>(resp.Content);
@@ -84,10 +84,10 @@ namespace DiscordBot.UI
         /// <returns>new created ButtonData, can have different Id than input</returns>
         private Buttons OnButtonCreation(Buttons created)
         {
-            if(created.TrackId != 0)
+            if(created.track_id != 0)
             {
                 // only send index to database, not the resolved field
-                created.Track = null;
+                created.track = null;
             }
             
             var rest = RestStorage.GetClient();
@@ -107,7 +107,7 @@ namespace DiscordBot.UI
             
 
             var rest = RestStorage.GetClient();
-            var request = RestStorage.GetRequest("Buttons/" + update.Id, Method.PUT);            
+            var request = RestStorage.GetRequest("buttons/" + update.id, Method.PUT);            
             request.AddJsonBody(update);
 
             var resp = rest.Put(request);
@@ -121,18 +121,18 @@ namespace DiscordBot.UI
             // insert newly created button
             if(resp.StatusCode == System.Net.HttpStatusCode.NotFound)
             {
-                return OnButtonCreation(update).Id;
+                return OnButtonCreation(update).id;
             }
-            return update.Id;
+            return update.id;
         }
 
 
         private BotTrackData ButtonToBotTrackData(Buttons btn)
         {
             BotTrackData data = new BotTrackData();
-            data.Track = btn.Track;
-            data.Metadata.IsEarrape = btn.IsEarrape;
-            data.Metadata.IsLoop = btn.IsLoop;
+            data.Track = btn.track;
+            data.Metadata.IsEarrape = btn.is_earrape;
+            data.Metadata.IsLoop = btn.is_loop;
 
             return data;    
         }
@@ -222,11 +222,11 @@ namespace DiscordBot.UI
                     // do maunal update once all fields are updated
                     TrackData tData = new TrackData();
 
-                    tData.LocalFile = openFileDialog.FileName;
-                    tData.Author = info.Author;
-                    tData.Album = info.Album;
-                    tData.Genre = info.Genre;
-                    tData.Name = evaluateName(tData.LocalFile);
+                    tData.local_file = openFileDialog.FileName;
+                    tData.author = info.Author;
+                    tData.album = info.Album;
+                    tData.genre = info.Genre;
+                    tData.name = evaluateName(tData.local_file);
 
                     // save the file into the db
                     req = RestStorage.GetRequest("TrackData", Method.POST);
@@ -235,23 +235,23 @@ namespace DiscordBot.UI
 
                     // the post might change the id of the track
                     tData = RestStorage.JsonToObj<TrackData>(resp.Content);
-                    tgtBtn.Track = tData;
-                    tgtBtn.TrackId = tData.Id;
+                    tgtBtn.track = tData;
+                    tgtBtn.track_id = tData.id;
                 }
                 // file is existing in db
                 else
                 {
                     // all files matching are eqiavalent
-                    tgtBtn.TrackId = matches[0].Id;
-                    tgtBtn.Track = matches[0];
+                    tgtBtn.track_id = matches[0].id;
+                    tgtBtn.track = matches[0];
                 }
 
                 
 
                 // only set nickname if not set yet
-                if (tgtBtn.NickName == null)
+                if (tgtBtn.nick_name == null)
                 {
-                    tgtBtn.NickName = tgtBtn.Track.Name;
+                    tgtBtn.nick_name = tgtBtn.track.name;
                 }
 
                 // manual update to prevent update on every property update

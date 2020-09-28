@@ -153,7 +153,7 @@ namespace DataManagement
             foreach (var element in Persistent.BtnList)
             {
                 //a button with file and name null is considered empty
-                if (!String.IsNullOrEmpty(element.NickName) && !String.IsNullOrEmpty(element.Track.LocalFile))
+                if (!String.IsNullOrEmpty(element.NickName) && !String.IsNullOrEmpty(element.Track.local_file))
                     Persistent.HighestButtonToSave = (int)element.Id;
             }
             OnPropertyChanged("BtnList");

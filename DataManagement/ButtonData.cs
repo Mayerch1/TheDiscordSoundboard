@@ -28,7 +28,7 @@ namespace DataManagement
         /// uses OnPropertyChanged as id is bound to 'Tag'-field of UI-Button
         /// </summary>
         [JsonIgnore]
-        public new long Id { get => base.Id; set { base.Id = value; OnPropertyChanged("Id"); } }
+        public new long Id { get => base.id; set { base.id = value; OnPropertyChanged("Id"); } }
 
 
         /// <summary>
@@ -36,16 +36,16 @@ namespace DataManagement
         /// change of member of track is handled by TrackData class
         /// </summary>
         [JsonIgnore]
-        public new TrackData Track { get => base.Track; set { base.Track = value; OnPropertyChanged("Track"); } }
+        public new TrackData Track { get => base.track; set { base.track = value; OnPropertyChanged("Track"); } }
 
 
         [JsonIgnore]
         public new string NickName {
-            get=>base.NickName;
+            get=>base.nick_name;
             set {  
-                if (value != base.NickName)
+                if (value != base.nick_name)
                 {
-                    base.NickName = value;
+                    base.nick_name = value;
                     OnPropertyChanged("NickName");
                     if (ButtonUpdated != null)
                     {
@@ -59,12 +59,12 @@ namespace DataManagement
         [JsonIgnore]
         public new bool IsEarrape
         {
-            get => base.IsEarrape;
+            get => base.is_earrape;
             set
             {
-                if (value != base.IsEarrape)
+                if (value != base.is_earrape)
                 {
-                    base.IsEarrape = value;
+                    base.is_earrape = value;
                     OnPropertyChanged("IsEarrape");
                     if (ButtonUpdated != null)
                     {
@@ -78,12 +78,12 @@ namespace DataManagement
         [JsonIgnore]
         public new bool IsLoop
         {
-            get => base.IsLoop;
+            get => base.is_loop;
             set
             {
-                if (value != base.IsLoop)
+                if (value != base.is_loop)
                 {
-                    base.IsLoop = value;
+                    base.is_loop = value;
                     OnPropertyChanged("IsLoop");
                     if (ButtonUpdated != null)
                     {
@@ -97,12 +97,12 @@ namespace DataManagement
         [JsonIgnore]
         public new long Position
         {
-            get => base.Position;
+            get => base.position;
             set
             {
-                if (value != base.Position)
+                if (value != base.position)
                 {
-                    base.Position = value;
+                    base.position = value;
                     OnPropertyChanged("Position");
                     if (ButtonUpdated != null)
                     {
@@ -116,12 +116,12 @@ namespace DataManagement
         [JsonIgnore]
         public new long? TrackId
         {
-            get => base.TrackId;
+            get => base.track_id;
             set
             {
-                if (value != base.TrackId)
+                if (value != base.track_id)
                 {
-                    base.TrackId = value;
+                    base.track_id = value;
                     OnPropertyChanged("TrackId");
                     if (ButtonUpdated != null)
                     {

@@ -15,4 +15,5 @@ class BotTrackData:
 
     # foreign key to TrackData
     track_id = 0
+    track = None
     
