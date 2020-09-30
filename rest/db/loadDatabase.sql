@@ -3,7 +3,9 @@
 
 CREATE TABLE if not exists "version"(
 	"id" INTEGER,
-	"db_version" INTEGER,
+	"db_version" INTEGER DEFAULT 1,
+	"api_version" INTEGER DEFAULT 1,
+	"api_valid_until" INTEGER,
 	PRIMARY KEY("id" AUTOINCREMENT)
 );
 
@@ -47,25 +49,6 @@ CREATE TABLE if not exists "config" (
 
 
 
-CREATE TABLE if not exists "bottrackdatas" (
-	"id"	INTEGER,
-	"is_earrape"	INTEGER DEFAULT 0,
-	"is_loop"	INTEGER DEFAULT 0,
-	"force_replay"	INTEGER DEFAULT 0,
-	"track_data_id"	INTEGER,
-	FOREIGN KEY("track_data_id") REFERENCES "trackdatas"("id") ON UPDATE CASCADE ON DELETE SET NULL,
-	PRIMARY KEY("id" AUTOINCREMENT)
-);
-
-
-CREATE TABLE if not exists "botstate" (
-	"id"	INTEGER,
-	"current_track"	INTEGER,
-	"queue"	INTEGER,
-	FOREIGN KEY("current_track") REFERENCES "bottrackdatas"("id") ON UPDATE CASCADE ON DELETE SET NULL,
-	FOREIGN KEY("queue") REFERENCES "bottrackdatas" ON UPDATE CASCADE ON DELETE SET NULL,
-	PRIMARY KEY("id")
-);
 
 
 CREATE TRIGGER if not EXISTS version_no_insert
@@ -76,15 +59,7 @@ BEGIN
 END;
 
 
-CREATE TRIGGER if not EXISTS botstate_no_insert
-BEFORE INSERT ON botstate
-WHEN (SELECT COUNT(*) FROM botstate) >= 1   -- limit here
-BEGIN
-    SELECT RAISE(FAIL, 'only one row for botstate');
-END;
 
 
-
-INSERT INTO version (id, db_version) SELECT 1, 1 WHERE NOT EXISTS (SELECT * FROM version);
+INSERT INTO version (id, db_version, api_version) SELECT 1, 1, 1 WHERE NOT EXISTS (SELECT * FROM version);
 INSERT INTO config (id) SELECT 1 WHERE NOT EXISTS (SELECT * FROM config);
-INSERT INTO botstate (id) SELECT 1 WHERE NOT EXISTS (SELECT * FROM botstate);

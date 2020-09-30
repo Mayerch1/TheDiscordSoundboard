@@ -14,10 +14,16 @@ class ConfigDao:
 
 
     def get_config_list(self):
+        """get a list of all configs
+
+        Returns:
+            list[Config]: list of all stored configs, can be empty
+        """
+
         conn, cursor = SqlConnector.get_cursor()
 
         cursor.execute('''SELECT * from config where id=1''')
-        result = cursor.fetchone()
+        result = cursor.fetchall()
 
         cfg_list = []
         [cfg_list.append(Config(item)) for item in result]
@@ -26,6 +32,14 @@ class ConfigDao:
 
 
     def get_config_exists(self, id: int):
+        """test if a id (prim key) is existing in the db
+
+        Args:
+            id (int): primary key (id) of Config
+
+        Returns:
+            bool: True if entry exists
+        """
 
         conn, cursor = SqlConnector.get_cursor()
 
@@ -39,6 +53,15 @@ class ConfigDao:
 
 
     def get_config(self, id: int):
+        """get the config with the given id
+           
+
+        Args:
+            id (int): id of the config as in database
+
+        Returns:
+            Config: the requested config, None if id not exists
+        """
 
         conn, cursor = SqlConnector.get_cursor()
 
@@ -55,6 +78,12 @@ class ConfigDao:
 
 
     def update_config(self, cfg: Config):
+        """update the database with the current config
+           NOP when config id is not in database
+          
+        Args:
+            cfg (Config): the new config (id must be filled in and existing, otherwise NOP)
+        """
 
         conn, cursor = SqlConnector.get_cursor()
 

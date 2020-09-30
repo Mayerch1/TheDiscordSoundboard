@@ -1,5 +1,5 @@
 import asyncio
-from quart import Quart, abort, request
+from quart import Quart, abort, request, make_response
 
 from bot.bot import DiscordBot
 import db.db_connector as db
@@ -25,19 +25,8 @@ app.register_blueprint(button_page)
 app.register_blueprint(track_page)
 
 
-# custom discord wrapper class
-# only here for DEBUG 
-# will be moved to /bot endpoint
-bot = DiscordBot()
-
-
-
-
-
-@app.before_serving
-async def before_serving():
-    await bot.start_client_loop()
     
+
 
 @app.before_request
 async def before_request():
@@ -46,12 +35,25 @@ async def before_request():
 
 
 @app.route("/api/version/latest")
-def get_latest_version():
-    return "v1", 200
+async def get_latest_version():
+    """get the latest version of the api
+       the Location header will point to the latest endpoint (relative)
+
+    Returns:
+        [type]: 200
+    """
+    resp = await make_response('v1', 200)
+    resp.headers['Location'] = '/api/v1/'
+    return resp
 
 
 @app.route("/api/v1")
 def get_v1_version():
+    """get a 200 response to validate that this version is still supported
+
+    Returns:
+        [type]: 200
+    """
     return "v1", 200
 
 

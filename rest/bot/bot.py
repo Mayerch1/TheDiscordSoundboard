@@ -6,38 +6,47 @@ import asyncio
 
 
 class DiscordBot():
-    client = discord.Client()
+    
+    def __init__(self):
+        self.client = discord.Client()
+        self.started = False
 
-    async def start_client_loop(self):
+
+    async def start_client_loop(self, token):
         """Login and start the client loop as new task
            NOP if client is already open
+
+           throws only for invalid token (discord.errors.LoginFailure)
 
         Returns:
             [bool]: True on sucess
         """
-        if self.client.is_closed:
+        if not self.started:
 
             loop = asyncio.get_event_loop()
 
-
             try:
-                await self.client.login('NDQ2MDUyMTcxNTAzMzcwMjQy.WvtIdA.7guJsBmPccwKlIxJFGRi8eVMkGoaaaa')
-            except discord.errors.LoginFailure:
+                await self.client.login(token)
+            except discord.errors.LoginFailure as e:
                 print('Invalid token')
-                return False
+                raise e
             except discord.errors.HTTPException:
                 print('Connection error')
                 return False
             else:
                 loop.create_task(self.client.connect())
+                self.started = True
                 return  True
+        else:
+            return True
 
 
 
     async def stop_client_loop(self):
-        if not self.client.is_closed:
+        if self.started:
             await self.client.close()
             await self.client.logout()
+            self.started = False
         
 
 

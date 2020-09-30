@@ -36,11 +36,10 @@ def get_config(id):
 
 
 
-
-@config_page.route('/api/v1/config<id>', methods=['PUT'])
+@config_page.route('/api/v1/config/<id>', methods=['PUT'])
 async def update_config(id):
     
-    body = await request.get_jso()
+    body = await request.get_json()
 
     if not id.isdigit():
         abort(400)

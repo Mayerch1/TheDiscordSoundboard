@@ -1,11 +1,13 @@
 import quart
 from quart import jsonify
 
-from bot.bot import DiscordBot
+import discord.errors
 
-from dao.buttonDao import ButtonDao
+from dao.botStateDao import BotStateDao
 
-bot = DiscordBot()
+
+
+
 bot_page = quart.Blueprint('bot_page', __name__, template_folder='templates')
 
 
@@ -17,11 +19,19 @@ async def logout():
 
 
 
-
 @bot_page.route('/api/v1/bot/login')
 async def login():
-    await bot.start_client_loop()
-    return 'OK', 200
+
+    try:
+        sucess = await BotStateDao.get_instance().bot_login()
+    except discord.errors.LoginFailure:
+        return 'Invalid Token', 403
+
+    if not sucess:
+        return 'Networking error', 503
+    else:
+        return 'OK', 200
+
 
 
 
