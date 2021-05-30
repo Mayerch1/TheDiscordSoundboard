@@ -945,7 +945,7 @@ namespace BotModule
         {
             if (!IsServerConnected)
                 throw new BotException(BotException.type.connection,
-                    "Not connected to the servers, while trying to get clint list",
+                    "Not connected to the servers, while trying to get client list",
                     BotException.connectionError.NoServer);
 
             List<List<SocketGuildUser>> guildList = new List<List<SocketGuildUser>>();
@@ -970,6 +970,35 @@ namespace BotModule
             }
 
             return guildList;
+        }
+
+
+        /// <summary>
+        /// resolve a username#1234 to the user id
+        /// </summary>
+        /// <param name="name">username</param>
+        /// <param name="discriminator">discriminator number</param>
+        /// <returns>0 on failure, id otherwise</returns>
+        public virtual async Task<ulong> resolveUsername(string name, string discriminator)
+        {
+            if (!IsServerConnected)
+                throw new BotException(BotException.type.connection,
+                    "Not connected to the servers, while trying to resolve client",
+                    BotException.connectionError.NoServer);
+
+            if (Client.ConnectionState == ConnectionState.Connecting)
+                return 0;
+
+            
+            var client = Client.GetUser(name, discriminator);
+
+            if(client == null)
+            {
+                return 0;
+            }
+
+            return client.Id;
+
         }
 
         #endregion get data

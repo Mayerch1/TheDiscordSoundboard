@@ -98,7 +98,6 @@ namespace BotModule
         }
 
 
-
         /// <summary>
         /// resumes or starts the stream
         /// </summary>
@@ -130,6 +129,10 @@ namespace BotModule
             {
                 await disconnectFromChannelAsync();
                 handleReplayException(ex, "Trying to start / resume the stream");
+            }
+            finally
+            {
+                await disconnectFromChannelAsync();
             }
         }
 
@@ -380,6 +383,21 @@ namespace BotModule
                 return null;
             }
             return userList;
+        }
+
+
+        /// <summary>
+        /// resolve a given username, in discord discrimantor schemee
+        /// </summary>
+        /// <param name="name">username</param>
+        /// <param name="discriminator">discriminator</param>
+        /// <returns>0 on failure, user_id otherwise</returns>
+        public override async Task<ulong> resolveUsername(string name, string discriminator)
+        {
+            if (!await connectToServerAsync())
+                return 0;
+
+            return await base.resolveUsername(name, discriminator);
         }
 
         /// <summary>

@@ -54,23 +54,14 @@ namespace DiscordBot.Misc
         /// <returns>id of the user packed in Task</returns>
         public async Task<ulong> resolveUserName(string name)
         {
-            List<List<SocketGuildUser>> clientList = await Handle.Bot.getAllClients(true);
+            var split = name.Split('#');
 
-            if (clientList == null)
+            if (split.Length < 2){
                 return 0;
-
-            foreach (var server in clientList)
-            {
-                foreach (var client in server)
-                {
-                    if (client.Username + '#' + client.Discriminator == name)
-                    {
-                        return client.Id;
-                    }
-                }
             }
 
-            return 0;
+            var id = await Handle.Bot.resolveUsername(split[0], split[1]);
+            return id;
         }      
     }
 }

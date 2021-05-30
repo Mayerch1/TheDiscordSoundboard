@@ -47,7 +47,6 @@ namespace DiscordBot
 
                 if (id > 0)
                     ClientId = id;
-
             }
         }
 
