@@ -13,7 +13,6 @@ using DataManagement;
 using DeviceStreamModule;
 using DiscordBot.UI;
 using DiscordBot.UI.Tutorial;
-using GithubVersionChecker;
 using MaterialDesignThemes.Wpf;
 using StreamModule;
 using PlaylistModule;
@@ -315,9 +314,10 @@ namespace DiscordBot
             await Task.Delay(2500);
 
             //search for updates on github/releases
-            var git = new GithubVersionChecker.GithubUpdateChecker(DataManagement.PersistentData.gitAuthor,
+            var git = new Mayerch1.GithubUpdateCheck.GithubUpdateCheck(DataManagement.PersistentData.gitAuthor,
                 DataManagement.PersistentData.gitRepo);
-            if (await git.CheckForUpdateAsync(DataManagement.PersistentData.version, VersionChange.Revision))
+
+            if (await git.IsUpdateAvailableAsync(DataManagement.PersistentData.version, Mayerch1.GithubUpdateCheck.VersionChange.Revision))
             {
                 SnackbarManager.SnackbarMessage("A newer version is available", SnackbarManager.SnackbarAction.Update);
             }
@@ -788,7 +788,7 @@ namespace DiscordBot
 
         private void snackBar_OpenUpdate()
         {
-            System.Diagnostics.Process.Start(DataManagement.PersistentData.gitCompleteUrl);
+            System.Diagnostics.Process.Start(DataManagement.PersistentData.gitCompleteUrl + "releases/latest");
         }
 
 

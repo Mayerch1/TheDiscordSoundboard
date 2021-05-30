@@ -13,13 +13,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Util", "Util\Util.csproj", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PlaylistModule", "Modules\PlaylistModule\PlaylistModule.csproj", "{B1EE8812-C82C-4DE7-A589-5E1D88E49C20}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GithubVersionChecker", "GithubVersionChecker\GithubVersionChecker.csproj", "{BF622E71-ACB5-401D-8AE2-4ABACE38AE00}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DiscordBot", "DiscordBot\DiscordBot.csproj", "{DDC0D602-01D6-45FF-85C0-8D2E21C7C6E0}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataManagement", "DataManagement\DataManagement.csproj", "{6745405B-8A1D-423F-9D17-95BAD658DB18}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "YoutubeSearch", "YoutubeSearch\YoutubeSearch.csproj", "{DFECE3E8-99D9-4652-B486-BEA1010329BA}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "libvideo", "libvideo\libvideo.csproj", "{17FC1E74-A2A2-4F9B-ABE5-1B36878945CB}"
 EndProject
@@ -69,14 +65,6 @@ Global
 		{B1EE8812-C82C-4DE7-A589-5E1D88E49C20}.Release|Any CPU.Build.0 = Release|Any CPU
 		{B1EE8812-C82C-4DE7-A589-5E1D88E49C20}.Release|x64.ActiveCfg = Release|x64
 		{B1EE8812-C82C-4DE7-A589-5E1D88E49C20}.Release|x64.Build.0 = Release|x64
-		{BF622E71-ACB5-401D-8AE2-4ABACE38AE00}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{BF622E71-ACB5-401D-8AE2-4ABACE38AE00}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{BF622E71-ACB5-401D-8AE2-4ABACE38AE00}.Debug|x64.ActiveCfg = Debug|x64
-		{BF622E71-ACB5-401D-8AE2-4ABACE38AE00}.Debug|x64.Build.0 = Debug|x64
-		{BF622E71-ACB5-401D-8AE2-4ABACE38AE00}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{BF622E71-ACB5-401D-8AE2-4ABACE38AE00}.Release|Any CPU.Build.0 = Release|Any CPU
-		{BF622E71-ACB5-401D-8AE2-4ABACE38AE00}.Release|x64.ActiveCfg = Release|x64
-		{BF622E71-ACB5-401D-8AE2-4ABACE38AE00}.Release|x64.Build.0 = Release|x64
 		{DDC0D602-01D6-45FF-85C0-8D2E21C7C6E0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{DDC0D602-01D6-45FF-85C0-8D2E21C7C6E0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DDC0D602-01D6-45FF-85C0-8D2E21C7C6E0}.Debug|x64.ActiveCfg = Debug|x64
@@ -93,14 +81,6 @@ Global
 		{6745405B-8A1D-423F-9D17-95BAD658DB18}.Release|Any CPU.Build.0 = Release|Any CPU
 		{6745405B-8A1D-423F-9D17-95BAD658DB18}.Release|x64.ActiveCfg = Release|x64
 		{6745405B-8A1D-423F-9D17-95BAD658DB18}.Release|x64.Build.0 = Release|x64
-		{DFECE3E8-99D9-4652-B486-BEA1010329BA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{DFECE3E8-99D9-4652-B486-BEA1010329BA}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{DFECE3E8-99D9-4652-B486-BEA1010329BA}.Debug|x64.ActiveCfg = Debug|Any CPU
-		{DFECE3E8-99D9-4652-B486-BEA1010329BA}.Debug|x64.Build.0 = Debug|Any CPU
-		{DFECE3E8-99D9-4652-B486-BEA1010329BA}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{DFECE3E8-99D9-4652-B486-BEA1010329BA}.Release|Any CPU.Build.0 = Release|Any CPU
-		{DFECE3E8-99D9-4652-B486-BEA1010329BA}.Release|x64.ActiveCfg = Release|Any CPU
-		{DFECE3E8-99D9-4652-B486-BEA1010329BA}.Release|x64.Build.0 = Release|Any CPU
 		{17FC1E74-A2A2-4F9B-ABE5-1B36878945CB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{17FC1E74-A2A2-4F9B-ABE5-1B36878945CB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{17FC1E74-A2A2-4F9B-ABE5-1B36878945CB}.Debug|x64.ActiveCfg = Debug|Any CPU
