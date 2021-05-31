@@ -8,6 +8,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Web;
+using Newtonsoft.Json;
 using NYoutubeDL;
 using NYoutubeDL.Models;
 using Util.IO;
@@ -99,19 +100,24 @@ namespace StreamModule
         /// <returns>task string representing the title</returns>
         public static async Task<string> GetTitleAsync(string url)
         {
-            var api = $"http://youtube.com/get_video_info?video_id={GetArgs(url, "v", '?')}";
-            return GetArgs(await new WebClient().DownloadStringTaskAsync(api), "title", '&');
+            var api = "https://noembed.com/embed?url=" + url;
+            return GetArgs(await new WebClient().DownloadStringTaskAsync(api), "title");
         }
 
 
-        private static string GetArgs(string args, string key, char query)
+        private static string GetArgs(string args, string key)
         {
-            var iqs = args.IndexOf(query);
-            return iqs == -1
-                ? string.Empty
-                : HttpUtility.ParseQueryString(iqs < args.Length - 1
-                    ? args.Substring(iqs + 1)
-                    : string.Empty)[key];
+            var dict = JsonConvert.DeserializeObject<Dictionary<string, string>>(args);
+            string ret;
+
+            if (dict.TryGetValue(key, out ret))
+            {
+                return ret;
+            }
+            else
+            {
+                return "";
+            }
         }
 
 
