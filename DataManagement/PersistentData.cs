@@ -65,7 +65,7 @@ namespace DataManagement
         /// <summary>
         /// version of this build, refers to the github release number
         /// </summary>
-        public const string version = "2.4.2";
+        public const string version = "2.4.4";
 
 
         /// <summary>

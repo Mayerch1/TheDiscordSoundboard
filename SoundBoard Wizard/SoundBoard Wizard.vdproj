@@ -2987,14 +2987,9 @@
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:PlaylistModule, Version=2.4.2.0, Culture=neutral, processorArchitecture=MSIL"
+            "AssemblyAsmDisplayName" = "8:PlaylistModule, Version=2.4.4.0, Culture=neutral, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
-                    "_05BAC2FAFACBD9654939CD076F2E4FE7"
-                    {
-                    "Name" = "8:PlaylistModule.dll"
-                    "Attributes" = "3:512"
-                    }
                 }
             "SourcePath" = "8:PlaylistModule.dll"
             "TargetName" = "8:"
@@ -3145,11 +3140,6 @@
             "AssemblyAsmDisplayName" = "8:YoutubeSearch, Version=2.2.0.0, Culture=neutral, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
-                    "_0FC3052B4EC61F4E730A4C707F938DEB"
-                    {
-                    "Name" = "8:YoutubeSearch.dll"
-                    "Attributes" = "3:512"
-                    }
                 }
             "SourcePath" = "8:YoutubeSearch.dll"
             "TargetName" = "8:"
@@ -4010,14 +4000,9 @@
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:Util, Version=2.4.2.0, Culture=neutral, processorArchitecture=MSIL"
+            "AssemblyAsmDisplayName" = "8:Util, Version=2.4.4.0, Culture=neutral, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
-                    "_3436B467F6E5DF0CBA4FECD64CDDA298"
-                    {
-                    "Name" = "8:Util.dll"
-                    "Attributes" = "3:512"
-                    }
                 }
             "SourcePath" = "8:Util.dll"
             "TargetName" = "8:"
@@ -4044,11 +4029,6 @@
             "AssemblyAsmDisplayName" = "8:DeviceStreamModule, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
-                    "_3513EB44D37288FCA68A7B0F1A228DC3"
-                    {
-                    "Name" = "8:DeviceStreamModule.dll"
-                    "Attributes" = "3:512"
-                    }
                 }
             "SourcePath" = "8:DeviceStreamModule.dll"
             "TargetName" = "8:"
@@ -4137,11 +4117,6 @@
             "AssemblyAsmDisplayName" = "8:SoundTouch.Net.NAudio, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
-                    "_38187F1DDB2296A0C5F04CC3065B9179"
-                    {
-                    "Name" = "8:SoundTouch.Net.NAudio.dll"
-                    "Attributes" = "3:512"
-                    }
                 }
             "SourcePath" = "8:SoundTouch.Net.NAudio.dll"
             "TargetName" = "8:"
@@ -4416,11 +4391,6 @@
             "AssemblyAsmDisplayName" = "8:GongSolutions.WPF.DragDrop, Version=1.1.0.0, Culture=neutral, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
-                    "_46BA8261BDE9441A3C459E9EEC5A0CA4"
-                    {
-                    "Name" = "8:GongSolutions.WPF.DragDrop.dll"
-                    "Attributes" = "3:512"
-                    }
                 }
             "SourcePath" = "8:GongSolutions.WPF.DragDrop.dll"
             "TargetName" = "8:"
@@ -5417,11 +5387,6 @@
             "AssemblyAsmDisplayName" = "8:taglib-sharp, Version=2.1.0.0, Culture=neutral, PublicKeyToken=db62eba44689b5b0, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
-                    "_70BE66A2A7EB2370CC6A4A1C7EC46032"
-                    {
-                    "Name" = "8:taglib-sharp.dll"
-                    "Attributes" = "3:512"
-                    }
                 }
             "SourcePath" = "8:taglib-sharp.dll"
             "TargetName" = "8:"
@@ -5448,11 +5413,6 @@
             "AssemblyAsmDisplayName" = "8:NYoutubeDL, Version=0.11.1.0, Culture=neutral, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
-                    "_70F0B0539FA9152D6714E970D7BA60F1"
-                    {
-                    "Name" = "8:NYoutubeDL.dll"
-                    "Attributes" = "3:512"
-                    }
                 }
             "SourcePath" = "8:NYoutubeDL.dll"
             "TargetName" = "8:"
@@ -5693,14 +5653,9 @@
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:BotModule, Version=2.4.2.0, Culture=neutral, processorArchitecture=MSIL"
+            "AssemblyAsmDisplayName" = "8:BotModule, Version=2.4.4.0, Culture=neutral, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
-                    "_79351E3A02A9AE4A94561B94B4314957"
-                    {
-                    "Name" = "8:BotModule.dll"
-                    "Attributes" = "3:512"
-                    }
                 }
             "SourcePath" = "8:BotModule.dll"
             "TargetName" = "8:"
@@ -6313,14 +6268,9 @@
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:StreamModule, Version=2.4.2.0, Culture=neutral, processorArchitecture=MSIL"
+            "AssemblyAsmDisplayName" = "8:StreamModule, Version=2.4.4.0, Culture=neutral, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
-                    "_92AAFB2F3E61C9909C52FBB6CFD494F4"
-                    {
-                    "Name" = "8:StreamModule.dll"
-                    "Attributes" = "3:512"
-                    }
                 }
             "SourcePath" = "8:StreamModule.dll"
             "TargetName" = "8:"
@@ -7542,14 +7492,9 @@
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:DataManagement, Version=2.4.2.0, Culture=neutral, processorArchitecture=MSIL"
+            "AssemblyAsmDisplayName" = "8:DataManagement, Version=2.4.4.0, Culture=neutral, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
-                    "_D087A0B872235910D231E0CB5C62B736"
-                    {
-                    "Name" = "8:DataManagement.dll"
-                    "Attributes" = "3:512"
-                    }
                 }
             "SourcePath" = "8:DataManagement.dll"
             "TargetName" = "8:"
@@ -7762,11 +7707,6 @@
             "AssemblyAsmDisplayName" = "8:libvideo, Version=3.1.2.0, Culture=neutral, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
-                    "_DB1E638A8CDC1DCE8FF26CDE7FEE2A8A"
-                    {
-                    "Name" = "8:libvideo.dll"
-                    "Attributes" = "3:512"
-                    }
                 }
             "SourcePath" = "8:libvideo.dll"
             "TargetName" = "8:"
@@ -7855,11 +7795,6 @@
             "AssemblyAsmDisplayName" = "8:SoundTouch.Net, Version=1.9.2.0, Culture=neutral, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
-                    "_E3E1ECACBEC9BA59E40532E77D811B58"
-                    {
-                    "Name" = "8:SoundTouch.Net.dll"
-                    "Attributes" = "3:512"
-                    }
                 }
             "SourcePath" = "8:SoundTouch.Net.dll"
             "TargetName" = "8:"
@@ -8493,15 +8428,15 @@
         {
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:The Discord Soundboard (TDS)"
-        "ProductCode" = "8:{F8C2E422-F8CE-410F-ADF0-3D881B15BA64}"
-        "PackageCode" = "8:{BCA11659-3DF3-416A-9022-90DE030D0182}"
+        "ProductCode" = "8:{77338459-99D2-47D9-B80D-42A406D211F0}"
+        "PackageCode" = "8:{BCC9042E-848D-4E85-951E-8F1DD890FAF5}"
         "UpgradeCode" = "8:{63B1D556-FE83-4B58-B523-1E85C6D95FBB}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"
         "RemovePreviousVersions" = "11:TRUE"
         "DetectNewerInstalledVersion" = "11:TRUE"
         "InstallAllUsers" = "11:TRUE"
-        "ProductVersion" = "8:2.4.3"
+        "ProductVersion" = "8:2.4.4"
         "Manufacturer" = "8:Mayer Software Inc."
         "ARPHELPTELEPHONE" = "8:"
         "ARPHELPLINK" = "8:https://github.com/mayerch1/TheDiscordSoundboard/issues"
