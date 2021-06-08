@@ -10,10 +10,10 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media.Imaging;
 using VideoLibrary;
-using YoutubeSearch;
 using DataManagement;
 using NYoutubeDL.Models;
 using Util.IO;
+using System.Linq;
 
 namespace StreamModule
 {
@@ -186,10 +186,13 @@ namespace StreamModule
 
                 if (!String.IsNullOrWhiteSpace(id))
                 {
-                    List<VideoInformation> infos;
+                    List<YoutubeSearch.VideoInformation> infos;
                     try
                     {
-                        infos = await new VideoSearch(){encoding = Encoding.UTF8}.SearchQueryTaskAsync(id, 1);
+                        // object is disposed after call
+                        // surpressed exceptions are fully ignored
+                        infos = await new YoutubeSearch.VideoSearch(){encoding = Encoding.UTF8}.SearchQueryTaskAsync(id, 1, 0, true);
+
                         if (infos.Count > 0)
                         {
                             var videoInfo = infos[0];
@@ -263,21 +266,45 @@ namespace StreamModule
 
             const int pages = 1;
 
-            List<VideoInformation> result;
+            List<YoutubeSearch.VideoInformation> result;
+            var ytSearch = new YoutubeSearch.VideoSearch() { encoding = Encoding.UTF8 };
 
             try
             {
-                result = await new VideoSearch(){encoding = Encoding.UTF8}.SearchQueryTaskAsync(filter, pages);
+                result = await ytSearch.SearchQueryTaskAsync(filter, pages, 0, true);
+            }
+            catch(YoutubeSearch.OutdatedPatternException ex)
+            {
+                Util.IO.LogManager.LogException(ex, "StreamModule/Streammode", "Youtubesearch package is outdated");
+                SnackbarManager.SnackbarMessage("Failed to load search result. A dependency might be outdated", SnackbarManager.SnackbarAction.None);
+                return;
             }
             catch (Exception ex)
             {
                 Util.IO.LogManager.LogException(ex, "StreamModule/StreamMode", "Could not accomplish search for video");
+                SnackbarManager.SnackbarMessage("Could not load search result", SnackbarManager.SnackbarAction.None);
                 return;
             }
+
+
+
+            // filter out unwanted livestreams
+            result = result.Where(v => !v.IsLivestream).ToList();
 
             foreach (var item in result)
             {
                 Suggestions.Add(new VideoData(item));
+            }
+
+            // show (non-vital) parsing exceptions as a hint for potentially missing videos
+            var exCount = ytSearch.exceptionQueue.Count;
+            if (exCount > 0)
+            {
+                var exampleException = ytSearch.exceptionQueue.Dequeue();
+
+                Util.IO.LogManager.LogException(exampleException, "StreamModule/Streammode", "Youtubesearch package is outdated and missing " + exCount.ToString() + " search results");
+                SnackbarManager.SnackbarMessage("Failed to load some search results. A dependency might be outdated", SnackbarManager.SnackbarAction.None);
+                ytSearch.exceptionQueue.Clear();
             }
         }
 
@@ -297,7 +324,7 @@ namespace StreamModule
             }
             catch(Exception ex)
             {
-                LogManager.LogException(ex, "StreamModule/StreamMode.xaml.cs", "The liblido Regex Function couldn't match the download uri");
+                LogManager.LogException(ex, "StreamModule/StreamMode.xaml.cs", "The libvideo Regex Function couldn't match the download uri");
                 SnackbarManager.SnackbarMessage("Could not resolve video URI", SnackbarManager.SnackbarAction.Log);
                 return;
             }
@@ -365,7 +392,14 @@ namespace StreamModule
         {
             if (sender is FrameworkElement fe)
             {
-                GetAndStartStream(fe.Tag as string, true);
+                if(fe.Tag is string uri)
+                {
+                    Url = uri;
+                    ProcessEntry();
+                    GetAndStartStream(uri, true);
+                }
+
+                
             }
         }
 

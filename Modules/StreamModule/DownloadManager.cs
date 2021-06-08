@@ -136,6 +136,11 @@ namespace StreamModule
                 //save audio into Video, only with audio
                 mpAudio = audios.FirstOrDefault(x => x.AudioBitrate > 0);
             }
+            catch(VideoLibrary.Exceptions.UnavailableStreamException ex)
+            {
+                SnackbarManager.SnackbarMessage("Livestreams are not supported", SnackbarManager.SnackbarAction.None);
+                return null;
+            }
             catch (Exception ex)
             {
                 SnackbarManager.SnackbarMessage("Could not load video, unknown reason", SnackbarManager.SnackbarAction.Log);
